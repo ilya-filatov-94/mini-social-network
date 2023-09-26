@@ -1,0 +1,76 @@
+.register {
+    height: 100vh;
+    background-color: rgb(193, 190, 255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    display: flex;
+    background-color: white;
+    width: 50%;
+    border-radius: 10px;
+    min-height: 600px;
+    overflow: hidden;
+
+    .leftSection {
+        flex: 1 1 0;
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 50px;
+
+        h1 {
+            font-size: 2rem;
+            color: #555;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .regButton {
+            background-color: #938eef;
+            color: white;
+            width: 60%;
+        }
+
+    }
+
+    .rightSection {
+        flex: 1 1 0;
+        background: url(../../assets/images/bg-for-login.jpeg) center rgba(39,11,96, 0.5);
+        background-blend-mode: multiply;
+        background-size: cover;
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        color: white;
+
+
+        h1 {
+            font-size: 5rem;
+            line-height: 5rem;
+        }
+
+        p {
+            font-size: 1rem;
+        }
+
+        span {
+            font-size: 0.875rem;
+        }
+
+        .loginButton {
+            background-color: white;
+            color: rebeccapurple;
+            font-weight: bold;
+        }
+
+    }
+}
