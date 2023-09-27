@@ -24,14 +24,14 @@ const App: FC = () => {
                 <Home />
               </RequireAuth>
             }/>
-            <Route path="login" element={<Login />}/>
-            <Route path="register" element={<Register />}/>
             <Route path="profile/:id" element={
               <RequireAuth >
                 <Profile />
               </RequireAuth >
             } />
           </Route>
+          <Route path="login" element={<Login />}/>
+          <Route path="register" element={<Register />}/>
         </Routes>
       </div>
     </BrowserRouter>
