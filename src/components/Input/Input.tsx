@@ -7,13 +7,14 @@ interface ISpreadingInputProps
   addClass?: string;
 }
 
-const Input = ({...props}: ISpreadingInputProps): ReactElement => {
+const Input: FC<ISpreadingInputProps> = ({...props}) => {
   return (
     <input
       {...props}
-      className={props.addClass ? `${styles.Input} ${props.addClass}`: styles.Input}
+      className={props.addclass ? `${styles.Input} ${props.addclass}`: styles.Input}
     />
   );
 }
+
 
 export default Input;
