@@ -1,4 +1,4 @@
-import { ReactElement, DetailedHTMLProps, InputHTMLAttributes } from 'react';
+import { FC, DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import styles from './Input.module.scss';
 
 
