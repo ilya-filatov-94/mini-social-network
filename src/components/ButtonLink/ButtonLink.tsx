@@ -1,4 +1,4 @@
-import {ReactNode, ReactElement, HTMLAttributes} from 'react';
+import {ReactNode, FC, HTMLAttributes} from 'react';
 import styles from './ButtonLink.module.scss';
 import { Link } from "react-router-dom";
 
@@ -10,8 +10,8 @@ interface ISpreadingButtonLinkProps
   children: ReactNode
 }
 
-
-const ButtonLink = ({addClass, to, children, ...props}: ISpreadingButtonLinkProps): ReactElement => {
+const ButtonLink: FC<ISpreadingButtonLinkProps> = 
+({addClass, to, children, ...props}) => {
   return (
     <Link to={to}>
         <button 
