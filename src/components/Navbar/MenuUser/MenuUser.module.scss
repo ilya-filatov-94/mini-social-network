@@ -1,0 +1,85 @@
+@import '../../Layout/sizeCoontainer.scss';
+@import '../../../styles/theme.scss';
+@import '../../../styles/responsive.scss';
+
+.menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    background-color: transparent;
+    font-family: 'Gilroy', 'Arial', sans-serif;
+    font-size: 0.875rem;
+    font-weight: normal;
+
+
+    @include mobile {
+        display: none;
+    }
+
+    .contentWindow {
+        min-width: 180px;
+        position: absolute;
+        top: $heightNav;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        border-radius: 10px;
+
+        @include mobile {
+            width: 100%;
+        }
+
+        .link {
+            text-decoration: none;
+        }
+        
+        .button,
+        .link {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 10px;
+        }
+        .button:hover,
+        .link:hover {
+            cursor: pointer;
+        }
+
+        &.theme-dark {
+            $curTheme: "dark";
+            background-color: themed($curTheme, "background");
+            color: themed($curTheme, "textColor");
+            border: 2px solid themed($curTheme, "border");
+
+            .link {
+                color: themed($curTheme, "textColor");
+            }
+            .button:hover,
+            .link:hover {
+                background-color: rgb(140, 140, 140);
+            }
+        }
+
+        &.theme-light {
+            $curTheme: "light";
+            background-color: themed($curTheme, "background");
+            color: themed($curTheme, "textColor");
+            border: 2px solid themed($curTheme, "border");
+
+            .link {
+                color: themed($curTheme, "textColor");
+            }
+            .button:hover,
+            .link:hover {
+                background-color: rgb(229, 227, 227);
+            }
+        }
+    }
+}

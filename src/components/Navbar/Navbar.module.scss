@@ -1,3 +1,133 @@
-.container {
+@import '../../styles/theme.scss';
+@import '../Layout/sizeCoontainer.scss';
+@import '../../styles/responsive.scss';
+
+
+.navbar {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    height: $heightNav;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    .leftSection {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+
+        .search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 5px;
+            padding: 5px;
+
+            .inputSearch {
+                border: none;
+                width: 500px;
+                background-color: transparent;
+
+                @include mobile {
+                    display: none;
+                }
+
+                @include tablet{
+                    width: 200px;
+                }
+            }
+
+        }
+    }
+    &.homeLink {
+        text-decoration: none;
+        color: #000;
+    }
+
+    .rigthSection {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        @include mobile {
+            display: none;
+        }
+
+        @include tablet {
+            .tabletNavbar {
+                display: none;
+            }
+        }
+
+        .user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+
+            img {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                object-fit: cover;
+            }
+        }
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";
+        background-color: themed($curTheme, "background");
+        color: themed($curTheme, "textColor");
+        border-bottom: 1px solid themed($curTheme, "border");
+
+        .search {
+            border: 1px solid themed($curTheme, "border");
+
+            .inputSearch {
+                color: themed($curTheme, "textColor");
+            }
+        }
+    }
+    &.theme-light {
+        $curTheme: "light";
+        background-color: themed($curTheme, "background");
+        color: themed($curTheme, "textColor");
+        border-bottom: 1px solid themed($curTheme, "border");
+
+        .search {
+            border: 1px solid themed($curTheme, "border");
+
+            .inputSearch {
+                color: themed($curTheme, "textColor");
+            }
+        }
+    }
+}
+
+.avatar {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.textclassAvatar {
+    cursor: pointer;
+}
+
+.themeSwitch {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.positionMenuUser {
+    top: $heightNav;
+    right: 0;
 }

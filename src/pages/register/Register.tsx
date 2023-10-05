@@ -1,19 +1,35 @@
-import { FC, useState, ChangeEvent, UIEvent } from 'react';
+import { 
+  FC, 
+  useState, 
+  useEffect,
+  ChangeEvent,
+  UIEvent
+} from 'react';
 import styles from './Register.module.scss';
 import { useNavigate } from "react-router-dom";
-import {useDispatch} from 'react-redux';
+import {useAppDispatch} from '../../hooks/useTypedRedux';
 import {registerUser} from '../../store/authSlice';
+import {useMatchMedia} from '../../hooks/useMatchMedia';
+import {useScroll} from '../../hooks/useScroll';
 
 import Button from '../../components/Button/Button';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import Input from '../../components/Input/Input';
-
 import {IRegData} from '../../types/form';
 
 
 const Register: FC = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const {isMobile} = useMatchMedia();
+  const [executeScroll, elRef] = useScroll();
+
+  useEffect(() => {
+    if (isMobile) {
+      executeScroll();
+    }
+  // eslint-disable-next-line
+  }, []);
 
   const [regData, setRegData] = useState<IRegData>({
     nickname: '',
@@ -26,7 +42,7 @@ const Register: FC = () => {
     setRegData(prev => ({...prev, [event.target.name]: event.target.value}))
   }
 
-  const handleLogin = (event: UIEvent) => {
+  function handleLogin(event: UIEvent) {
     event.preventDefault();
     dispatch(registerUser(regData));
     navigate('/', {replace: true});
@@ -36,35 +52,39 @@ const Register: FC = () => {
     <div className={styles.register}>
       <div className={styles.card}>
         <div className={styles.leftSection}>
-          <h1>Регистрация</h1>
+          <h1 ref={elRef}>Регистрация</h1>
           <form action="">
             <Input 
              onChange={handleInputs}
+             addClass={styles.inputForm}
              type="text"
              placeholder="Никнейм пользователя"
              name="nickname"
             />
             <Input 
               onChange={handleInputs}
+              addClass={styles.inputForm}
               type="email" 
               placeholder="Электронная почта" 
               name="email"
             />
             <Input 
               onChange={handleInputs}
+              addClass={styles.inputForm}
               type="password" 
               placeholder="Пароль" 
               name="password"
             />
             <Input 
               onChange={handleInputs}
+              addClass={styles.inputForm}
               type="text" 
               placeholder="Ваше имя"
               name="username"
             />
             <Button 
-              onClick={handleLogin}
               addClass={styles.regButton}
+              onClick={handleLogin}
             >
               Зарегистрироваться
             </Button>

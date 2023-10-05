@@ -1,0 +1,19 @@
+@import '../../styles/responsive.scss';
+@import '../Layout/sizeCoontainer.scss';
+
+.stories {
+    display: flex;
+    gap: 10px;
+    height: 200px;
+    margin-bottom: 30px;
+
+    @include tablet{
+        height: 150px;
+        gap: 20px;
+    }
+
+    @include mobile {
+        height: 40px;
+        justify-content: space-around;
+    }
+}

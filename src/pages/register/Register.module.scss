@@ -1,9 +1,15 @@
+@import '../../styles/responsive.scss';
+
 .register {
     height: 100vh;
     background-color: rgb(193, 190, 255);
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @include mobile {
+        height: 100%;
+    }
 }
 
 .card {
@@ -13,6 +19,21 @@
     border-radius: 10px;
     min-height: 600px;
     overflow: hidden;
+
+    @include mobile {
+        width: 100%;
+        margin: 10px;
+        flex-direction: column-reverse;
+        overflow-y: scroll;
+        padding: 12px 0 12px 12px;
+    }
+    @include tablet {
+        width: 100%;
+        margin: 10px;
+        flex-direction: column-reverse;
+        overflow-y: scroll;
+        padding: 12px 0 12px 12px;
+    }
 
     .leftSection {
         flex: 1 1 0;
@@ -25,6 +46,7 @@
         h1 {
             font-size: 2rem;
             color: #555;
+            text-align: center;
         }
 
         form {
@@ -33,10 +55,23 @@
             gap: 30px;
         }
 
+        .inputForm {
+            padding: 20px;
+        }
+
         .regButton {
             background-color: #938eef;
             color: white;
             width: 60%;
+            padding: 10px;
+            align-self: center;
+            
+            @include mobile {
+                align-self: center;
+            }
+            @include tablet {
+                width: 30%;
+            }
         }
 
     }
@@ -53,9 +88,17 @@
         color: white;
 
 
+        @include mobile {
+            padding: 50px 20px;
+        }
+
         h1 {
             font-size: 5rem;
             line-height: 5rem;
+
+            @include mobile {
+                text-align: center;
+            }
         }
 
         p {
@@ -70,6 +113,11 @@
             background-color: white;
             color: rebeccapurple;
             font-weight: bold;
+            padding: 10px;
+
+            @include tablet {
+                width: 30%;
+            }
         }
 
     }

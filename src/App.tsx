@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import './styles/App.css';
+import './styles/App.scss';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
@@ -24,11 +24,11 @@ const App: FC = () => {
                 <Home />
               </RequireAuth>
             }/>
-            <Route path="profile/:id" element={
+            <Route path="profile/:user_id" element={
               <RequireAuth >
                 <Profile />
               </RequireAuth >
-            } />
+            }/>
           </Route>
           <Route path="login" element={<Login />}/>
           <Route path="register" element={<Register />}/>

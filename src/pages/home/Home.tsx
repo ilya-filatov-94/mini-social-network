@@ -1,28 +1,16 @@
-import {ReactElement} from 'react';
+import {FC} from 'react';
 import styles from './Home.module.scss';
 
-import { useLocation, useNavigate } from "react-router-dom";
-import {useDispatch} from 'react-redux';
-import {logoutUser} from '../../store/authSlice';
+import Stories from '../../components/Stories/Stories';
+import Posts from '../../components/Posts/Posts';
+import {posts} from '../../components/Posts/temporaryDataPosts';
 
-
-
-const Home = (): ReactElement => {
-
-  const navigate = useNavigate();
-  const location = useLocation();
-  const fromPage = location.state?.from?.pathname || '/';
-  const dispatch = useDispatch();
-
-  function handleLogout() {
-    dispatch(logoutUser());
-    navigate(fromPage, {replace: true});
-  }
+const Home: FC = () => {
 
   return (
     <div className={styles.home}>
-      Пёс
-      <button onClick={handleLogout}>Выйти</button>
+      <Stories />
+      <Posts posts={posts}/>
     </div>
   )
 }

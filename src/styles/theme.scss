@@ -1,0 +1,25 @@
+@use "sass:map";
+$curTheme: "light" !default;
+
+$themes: (
+    light: (
+        textColor: #000,
+        background: white,
+        logo: darkblue,
+        bgSoft: #f6f3f3,
+        textColorSoft: #555,
+        border: lightgray,
+    ),
+    dark: (
+        textColor: whitesmoke,
+        background: #222,
+        logo: white,
+        bgSoft: #333,
+        textColorSoft: lightgray,
+        border: #444,
+    ),
+);
+
+@function themed($theme, $key) {
+    @return map.get(map.get($themes,  $theme), $key)
+}

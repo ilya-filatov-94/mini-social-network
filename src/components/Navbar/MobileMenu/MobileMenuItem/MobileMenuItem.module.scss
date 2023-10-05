@@ -1,0 +1,50 @@
+@import '../../../../styles/theme.scss';
+
+.menuItem {
+    transition: all 220ms ease-in-out;
+
+    &:hover {
+        background-color: rgba(173, 216, 230, 0.258);
+    }
+
+    .link {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        padding: 0.5rem 0;
+        padding-left: 5%;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.3rem;
+
+        .iconElem {
+            width: 30px;
+            height: 30px;
+            object-fit: cover;
+        }
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";    
+        &:hover {
+            background-color: rgba(122, 122, 122, 0.936);
+        }
+
+        .link {
+            color: themed($curTheme, "textColor");
+        }
+    }
+    
+    &.theme-light {
+        $curTheme: "light";    
+        &:hover {
+            background-color: rgba(122, 122, 122, 0.936);
+        }
+    
+        .link {
+            color: themed($curTheme, "textColor");
+        }
+    }
+}

@@ -1,0 +1,55 @@
+@import '../../styles/theme.scss';
+
+.user {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0;
+
+    .activities {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";
+        color: themed($curTheme, "textColor");
+
+        .activities {
+            color: themed($curTheme, "textColorSoft");
+        }
+    }
+    &.theme-light {
+        $curTheme: "light";
+        color: themed($curTheme, "textColor");
+
+        .activities {
+            color: themed($curTheme, "textColorSoft");
+        }
+    }
+}
+
+.textActivities {
+    font-weight: 400;
+    font-size: 0.875rem;
+}
+
+.textTimeActivities {
+    font-weight: 400;
+    font-size: 0.75rem;
+}
+
+.textClass {
+    font-weight: 500;
+}
+
+.avatar {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}

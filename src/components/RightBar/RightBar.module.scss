@@ -1,3 +1,68 @@
-.rightSectionBar {
-    display: flex;
+@import '../Layout//sizeCoontainer.scss';
+@import '../../styles/theme.scss';
+@import '../../styles/responsive.scss';
+
+
+.rightBar {
+    flex: 3;
+    position: sticky;
+    top: $heightNav;
+    height: calc(100vh - $topBar);
+    overflow-y: scroll;
+
+    @include mobile {
+        display: none;
+    }
+
+    @include tablet {
+        display: none;
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .container {
+        padding: 20px;
+
+        .item {
+            -webkit-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+            -moz-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+            box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.09);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        .container {
+            .item {
+                background-color: themed($curTheme, "background");
+
+                .headerItem {
+                    color: themed($curTheme, "textColor");
+                }
+            }
+        }
+    }
+    &.theme-light {
+        $curTheme: "light";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        .container {
+            .item {
+                background-color: themed($curTheme, "background");
+
+                .headerItem {
+                    color: themed($curTheme, "textColor");
+                }
+            }
+        }
+    }
 }
+

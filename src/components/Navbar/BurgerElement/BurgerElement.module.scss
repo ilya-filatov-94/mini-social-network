@@ -1,0 +1,79 @@
+@import '../../../styles/responsive.scss';
+@import '../../../styles/theme.scss';
+
+.headerBurger {
+    display: none;
+}
+
+@include mobile {
+    .headerBurger {
+        display: block;
+        position: relative;
+        padding: 0;
+        margin: 0;
+        right: -3%;
+        width: 30px;
+        height: 25px;
+        cursor: pointer;
+
+        &.theme-dark .middleLine {
+            $curTheme: "dark"; 
+            background-color: themed($curTheme, "textColor");
+        }
+        &.theme-light .middleLine {
+            $curTheme: "light"; 
+            background-color: themed($curTheme, "textColor");
+        }
+
+        .middleLine {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            top: 12px;
+        }
+
+        .active_MiddleLine {
+            display: none;
+        }
+    }
+
+    .headerBurger::before,
+    .headerBurger::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        left: 0;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .headerBurger.theme-dark::before,
+    .headerBurger.theme-dark::after {
+        $curTheme: "dark"; 
+        background-color: themed($curTheme, "textColor");
+    }
+    .headerBurger.theme-light::before,
+    .headerBurger.theme-light::after {
+        $curTheme: "light"; 
+        background-color: themed($curTheme, "textColor");
+    }
+
+    .headerBurger::before {
+        top: 0;
+    }
+
+    .headerBurger.active::before {
+        transform: rotate(45deg);
+        top: 12px;
+    }
+
+    .headerBurger::after {
+        bottom: 0;
+    }
+
+    .headerBurger.active::after {
+        transform: rotate(-45deg);
+        bottom: 11px;
+    }
+}

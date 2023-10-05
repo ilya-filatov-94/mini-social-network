@@ -1,0 +1,39 @@
+@import '../assets/fonts/fonts.css';
+
+*,
+*:before,
+*:after {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    box-sizing: border-box;
+}
+
+
+/* Работает в Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: grey white;
+}
+
+/* Работает в Chrome, Edge и Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+body::-webkit-scrollbar-track {
+    background: white;                         /* цвет зоны отслеживания */
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: grey;                     /* цвет бегунка */
+    border-radius: 20px;                          /* округлось бегунка */
+    border: 3px solid rgb(215, 215, 215);       /* отступ вокруг бегунка */
+}
+
+.App {
+    font-family: 'Gilroy', 'Arial', sans-serif;
+    font-size: 1rem;
+    font-weight: normal;
+}

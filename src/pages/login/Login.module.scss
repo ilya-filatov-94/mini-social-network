@@ -1,9 +1,15 @@
+@import '../../styles/responsive.scss';
+
 .login {
     height: 100vh;
     background-color: rgb(193, 190, 255);
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @include mobile {
+        height: 100%;
+    }
 }
 
 .card {
@@ -13,6 +19,21 @@
     border-radius: 10px;
     min-height: 600px;
     overflow: hidden;
+
+    @include mobile {
+        width: 100%;
+        margin: 10px;
+        flex-direction: column;
+        overflow-y: scroll;
+        padding: 12px 0 12px 12px;
+    }
+    @include tablet {
+        width: 100%;
+        margin: 10px;
+        flex-direction: column;
+        overflow-y: scroll;
+        padding: 12px 0 12px 12px;
+    }
 
     .leftSection {
         flex: 1 1 0;
@@ -25,6 +46,10 @@
         justify-content: center;
         gap: 30px;
         color: white;
+
+        @include mobile {
+            padding: 50px 20px;
+        }
 
         h1 {
             font-size: 2rem;
@@ -40,9 +65,15 @@
         }
 
         .regButton {
+            width: 50%;
             background-color: white;
             color: rebeccapurple;
             font-weight: bold;
+            padding: 10px;
+
+            @include tablet {
+                width: 30%;
+            }
         }
     }
 
@@ -57,6 +88,13 @@
         h1 {
             font-size: 2rem;
             color: #555;
+
+            @include mobile {
+                text-align: center;
+            }
+            @include tablet {
+                text-align: center;
+            }
         }
 
         form {
@@ -65,9 +103,23 @@
             gap: 30px;
         }
 
+        .inputForm {
+            padding: 20px;
+        }
+
         .loginButton {
+            width: 50%;
             background-color: #938eef;
             color: white;
+            padding: 10px;
+
+            @include mobile {
+                align-self: center;
+            }
+            @include tablet {
+                width: 30%;
+                align-self: center;
+            }
         }
     }
 }

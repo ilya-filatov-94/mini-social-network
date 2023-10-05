@@ -1,4 +1,8 @@
-import { ReactNode, FC, HTMLAttributes } from 'react';
+import {
+  FC,
+  HTMLAttributes,
+  ReactNode
+} from 'react';
 import styles from './Button.module.scss';
 
 
@@ -8,8 +12,12 @@ interface ISpreadingButtonProps
   children: ReactNode;
 }
 
-const Button: FC<ISpreadingButtonProps> = 
-({addClass, children, ...props}) => {
+
+const Button: FC<ISpreadingButtonProps> = ({ 
+  addClass, 
+  children, 
+  ...props 
+}) => {
   return (
     <button
       {...props}

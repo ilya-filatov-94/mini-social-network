@@ -1,0 +1,35 @@
+.user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+}
+
+.avatar {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.styleText {
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.online {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: limegreen;
+    position: absolute;
+    top: 0;
+    left: 30px;
+}

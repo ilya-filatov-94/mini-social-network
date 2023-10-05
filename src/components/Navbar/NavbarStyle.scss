@@ -1,0 +1,106 @@
+@use "sass:map";
+
+$themes: (
+    light: (
+        textColor: #000,
+        background: white,
+        logo: darkblue,
+        bgSoft: #f6f3f3,
+        textColorSoft: #555,
+        border: lightgray,
+    ),
+    dark: (
+        textColor: whitesmoke,
+        background: #222,
+        logo: white,
+        bgSoft: #333,
+        textColorSoft: lightgray,
+        border: #444,
+    ),
+);
+
+$curTheme: null !default;
+@mixin generateClass($curTheme) {
+    @each $theme in map-keys($themes) {
+        $curTheme: $theme !global;
+        .theme-#{$theme} {
+            @content;
+        }
+    }
+}
+
+@function themed($key) {
+  @return map.get(map.get($themes,  $curTheme), $key);
+}
+
+.navbar {
+    @include generateClass($curTheme) {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        height: 50px;
+        position: sticky;
+        top: 0;
+        background: themed("background");
+        color: themed("textColor");
+
+        .leftSection {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+
+            .search {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                border-radius: 5px;
+                padding: 5px;
+
+                .inputSearch {
+                    border: none;
+                    width: 500px;
+                    background-color: transparent;
+                }
+
+            }
+        }
+
+        .rigthSection {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+
+            .user {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 500;
+
+                img {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+}
+
+
+.avatar {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.themeSwitch {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+}

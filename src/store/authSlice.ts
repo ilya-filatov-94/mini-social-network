@@ -1,9 +1,13 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+
 import {IRegState, IAuthState} from '../types/authReducer';
 import {ILoginData} from '../types/form';
 
+import {initialStateUsers} from './initialStore';
+
 const initialState: IAuthState = {
     users: [],
+    currentUser: initialStateUsers[0],
     isAuth: false
 }
 
@@ -24,23 +28,25 @@ const authSlice = createSlice({
                     username: username
                 });
                 state.isAuth = true;
-                localStorage.setItem('isAuth', JSON.stringify(state.isAuth));
             }
         },
         loginUser(state, action: PayloadAction<ILoginData>) {
             const {nickname, password} = action.payload;
             const currentUser = state.users.find(user => user.nickname === nickname);
             if (currentUser && currentUser.password === password) {
+                state.currentUser = currentUser;
+                if (currentUser.username === initialStateUsers[0].username) {
+                    state.currentUser.profileImg = initialStateUsers[0].profileImg;
+                }
                 state.isAuth = true;
-                localStorage.setItem('isAuth', JSON.stringify(state.isAuth));
             }
         },
         logoutUser(state) {
             state.isAuth = false;
-            localStorage.setItem('isAuth', JSON.stringify(state.isAuth));
         }
     }
 });
+
 
 export const {registerUser, loginUser, logoutUser} = authSlice.actions; 
 export default authSlice.reducer;

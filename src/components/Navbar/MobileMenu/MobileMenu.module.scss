@@ -1,0 +1,116 @@
+@import '../../../styles/responsive.scss';
+@import '../../../styles/theme.scss';
+$height_dropdown: 20rem;
+$height_menu: 50px;
+
+
+.container {
+    position: relative;
+
+    .backDrop {
+        position: fixed;
+        display: none;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: transparent;
+    }
+    .backDrop_active {
+        display: block;
+    }
+
+    .linksWrapper {
+        display: none;
+    
+        @include mobile {
+            height: $height_dropdown;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: -100%;
+            left: 0;
+            transition: all 0.3s ease-in-out;
+            overflow-y: auto;
+    
+            &.openMenu {
+                top: $height_menu;
+                left: 0;
+            }
+        }
+    }
+
+    .menuItem {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        padding: 0.5rem 0;
+        padding-left: 5%;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1.3rem;
+        cursor: pointer;
+        transition: all 220ms ease-in-out;
+    
+        &:hover {
+            background-color: rgba(173, 216, 230, 0.258);
+        }
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";
+
+        .linksWrapper {
+            background-color: themed($curTheme, "background");
+
+            @include mobile {
+                box-shadow: 2px 5px 5px rgba(#fff, 0.3);
+            }
+        }
+        
+        .menuItem {
+            color: themed($curTheme, "textColor");
+
+            &:hover {
+                background-color: rgba(122, 122, 122, 0.936);
+            }
+        }
+    }
+
+    &.theme-light {
+        $curTheme: "light";
+
+        .linksWrapper {
+            background-color: themed($curTheme, "background");
+
+            @include mobile {
+                box-shadow: 2px 5px 5px rgba(#000, 0.3);
+            }
+        }
+
+        .menuItem {
+            color: themed($curTheme, "textColor");
+        }
+    }
+    
+    .iconElem {
+        width: 30px;
+        height: 30px;
+        object-fit: cover;
+    }
+}
+
+
+.avatar {
+    border-radius: 50%;
+}
+
+
+
+
+

@@ -1,3 +1,163 @@
+@import '../../styles/theme.scss';
+@import '../../styles/responsive.scss';
+
 .profile {
-    display: flex;
+
+    .imagesHeader {
+        width: 100%;
+        height: 300px;
+        position: relative;
+
+        .cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profilePic {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin: auto;
+            top: 160px;
+        }
+    }
+
+    .profileContainer {
+        padding: 20px 70px;
+
+        @include mobile{
+          padding: 10px;
+        }
+
+        @include tablet{
+          padding: 20px;
+        }
+
+        .userInfo {
+            height: 200px;
+            box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+            border-radius: 20px;
+            padding: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+
+            @include mobile {
+              flex-direction: column;
+              height: 30vh;
+              margin-top: 10px;
+            }
+
+            .mainInfo {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+
+                @include mobile {
+                  gap: 15px;
+                }
+      
+                .textNick {
+                  font-size: 1.875rem;
+                  font-weight: 500;
+                }
+      
+                .info {
+                  width: 100%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-around;
+
+                  @include mobile {
+                    gap: 20px;
+                  }
+      
+                  .item {
+                    display: flex;
+                    align-items: center;
+                    gap: 5px;
+                    font-size: 0.75rem;
+  
+                    .textInfo {
+                      font-size: 0.75rem;
+                    }
+                  }
+                }
+
+                .Btn {
+                  border: none;
+                  background-color: #5271ff;
+                  color: white;
+                  padding: 10px 20px;
+                  border-radius: 5px;
+                  cursor: pointer;
+                }
+              }
+
+              .left {
+                flex: 1;
+                display: flex;
+                gap: 10px;
+
+                @include tablet{
+                  flex-wrap: wrap;
+                }
+              }
+
+              .right {
+                flex: 1;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                gap: 10px;
+              }
+
+        }
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        a {
+          color: themed($curTheme, "textColor");
+        }
+
+        .userInfo {
+            background-color: themed($curTheme, "background");
+            color: themed($curTheme, "textColor");
+
+            .item {
+                color: themed($curTheme, "textColorSoft");
+            }
+        }
+    }
+    &.theme-light {
+        $curTheme: "light";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        a {
+          color: themed($curTheme, "textColor");
+        }
+
+        .userInfo {
+            background-color: themed($curTheme, "background");
+            color: themed($curTheme, "textColor");
+
+            .item {
+                color: themed($curTheme, "textColorSoft");
+            }
+        }
+    }
+
 }

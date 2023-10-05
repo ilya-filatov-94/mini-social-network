@@ -1,4 +1,8 @@
-import { FC, DetailedHTMLProps, InputHTMLAttributes } from 'react';
+import {
+  FC,
+  DetailedHTMLProps,
+  InputHTMLAttributes
+} from 'react';
 import styles from './Input.module.scss';
 
 
@@ -7,14 +11,16 @@ interface ISpreadingInputProps
   addClass?: string;
 }
 
-const Input: FC<ISpreadingInputProps> = ({...props}) => {
+const Input: FC<ISpreadingInputProps> = ({
+  addClass, 
+  ...props
+}) => {
   return (
     <input
       {...props}
-      className={props.addclass ? `${styles.Input} ${props.addclass}`: styles.Input}
+      className={addClass ? `${styles.Input} ${addClass}`: styles.Input}
     />
   );
 }
-
 
 export default Input;

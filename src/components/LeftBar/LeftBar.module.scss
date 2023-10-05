@@ -1,3 +1,79 @@
-.leftSectionBar {
-    display: flex;
+@import '../Layout/sizeCoontainer.scss';
+@import '../../styles/theme.scss';
+@import '../../styles/responsive.scss';
+
+.leftBar {
+    flex: 2;
+    position: sticky;
+    top: $heightNav;
+    height: calc(100vh - $topBar);
+    overflow-y: scroll;
+
+    @include mobile {
+        display: none;
+    }
+
+    .tabletBar {
+        display: none;
+        @include tablet {
+            display: flex;
+        }
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    hr {
+        margin: 20px 0;
+        border: none;
+        height: 0.5px;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .container .menu {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        .styleText {
+            font-size: 0.75rem;
+        }
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";
+        background-color: themed($curTheme, "background");
+        color: themed($curTheme, "textColor");
+
+        hr {
+            background-color: themed($curTheme, "border");
+        }
+    }
+    &.theme-light {
+        $curTheme: "light";
+        background-color: themed($curTheme, "background");
+        color: themed($curTheme, "textColor");
+
+        hr {
+            background-color: themed($curTheme, "border");
+        }
+    }
+
+}
+
+.user {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.positionMenuUser {
+    top: $heightNav;
+    left: 25%;
+    right: 0;
 }

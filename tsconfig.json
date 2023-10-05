@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ES6",
     "lib": [
       "dom",
       "dom.iterable",
@@ -19,11 +19,13 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "typeRoots" : ["node_modules/@types", "src/types"],
     "plugins": [{ 
       "name": "typescript-plugin-css-modules" 
     }]
   },
   "include": [
-    "src"
+    "src",
+    "src/globals.d.ts"
   ]
 }

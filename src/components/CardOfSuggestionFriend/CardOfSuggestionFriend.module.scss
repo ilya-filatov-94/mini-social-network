@@ -1,0 +1,46 @@
+@import '../../styles/theme.scss';
+
+.user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0;
+
+    &.theme-dark {
+        $curTheme: "dark";
+        color: themed($curTheme, "textColor");
+    }
+    &.theme-light {
+        $curTheme: "light";
+        color: themed($curTheme, "textColor");
+    }
+}
+
+.user .buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.followBtn {
+    padding: 5px;
+    background-color: #5271ff;
+    color: white;
+}
+
+.dismissBtn {
+    padding: 5px;
+    background-color: #f0544f;
+    color: white;
+}
+
+.textClass {
+    font-weight: 500;
+}

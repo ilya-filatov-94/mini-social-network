@@ -1,0 +1,42 @@
+@import '../../../styles/responsive.scss';
+
+.user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @include mobile {
+        flex: 1;
+    }
+
+    .userInfo {
+        display: flex;
+        gap: 20px;
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+
+            .username {
+                font-weight: 500;
+            }
+
+            .date {
+                font-size: 0.75rem;
+            }
+        }
+    }
+}
+
+.link {
+    text-decoration: none;
+    color: inherit;
+    font-weight: 500;
+}

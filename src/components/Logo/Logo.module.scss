@@ -1,0 +1,23 @@
+@import '../../styles/theme.scss';
+
+.wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.logoText:not(.theme-dark) {
+    $curTheme: "light";
+    color: themed($curTheme, "logo");
+}
+
+.logoText {
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 0;
+
+    &.theme-dark {
+        $curTheme: "dark";
+        color: themed($curTheme, "logo");
+    }
+}
