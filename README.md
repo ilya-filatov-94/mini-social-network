@@ -1,5 +1,5 @@
 # Mini Social network
-Mini-application for social networks with adaptive design  
+Mini-application for social networks with responsive design  
 (desktop, tablet, mobile).
 
 ## Languages and Tools
@@ -14,4 +14,4 @@ Mini-application for social networks with adaptive design
 
 ### Third party tools
 *   Using icons from Material-UI.
-*   Using Redux-Persist to synchronize state.
+*   Using Redux-Persist to synchronize state with localStorage.
