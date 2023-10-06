@@ -18,6 +18,14 @@
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
+
+            @include mobile {
+                @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                        &:not(:last-child) {
+                        margin-right: 20px;
+                    }
+                }
+            }
         }
 
         .details {

@@ -25,7 +25,12 @@
         margin: 10px;
         flex-direction: column;
         overflow-y: scroll;
-        padding: 12px 0 12px 12px;
+        padding-top: 10px;
+        padding-left: 10px;
+
+        @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+            padding: 0;
+        }
     }
     @include tablet {
         width: 100%;
@@ -105,6 +110,13 @@
 
         .inputForm {
             padding: 20px;
+            @include mobile {
+                @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                        &:not(:last-child) {
+                        margin-bottom: 30px;
+                    }
+                }
+            }
         }
 
         .loginButton {

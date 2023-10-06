@@ -5,7 +5,7 @@ import {Link} from 'react-router-dom';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
 import {IComments} from '../../../types/comments';
 
-import { ReactComponent as SendArrow} from '../../../assets/images/right_arrow.svg';
+// import { ReactComponent as SendArrow} from '../../../assets/images/right_arrow.svg';
 
 interface IContentPostProps {
     comments: IComments[] | [];
@@ -33,7 +33,7 @@ const Comments: FC<IContentPostProps> = ({comments, curTheme}) => {
                 placeholder="Напишите комментарий"
             />
             <div className={styles.mobileBtnSend}>
-                <SendArrow/>
+                {/* <SendArrow/> */}
             </div>
             <button
                 className={styles.btn}

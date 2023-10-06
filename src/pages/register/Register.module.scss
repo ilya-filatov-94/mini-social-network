@@ -25,14 +25,18 @@
         margin: 10px;
         flex-direction: column-reverse;
         overflow-y: scroll;
-        padding: 12px 0 12px 12px;
+        padding-top: 10px;
+        padding-left: 10px;
+
+        @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+            padding: 0;
+        }
     }
     @include tablet {
         width: 100%;
         margin: 10px;
         flex-direction: column-reverse;
         overflow-y: scroll;
-        padding: 12px 0 12px 12px;
     }
 
     .leftSection {
@@ -57,6 +61,13 @@
 
         .inputForm {
             padding: 20px;
+            @include mobile {
+                @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                        &:not(:last-child) {
+                        margin-bottom: 30px;
+                    }
+                }
+            }
         }
 
         .regButton {
@@ -87,9 +98,9 @@
         gap: 30px;
         color: white;
 
-
         @include mobile {
             padding: 50px 20px;
+            background-size: cover !important;
         }
 
         h1 {
