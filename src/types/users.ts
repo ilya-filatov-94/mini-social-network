@@ -1,7 +1,7 @@
 export interface IUser {
     id?: number;
     name: string;
-    avatar?: any;
+    avatar?: string | undefined;
 }
 
 export interface IActivityOfFriend 

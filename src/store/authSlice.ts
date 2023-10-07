@@ -36,7 +36,7 @@ const authSlice = createSlice({
             if (currentUser && currentUser.password === password) {
                 state.currentUser = currentUser;
                 if (currentUser.username === initialStateUsers[0].username) {
-                    state.currentUser.profileImg = initialStateUsers[0].profileImg;
+                    state.currentUser.profilePic = initialStateUsers[0].profilePic;
                 }
                 state.isAuth = true;
             }

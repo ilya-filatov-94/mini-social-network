@@ -44,7 +44,7 @@ export const posts: IPost[] = [
       profilePic: avatarKate,
       desc: "Недавно прочла \"Три товарища\" Ремарка",
       date: "2 часа назад",
-      img: null,
+      img: undefined,
       likes: 1,
       comments: [
         {

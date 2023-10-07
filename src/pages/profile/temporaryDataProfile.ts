@@ -15,35 +15,35 @@ export const profileData: IinitialUser[] = [
     userId: "JaneStone",
     nickname: "Jane",
     username: "Jane Stone",
-    profileImg: JaneAvatar,
+    profilePic: JaneAvatar,
   },
   {
     id: 2,
     userId: "RichSkinner",
     nickname: "Rich",
     username: "Rich Skinner",
-    profileImg: AvatarRich,
+    profilePic: AvatarRich,
   },
   {
     id: 3,
     userId: "TomRiddle",
     nickname: "Tom",
     username: "Tom Riddle",
-    profileImg: AvatarTom,
+    profilePic: AvatarTom,
   },
   {
     id: 4,
     userId: "KateStone",
     nickname: "Kate",
     username: "Kate Stone",
-    profileImg: AvatarKate,
+    profilePic: AvatarKate,
   },
   {
     id: 5,
     userId: "JohnDoe",
     nickname: "John",
     username: "John Doe",
-    profileImg: JohnAvatar,
+    profilePic: JohnAvatar,
   },
   {
     id: 6,
@@ -51,7 +51,7 @@ export const profileData: IinitialUser[] = [
     nickname: "Jane",
     username: "Jane Ostin",
     refUser: "JaneOstin",
-    profileImg: null,
+    profilePic: undefined,
   },
 ];
 
@@ -93,7 +93,7 @@ export const posts: IPost[] = [
     profilePic: JaneAvatar,
     desc: "Недавно прочла \"Три товарища\" Ремарка",
     date: "2 часа назад",
-    img: null,
+    img: undefined,
     likes: 1,
     comments: [
       {

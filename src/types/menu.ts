@@ -1,6 +1,6 @@
 export interface IMenu {
     id?: number;
     name: string;
-    image?: any;
+    image?: string | undefined;
     menuRef?: string;
 }

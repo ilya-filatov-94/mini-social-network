@@ -32,7 +32,7 @@ const LeftBar: FC = () => {
           <UserAvatar 
             onClick={() => openMenu(!menuIsOpen)}
             addClass={styles.user}
-            avatar={currentUser.profileImg}
+            avatar={currentUser.profilePic}
             name={currentUser.username}
             def_size_ico={30}
             tabletmode={styles.tabletBar}

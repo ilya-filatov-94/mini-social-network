@@ -74,7 +74,7 @@ const Navbar: FC = () => {
             onClick={() => openMenu(!menuIsOpen)}
             addClass={styles.avatar}
             textclass={styles.textclassAvatar}
-            avatar={currentUser.profileImg}
+            avatar={currentUser.profilePic}
             name={currentUser.username}
             def_size_ico={30}
             tabletmode={styles.tabletNavbar}

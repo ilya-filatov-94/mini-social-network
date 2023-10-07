@@ -39,7 +39,7 @@ const MobileMenu: FC<IMobileMenuProps> = ({
   const userMenuItem = {
     name: 'Мой профиль',
     menuRef: `/profile/${currentUser.username.replace(' ', '')}`,
-    image: currentUser.profileImg,
+    image: currentUser.profilePic,
   }
 
   if (isOpenMobileMenu) {

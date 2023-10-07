@@ -1,14 +1,12 @@
+import {IinitialUser} from './authReducer';
 import {IComments} from './comments';
 
-export interface IPost {
-  id: number;
-  userId?: number;
-  nickname: string;
-  username: string;
-  profilePic?: any;
+
+export interface IPost 
+extends IinitialUser {
   desc: string;
   date: string;
-  img?: any;
+  img?: string | undefined;
   likes: number;
   comments: IComments[] | [];
 }

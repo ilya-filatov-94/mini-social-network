@@ -12,7 +12,7 @@ const Stories: FC = () => {
   return (
     <div className={styles.stories}>
       <StoryTemplate 
-        image={false} 
+        image={undefined} 
         username={currentUser.username}
       />
       {stories.map(story => 

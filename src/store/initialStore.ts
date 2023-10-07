@@ -9,6 +9,6 @@ export const initialStateUsers: IinitialUser[] = [
         nickname: "John",
         username: "John Doe",
         refUser: "JohnDoe",
-        profileImg: JohnAvatar,
+        profilePic: JohnAvatar,
     }
 ];

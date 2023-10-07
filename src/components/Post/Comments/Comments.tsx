@@ -24,7 +24,7 @@ const Comments: FC<IContentPostProps> = ({comments, curTheme}) => {
         <div className={styles.writeComment}>
             <img 
                 className={styles.iconUser}
-                src={currentUser.profileImg ? currentUser.profileImg : noAvatar} 
+                src={currentUser.profilePic ? currentUser.profilePic : noAvatar} 
                 alt={`user ${currentUser.username}`} 
             />
             <input 

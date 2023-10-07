@@ -1,22 +1,16 @@
-export interface IinitialUser {
+export interface IRegState {
     id?: string | number;
-    userId?: string;
     nickname: string;
     email?: string;
     password?: string;
     username: string;
     refUser?: string;
-    profileImg?: any;
+    profilePic?: string | undefined;
 }
 
-export interface IRegState {
-    id?: string | number;
-    nickname: string;
-    email: string;
-    password: string;
-    username: string;
-    refUser?: string;
-    profileImg?: any;
+export interface IinitialUser 
+extends IRegState {
+    userId?: string | number;
 }
 
 export interface IAuthState {

@@ -48,7 +48,7 @@ const Profile: FC = () => {
           className={styles.cover}
         />
         <img
-          src={curUser.profileImg ? curUser.profileImg : noAvatar}
+          src={curUser.profilePic ? curUser.profilePic : noAvatar}
           alt={`avatar of ${curUser.username}`}
           className={styles.profilePic}
         />
