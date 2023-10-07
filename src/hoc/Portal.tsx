@@ -1,4 +1,5 @@
-import {  
+import {
+  FC,  
   useEffect, 
   useState, 
   ReactElement 
@@ -9,10 +10,8 @@ import ReactDOM from 'react-dom';
 interface IProps {
   children: ReactElement | null;
 }
-type IHoc = ReactElement | null;
 
-
-const Portal = ({children}: IProps): IHoc => {
+const Portal: FC<IProps> = ({children}: IProps) => {
   const [container] = useState<HTMLDivElement>(() => document.createElement('div'));
 
   useEffect(() => {
