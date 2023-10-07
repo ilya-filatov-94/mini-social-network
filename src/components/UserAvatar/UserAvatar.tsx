@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 
 interface IUserAvatarProps {
-  avatar?: any; 
+  avatar?: string | undefined; 
   name: string;
   refUser?: string; 
   addClass?: string;

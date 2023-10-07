@@ -2,7 +2,7 @@ import {FC} from 'react'
 import styles from './MenuElement.module.scss';
 
 interface IMenuElement {
-  image?: any; 
+  image?: string | undefined; 
   textElem: string;
   [key: string]: string | number | (() => void) | undefined;
 }

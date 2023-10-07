@@ -8,7 +8,7 @@ interface IMobileMenuItemProps {
   item: IMenu;
   avatarStyle?: string;
   currentTheme: string;
-  [key: string]: any;
+  [key: string]: string | number | undefined | IMenu;
 }
 
 const MobileMenuItem: FC<IMobileMenuItemProps> = ({

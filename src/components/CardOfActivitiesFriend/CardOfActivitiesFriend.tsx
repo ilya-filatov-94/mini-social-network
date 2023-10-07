@@ -6,7 +6,7 @@ import {useAppSelector} from '../../hooks/useTypedRedux';
 interface IActivitiesProps {
   name: string; 
   refUser?: string;
-  avatar?: any;
+  avatar?: string | undefined;
   textEvent: string;
   timeEvent: string;
   addClass?: string;

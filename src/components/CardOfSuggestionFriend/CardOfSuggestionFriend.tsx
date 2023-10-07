@@ -7,7 +7,7 @@ import {useAppSelector} from '../../hooks/useTypedRedux';
 interface ISuggestionProps {
   name: string;
   refUser?: string; 
-  avatar?: any;
+  avatar?: string | undefined;
   addClass?: string;
   [key: string]: string | number | undefined;
 }
