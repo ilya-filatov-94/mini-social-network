@@ -8,7 +8,7 @@ import {IComments} from '../../../types/comments';
 // import { ReactComponent as SendArrow} from '../../../assets/images/right_arrow.svg';
 
 interface IContentPostProps {
-    comments: IComments[] | [];
+    comments: IComments[];
     curTheme: string;
 };
 

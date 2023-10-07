@@ -16,6 +16,7 @@ const Post: FC<IPostsProps> = ({post}) => {
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const [commentOpen, setCommentOpen] = useState<boolean>(false);
 
+
   return (
     <div className={currentTheme ==='darkMode'
       ? `${styles.post} ${styles['theme-dark']}`

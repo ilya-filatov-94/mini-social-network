@@ -8,6 +8,6 @@ extends IinitialUser {
   date: string;
   img?: string | undefined;
   likes: number;
-  comments: IComments[] | [];
+  comments: IComments[];
 }
 
