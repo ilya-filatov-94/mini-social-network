@@ -1,20 +1,45 @@
 import {FC} from 'react';
 import styles from './StoryTemplate.module.scss';
-import {IStory} from '../../../types/story';
+import StorySkeleton from '../StorySkeleton/StorySkeleton';
 
+import {useInView} from 'react-intersection-observer';
 
-const StoryTemplate: FC<IStory> = ({image, username}) => {
+interface IStoryTemplateProps {
+  image: string | undefined;
+  username: string;
+  curIndex?: number;
+  setIndexStory: (index: number | undefined) => void;
+}
+
+const StoryTemplate: FC<IStoryTemplateProps> = ({
+  image, 
+  username, 
+  curIndex, 
+  setIndexStory
+}) => {
+
+  const {ref, inView} = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
+  function openStory() {
+    setIndexStory(curIndex);
+  }
+
   return (
-    <div className={styles.story}>
-      {image
+    <div
+      onClick={openStory}
+      className={image ? `${styles.story} ${styles.pointer}` : `${styles.story}`}
+      ref={ref}
+    >
+      {image && inView
       ? <img
             className={styles.imgStory}
             src={image}
             alt={`story from ${username}`}
         />
-      : <div className={styles.inox_gloss_blue}>
-          <button className={styles.addStory}>+</button>
-        </div>}
+      : <StorySkeleton />}
       <span className={styles.nameUser}>{username}</span>
     </div>
   );

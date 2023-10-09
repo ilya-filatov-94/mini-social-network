@@ -1,0 +1,84 @@
+@import '../../../styles//responsive.scss';
+
+
+.windowPopup {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 101;
+    background-color: rgba(0,0,0,0.4);
+    font-family: 'Gilroy', 'Arial', sans-serif;
+    font-size: 0.875rem;
+    font-weight: normal;
+    color: white;
+    display: none;
+
+    .contentPopup {
+        padding: 20px;
+        border-radius: 12px;
+        background-color: black;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        
+        .headerStory {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .curUser {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 10px;
+
+                .avatar {
+                    width: 30px;
+                    height: 30px;
+                    object-fit: cover;
+                    border-radius: 50%;
+                }
+            }
+        }
+
+        .contentStory .storyContent {
+            max-height: 80vh;
+            width: 60vw;
+            object-fit: contain;
+        }
+
+        @include mobile {
+            .contentStory .storyContent {
+                height: 95vh;
+                width: 85vw;
+                object-fit: contain;
+            }
+        }
+        @include tablet {
+            .contentStory .storyContent {
+                height: 95vh;
+                width: 85vw;
+                object-fit: contain;
+            }
+        }
+    }
+}
+
+.windowPopup.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.closeBtn {
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.progressBar {
+    height: 1.5px;
+    margin-bottom: 10px;
+    background-color: black;
+}

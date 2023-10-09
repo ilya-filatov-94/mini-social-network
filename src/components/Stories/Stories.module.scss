@@ -1,19 +1,36 @@
 @import '../../styles/responsive.scss';
 @import '../Layout/sizeCoontainer.scss';
 
+
+.container {
+    overflow-x: hidden;
+    // scroll-behavior: smooth;
+    transition-delay: 1s;
+}
+
 .stories {
     display: flex;
     gap: 10px;
     height: 200px;
     margin-bottom: 30px;
+    max-width: 22vw;
 
     @include tablet{
         height: 150px;
         gap: 20px;
+        max-width: 40vw;
     }
 
     @include mobile {
-        height: 40px;
-        justify-content: space-around;
+        height: 60px;
+        margin-bottom: 20px;
+        justify-content: flex-start;
     }
+}
+
+.imgStory {
+    height: 100%;
+    width: 100%;
+    border-radius: 10px;
+    object-fit: cover;
 }
