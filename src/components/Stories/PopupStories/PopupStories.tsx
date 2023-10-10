@@ -2,7 +2,9 @@ import {
   FC, 
   useEffect, 
   useState, 
-  useRef 
+  useRef,
+  memo,
+  useCallback
 } from 'react';
 import styles from './PopupStories.module.scss';
 import Portal from '../../../hoc/Portal';
@@ -48,12 +50,12 @@ const PopupStories: FC<IPopupStoriesProps> = ({
   // eslint-disable-next-line
   }, [filled, isVisible]);
 
-  if (!isVisible) return null;
-
-  function closePopup() {
+  const closePopup = useCallback(() => {
     setFilled(0);
     setVisible(!isVisible);
-  }
+  }, [isVisible, setVisible]);
+
+  if (!isVisible) return null;
 
   return (
     <Portal>
@@ -69,32 +71,59 @@ const PopupStories: FC<IPopupStoriesProps> = ({
                 }}></div>
             </div>
 
-            <div className={styles.headerStory}>
-                <div className={styles.curUser}>
-                    <img 
-                        className={styles.avatar}
-                        src={stories[indexStory!-1].avatar} 
-                        alt={`avatar of ${stories[indexStory!-1].username}`} 
-                    />
-                    <span>{stories[indexStory!-1].username}</span>
-                </div>
-                <CloseOutlinedIcon
-                    onClick={closePopup}
-                    className={styles.closeBtn}
-                />
-            </div>
-            <div className={styles.contentStory}>
-                <img 
-                    className={styles.storyContent}
-                    src={stories[indexStory!-1].image} 
-                    alt={`Story ${indexStory!-1} of ${stories[indexStory!-1].username}`} 
-                />
-            </div>
+            <Content
+              isVisible={isVisible}
+              indexStory={indexStory}
+              stories={stories}
+              closePopup={closePopup}
+            />
 
         </div>
       </div>
     </Portal>
   )
+};
+
+interface IPopupStoriesContentProps {
+  isVisible: boolean;
+  indexStory?: number;
+  stories: IStory[];
+  closePopup: () => void;
 }
+
+const Content: FC<IPopupStoriesContentProps> = memo(({
+  isVisible,
+  indexStory, 
+  stories,
+  closePopup
+ }) => {
+  
+  if (!isVisible) return null;
+
+  return (
+    <>
+      <div className={styles.headerStory}>
+        <div className={styles.curUser}>
+          <img
+            className={styles.avatar}
+            src={stories[indexStory! - 1].avatar}
+            alt={`avatar of ${stories[indexStory! - 1].username}`}
+          />
+          <span>{stories[indexStory! - 1].username}</span>
+        </div>
+        <CloseOutlinedIcon onClick={closePopup} className={styles.closeBtn} />
+      </div>
+      <div className={styles.contentStory}>
+        <img
+          className={styles.storyContent}
+          src={stories[indexStory! - 1].image}
+          alt={`Story ${indexStory! - 1} of ${
+            stories[indexStory! - 1].username
+          }`}
+        />
+      </div>
+    </>
+  );
+});
 
 export default PopupStories;
