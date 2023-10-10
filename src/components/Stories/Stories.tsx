@@ -21,7 +21,7 @@ const Stories: FC = () => {
   const [hasStoryCurUser, setStoryCurrentUser] = useState(undefined);
   const [isOpenStories, setOpenStories] = useState<boolean>(false);
 
-  const refCarousel = useRef<any>(null);
+  const refCarousel = useRef<HTMLDivElement>(null);
   const isDragStart = useRef<boolean>(false);
   const prevPageX = useRef<number>(0);
   const prevScrollLeft = useRef<any>(null);
@@ -38,7 +38,9 @@ const Stories: FC = () => {
     if (!isDragStart.current) return;
     event.preventDefault();
     let positionDiff = event.pageX - prevPageX.current;
-    refCarousel.current.scrollLeft = prevScrollLeft.current - positionDiff;
+    if (refCarousel.current) {
+      refCarousel.current.scrollLeft = prevScrollLeft.current - positionDiff;
+    }
   }
 
   function handlerDragStop(event: TEventTouch): void {
