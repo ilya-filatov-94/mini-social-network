@@ -3,7 +3,7 @@ import {
   useState, 
   useEffect, 
   ChangeEvent, 
-  UIEvent
+  FormEventHandler
 } from 'react';
 import styles from './Login.module.scss';
 
@@ -33,7 +33,7 @@ const Login: FC = () => {
   }, []);
 
   const [loginData, setLoginData] = useState<ILoginData>({
-    nickname: '',
+    email: '',
     password: ''
   });
 
@@ -41,7 +41,7 @@ const Login: FC = () => {
     setLoginData(prev => ({...prev, [event.target.name]: event.target.value}))
   }
 
-  function handleLogin(event: UIEvent) {
+  const handleLogin: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
     dispatch(loginUser(loginData));
     navigate('/', {replace: true});
@@ -68,13 +68,13 @@ const Login: FC = () => {
           <h1 ref={elRef}>
             Вход
           </h1>
-          <form>
+          <form onSubmit={handleLogin}>
             <Input 
               onChange={handleInputs}
               addClass={styles.inputForm}
               type="text" 
-              placeholder="Никнейм пользователя"
-              name="nickname"
+              placeholder="Электронная почта"
+              name="email"
             />
             <Input 
               onChange={handleInputs}
@@ -83,10 +83,7 @@ const Login: FC = () => {
               placeholder="Пароль"
               name="password"
             />
-            <Button 
-              onClick={handleLogin}
-              addClass={styles.loginButton}
-            >
+            <Button addClass={styles.loginButton}>
               Войти
             </Button>
           </form>

@@ -28,17 +28,17 @@ const MobileMenu: FC<IMobileMenuProps> = ({
   const fromPage = location.state?.from?.pathname || '/';
   const dispatch = useAppDispatch();
 
-  function handleLogout() {
-    dispatch(logoutUser());
-    navigate(fromPage, {replace: true});
-  }
-
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
 
+  function handleLogout() {
+    dispatch(logoutUser(currentUser.id));
+    navigate(fromPage, {replace: true});
+  }
+
   const userMenuItem = {
     name: 'Мой профиль',
-    menuRef: `/profile/${currentUser.username.replace(' ', '')}`,
+    menuRef: `profile/${currentUser.refUser}`,
     image: currentUser.profilePic,
   }
 

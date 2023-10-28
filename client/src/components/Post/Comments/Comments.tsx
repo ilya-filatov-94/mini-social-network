@@ -32,12 +32,8 @@ const Comments: FC<IContentPostProps> = ({comments, curTheme}) => {
                 type="text" 
                 placeholder="Напишите комментарий"
             />
-            <div className={styles.mobileBtnSend}>
-                {/* <SendArrow/> */}
-            </div>
-            <button
-                className={styles.btn}
-            >
+            <div className={styles.mobileBtnSend}/>
+            <button className={styles.btn}>
                 Отправить
             </button>
         </div>
@@ -45,13 +41,14 @@ const Comments: FC<IContentPostProps> = ({comments, curTheme}) => {
             <div className={styles.comment} key={comment.id}>
                 <img 
                     className={styles.iconUser}
-                    src={comment.profilePicture} 
+                    src={comment.profilePic} 
                     alt={`description comment ${comment.id}`} 
                 />
                 <div className={styles.info}>
                     <Link 
                         className={styles.username}
-                        to={`/profile/${comment.username.replaceAll(' ', '')}`}
+                        to={`/profile/${comment.refUser}`}
+                        replace={true}
                     >
                         <span>{comment.username}</span>
                     </Link>

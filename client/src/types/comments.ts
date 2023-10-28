@@ -1,9 +1,9 @@
 
 export interface IComments {
   id: number;
-  userId: number;
   username: string;
-  profilePicture?: string | undefined;
+  profilePic?: string | undefined;
+  refUser: string;
   desc: string;
   date: string;
 }

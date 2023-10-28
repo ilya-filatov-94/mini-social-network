@@ -28,12 +28,11 @@ const MenuUser: FC<IMenuUserProps> = ({
   const dispatch = useAppDispatch();
 
   function handleLogout() {
-    dispatch(logoutUser());
+    dispatch(logoutUser(curUser.id));
     navigate(fromPage, {replace: true});
   }
 
   if (!isVisible) return null;
-  const refUser = curUser.username.replace(' ', '');
 
   return (
     <Portal>
@@ -46,7 +45,7 @@ const MenuUser: FC<IMenuUserProps> = ({
           <Link
             onClick={() => setVisible(!isVisible)}
             className={styles.link}
-            to={`/profile/${refUser}`}
+            to={`profile/${curUser.refUser}`}
           >
             Мой профиль
           </Link>

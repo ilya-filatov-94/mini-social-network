@@ -17,21 +17,22 @@ import {useAppSelector} from '../../hooks/useTypedRedux';
 import {useScroll} from '../../hooks/useScroll';
 
 import coverImage from '../../assets/images/profile-background.jpeg';
-import { profileData, posts } from './temporaryDataProfile';
+import { posts } from './temporaryDataProfile';
 
-
+import {profileData} from './temporaryDataProfile';
 
 const Profile: FC = () => {
-  const {user_id} = useParams();
-  const [curUser] = profileData.filter(item => item.userId === user_id);
+  const {id} = useParams();
 
   const [executeScroll, elRef] = useScroll();
   useEffect(() => {
     executeScroll();
   // eslint-disable-next-line
-  }, [user_id]);
+  }, [id]);
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  // const curUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const curUser = profileData[4];
 
   return (
     <div 
@@ -74,11 +75,11 @@ const Profile: FC = () => {
             <div className={styles.info}>
               <div className={styles.item}>
                 <PlaceIcon />
-                <span className={styles.textInfo}>Россия</span>
+                <span className={styles.textInfo}>{curUser.city}</span>
               </div>
               <div className={styles.item}>
                 <LanguageIcon />
-                <span className={styles.textInfo}>spotify.com</span>
+                <span className={styles.textInfo}>{curUser.website}</span>
               </div>
             </div>
             <button className={styles.Btn}>Подписаться</button>

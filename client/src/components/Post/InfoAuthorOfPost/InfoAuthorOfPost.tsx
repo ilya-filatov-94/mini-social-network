@@ -22,7 +22,8 @@ const InfoAuthorOfPost: FC<IPostsProps> = ({post}) => {
         <div className={styles.details}>
           <Link
             className={styles.link}
-            to={`/profile/${post.username.replaceAll(" ", "")}`}
+            to={`/profile/${post.refUser}`}
+            replace={true}
           >
             <span className={styles.username}>{post.username}</span>
           </Link>

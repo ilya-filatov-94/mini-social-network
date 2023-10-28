@@ -1,11 +1,11 @@
 export interface IRegData {
-    nickname: string;
+    name: string;
+    lastname: string;
     email: string;
     password: string;
-    username: string;
 }
 
 export interface ILoginData {
-    nickname: string;
+    email: string;
     password: string;
 }

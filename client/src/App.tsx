@@ -24,7 +24,7 @@ const App: FC = () => {
                 <Home />
               </RequireAuth>
             }/>
-            <Route path="profile/:user_id" element={
+            <Route path="profile/:id" element={
               <RequireAuth >
                 <Profile />
               </RequireAuth >

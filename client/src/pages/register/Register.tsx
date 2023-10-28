@@ -3,11 +3,12 @@ import {
   useState, 
   useEffect,
   ChangeEvent,
-  UIEvent
+  FormEventHandler
 } from 'react';
 import styles from './Register.module.scss';
 import { useNavigate } from "react-router-dom";
 import {useAppDispatch} from '../../hooks/useTypedRedux';
+// import {useAppSelector} from '../../hooks/useTypedRedux';
 import {registerUser} from '../../store/authSlice';
 import {useMatchMedia} from '../../hooks/useMatchMedia';
 import {useScroll} from '../../hooks/useScroll';
@@ -18,9 +19,15 @@ import Input from '../../components/Input/Input';
 import {IRegData} from '../../types/form';
 
 
+
+
+
 const Register: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
+  // const {loading, error} = useAppSelector(state => state.reducerAuth);
+
   const {isMobile} = useMatchMedia();
   const [executeScroll, elRef] = useScroll();
 
@@ -32,19 +39,35 @@ const Register: FC = () => {
   }, []);
 
   const [regData, setRegData] = useState<IRegData>({
-    nickname: '',
+    name: '',
+    lastname: '',
     email: '',
     password: '',
-    username: ''
   });
+
+  const [isValidInputs, setValidInput] = useState({
+    name: false,
+    lastname: false,
+    email: false,
+    password: false,
+  });
+
+  const isValidForm = isValidInputs.name &&
+                      isValidInputs.lastname &&
+                      isValidInputs.email &&
+                      isValidInputs.password;
 
   function handleInputs(event: ChangeEvent<HTMLInputElement>) {
     setRegData(prev => ({...prev, [event.target.name]: event.target.value}))
   }
 
-  function handleLogin(event: UIEvent) {
+  const handleRegister: FormEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
-    dispatch(registerUser(regData));
+    dispatch(registerUser({
+      username: regData.name + ' ' + regData.lastname,
+      email: regData.email,
+      password: regData.password,
+    }));
     navigate('/', {replace: true});
   }
 
@@ -53,39 +76,40 @@ const Register: FC = () => {
       <div className={styles.card}>
         <div className={styles.leftSection}>
           <h1 ref={elRef}>Регистрация</h1>
-          <form action="">
+          <form onSubmit={handleRegister}>
             <Input 
              onChange={handleInputs}
              addClass={styles.inputForm}
              type="text"
-             placeholder="Никнейм пользователя"
-             name="nickname"
-            />
-            <Input 
-              onChange={handleInputs}
-              addClass={styles.inputForm}
-              type="email" 
-              placeholder="Электронная почта" 
-              name="email"
-            />
-            <Input 
-              onChange={handleInputs}
-              addClass={styles.inputForm}
-              type="password" 
-              placeholder="Пароль" 
-              name="password"
+             placeholder="Имя"
+             name="name"
+             required
             />
             <Input 
               onChange={handleInputs}
               addClass={styles.inputForm}
               type="text" 
-              placeholder="Ваше имя"
-              name="username"
+              placeholder="Фамилия" 
+              name="lastname"
+              required
             />
-            <Button 
-              addClass={styles.regButton}
-              onClick={handleLogin}
-            >
+            <Input 
+              onChange={handleInputs}
+              addClass={styles.inputForm}
+              type="text" 
+              placeholder="Электронная почта" 
+              name="email"
+              required
+            />
+            <Input 
+              onChange={handleInputs}
+              addClass={styles.inputForm}
+              type="password" 
+              placeholder="Пароль"
+              name="password"
+              required
+            />
+            <Button addClass={styles.regButton}>
               Зарегистрироваться
             </Button>
           </form>
