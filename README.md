@@ -19,7 +19,7 @@ Fullstack mini-application for social media with responsive design
 ![JavaScript](https://img.shields.io/badge/-JavaScript-4d4d4d?style=for-the-badge&logo=JavaScript&logoColor=f7dc1c)
 ![JWT](https://img.shields.io/badge/JWT-4d4d4d?style=for-the-badge&logo=JSON%20web%20tokens)
 ![Nodemon](https://img.shields.io/badge/NODEMON-4d4d4d?style=for-the-badge&logo=nodemon&logoColor=%BBDEAD)
-![Postgres](https://img.shields.io/badge/Postgres-4d4d4d?style=for-the-badge&logo=postgresql&logoColor=%23316192)
+![Postgres](https://img.shields.io/badge/Postgres-%23316192?style=for-the-badge&logo=postgresql&logoColor=white)
 
 ### Third party tools
 *   Using icons from Material-UI.
