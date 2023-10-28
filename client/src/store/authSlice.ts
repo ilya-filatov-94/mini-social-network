@@ -151,7 +151,4 @@ function isError(action: AnyAction) {
     return action.type.endsWith('rejected');
 }
 
-
-// export const {registerUser, loginUser, logoutUser} = authSlice.actions; 
-// export const {logoutUser} = authSlice.actions; 
 export default authSlice.reducer;
