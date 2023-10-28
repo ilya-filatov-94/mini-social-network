@@ -17,6 +17,7 @@ extends IAuthState {
 const initialState: IAsyncAuthState = {
     isAuth: false,
     currentUser: initialStateUser,
+    accessToken: '',
     loading: false,
     error: null
 }
@@ -107,6 +108,7 @@ const authSlice = createSlice({
                 profilePic: user.profilePic,
             };
             state.isAuth = true;
+            state.accessToken = accessToken;
         })
         .addCase(loginUser.pending, (state) => {
             state.loading = true;
@@ -125,6 +127,7 @@ const authSlice = createSlice({
                 profilePic: user.profilePic,
             };
             state.isAuth = true;
+            state.accessToken = accessToken;
         })
         .addCase(logoutUser.pending, (state) => {
             state.loading = true;

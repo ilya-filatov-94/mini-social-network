@@ -37,6 +37,7 @@ export interface IResponse {
 export interface IAuthState {
     currentUser: IinitialUser;
     isAuth: boolean;
+    accessToken: string;
 }
 
 export interface IResponseLogout {
