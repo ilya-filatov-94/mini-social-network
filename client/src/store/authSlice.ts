@@ -24,7 +24,7 @@ const initialState: IAsyncAuthState = {
 
 export const registerUser = createAsyncThunk<IResponse, IRegState, {rejectValue: string}>(
     'authService/registerUser',
-    async function (data, {rejectWithValue}) {
+    function (data, {rejectWithValue}) {
         return axios.post(API_URL + '/user/registration',
         {...data},
         {
@@ -45,7 +45,7 @@ export const registerUser = createAsyncThunk<IResponse, IRegState, {rejectValue:
 
 export const loginUser = createAsyncThunk<IResponse, ILoginData, {rejectValue: string}>(
     'authService/loginUser',
-    async function (data, {rejectWithValue}) {
+    function (data, {rejectWithValue}) {
         return axios.post(API_URL + '/user/login',
         {...data},
         {
@@ -66,7 +66,7 @@ export const loginUser = createAsyncThunk<IResponse, ILoginData, {rejectValue: s
 
 export const logoutUser = createAsyncThunk<IResponseLogout, number, {rejectValue: string}>(
     'authService/logoutUser',
-    async function (data, {rejectWithValue}) {
+    function (data, {rejectWithValue}) {
         return axios.post(API_URL + '/user/logout',
         {id: data},
         {
@@ -140,6 +140,7 @@ const authSlice = createSlice({
             state.currentUser.profilePic = "";
             state.currentUser.refUser = "";
             state.currentUser.username = "";
+            state.accessToken ="";
             state.isAuth = false;
         })
         .addMatcher(isError, (state, action: PayloadAction<string>) => {
