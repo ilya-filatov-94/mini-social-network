@@ -75,6 +75,7 @@ const Login: FC = () => {
               type="text" 
               placeholder="Электронная почта"
               name="email"
+              required
             />
             <Input 
               onChange={handleInputs}
@@ -82,6 +83,8 @@ const Login: FC = () => {
               type="password" 
               placeholder="Пароль"
               name="password"
+              required
+              autoComplete="false"
             />
             <Button addClass={styles.loginButton}>
               Войти

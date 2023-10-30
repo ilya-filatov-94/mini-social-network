@@ -18,7 +18,7 @@ class UserController {
             return response.json(dataForClient);
 
         } catch (error) {
-            next(ApiError.badRequest(error.message));
+            next(error);
         }
     }
 

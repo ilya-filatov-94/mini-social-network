@@ -1,0 +1,16 @@
+
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn > p {
+    margin-right: 10px;
+}
+
+.btn > div {
+    padding: 0;
+    margin-bottom: -5px;
+}
+

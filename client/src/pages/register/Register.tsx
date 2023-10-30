@@ -6,14 +6,14 @@ import {
   FormEventHandler
 } from 'react';
 import styles from './Register.module.scss';
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from '../../hooks/useTypedRedux';
-// import {useAppSelector} from '../../hooks/useTypedRedux';
+import {useAppSelector} from '../../hooks/useTypedRedux';
 import {registerUser} from '../../store/authSlice';
 import {useMatchMedia} from '../../hooks/useMatchMedia';
 import {useScroll} from '../../hooks/useScroll';
 
-import Button from '../../components/Button/Button';
+import LoadingButton from '../../components/LoadingButton/LoadingButton';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import Input from '../../components/Input/Input';
 import {IRegData} from '../../types/form';
@@ -26,7 +26,18 @@ const Register: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  // const {loading, error} = useAppSelector(state => state.reducerAuth);
+  const {isAuth, status, error} = useAppSelector(state => state.reducerAuth);
+
+  useEffect(() => {
+    if (isAuth && status === 'resolved') {
+      navigate('/', {replace: true});
+    }
+    if (error) {
+      console.log(error);
+      console.log(status);
+    }
+  // eslint-disable-next-line
+  }, [status, error]);
 
   const {isMobile} = useMatchMedia();
   const [executeScroll, elRef] = useScroll();
@@ -68,7 +79,6 @@ const Register: FC = () => {
       email: regData.email,
       password: regData.password,
     }));
-    navigate('/', {replace: true});
   }
 
   return (
@@ -108,10 +118,17 @@ const Register: FC = () => {
               placeholder="Пароль"
               name="password"
               required
+              autoComplete="false"
             />
-            <Button addClass={styles.regButton}>
+            <LoadingButton
+              type="submit"
+              loading={status === 'loading'}
+              text="Зарегистрироваться"
+              classes={styles.regButton}
+            />
+            {/* <Button addClass={styles.regButton}>
               Зарегистрироваться
-            </Button>
+            </Button> */}
           </form>
         </div>
 

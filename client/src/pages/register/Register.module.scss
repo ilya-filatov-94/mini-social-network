@@ -84,7 +84,15 @@
                 width: 30%;
             }
         }
-
+        .regButton:hover {
+            background-color: rgb(131, 93, 178);
+        }
+        .regButton:active {
+            background-color: rebeccapurple;
+        }
+        .regButton:disabled {
+            background-color: grey;
+        }
     }
 
     .rightSection {
