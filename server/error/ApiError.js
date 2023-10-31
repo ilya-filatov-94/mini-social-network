@@ -21,6 +21,10 @@ class ApiError extends Error {
     static forbidden(message, errors = []) {
         return new ApiError(403, message, errors);  //Нет доступа
     }
+
+    static invalidData(serverMessage='', errors = []) {
+        return new ApiError(403, serverMessage, errors);  //Нет доступа
+    }
 }
 
 

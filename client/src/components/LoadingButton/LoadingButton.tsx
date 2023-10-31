@@ -12,12 +12,14 @@ extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonEle
     loading: boolean;
     text: string;
     classes: string;
+    disabled: boolean;
 }
 
 const LoadingButton: FC<ILoadingButtonProps> = ({
     loading,
     text,
     classes,
+    disabled,
     ...props
 }) => {
 
@@ -29,7 +31,7 @@ const LoadingButton: FC<ILoadingButtonProps> = ({
   return (
     <button
         {...props}
-        disabled={loading}
+        disabled={loading || disabled}
         className={rootStyles.join(' ')}
     >
         <p>{loading ? "Подождите" : text}</p>

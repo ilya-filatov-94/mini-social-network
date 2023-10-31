@@ -7,25 +7,27 @@ import {
 } from 'react';
 import styles from './Register.module.scss';
 import {useNavigate} from "react-router-dom";
-import {useAppDispatch} from '../../hooks/useTypedRedux';
-import {useAppSelector} from '../../hooks/useTypedRedux';
-import {registerUser} from '../../store/authSlice';
+import {useAppDispatch, useAppSelector} from '../../hooks/useTypedRedux';
+import {registerUser, setErrorStatus} from '../../store/authSlice';
 import {useMatchMedia} from '../../hooks/useMatchMedia';
 import {useScroll} from '../../hooks/useScroll';
 
 import LoadingButton from '../../components/LoadingButton/LoadingButton';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
-import Input from '../../components/Input/Input';
-import {IRegData} from '../../types/form';
+import InputWithValidation from '../../components/InputWithValidation/InputWithValidation';
+import {inputs} from './regInputs';
 
+interface IStatusValidData {
+  [key: string]: boolean;
+}
 
-
-
+interface IRegValue {
+  [key: string]: string;
+}
 
 const Register: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
   const {isAuth, status, error} = useAppSelector(state => state.reducerAuth);
 
   useEffect(() => {
@@ -35,6 +37,9 @@ const Register: FC = () => {
     if (error) {
       console.log(error);
       console.log(status);
+      if (status === '403') {
+        setValidInput({...isValidInputs, email: false});
+      }
     }
   // eslint-disable-next-line
   }, [status, error]);
@@ -49,14 +54,14 @@ const Register: FC = () => {
   // eslint-disable-next-line
   }, []);
 
-  const [regData, setRegData] = useState<IRegData>({
+  const [regData, setRegData] = useState<IRegValue>({
     name: '',
     lastname: '',
     email: '',
     password: '',
   });
 
-  const [isValidInputs, setValidInput] = useState({
+  const [isValidInputs, setValidInput] = useState<IStatusValidData>({
     name: false,
     lastname: false,
     email: false,
@@ -69,7 +74,10 @@ const Register: FC = () => {
                       isValidInputs.password;
 
   function handleInputs(event: ChangeEvent<HTMLInputElement>) {
-    setRegData(prev => ({...prev, [event.target.name]: event.target.value}))
+    setRegData({...regData, [event.target.name]: event.target.value})
+    if (status === '403') {
+      dispatch(setErrorStatus(undefined))
+    }
   }
 
   const handleRegister: FormEventHandler<HTMLFormElement> = (event) => {
@@ -81,54 +89,45 @@ const Register: FC = () => {
     }));
   }
 
+  function addFnValidation(inputName: string) {
+    if (inputName === 'email') {
+      return {
+        customFun: function() {
+          if (status === '403') {
+            return error as string;
+          }
+          return '';
+        }
+      }
+    }
+    return {customFun: undefined};
+  }
+
   return (
     <div className={styles.register}>
       <div className={styles.card}>
         <div className={styles.leftSection}>
           <h1 ref={elRef}>Регистрация</h1>
           <form onSubmit={handleRegister}>
-            <Input 
-             onChange={handleInputs}
-             addClass={styles.inputForm}
-             type="text"
-             placeholder="Имя"
-             name="name"
-             required
-            />
-            <Input 
-              onChange={handleInputs}
-              addClass={styles.inputForm}
-              type="text" 
-              placeholder="Фамилия" 
-              name="lastname"
-              required
-            />
-            <Input 
-              onChange={handleInputs}
-              addClass={styles.inputForm}
-              type="text" 
-              placeholder="Электронная почта" 
-              name="email"
-              required
-            />
-            <Input 
-              onChange={handleInputs}
-              addClass={styles.inputForm}
-              type="password" 
-              placeholder="Пароль"
-              name="password"
-              required
-              autoComplete="false"
-            />
+            {inputs.map((input) => 
+              <InputWithValidation
+                key={input.idInput}
+                classes={styles.inputForm}
+                value={regData[input.name]}
+                isValidInputs={isValidInputs}  
+                setValidInput={setValidInput}
+                funValidation={addFnValidation(input.name)}
+                onChange={handleInputs}
+                {...input}
+              />
+            )}
             <LoadingButton
               type="submit"
               loading={status === 'loading'}
+              disabled={!isValidForm}
               text="Зарегистрироваться"
               classes={styles.regButton}
             />
-            {/* <Button addClass={styles.regButton}>
-              Зарегистрироваться
-            </Button> */}
           </form>
         </div>
 

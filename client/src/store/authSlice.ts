@@ -3,9 +3,15 @@ import {AppDispatch} from './index';
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
 
-import {IRegState, IAuthState, IAccessToken, IResponse, IResponseLogout} from '../types/authReducer';
+import {
+    IRegState, 
+    IAuthState, 
+    IAccessToken, 
+    IResponse, 
+    ILoginState, 
+    IResponseLogout
+} from '../types/authReducer';
 import {initialStateUser} from './initialStore';
-import {ILoginData} from '../types/form';
 import {API_URL} from '../env_variables';
 
 
@@ -41,11 +47,14 @@ export const registerUser = createAsyncThunk<IResponse, IRegState, {rejectValue:
         .catch((error: unknown) => {
             if (error instanceof axios.AxiosError) {
                 dispatch(setErrorStatus(error?.response?.status));
-                if (error?.message) {
-                    return rejectWithValue(error?.message);
-                }
                 if (error?.response?.data?.message) {
                     return rejectWithValue(error?.response?.data?.message);
+                }
+                if (error?.message) {
+                    if (error?.message === 'Network Error') {
+                        dispatch(setErrorStatus(500));
+                    }
+                    return rejectWithValue(error?.message);
                 }
                 return rejectWithValue(error?.message);
             }
@@ -55,7 +64,7 @@ export const registerUser = createAsyncThunk<IResponse, IRegState, {rejectValue:
     }
 );
 
-export const loginUser = createAsyncThunk<IResponse, ILoginData, {rejectValue: string, dispatch: AppDispatch}>(
+export const loginUser = createAsyncThunk<IResponse, ILoginState, {rejectValue: string, dispatch: AppDispatch}>(
     'authService/loginUser',
     function (data, {rejectWithValue, dispatch}) {
         return axios.post(API_URL + '/user/login',
@@ -72,11 +81,14 @@ export const loginUser = createAsyncThunk<IResponse, ILoginData, {rejectValue: s
         .catch((error: unknown) => {
             if (error instanceof axios.AxiosError) {
                 dispatch(setErrorStatus(error?.response?.status));
-                if (error?.message) {
-                    return rejectWithValue(error?.message);
-                }
                 if (error?.response?.data?.message) {
                     return rejectWithValue(error?.response?.data?.message);
+                }
+                if (error?.message) {
+                    if (error?.message === 'Network Error') {
+                        dispatch(setErrorStatus(500));
+                    }
+                    return rejectWithValue(error?.message);
                 }
                 return rejectWithValue(error?.message);
             }
@@ -103,11 +115,14 @@ export const logoutUser = createAsyncThunk<IResponseLogout, number, {rejectValue
         .catch((error: unknown) => {
             if (error instanceof axios.AxiosError) {
                 dispatch(setErrorStatus(error?.response?.status));
-                if (error?.message) {
-                    return rejectWithValue(error?.message);
-                }
                 if (error?.response?.data?.message) {
                     return rejectWithValue(error?.response?.data?.message);
+                }
+                if (error?.message) {
+                    if (error?.message === 'Network Error') {
+                        dispatch(setErrorStatus(500));
+                    }
+                    return rejectWithValue(error?.message);
                 }
                 return rejectWithValue(error?.message);
             }
@@ -123,6 +138,9 @@ const authSlice = createSlice({
     reducers: {
         setErrorStatus(state, action: PayloadAction<number | undefined>) {
             state.status = String(action.payload);
+            if (action.payload === undefined) {
+                state.error = '';
+            }
         },
     },
     extraReducers: (builder) => {
@@ -190,5 +208,5 @@ function isError(action: AnyAction) {
     return action.type.endsWith('rejected');
 }
 
-const {setErrorStatus} = authSlice.actions; 
+export const {setErrorStatus} = authSlice.actions; 
 export default authSlice.reducer;

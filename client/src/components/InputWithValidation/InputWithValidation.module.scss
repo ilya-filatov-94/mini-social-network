@@ -1,0 +1,20 @@
+.wrapperInput {
+    width: 100%;
+}
+
+.input {
+    width: 100%;
+    border: 1px solid white;
+    border-bottom: 1px solid lightgray;
+}
+
+.invalidData {
+    border: 1px solid red;
+}
+
+.error {
+    min-height: 24.4px;
+    padding: 5px 15px;
+    font-size: 0.75rem;
+    color: red;
+}

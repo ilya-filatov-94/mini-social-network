@@ -60,7 +60,7 @@
         }
 
         .inputForm {
-            padding: 20px;
+            padding: 15px;
             @include mobile {
                 @supports (-webkit-touch-callout: none) and (not (translate: none)) {
                         &:not(:last-child) {

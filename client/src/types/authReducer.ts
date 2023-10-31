@@ -5,6 +5,11 @@ export interface IRegState {
     password: string;
 }
 
+export interface ILoginState {
+    email: string;
+    password: string;
+}
+
 export interface IAccessToken {
     id: number,
     refUser: string;

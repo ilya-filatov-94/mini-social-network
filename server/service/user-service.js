@@ -10,7 +10,7 @@ class UserService {
     async registration(username, email, password) {
         const candidate = await User.findOne({where: {email}});
         if (candidate) {
-            throw ApiError.forbidden(`Пользователь с почтовым адресом ${email} уже существует!`);
+            throw ApiError.invalidData(`Пользователь с почтовым адресом ${email} уже существует!`);
         }
         const hashPassword = await bcrypt.hash(password, 5); //второй параметр это количество раундов для генерации соли
         const user = await User.create({
@@ -43,11 +43,11 @@ class UserService {
     async login(email, password) {
         const user = await User.findOne({where: {email}});
         if (!user) {
-            throw ApiError.badRequest(`Пользователь с почтовым адресом ${email} не найден!`);
+            throw ApiError.invalidData(`Пользователь с почтовым адресом ${email} не найден!`);
         }
         const isPassEquals = await bcrypt.compare(password, user.password);
         if (!isPassEquals) {
-            throw ApiError.badRequest('Неверный пароль');
+            throw ApiError.invalidData('Неверный пароль');
         }
         const payload = {id: user.id, refUser: user.refUser, email: user.email};
         const tokens = tokenService.generateTokens(payload);
