@@ -115,54 +115,37 @@ const Login: FC = () => {
           </h1>
           <form onSubmit={handleLogin}>
             <InputWithValidation
-                classes={styles.inputForm}
-                value={loginData['email']}
-                name="email"
-                type="text"
-                required
-                placeholder="Электронная почта"
-                isValidInputs={isValidInputs}  
-                setValidInput={setValidInput}
-                funValidation={{customFun: addFnValidation}}
-                onChange={handleInputs}
-                validations={{checkEmail: true}}
-              />
-              <InputWithValidation
-                classes={styles.inputForm}
-                value={loginData['password']}
-                name="password"
-                type="password"
-                required
-                placeholder="Пароль"
-                autoComplete="false"
-                isValidInputs={isValidInputs}  
-                setValidInput={setValidInput}
-                funValidation={{customFun: addFnValidation}}
-                onChange={handleInputs}
-                validations={{
-                  lettersDfferentRegisters: true,
-                  hasDigit: true,
-                  minLength: 6,
-                  maxLength: 32,
-                }}
-              />
-            {/* <Input 
-              onChange={handleInputs}
-              addClass={styles.inputForm}
-              type="text" 
-              placeholder="Электронная почта"
+              classes={styles.inputForm}
+              value={loginData['email']}
               name="email"
+              type="text"
               required
-            />
-            <Input 
+              placeholder="Электронная почта"
+              isValidInputs={isValidInputs}  
+              setValidInput={setValidInput}
+              funValidation={{customFun: addFnValidation}}
               onChange={handleInputs}
-              addClass={styles.inputForm}
-              type="password" 
-              placeholder="Пароль"
+              validations={{checkEmail: true}}
+            />
+            <InputWithValidation
+              classes={styles.inputForm}
+              value={loginData['password']}
               name="password"
+              type="password"
               required
+              placeholder="Пароль"
               autoComplete="false"
-            /> */}
+              isValidInputs={isValidInputs}  
+              setValidInput={setValidInput}
+              funValidation={{customFun: addFnValidation}}
+              onChange={handleInputs}
+              validations={{
+                lettersDfferentRegisters: true,
+                hasDigit: true,
+                minLength: 6,
+                maxLength: 32,
+              }}
+            />
             <LoadingButton
               type="submit"
               loading={status === 'loading'}
