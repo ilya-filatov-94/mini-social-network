@@ -52,6 +52,12 @@
             display: flex;
             align-items: center;
             gap: 20px;
+
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                &:not(:last-child) {
+                    margin-right: 20px;
+                }
+            }
   
             .input {
               width: 100%;
@@ -76,6 +82,12 @@
               align-items: center;
               gap: 20px;
 
+              @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                &:not(:last-child) {
+                    margin-right: 20px;
+                }
+              }
+
               .fileInput {
                 display: none;
               }
@@ -85,6 +97,12 @@
                 align-items: center;
                 gap: 10px;
                 cursor: pointer;
+
+                @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                    &:not(:last-child) {
+                        margin-right: 10px;
+                    }
+                }
     
                 .img {
                   height: 20px;
@@ -106,12 +124,6 @@
                     cursor: pointer;
                   }
             }
-        }
-    }
-
-    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-        &:not(:last-child) {
-            margin-bottom: 30px;
         }
     }
 }
