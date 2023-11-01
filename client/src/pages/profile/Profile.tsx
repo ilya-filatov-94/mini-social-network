@@ -7,8 +7,6 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 import Posts from '../../components/Posts/Posts';
 import noAvatar from '../../assets/images/no-avatar.jpg';
@@ -16,9 +14,8 @@ import { useParams } from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import {useScroll} from '../../hooks/useScroll';
 
-import coverImage from '../../assets/images/profile-background.jpeg';
-import { posts } from './temporaryDataProfile';
 
+import { posts } from './temporaryDataProfile';
 import {profileData} from './temporaryDataProfile';
 
 const Profile: FC = () => {
@@ -31,8 +28,9 @@ const Profile: FC = () => {
   }, [id]);
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  // const curUser = useAppSelector(state => state.reducerAuth.currentUser);
-  const curUser = profileData[4];
+  const curUser = useAppSelector(state => state.reducerAuth.currentUser);
+
+  const userData = profileData.filter(user => user.refUser === id)[0];
 
   return (
     <div 
@@ -43,50 +41,62 @@ const Profile: FC = () => {
       }
     >
       <div className={styles.imagesHeader}>
-        <img
-          src={coverImage}
-          alt={`coverImage of ${curUser.username}`}
+        {userData.coverPic 
+        ? <img
+            src={userData.coverPic}
+            alt={`coverImage of ${userData.username}`}
+            className={styles.cover}
+          />
+        : <div className={styles.bgNonCover}/>
+        }
+        {/* <img
+          src={userData.coverPic}
+          alt={`coverImage of ${userData.username}`}
           className={styles.cover}
-        />
+        /> */}
         <img
-          src={curUser.profilePic ? curUser.profilePic : noAvatar}
-          alt={`avatar of ${curUser.username}`}
+          src={userData.profilePic ? userData.profilePic : noAvatar}
+          alt={`avatar of ${userData.username}`}
           className={styles.profilePic}
         />
       </div>
       <div className={styles.profileContainer}>
       <div className={styles.userInfo}>
-          <div className={styles.left}>
-            <a href="http://facebook.com">
-              <FacebookTwoToneIcon />
-            </a>
-            <a href="http://instagram.com">
-              <InstagramIcon />
-            </a>
-            <a href="http://twitter.com">
-              <TwitterIcon />
-            </a>
-            <a href="http://ru.linkedinn.com">
-              <LinkedInIcon />
-            </a>
-          </div>
           <div className={styles.mainInfo}>
-            <span className={styles.textNick}>{curUser.username}</span>
+            <span className={styles.textNick}>{userData.username}</span>
             <div className={styles.info}>
               <div className={styles.item}>
                 <PlaceIcon />
-                <span className={styles.textInfo}>{curUser.city}</span>
+                <span className={styles.textInfo}>{userData.city}</span>
               </div>
               <div className={styles.item}>
                 <LanguageIcon />
-                <span className={styles.textInfo}>{curUser.website}</span>
+                <span className={styles.textInfo}>{userData.website}</span>
               </div>
             </div>
-            <button className={styles.Btn}>Подписаться</button>
-          </div>
-          <div className={styles.right}>
-            <EmailOutlinedIcon />
-            <MoreVertIcon />
+            <div className={styles.socials}>
+              <a href="http://facebook.com">
+                <FacebookTwoToneIcon />
+              </a>
+              <a href="http://instagram.com">
+                <InstagramIcon />
+              </a>
+              <a href="http://twitter.com">
+                <TwitterIcon />
+              </a>
+              <a href="http://ru.linkedinn.com">
+                <LinkedInIcon />
+              </a>
+            </div>
+            <div className={styles.userActions}>
+              {id !== curUser.refUser
+              ? <>
+                  <button className={styles.Btn}>Написать</button>
+                  <button className={styles.Btn}>Подписаться</button>
+                </>
+              : <button className={styles.Btn}>Редактировать профиль</button>
+              }
+            </div>
           </div>
         </div>
         <Posts posts={posts}/>

@@ -4,6 +4,7 @@ import AvatarTom from '../../assets/images/avatar2.jpg';
 import AvatarKate from '../../assets/images/pexels-photo-1036623.jpeg';
 import JohnAvatar from '../../assets/images/John-Avatar.png';
 import postImage from '../../assets/images/bg-for-registration.jpeg'
+import coverImage from '../../assets/images/profile-background.jpeg';
 import {IUserProfile} from '../../types/users';
 import {IPost} from '../../types/posts';
 
@@ -12,10 +13,10 @@ import {IPost} from '../../types/posts';
 //TEMPORARY
 export const profileData: IUserProfile[] = [
   {
-    id: 10,
-    username: "Jane Stone",
-    email: "jane-stone@mail.ru",
-    refUser: "Jane10Stone",
+    id: 9,
+    username: "Jane Olsen",
+    email: "jane@mail.ru",
+    refUser: "JaneOlsen9",
     profilePic: JaneAvatar,
     coverPic: "",
     city: "Не указан",
@@ -23,10 +24,10 @@ export const profileData: IUserProfile[] = [
     status: "online"
   },
   {
-    id: 11,
+    id: 10,
     username: "Rich Skinner",
     email: "rich-skinner@mail.ru",
-    refUser: "Rich11Skinner",
+    refUser: "RichSkinner10",
     profilePic: AvatarRich,
     coverPic: "",
     city: "Не указан",
@@ -34,21 +35,21 @@ export const profileData: IUserProfile[] = [
     status: "online"
   },
   {
-    id: 12,
+    id: 16,
     username: "Tom Riddle",
     email: "tom-riddle@mail.ru",
-    refUser: "Tom12Riddle",
+    refUser: "TomRiddle16",
     profilePic: AvatarTom,
-    coverPic: "",
-    city: "Не указан",
-    website: "Отсутствует",
+    coverPic: coverImage,
+    city: "Москва",
+    website: "http://t.me/tom-riddle",
     status: "online"
   },
   {
-    id: 13,
+    id: 11,
     username: "Kate Stone",
     email: "kate-stone@mail.ru",
-    refUser: "Kate13Stone",
+    refUser: "KateStone11",
     profilePic: AvatarKate,
     coverPic: "",
     city: "Не указан",
@@ -56,10 +57,10 @@ export const profileData: IUserProfile[] = [
     status: "online"
   },
   {
-    id: 14,
+    id: 8,
     username: "John Doe",
     email: "john-doe@mail.ru",
-    refUser: "John14Doe",
+    refUser: "JohnDoe8",
     profilePic: JohnAvatar,
     coverPic: "",
     city: "Не указан",
