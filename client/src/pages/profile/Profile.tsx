@@ -9,6 +9,7 @@ import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 
 import Posts from '../../components/Posts/Posts';
+import SharePost from '../../components/SharePost/SharePost';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import { useParams } from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
@@ -99,6 +100,7 @@ const Profile: FC = () => {
             </div>
           </div>
         </div>
+        <SharePost />
         <Posts posts={posts}/>
       </div>
     </div>
