@@ -38,6 +38,7 @@ const StoryTemplate: FC<IStoryTemplateProps> = ({
             className={styles.imgStory}
             src={image}
             alt={`story from ${username}`}
+            draggable={false}
         />
       : <StorySkeleton />}
       <span className={styles.nameUser}>{username}</span>

@@ -9,6 +9,7 @@ import styles from './Stories.module.scss';
 import StoryTemplate from './StoryTemplate/StoryTemplate';
 import PopupStories from './PopupStories/PopupStories';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import {getRefValue, useStateRef} from '../../hooks/useStateRef';
 
 import {stories} from './temporaryData';
 
@@ -20,33 +21,44 @@ const Stories: FC = () => {
    // eslint-disable-next-line
   const [hasStoryCurUser, setStoryCurrentUser] = useState(undefined);
   const [isOpenStories, setOpenStories] = useState<boolean>(false);
-
-  const refCarousel = useRef<HTMLDivElement>(null);
-  const isDragStart = useRef<boolean>(false);
-  const prevPageX = useRef<number>(0);
-  const prevScrollLeft = useRef<any>(null);
-  const [indexCurrentStory, setIndexStory] = useState<number | undefined>(0);
   const clickIndex = useRef<number | undefined>(0);
+  const [indexCurrentStory, setIndexStory] = useState<number | undefined>(0);
 
-  function handlerDragStart(event: TEventTouch): void {
+  const isDragStart = useRef<boolean>(false);
+  const currentOffsetXRef = useRef(0);
+  const startXRef = useRef(0);
+  const [offsetX, setOffsetX, offsetXRef] = useStateRef(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const minOffsetXRef = useRef(0);
+
+  const handlerDragStart = (event: MouseEvent<HTMLDivElement>) => {
     isDragStart.current = true;
-    prevPageX.current = event.pageX;
-    prevScrollLeft.current = refCarousel.current?.scrollLeft;
-  }
+    const containerEl = getRefValue(containerRef);
+    minOffsetXRef.current = containerEl.offsetWidth - (containerEl.scrollWidth)*0.77;
+    currentOffsetXRef.current = getRefValue(offsetXRef);
+    startXRef.current = event.clientX;
+  };
 
-  function handlerDragging(event: TEventTouch): void {
-    if (!isDragStart.current) return;
-    event.preventDefault();
-    let positionDiff = event.pageX - prevPageX.current;
-    if (refCarousel.current) {
-      refCarousel.current.scrollLeft = prevScrollLeft.current - positionDiff;
-    }
-  }
-
-  function handlerDragStop(event: TEventTouch): void {
+  const handlerDragStop = (event: TEventTouch) => {
     event.preventDefault();
     isDragStart.current = false;
   }
+
+  const handlerDragging = (event: TEventTouch) => {
+    if (!isDragStart.current) return;
+    const currentX = event.clientX;
+    const diff = getRefValue(startXRef) - currentX;
+    let newOffsetX = getRefValue(currentOffsetXRef) - diff;
+    const maxOffsetX = 0;
+    const minOffsetX = getRefValue(minOffsetXRef);
+    if (newOffsetX > maxOffsetX) {
+      newOffsetX = maxOffsetX;
+    }
+    if (newOffsetX < minOffsetX) {
+      newOffsetX = minOffsetX;
+    }
+    setOffsetX(newOffsetX);
+  };
 
   function setCurrentIndex(index?: number): void {
     setIndexStory(index);
@@ -54,10 +66,12 @@ const Stories: FC = () => {
   }
 
   function openStory(event: TEventTouch) {
-    let positionDiff = event.pageX - prevPageX.current;
+    const currentX = event.clientX;
+    const diff = getRefValue(startXRef) - currentX;
     const notOpen = clickIndex.current === 0 && !hasStoryCurUser;
-    if (Math.abs(positionDiff) < 1 && !notOpen) {
+    if (Math.abs(diff) < 1 && !notOpen) {
       setOpenStories(true);
+      console.log(clickIndex.current);
     }
   }
 
@@ -70,9 +84,12 @@ const Stories: FC = () => {
       onPointerUp={handlerDragStop}
       onPointerLeave={handlerDragStop}
       className={styles.container}
-      ref={refCarousel}
     >
-      <div className={styles.stories}>
+      <div
+        className={`${styles.stories} ${isDragStart.current ? styles['is-swiping'] : ''}`}
+        style={{ transform: `translate3d(${offsetX}px, 0, 0)` }}
+        ref={containerRef}
+      >
         <StoryTemplate 
           image={hasStoryCurUser} 
           username={currentUser.username}

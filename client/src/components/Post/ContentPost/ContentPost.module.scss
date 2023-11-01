@@ -48,5 +48,13 @@
             cursor: pointer;
             font-size: 0.875rem;
         }
+
+        @include mobile {
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                & > *:not(:last-child) {
+                    margin-right: 40px;
+                }
+            }
+        }
     }
 }

@@ -40,6 +40,21 @@
             }
 
         }
+
+        @include mobile {
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                & > *:not(:last-child) {
+                    margin-right: 27px;
+                }
+            }
+        }
+        @include tablet {
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                & > *:not(:last-child) {
+                    margin-right: 30px;
+                }
+            }
+        }
     }
     &.homeLink {
         text-decoration: none;

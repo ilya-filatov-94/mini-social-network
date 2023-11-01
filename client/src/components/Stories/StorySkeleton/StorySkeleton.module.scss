@@ -8,20 +8,19 @@
     background-color: #5271ff;
     border: none;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    font-size: 1.5rem;
-    display: flex;
+    width: 30px;
+    height: 30px;
+    font-size: 1.7rem;
+    display: inline-grid;
     align-items: center;
-    justify-content: center;
     cursor: pointer;
 
     @include mobile {
-        left: 1.4rem;
-        right: 2rem;
-        top: 1.5rem;
-        bottom: 0;
+        left: 20px;
+        right: 0;
+        bottom: 3px;
         margin: auto;
+        font-size: 1.4rem;
     }
 }
 

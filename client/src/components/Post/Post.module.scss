@@ -20,5 +20,11 @@
     .container {
         padding: 20px;
     }
+
+    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+        &:not(:last-child) {
+            margin-bottom: 30px;
+        }
+    }
 }
 

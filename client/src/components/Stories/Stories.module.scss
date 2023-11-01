@@ -4,8 +4,7 @@
 
 .container {
     overflow-x: hidden;
-    // scroll-behavior: smooth;
-    transition-delay: 1s;
+    touch-action: pan-y; /* prevent browser's default behavior on swiping horizontally */
 }
 
 .stories {
@@ -14,6 +13,7 @@
     height: 200px;
     margin-bottom: 30px;
     max-width: 22vw;
+    transition: transform 0.5s ease-out;
 
     @include tablet{
         height: 150px;
@@ -26,6 +26,10 @@
         margin-bottom: 20px;
         justify-content: flex-start;
     }
+}
+
+.stories.is-swiping {
+    transition: transform 0.3s ease-out;
 }
 
 .imgStory {
