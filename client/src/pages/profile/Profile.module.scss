@@ -31,6 +31,14 @@
             margin: auto;
             top: 160px;
         }
+
+        @include mobile{
+          height: 220px;
+
+          .profilePic {
+            top: 80px;
+          }
+        }
     }
 
     .profileContainer {
@@ -156,10 +164,6 @@
                   &:not(:last-child) {
                       margin-right: 10px;
                   }
-                }
-
-                @include tablet{
-                  flex-wrap: wrap;
                 }
               }
         }
