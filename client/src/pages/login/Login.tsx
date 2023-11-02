@@ -116,12 +116,12 @@ const Login: FC = () => {
           <form onSubmit={handleLogin}>
             <InputWithValidation
               classes={styles.inputForm}
-              value={loginData['email']}
+              value={loginData.email}
               name="email"
               type="text"
               required
               placeholder="Электронная почта"
-              isValidInputs={isValidInputs}  
+              isValidInput={isValidInputs.email}  
               setValidInput={setValidInput}
               funValidation={{customFun: addFnValidation}}
               onChange={handleInputs}
@@ -129,13 +129,13 @@ const Login: FC = () => {
             />
             <InputWithValidation
               classes={styles.inputForm}
-              value={loginData['password']}
+              value={loginData.password}
               name="password"
               type="password"
               required
               placeholder="Пароль"
               autoComplete="false"
-              isValidInputs={isValidInputs}  
+              isValidInput={isValidInputs.password}  
               setValidInput={setValidInput}
               funValidation={{customFun: addFnValidation}}
               onChange={handleInputs}

@@ -4,7 +4,8 @@ import {
   useRef,
   useEffect,
   DetailedHTMLProps,
-  InputHTMLAttributes
+  InputHTMLAttributes,
+  SetStateAction
 } from 'react';
 import styles from './InputWithValidation.module.scss';
 import {useValidation, IValidations, TFnOfValidation} from '../../hooks/useValidation';
@@ -23,8 +24,8 @@ interface ISpreadingInputProps
   idInput?: number;
   classes?: string;
   value: string;
-  isValidInputs: IStatusValidData;
-  setValidInput: (value: IStatusValidData) => void;
+  isValidInput: boolean;
+  setValidInput: (value: SetStateAction<IStatusValidData>) => void;
   funValidation: TfunValidation;
   validations: IValidations;
 }
@@ -33,7 +34,7 @@ const InputWithValidation: FC<ISpreadingInputProps> = ({
   idInput,
   classes, 
   value,
-  isValidInputs,  
+  isValidInput,  
   setValidInput, 
   funValidation,
   validations,
@@ -48,19 +49,20 @@ const InputWithValidation: FC<ISpreadingInputProps> = ({
   useEffect(() => {
     if (value && isValid) {
       setError(errorMessage);
-      setValidInput({...isValidInputs, [inputName]: isValid});
+      setValidInput(prev => ({...prev, [inputName]: isValid}));
     }
-    if (value && isValid && !isValidInputs[inputName] && funValidation.customFun) {
-      setError(funValidation.customFun());
-      setValidInput({...isValidInputs, [inputName]: !funValidation.customFun()});
+    if (value && isValid && !isValidInput && funValidation.customFun) {
+      const errorFromFn = funValidation.customFun();
+      setError(errorFromFn);
+      setValidInput(prev => ({...prev, [inputName]: !errorFromFn}));
     }
   // eslint-disable-next-line
-  }, [isValid, value, isValidInputs[inputName]]);
+  }, [isValid, value, isValidInput]);
 
   function handleFocus() {
     if (!isValid) {
       setError(errorMessage);
-      setValidInput({...isValidInputs, [inputName]: isValid});
+      setValidInput(prev => ({...prev, [inputName]: isValid}));
     }
   }
 

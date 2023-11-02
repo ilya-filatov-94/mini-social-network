@@ -114,7 +114,7 @@ const Register: FC = () => {
                 key={input.idInput}
                 classes={styles.inputForm}
                 value={regData[input.name]}
-                isValidInputs={isValidInputs}  
+                isValidInput={isValidInputs[input.name]}  
                 setValidInput={setValidInput}
                 funValidation={addFnValidation(input.name)}
                 onChange={handleInputs}
