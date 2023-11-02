@@ -3,6 +3,7 @@ import {
   useState,
   useRef,
   useEffect,
+  memo,
   DetailedHTMLProps,
   InputHTMLAttributes,
   SetStateAction
@@ -30,7 +31,7 @@ interface ISpreadingInputProps
   validations: IValidations;
 }
 
-const InputWithValidation: FC<ISpreadingInputProps> = ({
+const InputWithValidation: FC<ISpreadingInputProps> = memo(({
   idInput,
   classes, 
   value,
@@ -45,6 +46,7 @@ const InputWithValidation: FC<ISpreadingInputProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const inputName = inputRef.current ? inputRef.current.name : '';
   const [error, setError] = useState<string>('');
+
 
   useEffect(() => {
     if (value && isValid) {
@@ -86,7 +88,7 @@ const InputWithValidation: FC<ISpreadingInputProps> = ({
       <p className={styles.error}>{error}</p>
     </div>
   );
-}
+});
 
 
 export default InputWithValidation;

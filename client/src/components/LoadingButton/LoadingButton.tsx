@@ -1,5 +1,6 @@
 import {
-    FC, 
+    FC,
+    memo,
     DetailedHTMLProps, 
     ButtonHTMLAttributes
 } from 'react';
@@ -15,7 +16,7 @@ extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonEle
     disabled: boolean;
 }
 
-const LoadingButton: FC<ILoadingButtonProps> = ({
+const LoadingButton: FC<ILoadingButtonProps> = memo (({
     loading,
     text,
     classes,
@@ -45,6 +46,6 @@ const LoadingButton: FC<ILoadingButtonProps> = ({
         </div>}
     </button>
   )
-}
+});
 
 export default LoadingButton;

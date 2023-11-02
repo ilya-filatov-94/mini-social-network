@@ -1,5 +1,6 @@
 import {
   FC,
+  memo,
   HTMLAttributes,
   ReactNode
 } from 'react';
@@ -13,7 +14,7 @@ interface ISpreadingButtonLinkProps
   children: ReactNode
 }
 
-const ButtonLink: FC<ISpreadingButtonLinkProps> = ({
+const ButtonLink: FC<ISpreadingButtonLinkProps> = memo(({
   addClass, 
   to, 
   children, 
@@ -29,6 +30,6 @@ const ButtonLink: FC<ISpreadingButtonLinkProps> = ({
         </button>
     </Link>
   )
-}
+});
 
 export default ButtonLink
