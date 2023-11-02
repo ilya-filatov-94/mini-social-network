@@ -22,7 +22,10 @@ interface IStatusValidData {
 }
 
 interface IRegValue {
-  [key: string]: string;
+  name: string;
+  lastname: string;
+  email: string;
+  password: string;
 }
 
 const Register: FC = () => {
@@ -74,7 +77,7 @@ const Register: FC = () => {
                       isValidInputs.password;
 
   function handleInputs(event: ChangeEvent<HTMLInputElement>) {
-    setRegData({...regData, [event.target.name]: event.target.value})
+    setRegData(prev => ({...prev, [event.target.name]: event.target.value}))
     if (status === '403') {
       dispatch(setErrorStatus(undefined))
     }
@@ -113,7 +116,7 @@ const Register: FC = () => {
               <InputWithValidation
                 key={input.idInput}
                 classes={styles.inputForm}
-                value={regData[input.name]}
+                value={regData[input.name as keyof typeof regData]}
                 isValidInput={isValidInputs[input.name]}  
                 setValidInput={setValidInput}
                 funValidation={addFnValidation(input.name)}

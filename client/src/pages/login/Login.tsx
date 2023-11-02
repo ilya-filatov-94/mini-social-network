@@ -22,7 +22,8 @@ interface IStatusValidData {
 }
 
 interface ILoginValue {
-  [key: string]: string;
+  email: string;
+  password: string;
 }
 
 const Login: FC = () => {
