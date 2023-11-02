@@ -1,15 +1,26 @@
 const Router = require('express');
+const {body} = require('express-validator');
 const router = new Router();
 const userController = require('../controllers/userController');
-// const authMiddleware = require('../middleware/AuthMiddleware');
+const authMiddleware = require('../middleware/AuthMiddleware');
 
 
-
-router.post('/registration', userController.registration);
-router.post('/login', userController.login);
+router.post('/registration',
+            body('email').isEmail(),
+            body('password').isLength({min: 6, max: 32}),
+            userController.registration);
+router.post('/login',
+            body('email').isEmail(),
+            body('password').isLength({min: 6, max: 32}),
+            userController.login);
 router.post('/logout', userController.logout);
 router.get('/refresh', userController.refresh);
-// router.get('/auth', authMiddleware, userController.check);
+
+router.get('/all', authMiddleware, userController.getAll); 
+router.get('/one', authMiddleware, userController.getOne);
+router.post('/follow', authMiddleware, userController.followUser);
+router.post('/unfollow', authMiddleware, userController.unsubscribeUser);
+router.get('/followers', authMiddleware, userController.getFollowers);
 
 
 

@@ -47,6 +47,8 @@ const Activity = sequelize.define('activity', {
 
 const Relationship = sequelize.define('relationship', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    userId: {type: DataTypes.STRING},
+    followerId: {type: DataTypes.STRING},
 });
 
 //Промежуточная таблица для связи многие ко многим
@@ -83,8 +85,9 @@ User.hasMany(Activity);
 Activity.belongsTo(User);
 
 //Связь многие ко многим
-User.belongsToMany(Relationship, {through: UserRelationship});
-Relationship.belongsToMany(User, {through: UserRelationship});
+Relationship.belongsToMany(User, {through: UserRelationship, as: "users"});
+User.belongsToMany(Relationship, {through: UserRelationship, as: "relationship"});
+
 
 module.exports = {
     User,
@@ -94,5 +97,5 @@ module.exports = {
     Story,
     Like,
     Activity,
-    Relationship
+    Relationship,
 };

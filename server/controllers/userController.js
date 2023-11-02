@@ -32,7 +32,7 @@ class UserController {
             const userData = await userService.login(email, password);
 
             response.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*3600*1000, httpOnly: true});
-            const dataForClient = excludeKeysFromObj(userData, ['refreshToken']);
+            const dataForClient = excludeKeysFromObjj(userData, ['refreshToken']);
             return response.json(dataForClient);
         } catch (error) {
             next(error);
@@ -64,20 +64,67 @@ class UserController {
         }
     }
 
-    async check(request, response, next) {
-        // const {id} = request.query;
-        // if (!id) {
-        //     return next(ApiError.badRequest('Не задан id!'));
-        // }
-        // response.json(id);
-        response.json({message: "Всё отлично"});
+    async getAll(request, response, next) {
+        try {
+            const users = await userService.getAllUsers();
+            const {current_user} = request.headers;
+            const usersExcludeCurrent = excludeCurUserFromArr(users, current_user);
+            return response.json(usersExcludeCurrent);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getOne(request, response, next) {
+        try {
+            const {current_user} = request.headers;
+            const user = await userService.getOneUser(current_user);
+            const profileData = excludeKeysFromObjj(user.dataValues, ['id', 'email', 'password', 'status', 'createdAt', 'updatedAt']);
+            return response.json(profileData);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async followUser(request, response, next) {
+        try {
+            const {curUserId, followerId} = request.body;
+            const statusAction = await userService.followUser(curUserId, followerId);
+            return response.json(statusAction);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async unsubscribeUser(request, response, next) {
+        try {
+            const {curUserId, followerId} = request.body;
+            const statusAction = await userService.unsubscribeUser(curUserId, followerId);
+            return response.json(statusAction);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getFollowers(request, response, next) {
+        try {
+            const {id_user} = request.headers;
+            const followers = await userService.getFollowers(id_user);
+            return response.json(followers);
+        } catch (error) {
+            next(error);
+        }
     }
 
 };
 
 module.exports = new UserController();
 
-function excludeKeysFromObj(obj={}, keys=[]) {
+function excludeKeysFromObjj(obj={}, keys=[]) {
     return Object.fromEntries(Object.entries(obj)
     .filter(key => !keys.includes(key[0])));
+}
+
+function excludeCurUserFromArr(arr=[], refUser='') {
+    return arr.filter(obj => obj.refUser !== refUser);
 }
