@@ -19,13 +19,14 @@ interface IPopupStoriesProps {
   setCurrentIndex: (index: number | undefined) => void;
 }
 
-const PopupStories: FC<IPopupStoriesProps> = ({
+const PopupStories: FC<IPopupStoriesProps> = memo(({
   isVisible, 
   setVisible, 
   indexStory, 
   stories, 
   setCurrentIndex
 }) => {
+
 
   const [filled, setFilled] = useState(0);
   const timeout = useRef<any>();
@@ -82,7 +83,7 @@ const PopupStories: FC<IPopupStoriesProps> = ({
       </div>
     </Portal>
   )
-};
+});
 
 interface IPopupStoriesContentProps {
   isVisible: boolean;

@@ -2,6 +2,7 @@ import {
   FC, 
   useRef, 
   useState,
+  useCallback,
   PointerEvent,
   MouseEvent,
 } from 'react';
@@ -60,10 +61,10 @@ const Stories: FC = () => {
     setOffsetX(newOffsetX);
   };
 
-  function setCurrentIndex(index?: number): void {
+  const setCurrentIndex = useCallback((index?: number) => {
     setIndexStory(index);
     clickIndex.current = index;
-  }
+  }, []);
 
   function openStory(event: TEventTouch) {
     const currentX = event.clientX;

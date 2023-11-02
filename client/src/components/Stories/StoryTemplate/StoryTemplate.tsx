@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import styles from './StoryTemplate.module.scss';
 import StorySkeleton from '../StorySkeleton/StorySkeleton';
 
@@ -11,12 +11,13 @@ interface IStoryTemplateProps {
   setIndexStory: (index: number | undefined) => void;
 }
 
-const StoryTemplate: FC<IStoryTemplateProps> = ({
+const StoryTemplate: FC<IStoryTemplateProps> = memo(({
   image, 
   username, 
   curIndex, 
   setIndexStory
 }) => {
+
 
   const {ref, inView} = useInView({
     threshold: 0.2,
@@ -44,6 +45,6 @@ const StoryTemplate: FC<IStoryTemplateProps> = ({
       <span className={styles.nameUser}>{username}</span>
     </div>
   );
-}
+});
 
 export default StoryTemplate;
