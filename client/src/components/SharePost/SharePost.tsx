@@ -1,11 +1,33 @@
-import {FC} from 'react';
+import {FC, ChangeEvent, useState} from 'react';
 import styles from './SharePost.module.scss';
 import imageIcon from '../../assets/images/img.png'
 import {useAppSelector} from '../../hooks/useTypedRedux';
 
+interface ISharePostProps {
+  userId: number;
+}
 
-const SharePost: FC = () => {
+const SharePost: FC<ISharePostProps> = ({userId}) => {
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const [selectedFile, setSelectedFile] = useState<File>();
+
+  function handleImagePost(event: ChangeEvent<HTMLInputElement>) {
+    if (event.target.files) {
+      console.log(event.target.files);
+      setSelectedFile(event.target.files[0]);
+    }
+  }
+
+  function handleUpload() {
+    const formData = new FormData();
+    formData.append('userId', `${userId}`);
+    formData.append('desc', 'Содержание поста');
+    if (selectedFile) {
+      console.log('Отправить пост с изображением');
+      formData.append('image', selectedFile);
+    }
+    // createPost(formData).then(data);
+  }
 
   return (
     <div
@@ -27,10 +49,11 @@ const SharePost: FC = () => {
         <div className={styles.bottom}>
           <div className={styles.left}>
             <input
+              onChange={handleImagePost}
               className={styles.fileInput}
               type="file"
+              accept=".jpeg, .jpg, .png"
               id="file"
-              style={{ display: "none" }}
             />
             <label htmlFor="file">
               <div className={styles.item}>
@@ -39,12 +62,12 @@ const SharePost: FC = () => {
                   src={imageIcon}
                   alt="Вложение к посту"
                 />
-                <span className={styles.addImageText}>Add Image</span>
+                <span className={styles.addImageText}>Прикрепить фото</span>
               </div>
             </label>
           </div>
           <div className={styles.right}>
-            <button className={styles.Btn}>Опубликовать</button>
+            <button onClick={handleUpload} className={styles.Btn}>Опубликовать</button>
           </div>
         </div>
       </div>

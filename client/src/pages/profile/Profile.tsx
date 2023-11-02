@@ -100,7 +100,7 @@ const Profile: FC = () => {
             </div>
           </div>
         </div>
-        <SharePost />
+        <SharePost userId={curUser.id}/>
         <Posts posts={posts}/>
       </div>
     </div>
