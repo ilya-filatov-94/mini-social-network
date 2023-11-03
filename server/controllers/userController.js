@@ -76,9 +76,9 @@ class UserController {
 
     async getOne(request, response, next) {
         try {
-            const {current_user} = request.headers;
-            const user = await userService.getOneUser(current_user);
-            const profileData = excludeKeysFromObj(user.dataValues, ['id', 'email', 'password', 'status', 'createdAt', 'updatedAt']);
+            const {id} = request.params;
+            const user = await userService.getOneUser(id);
+            const profileData = excludeKeysFromObj(user.dataValues, ['email', 'password', 'status', 'createdAt', 'updatedAt']);
             return response.json(profileData);
         } catch (error) {
             next(error);
