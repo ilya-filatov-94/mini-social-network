@@ -139,15 +139,15 @@ class UserService {
     async getFollowers(curUserId) {
         const followers = await Relationship.findAll({
             where:{userId: curUserId},
-            include: [{model: User, as: "users"}]
+            // include: [{model: User, as: "users"}]
         });
-        // const users = await User.findAll({
-        //     attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
-        // });
-        // const followersArr = followers.map(item => item.dataValues);
-        // const usersArr = users.map(item => item.dataValues);
-        // const dataFollowers = intersectionArrays(followersArr, usersArr);
-        return followers;
+        const users = await User.findAll({
+            attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
+        });
+        const followersArr = followers.map(item => item.dataValues);
+        const usersArr = users.map(item => item.dataValues);
+        const dataFollowers = intersectionArrays(followersArr, usersArr);
+        return dataFollowers;
     }
 }
 
