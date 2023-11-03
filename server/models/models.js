@@ -24,6 +24,8 @@ const Post = sequelize.define('post', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     desc: {type: DataTypes.STRING, allowNull: false},
     image: {type: DataTypes.STRING},
+    counterLikes: {type: DataTypes.STRING, defaultValue: "0"},
+    counterComments: {type: DataTypes.STRING, defaultValue: "0"},
 });
 
 const Comment = sequelize.define('comment', {

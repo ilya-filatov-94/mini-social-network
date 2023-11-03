@@ -8,5 +8,8 @@ router.get('/create', authMiddleware, postController.createPost);
 router.get('/all', authMiddleware, postController.getAllPosts);
 router.get('/latest', authMiddleware, postController.getLatestPosts); 
 
+router.get('/auth', authMiddleware, postController.check);
+
+
 
 module.exports = router;

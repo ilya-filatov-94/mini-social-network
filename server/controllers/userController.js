@@ -54,7 +54,6 @@ class UserController {
         try {
             const {refreshToken} = request.cookies;
             const userData = await userService.refresh(refreshToken);
-
             response.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*3600*1000, httpOnly: true});
             const dataForClient = excludeKeysFromObj(userData, ['refreshToken']);
             return response.json(dataForClient);

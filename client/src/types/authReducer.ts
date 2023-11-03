@@ -39,6 +39,10 @@ export interface IResponse {
     user: IinitialUser;
 }
 
+export interface IReAuthResponse {
+    accessToken: string;
+}
+
 export interface IAuthState {
     currentUser: IinitialUser;
     isAuth: boolean;

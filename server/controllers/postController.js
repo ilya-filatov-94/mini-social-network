@@ -36,6 +36,11 @@ class PostController {
             next(error);
         }
     }
+
+    async check(request, response, next) {
+
+        response.json({message: "Всё отлично"});
+    }
 };
 
 module.exports = new PostController();

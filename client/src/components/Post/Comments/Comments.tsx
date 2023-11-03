@@ -37,7 +37,8 @@ const Comments: FC<IContentPostProps> = ({comments, curTheme}) => {
                 Отправить
             </button>
         </div>
-        {comments.map(comment => 
+        {comments?.length !== 0 && 
+            comments.map(comment => 
             <div className={styles.comment} key={comment.id}>
                 <img 
                     className={styles.iconUser}
@@ -61,4 +62,4 @@ const Comments: FC<IContentPostProps> = ({comments, curTheme}) => {
   )
 }
 
-export default Comments
+export default Comments;

@@ -142,6 +142,9 @@ const authSlice = createSlice({
                 state.error = '';
             }
         },
+        updateToken(state, action: PayloadAction<string>) {
+            state.accessToken = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -208,5 +211,5 @@ function isError(action: AnyAction) {
     return action.type.endsWith('rejected');
 }
 
-export const {setErrorStatus} = authSlice.actions; 
+export const {setErrorStatus, updateToken} = authSlice.actions; 
 export default authSlice.reducer;

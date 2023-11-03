@@ -3,11 +3,14 @@ import styles from './SharePost.module.scss';
 import imageIcon from '../../assets/images/img.png'
 import {useAppSelector} from '../../hooks/useTypedRedux';
 
+import {useGetAllPostsQuery} from '../../services/PostService';
+
 interface ISharePostProps {
   userId: number;
 }
 
 const SharePost: FC<ISharePostProps> = ({userId}) => {
+  const postService = useGetAllPostsQuery();
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const [selectedFile, setSelectedFile] = useState<File>();
 
@@ -19,13 +22,17 @@ const SharePost: FC<ISharePostProps> = ({userId}) => {
   }
 
   function handleUpload() {
-    const formData = new FormData();
-    formData.append('userId', `${userId}`);
-    formData.append('desc', 'Содержание поста');
-    if (selectedFile) {
-      console.log('Отправить пост с изображением');
-      formData.append('image', selectedFile);
-    }
+
+
+    console.log(postService.data);
+    
+    // const formData = new FormData();
+    // formData.append('userId', `${userId}`);
+    // formData.append('desc', 'Содержание поста');
+    // if (selectedFile) {
+    //   console.log('Отправить пост с изображением');
+    //   formData.append('image', selectedFile);
+    // }
     // createPost(formData).then(data);
   }
 
