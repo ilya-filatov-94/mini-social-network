@@ -16,7 +16,6 @@ class UserController {
             response.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*3600*1000, httpOnly: true});
             const dataForClient = excludeKeysFromObj(userData, ['refreshToken']);
             return response.json(dataForClient);
-
         } catch (error) {
             next(error);
         }
@@ -32,7 +31,7 @@ class UserController {
             const userData = await userService.login(email, password);
 
             response.cookie('refreshToken', userData.refreshToken, {maxAge: 30*24*3600*1000, httpOnly: true});
-            const dataForClient = excludeKeysFromObjj(userData, ['refreshToken']);
+            const dataForClient = excludeKeysFromObj(userData, ['refreshToken']);
             return response.json(dataForClient);
         } catch (error) {
             next(error);
@@ -79,7 +78,7 @@ class UserController {
         try {
             const {current_user} = request.headers;
             const user = await userService.getOneUser(current_user);
-            const profileData = excludeKeysFromObjj(user.dataValues, ['id', 'email', 'password', 'status', 'createdAt', 'updatedAt']);
+            const profileData = excludeKeysFromObj(user.dataValues, ['id', 'email', 'password', 'status', 'createdAt', 'updatedAt']);
             return response.json(profileData);
         } catch (error) {
             next(error);
@@ -118,9 +117,7 @@ class UserController {
 
 };
 
-module.exports = new UserController();
-
-function excludeKeysFromObjj(obj={}, keys=[]) {
+function excludeKeysFromObj(obj={}, keys=[]) {
     return Object.fromEntries(Object.entries(obj)
     .filter(key => !keys.includes(key[0])));
 }
@@ -128,3 +125,5 @@ function excludeKeysFromObjj(obj={}, keys=[]) {
 function excludeCurUserFromArr(arr=[], refUser='') {
     return arr.filter(obj => obj.refUser !== refUser);
 }
+
+module.exports = new UserController();

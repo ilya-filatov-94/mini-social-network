@@ -1,13 +1,13 @@
 const Router = require('express');
-const {body} = require('express-validator');
 const router = new Router();
+const {body} = require('express-validator');
 const userController = require('../controllers/userController');
 const authMiddleware = require('../middleware/AuthMiddleware');
 
 
 router.post('/registration',
-            body('email').isEmail(),
-            body('password').isLength({min: 6, max: 32}),
+            // body('email').isEmail(),
+            // body('password').isLength({min: 6, max: 32}),
             userController.registration);
 router.post('/login',
             body('email').isEmail(),

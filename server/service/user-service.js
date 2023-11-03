@@ -141,13 +141,13 @@ class UserService {
             where:{userId: curUserId},
             include: [{model: User, as: "users"}]
         });
-        const users = await User.findAll({
-            attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
-        });
-        const followersArr = followers.map(item => item.dataValues);
-        const usersArr = users.map(item => item.dataValues);
-        const dataFollowers = intersectionArrays(followersArr, usersArr);
-        return dataFollowers;
+        // const users = await User.findAll({
+        //     attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
+        // });
+        // const followersArr = followers.map(item => item.dataValues);
+        // const usersArr = users.map(item => item.dataValues);
+        // const dataFollowers = intersectionArrays(followersArr, usersArr);
+        return followers;
     }
 }
 
