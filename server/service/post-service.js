@@ -4,13 +4,25 @@ const {Post} = require('../models/models');
 
 
 class PostService {
-    async createNewPost(idUser, desc, image) {
-        const post = await Relationship.create({
-            idUser: idUser,
+    async createNewPost(userId, desc, fileName) {
+        const post = await Post.create({
+            userId: userId,
             desc: desc,
-            image: image
+            image: fileName
         });
         return post;
+    }
+
+    async getAll(userId) {
+        let posts;
+        if (userId) {
+            posts = await Post.findAll({
+                where:{userId: userId},
+            });
+        } else {
+            posts = await Post.findAll();
+        }
+        return posts;
     }
 }
 

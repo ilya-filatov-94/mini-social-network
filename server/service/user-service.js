@@ -139,6 +139,7 @@ class UserService {
     async getFollowers(curUserId) {
         const followers = await Relationship.findAll({
             where:{userId: curUserId},
+            include: [{model: User, as: "users"}]
         });
         const users = await User.findAll({
             attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
