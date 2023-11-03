@@ -1,8 +1,8 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import reducerAuth from "./authSlice";
 import reducerTheme from "./themeSlice";
-// import {postApi} from '../services/PostService';
-import {baseApi} from '../services/PostService';
+import {postApi} from '../services/PostService';
+
 
 import storage from "redux-persist/lib/storage";
 import {
@@ -19,8 +19,7 @@ import {
 const rootReducer = combineReducers({
   reducerAuth: reducerAuth,
   reducerTheme: reducerTheme,
-  [baseApi.reducerPath]: baseApi.reducer,
-  // [postApi.reducerPath]: postApi.reducer,
+  [postApi.reducerPath]: postApi.reducer,
 });
 
 const persistConfig = {
@@ -40,8 +39,7 @@ const store = configureStore({
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }).concat(
-      // postApi.middleware,
-      baseApi.middleware,
+      postApi.middleware,
     ),
 });
 
