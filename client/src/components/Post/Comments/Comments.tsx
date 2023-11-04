@@ -16,6 +16,9 @@ interface IContentPostProps {
 const Comments: FC<IContentPostProps> = ({comments, curTheme}) => {
   const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
 
+  console.log('Загрузка коммента');
+  
+
   return (
     <div className={curTheme ==='darkMode'
       ? `${styles.comments} ${styles['theme-dark']}`

@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, Suspense} from 'react';
 import styles from './Layout.module.scss';
 
 import Navbar from '../Navbar/Navbar';
@@ -20,7 +20,9 @@ const Layout: FC = () => {
       }>
         <LeftBar />
         <div className={styles.wrpapperOutlet}>
-          <Outlet />
+          <Suspense fallback={<p>Loading...</p>}>
+            <Outlet />
+          </Suspense>
         </div>
         <RightBar />
       </div>
