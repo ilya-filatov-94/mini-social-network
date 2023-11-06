@@ -8,15 +8,19 @@ import {IComments} from '../../../types/comments';
 // import { ReactComponent as SendArrow} from '../../../assets/images/right_arrow.svg';
 
 interface IContentPostProps {
-    comments: IComments[];
+    userId: number;
+    currentUser: boolean;
     curTheme: string;
 };
 
 
-const Comments: FC<IContentPostProps> = ({comments, curTheme}) => {
-  const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
+const Comments: FC<IContentPostProps> = ({userId, currentUser, curTheme}) => {
 
-  console.log('Загрузка коммента');
+  console.log(userId);
+  
+  //Временно, нужно написать запрос на бэкенд на получение массива комментов по user.id
+  const comments: IComments[] = [];
+  const curUser = useAppSelector(state => state.reducerAuth.currentUser);
   
 
   return (
@@ -27,8 +31,8 @@ const Comments: FC<IContentPostProps> = ({comments, curTheme}) => {
         <div className={styles.writeComment}>
             <img 
                 className={styles.iconUser}
-                src={currentUser.profilePic ? currentUser.profilePic : noAvatar} 
-                alt={`user ${currentUser.username}`} 
+                src={curUser.profilePic ? curUser.profilePic : noAvatar} 
+                alt={`user ${curUser.username}`} 
             />
             <input 
                 className={styles.input}

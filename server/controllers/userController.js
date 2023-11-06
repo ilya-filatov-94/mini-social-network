@@ -62,6 +62,16 @@ class UserController {
         }
     }
 
+    async getProfile(request, response, next) {
+        try {
+            const {ref} = request.params;
+            const user = await userService.getOneUser(ref);
+            return response.json(user);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async getAll(request, response, next) {
         try {
             const users = await userService.getAllUsers();

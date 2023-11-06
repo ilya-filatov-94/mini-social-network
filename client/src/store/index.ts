@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import reducerAuth from "./authSlice";
 import reducerTheme from "./themeSlice";
 import {postApi} from '../services/PostService';
+import {userApi} from '../services/UserService';
 
 
 import storage from "redux-persist/lib/storage";
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   reducerAuth: reducerAuth,
   reducerTheme: reducerTheme,
   [postApi.reducerPath]: postApi.reducer,
+  [userApi.reducerPath]: userApi.reducer
 });
 
 const persistConfig = {
@@ -38,9 +40,8 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(
-      postApi.middleware,
-    ),
+    }).concat(postApi.middleware)
+    .concat(userApi.middleware)
 });
 
 export const persistor = persistStore(store);

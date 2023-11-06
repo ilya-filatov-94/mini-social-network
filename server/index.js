@@ -1,5 +1,5 @@
 require('dotenv').config();
-const exppress = require('express');
+const express = require('express');
 const cors = require('cors');
 const sequelize = require('./db');
 const fileUpload = require('express-fileupload');
@@ -17,11 +17,11 @@ const corsOptions = {
 }
 
 
-const app = exppress();
+const app = express();
 app.use(cors(corsOptions));
-app.use(exppress.json());
+app.use(express.json());
 app.use(cookieParser());
-app.use(exppress.static(path.resolve(__dirname, 'static'))); 
+app.use(express.static(path.resolve(__dirname, 'static'))); 
 app.use(fileUpload({}));
 app.use('/api', router);
 app.use(errorHandler);

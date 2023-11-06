@@ -1,18 +1,45 @@
 import {FC} from 'react';
 import styles from './Posts.module.scss';
 import Post from '../Post/Post';
-import {IPost} from '../../types/posts';
+import {IPostData} from '../../types/posts';
+import {useGetAllPostsQuery} from '../../services/PostService';
+import Loader from '../Loader/Loader';
+import Alert from '@mui/material/Alert';
+import { 
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query/react";
+
 
 interface IPostsProps {
-  posts: IPost[]
+  userId: number;
+  currentUser: boolean;
 };
 
-const Posts: FC<IPostsProps> = ({posts}) => {
+const Posts: FC<IPostsProps> = ({userId, currentUser}) => {
+
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+  const {data: posts, error, isLoading} = useGetAllPostsQuery(userId);
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (error) {
+    if (isFetchBaseQueryErrorType(error)) {
+      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {error.status}</Alert>
+    }
+  }
+
   return (
     <div className={styles.posts}>
-      {posts?.length !== 0 &&
-        posts.map(post => 
-        <Post key={post.id} post={post} />
+      {(posts && posts?.length !== 0) &&
+        posts.map((post: IPostData) => 
+        <Post 
+          key={post.id} 
+          userId={userId}
+          currentUser={currentUser}
+          post={post} 
+        />
       )}
     </div>
   )

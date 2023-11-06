@@ -2,8 +2,7 @@ import {FC} from 'react';
 import styles from './Home.module.scss';
 
 import Stories from '../../components/Stories/Stories';
-import Posts from '../../components/Posts/Posts';
-import {posts} from '../../components/Posts/temporaryDataPosts';
+// import Posts from '../../components/Posts/Posts';
 
 
 const Home: FC = () => {
@@ -11,7 +10,7 @@ const Home: FC = () => {
   return (
     <div className={styles.home}>
       <Stories />
-      <Posts posts={posts}/>
+      {/* <Posts /> */}
     </div>
   )
 }

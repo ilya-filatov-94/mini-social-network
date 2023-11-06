@@ -1,6 +1,19 @@
 import {FC, useEffect} from 'react'
 import styles from './Profile.module.scss';
 
+import {useGetUserDataQuery} from '../../services/UserService';
+import { useParams } from "react-router-dom";
+import {useAppSelector} from '../../hooks/useTypedRedux';
+import {useScroll} from '../../hooks/useScroll';
+import { 
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query/react";
+
+import Loader from '../../components/Loader/Loader';
+import Alert from '@mui/material/Alert';
+import Posts from '../../components/Posts/Posts';
+import SharePost from '../../components/SharePost/SharePost';
+import noAvatar from '../../assets/images/no-avatar.jpg';
 import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -8,31 +21,33 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import PlaceIcon from "@mui/icons-material/Place";
 import LanguageIcon from "@mui/icons-material/Language";
 
-import Posts from '../../components/Posts/Posts';
-import SharePost from '../../components/SharePost/SharePost';
-import noAvatar from '../../assets/images/no-avatar.jpg';
-import { useParams } from "react-router-dom";
-import {useAppSelector} from '../../hooks/useTypedRedux';
-import {useScroll} from '../../hooks/useScroll';
-
-
-import { posts } from './temporaryDataProfile';
-import {profileData} from './temporaryDataProfile';
 
 const Profile: FC = () => {
   const {id} = useParams();
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+  const {data: userData, error, isLoading} = useGetUserDataQuery(id as string, {skip: !id});
+
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const curUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const currentUser = curUser.refUser === id;
 
   const [executeScroll, elRef] = useScroll();
   useEffect(() => {
     executeScroll();
   // eslint-disable-next-line
   }, [id]);
+  
+  if (isLoading) {
+    return <Loader />
+  }
 
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const curUser = useAppSelector(state => state.reducerAuth.currentUser);
+  if (error) {
+    if (isFetchBaseQueryErrorType(error)) {
+      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {error.status}</Alert>
+    }
+  }
 
-  const userData = profileData.filter(user => user.refUser === id)[0];
-
+  if (userData && !error) {
   return (
     <div 
       ref={elRef}
@@ -50,11 +65,6 @@ const Profile: FC = () => {
           />
         : <div className={styles.bgNonCover}/>
         }
-        {/* <img
-          src={userData.coverPic}
-          alt={`coverImage of ${userData.username}`}
-          className={styles.cover}
-        /> */}
         <img
           src={userData.profilePic ? userData.profilePic : noAvatar}
           alt={`avatar of ${userData.username}`}
@@ -90,7 +100,7 @@ const Profile: FC = () => {
               </a>
             </div>
             <div className={styles.userActions}>
-              {id !== curUser.refUser
+              {!currentUser
               ? <>
                   <button className={styles.Btn}>Написать</button>
                   <button className={styles.Btn}>Подписаться</button>
@@ -100,11 +110,12 @@ const Profile: FC = () => {
             </div>
           </div>
         </div>
-        <SharePost userId={curUser.id}/>
-        <Posts posts={posts}/>
+        <SharePost userId={curUser.id} />
+        <Posts userId={curUser.id} currentUser={currentUser} />
       </div>
     </div>
   );
+} else return <Alert severity="error" sx={{m: 20}}>{JSON.stringify(error)}</Alert>
 }
 
 export default Profile;

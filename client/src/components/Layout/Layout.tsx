@@ -6,6 +6,7 @@ import LeftBar from '../LeftBar/LeftBar';
 import { Outlet } from 'react-router-dom';
 import RightBar from '../RightBar/RightBar';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import Loader from '../Loader/Loader';
 
 const Layout: FC = () => {
 
@@ -20,7 +21,7 @@ const Layout: FC = () => {
       }>
         <LeftBar />
         <div className={styles.wrpapperOutlet}>
-          <Suspense fallback={<p>Loading...</p>}>
+          <Suspense fallback={<Loader />}>
             <Outlet />
           </Suspense>
         </div>

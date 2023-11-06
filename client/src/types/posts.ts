@@ -7,19 +7,23 @@ export interface IPostData {
   refUser: string;
   desc: string;
   date?: string;
-  img?: string | undefined;
+  image?: string | undefined;
   counterLikes: number;
   counterComments: number;
 }
 
-export interface IPost {
-  id: number;
-  username: string;
-  profilePic: string;
-  refUser: string;
-  desc: string;
-  date: string;
-  img?: string | undefined;
-  likes: number;
-  comments: IComments[];
+export interface ICheckData {
+  message: string;
 }
+
+// export interface IPost {
+//   id: number;
+//   username: string;
+//   profilePic: string;
+//   refUser: string;
+//   desc: string;
+//   date: string;
+//   img?: string | undefined;
+//   likes: number;
+//   comments: IComments[];
+// }

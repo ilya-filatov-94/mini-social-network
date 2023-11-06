@@ -4,15 +4,21 @@ const path = require('path');
 
 
 
+
 class PostController {
 
     async createPost(request, response, next) {
         try {
-            const {desc, userId} = request.body;
-            const {image} = request.files;
-            let fileName = uuid.v4() + ".jpg";
-            image.mv(path.resolve(__dirname, '..', 'static', fileName));
-            const post = await postService.createNewPost(userId, desc, fileName);
+            const {id, desc} = request.body;
+            let post;
+            if (request.files) {
+                const {image} = request.files;
+                let fileName = uuid.v4() + ".jpg";
+                image.mv(path.resolve(__dirname, '..', 'static', fileName));
+                post = await postService.createNewPost(parseInt(id), desc, fileName);
+            } else {
+                post = await postService.createNewPost(parseInt(id), desc, '');
+            }
             return response.json(post);
         } catch (error) {
             next(error);
@@ -21,8 +27,9 @@ class PostController {
 
     async getAllPosts(request, response, next) {
         try {
-            let {userId} = request.query;
-            const posts = await postService.getAll(userId);
+            let {id} = request.query;
+            const posts = await postService.getAll(id);
+            console.log(response.json(posts));
             return response.json(posts);
         } catch (error) {
             next(error);

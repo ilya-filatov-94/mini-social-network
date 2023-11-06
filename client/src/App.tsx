@@ -1,24 +1,13 @@
 import {FC, lazy} from 'react';
 import './styles/App.scss';
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import RequireAuth from './hoc/RequireAuth';
 
-
-// import Register from './pages/register/Register';
-// import Login from './pages/login/Login';
-// import Home from './pages/home/Home';
-// import Profile from './pages/profile/Profile';
-
-const Register = lazy(() => import('./pages/register/Register'));
-const Login = lazy(() => import('./pages/login/Login'));
+import Register from './pages/register/Register';
+import Login from './pages/login/Login';
 const Home = lazy(() => import('./pages/home/Home'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
-
-
-
-
 
 
 const App: FC = () => {

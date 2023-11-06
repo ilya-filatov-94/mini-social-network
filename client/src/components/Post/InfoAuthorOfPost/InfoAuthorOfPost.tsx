@@ -1,12 +1,13 @@
 import {FC} from 'react';
 import styles from './InfoAuthorOfPost.module.scss';
-import {IPost} from '../../../types/posts';
+import {IPostData} from '../../../types/posts';
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from 'react-router-dom';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
+import {urlAPIimages} from '../../../env_variables'; 
 
 interface IPostsProps {
-  post: IPost;
+  post: IPostData;
 };
 
 const InfoAuthorOfPost: FC<IPostsProps> = ({post}) => {
@@ -16,7 +17,7 @@ const InfoAuthorOfPost: FC<IPostsProps> = ({post}) => {
       <div className={styles.userInfo}>
         <img
           className={styles.avatar}
-          src={post.profilePic ? post.profilePic : noAvatar}
+          src={post.profilePic ? urlAPIimages + post.profilePic : noAvatar}
           alt={`post ${post.id} photо`}
         />
         <div className={styles.details}>

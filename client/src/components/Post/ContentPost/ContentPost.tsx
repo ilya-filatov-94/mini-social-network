@@ -1,15 +1,16 @@
 import {FC} from 'react';
 import styles from './ContentPost.module.scss';
+import {urlAPIimages} from '../../../env_variables'; 
 
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import {IPost} from '../../../types/posts';
+import {IPostData} from '../../../types/posts';
 
 
 interface IContentPostProps {
-  post: IPost;
+  post: IPostData;
   commentOpen: boolean;
   setCommentOpen: (state: boolean) => void;
 };
@@ -20,27 +21,27 @@ const ContentPost: FC<IContentPostProps> = ({
   commentOpen, 
   setCommentOpen
 }) => {
-  
+
   return (
     <>
       <div className={styles.content}>
         <p>{post.desc}</p>
-        {post.img && (
+        {post.image && (
           <img
             className={styles.imgPost}
-            src={post.img}
+            src={urlAPIimages + post.image}
             alt={`description post ${post.id}`}
           />
         )}
       </div>
       <div className={styles.info}>
         <div className={styles.item}>
-          {post.likes ? (
+          {post.counterLikes !== 0 ? (
             <FavoriteOutlinedIcon />
           ) : (
             <FavoriteBorderOutlinedIcon />
           )}
-          <span>{post.likes} Нравится</span>
+          <span>{post.counterLikes} Нравится</span>
         </div>
         <div
           className={styles.item}
@@ -48,11 +49,11 @@ const ContentPost: FC<IContentPostProps> = ({
         >
           <TextsmsOutlinedIcon />
           <span>
-            {post.comments?.length === 1
-              ? `${post.comments.length} Комменатрий`
-              : post.comments?.length! > 1 && post.comments?.length! < 5
-              ? `${post.comments?.length} Комментария`
-              : `${post.comments?.length} Комментариев`}
+            {post.counterComments === 1
+              ? `${post.counterComments} Комменатрий`
+              : post.counterComments > 1 && post.counterComments < 5
+              ? `${post.counterComments} Комментария`
+              : `${post.counterComments} Комментариев`}
           </span>
         </div>
         <div className={styles.item}>
@@ -63,15 +64,15 @@ const ContentPost: FC<IContentPostProps> = ({
 
       <div className={styles.mobileInfo}>
         <div className={styles.item}>
-          {post.likes
+          {post.counterLikes !== 0
            ? <FavoriteOutlinedIcon />
            : <FavoriteBorderOutlinedIcon />
           }
-          <span>{post.likes}</span>
+          <span>{post.counterLikes}</span>
         </div>
         <div className={styles.item} onClick={() => setCommentOpen(!commentOpen)}>
           <TextsmsOutlinedIcon />
-          <span>{post.comments?.length}</span>
+          <span>{post.counterComments}</span>
         </div>
         <div className={styles.item}>
           <ShareOutlinedIcon />

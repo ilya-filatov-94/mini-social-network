@@ -2,38 +2,44 @@ import {FC, ChangeEvent, useState} from 'react';
 import styles from './SharePost.module.scss';
 import imageIcon from '../../assets/images/img.png'
 import {useAppSelector} from '../../hooks/useTypedRedux';
-
-import {useGetAllPostsQuery} from '../../services/PostService';
+import {useAddPostMutation} from '../../services/PostService';
+import Alert from '@mui/material/Alert';
+import { 
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query/react";
 
 interface ISharePostProps {
   userId: number;
 }
 
 const SharePost: FC<ISharePostProps> = ({userId}) => {
-  const postService = useGetAllPostsQuery();
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+  const [addPost, {error}] = useAddPostMutation();
   const [selectedFile, setSelectedFile] = useState<File>();
+  const [desc, setDesc] = useState("");
 
   function handleImagePost(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
-      console.log(event.target.files);
       setSelectedFile(event.target.files[0]);
-    }
+    }    
   }
 
-  function handleUpload() {
+  async function handleUpload() {
+    const formData = new FormData();
+    formData.append('id', `${userId}`);
+    formData.append('desc', desc);
+    if (selectedFile) {
+      console.log('Отправить пост с изображением');
+      formData.append('image', selectedFile);
+    }
+    await addPost(formData).unwrap();
+  }
 
-
-    console.log(postService.data);
-    
-    // const formData = new FormData();
-    // formData.append('userId', `${userId}`);
-    // formData.append('desc', 'Содержание поста');
-    // if (selectedFile) {
-    //   console.log('Отправить пост с изображением');
-    //   formData.append('image', selectedFile);
-    // }
-    // createPost(formData).then(data);
+  if (error) {
+    if (isFetchBaseQueryErrorType(error)) {
+      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {error.status}</Alert>
+    }
   }
 
   return (
@@ -51,6 +57,7 @@ const SharePost: FC<ISharePostProps> = ({userId}) => {
             rows={2}
             className={styles.input}
             placeholder={"Что у Вас нового?"}
+            onBlur={(event) => setDesc(event.target.value)}
           />
         </div>
         <div className={styles.bottom}>
