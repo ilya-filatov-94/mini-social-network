@@ -19,6 +19,7 @@ export interface IAccessToken {
 }
 
 export interface IUserData {
+    id: number;
     username: string;
     profilePic: string | undefined;
     coverPic: string | undefined;

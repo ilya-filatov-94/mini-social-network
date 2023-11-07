@@ -29,7 +29,6 @@ class PostController {
         try {
             let {id} = request.query;
             const posts = await postService.getAll(id);
-            console.log(response.json(posts));
             return response.json(posts);
         } catch (error) {
             next(error);
@@ -38,7 +37,8 @@ class PostController {
 
     async getLatestPosts(request, response, next) {
         try {
-
+            const posts = await postService.getLatestPosts();
+            return response.json(posts);
         } catch (error) {
             next(error);
         }

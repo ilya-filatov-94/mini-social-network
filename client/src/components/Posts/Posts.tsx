@@ -17,8 +17,8 @@ interface IPostsProps {
 
 const Posts: FC<IPostsProps> = ({userId, currentUser}) => {
 
-  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const {data: posts, error, isLoading} = useGetAllPostsQuery(userId);
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   if (isLoading) {
     return <Loader />

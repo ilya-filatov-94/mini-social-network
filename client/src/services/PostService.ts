@@ -2,7 +2,6 @@ import {
     createApi, 
 } from "@reduxjs/toolkit/query/react";
 import {baseQueryWithReauth} from './index';
-
 import {IPostData, ICheckData} from '../types/posts';
 
 

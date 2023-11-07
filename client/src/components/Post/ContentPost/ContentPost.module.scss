@@ -11,6 +11,10 @@
     }
 }
 
+.content.hideMargin {
+    margin: 0;
+}
+
 .info {
     display: flex;
     justify-content: flex-start;
@@ -28,6 +32,10 @@
         gap: 10px;
         cursor: pointer;
         font-size: 0.875rem;
+
+        .like {
+            color: red;
+        }
     }
 }
 
@@ -47,6 +55,10 @@
             gap: 10px;
             cursor: pointer;
             font-size: 0.875rem;
+
+            .like {
+                color: red;
+            }
         }
 
         @include mobile {
@@ -57,4 +69,8 @@
             }
         }
     }
+}
+
+.hideText {
+    height: 0;
 }

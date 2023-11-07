@@ -1,9 +1,9 @@
-import {IComments} from './comments';
+// import {IComments} from './comments';
 
 export interface IPostData {
   id?: number;
   username: string;
-  profilePic: string;
+  profilePic?: string | undefined;
   refUser: string;
   desc: string;
   date?: string;

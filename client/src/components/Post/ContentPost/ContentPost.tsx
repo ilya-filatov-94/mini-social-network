@@ -15,7 +15,6 @@ interface IContentPostProps {
   setCommentOpen: (state: boolean) => void;
 };
 
-
 const ContentPost: FC<IContentPostProps> = ({
   post, 
   commentOpen, 
@@ -24,8 +23,8 @@ const ContentPost: FC<IContentPostProps> = ({
 
   return (
     <>
-      <div className={styles.content}>
-        <p>{post.desc}</p>
+      <div className={`${styles.content} ${post.desc==='' ? styles.hideMargin : ''}`}>
+        <p className={post.desc=== '' ? styles.hideText : ''}>{post.desc}</p>
         {post.image && (
           <img
             className={styles.imgPost}
@@ -37,7 +36,7 @@ const ContentPost: FC<IContentPostProps> = ({
       <div className={styles.info}>
         <div className={styles.item}>
           {post.counterLikes !== 0 ? (
-            <FavoriteOutlinedIcon />
+            <FavoriteOutlinedIcon className={styles.like} />
           ) : (
             <FavoriteBorderOutlinedIcon />
           )}
@@ -65,7 +64,7 @@ const ContentPost: FC<IContentPostProps> = ({
       <div className={styles.mobileInfo}>
         <div className={styles.item}>
           {post.counterLikes !== 0
-           ? <FavoriteOutlinedIcon />
+           ? <FavoriteOutlinedIcon className={styles.like}/>
            : <FavoriteBorderOutlinedIcon />
           }
           <span>{post.counterLikes}</span>

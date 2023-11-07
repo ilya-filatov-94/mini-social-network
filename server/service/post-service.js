@@ -4,57 +4,69 @@ const {Post, User} = require('../models/models');
 
 
 class PostService {
-    async createNewPost(userId, desc, fileName) {
-        const post = await Post.create({
-            userId: userId,
-            desc: desc,
-            image: fileName
-        });
-        return post;
-    }
+  async createNewPost(userId, desc, fileName) {
+    const post = await Post.create({
+      userId: userId,
+      desc: desc,
+      image: fileName,
+    });
+    return post;
+  }
 
-    async getAll(userId) {
-        let posts;
-        let oneUser = false;
-        let users;
-        if (userId) {
-            oneUser = true;
-            posts = await Post.findAll({
-                where: {userId: userId},
-                attributes: ['id', 'desc', 'image', 'counterLikes', 'counterComments', 'createdAt']
-            });
-            users = await User.findOne(
-                {
-                    where: {id: userId},
-                    attributes: ['id', 'username', 'refUser', 'profilePic']
-                },
-            )
-        } else {
-            posts = await Post.findAll({attributes: ['id', 'desc', 'image', 'counterLikes', 'counterComments', 'createdAt']});
-            users = await User.findAll({attributes: ['id', 'username', 'refUser', 'profilePic']});
-        }
+  async getAll(userId) {
+    if (!userId) return [];
+    const posts = await Post.findAll({
+      where: { userId: userId },
+      attributes: [
+        "id",
+        "desc",
+        "image",
+        "counterLikes",
+        "counterComments",
+        "createdAt",
+      ],
+    });
+    const users = await User.findOne({
+      where: { id: userId },
+      attributes: ["id", "username", "refUser", "profilePic"],
+    });
 
-        if (oneUser) {
-            for (let item of posts) {
-                let post = item.dataValues;
-                let date = new Date(Date.parse(post.createdAt));
-                post.date = formatRelativeDate(date);
-                post.username = users.dataValues.username;
-                post.refUser = users.dataValues.refUser;
-                post.profilePic = users.dataValues.profilePic;
-            }
-        } else {
-            for (let item of posts) {
-                let post = item.dataValues;
-                let date = new Date(Date.parse(post.createdAt));
-                post.date = formatRelativeDate(date);
-                post.username = users.dataValues.username;
-                post.refUser = users.dataValues.refUser;
-                post.profilePic = users.dataValues.profilePic;
-            }
-        }
-        return posts.reverse();
+    for (let item of posts) {
+      let post = item.dataValues;
+      let date = new Date(Date.parse(post.createdAt));
+      post.date = formatRelativeDate(date);
+      post.username = users.dataValues.username;
+      post.refUser = users.dataValues.refUser;
+      post.profilePic = users.dataValues.profilePic;
     }
+    return posts.reverse();
+  }
+
+  async getLatestPosts() {
+    const posts = await Post.findAll({
+      attributes: [
+        "id",
+        "desc",
+        "image",
+        "counterLikes",
+        "counterComments",
+        "createdAt",
+      ],
+    });
+    const users = await User.findAll({
+      attributes: ["id", "username", "refUser", "profilePic"],
+    });
+
+    for (let item of posts) {
+      let post = item.dataValues;
+      let date = new Date(Date.parse(post.createdAt));
+      post.date = formatRelativeDate(date);
+      post.username = users.dataValues.username;
+      post.refUser = users.dataValues.refUser;
+      post.profilePic = users.dataValues.profilePic;
+    }
+    return posts.reverse();
+  }
 }
 
 function formatRelativeDate(datePost) {
@@ -81,10 +93,10 @@ function formatRelativeDate(datePost) {
     if (hours > 5) return hours + " часов назад";
   }
 
-  let offsetHours = datePost.toLocaleString('ru-Ru', {timeZone: 'Europe/Moscow'});
-  let position1 =  offsetHours.indexOf(', ');
-  let position2 =  offsetHours.indexOf(':');
-  let currentHours = offsetHours.slice(position1+1, position2);
+  let localDate = datePost.toLocaleString('ru-Ru', {timeZone: 'Europe/Moscow'});
+  let position1 =  localDate.indexOf(', ');
+  let position2 =  localDate.indexOf(':');
+  let currentHours = localDate.slice(position1+1, position2);
   let dateArr = datePost;
   dateArr = [
     '0' + currentHours,

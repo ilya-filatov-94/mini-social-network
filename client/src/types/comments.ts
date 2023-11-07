@@ -1,6 +1,6 @@
 
 export interface IComments {
-  id: number;
+  id?: number;
   username: string;
   profilePic?: string | undefined;
   refUser: string;

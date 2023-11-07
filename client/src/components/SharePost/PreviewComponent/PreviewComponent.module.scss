@@ -1,0 +1,59 @@
+@import '../../../styles/theme.scss';
+
+.item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    cursor: pointer;
+
+    .remove {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      left: 30px;
+      top: -5px;
+      font-weight: bold;
+      font-size: 2.2rem;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid black;
+      color: black;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+
+    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+        &:not(:last-child) {
+            margin-right: 10px;
+        }
+    }
+
+    .img {
+        height: 20px;
+    }
+
+    .previewImg {
+        height: 30px;
+        width: 40px;
+        object-fit: cover;
+    }
+
+    .addImageText {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.item.hasPreview {
+    cursor: default;
+}
+
+.remove.themeDark {
+    $curTheme: "dark";
+    border: 1px solid themed($curTheme, "textColor");
+}

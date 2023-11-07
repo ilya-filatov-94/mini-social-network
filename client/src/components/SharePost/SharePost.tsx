@@ -1,12 +1,14 @@
-import {FC, ChangeEvent, useState} from 'react';
+import {FC, ChangeEvent, useState, useRef} from 'react';
 import styles from './SharePost.module.scss';
-import imageIcon from '../../assets/images/img.png'
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import {useAddPostMutation} from '../../services/PostService';
 import Alert from '@mui/material/Alert';
 import { 
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
+import PreviewComponent from './PreviewComponent/PreviewComponent';
+
+export type TPreviewImg = string | ArrayBuffer | null;
 
 interface ISharePostProps {
   userId: number;
@@ -14,26 +16,47 @@ interface ISharePostProps {
 
 const SharePost: FC<ISharePostProps> = ({userId}) => {
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const [addPost, {error}] = useAddPostMutation();
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const [selectedFile, setSelectedFile] = useState<File>();
-  const [desc, setDesc] = useState("");
+  const [previewImg, setPreviewImg] = useState<TPreviewImg>();
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   function handleImagePost(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
-      setSelectedFile(event.target.files[0]);
-    }    
+      let file = event.target.files[0];
+      if (!file.type.match('image')) return;
+      setSelectedFile(file);
+
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewImg(reader.result)
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function removeImagePost(event: MouseEvent | PointerEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+    setSelectedFile(undefined);
+    setPreviewImg(null);
   }
 
   async function handleUpload() {
+    let textPost;
     const formData = new FormData();
     formData.append('id', `${userId}`);
-    formData.append('desc', desc);
+    if (textareaRef.current) {
+      textPost = textareaRef.current.value;
+      formData.append('desc', textPost);
+    }
     if (selectedFile) {
-      console.log('Отправить пост с изображением');
       formData.append('image', selectedFile);
     }
+    if (!textPost && !selectedFile) return;
     await addPost(formData).unwrap();
+    if (textareaRef.current) textareaRef.current.value = '';
+    setSelectedFile(undefined);
+    setPreviewImg(null);
   }
 
   if (error) {
@@ -54,30 +77,29 @@ const SharePost: FC<ISharePostProps> = ({userId}) => {
         <span className={styles.header}>Создать новый пост</span>
         <div className={styles.top}>
           <textarea
+            ref={textareaRef}
             rows={2}
             className={styles.input}
             placeholder={"Что у Вас нового?"}
-            onBlur={(event) => setDesc(event.target.value)}
           />
         </div>
         <div className={styles.bottom}>
           <div className={styles.left}>
+            {!previewImg &&
             <input
               onChange={handleImagePost}
               className={styles.fileInput}
               type="file"
               accept=".jpeg, .jpg, .png"
               id="file"
-            />
+            />}
             <label htmlFor="file">
-              <div className={styles.item}>
-                <img
-                  className={styles.img}
-                  src={imageIcon}
-                  alt="Вложение к посту"
-                />
-                <span className={styles.addImageText}>Прикрепить фото</span>
-              </div>
+              <PreviewComponent 
+                dataImg={previewImg}
+                fileMetaData={selectedFile?.name}
+                curTheme={currentTheme}
+                remove={removeImagePost}
+              />
             </label>
           </div>
           <div className={styles.right}>
@@ -88,5 +110,6 @@ const SharePost: FC<ISharePostProps> = ({userId}) => {
     </div>
   );
 }
+
 
 export default SharePost;

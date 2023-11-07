@@ -116,8 +116,8 @@ class UserController {
 
     async getFollowers(request, response, next) {
         try {
-            const {id_user} = request.headers;
-            const followers = await userService.getFollowers(id_user);
+            const {id} = request.headers;
+            const followers = await userService.getFollowers(id);
             return response.json(followers);
         } catch (error) {
             next(error);

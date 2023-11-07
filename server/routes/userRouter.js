@@ -6,8 +6,8 @@ const authMiddleware = require('../middleware/AuthMiddleware');
 
 
 router.post('/registration',
-            // body('email').isEmail(),
-            // body('password').isLength({min: 6, max: 32}),
+            body('email').isEmail(),
+            body('password').isLength({min: 6, max: 32}),
             userController.registration);
 router.post('/login',
             body('email').isEmail(),
@@ -16,7 +16,7 @@ router.post('/login',
 router.post('/logout', userController.logout);
 router.get('/refresh', userController.refresh);
 
-router.get('/profile', authMiddleware, userController.getProfile);
+router.get('/profile', userController.getProfile);
 router.get('/all', authMiddleware, userController.getAll); 
 router.get('/profile/:id', authMiddleware, userController.getOne);
 router.post('/follow', authMiddleware, userController.followUser);

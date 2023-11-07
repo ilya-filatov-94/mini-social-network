@@ -144,9 +144,7 @@ class UserService {
         const users = await User.findAll({
             attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
         });
-        const followersArr = followers.map(item => item.dataValues);
-        const usersArr = users.map(item => item.dataValues);
-        const dataFollowers = intersectionArrays(followersArr, usersArr);
+        const dataFollowers = intersectionArrays(followers, users);
         return dataFollowers;
     }
 }
@@ -156,13 +154,13 @@ function intersectionArrays(followers, users) {
     const resultArray = [];
     let key;
     for (let i = 0; i < followers.length; i++) {
-        key = followers[i].followerId;
+        key = followers[i].dataValues.followerId;
         obj[key] = true;
     }
     for (let i = 0; i < users.length; i++) {
-        key = users[i].id;
+        key = users[i].dataValues.id;
         if (obj[key]) {
-            resultArray.push(users[i]);
+            resultArray.push(users[i].dataValues);
         }
     }
     return resultArray;
