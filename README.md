@@ -25,3 +25,4 @@ Fullstack mini-application for social media with responsive design
 ### Third party tools
 *   Using icons from Material-UI.
 *   Using Redux-Persist to synchronize state with localStorage.
+*   Using RTK Query - data fetching and caching tool.
