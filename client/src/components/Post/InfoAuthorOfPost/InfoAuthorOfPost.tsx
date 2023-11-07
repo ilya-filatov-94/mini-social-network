@@ -46,7 +46,12 @@ const InfoAuthorOfPost: FC<IPostsProps> = ({post, currentUser, curTheme}) => {
         curTheme={curTheme}
         position={''}
       />}
-      {currentUser && <MoreHorizIcon onClick={() => openMenu(!menuIsOpen)}/>}
+      {currentUser && 
+        <MoreHorizIcon 
+          onClick={() => openMenu(!menuIsOpen)}
+          className={styles.moreIcon}
+        />
+      }
     </div>
   );
 }
