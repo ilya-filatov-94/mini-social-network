@@ -17,20 +17,20 @@ class PostService {
     if (!userId) return [];
     const posts = await Post.findAll({
       where: { userId: userId },
+      order: [['createdAt', 'DESC']],
       attributes: [
         "id",
         "desc",
         "image",
         "counterLikes",
         "counterComments",
-        "createdAt",
+        "createdAt"
       ],
     });
     const users = await User.findOne({
       where: { id: userId },
       attributes: ["id", "username", "refUser", "profilePic"],
     });
-
     for (let item of posts) {
       let post = item.dataValues;
       let date = new Date(Date.parse(post.createdAt));
@@ -39,18 +39,19 @@ class PostService {
       post.refUser = users.dataValues.refUser;
       post.profilePic = users.dataValues.profilePic;
     }
-    return posts.reverse();
+    return posts;
   }
 
   async getLatestPosts() {
     const posts = await Post.findAll({
+      order: [['createdAt', 'DESC']],
       attributes: [
         "id",
         "desc",
         "image",
         "counterLikes",
         "counterComments",
-        "createdAt",
+        "updatedAt",
       ],
     });
     const users = await User.findAll({
@@ -65,7 +66,27 @@ class PostService {
       post.refUser = users.dataValues.refUser;
       post.profilePic = users.dataValues.profilePic;
     }
-    return posts.reverse();
+    return posts;
+  }
+
+  async updatePost(id, desc, fileName) {
+    const post = await Post.update({ desc: desc, image: fileName}, {
+      where: {
+        id: id,
+      },
+    });
+    return post;
+  }
+
+  async deletePost(id) {
+    if (id) {
+      return await Post.destroy({
+        where: {
+          id: id,
+        },
+      }) ? id : 0;
+    }
+    return 0;
   }
 }
 

@@ -17,16 +17,16 @@ interface IPostsProps {
 
 const Posts: FC<IPostsProps> = ({userId, currentUser}) => {
 
-  const {data: posts, error, isLoading} = useGetAllPostsQuery(userId);
+  const {data: posts, error: errorLoad, isLoading} = useGetAllPostsQuery(userId);
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   if (isLoading) {
     return <Loader />
   }
 
-  if (error) {
-    if (isFetchBaseQueryErrorType(error)) {
-      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {error.status}</Alert>
+  if (errorLoad) {
+    if (isFetchBaseQueryErrorType(errorLoad)) {
+      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {errorLoad.status}</Alert>
     }
   }
 

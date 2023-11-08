@@ -44,6 +44,34 @@ class PostController {
         }
     }
 
+    async updatePost(request, response, next) {
+        try {
+            const {id, desc} = request.body;
+            let post;
+            if (request.files) {
+                const {image} = request.files;
+                let fileName = uuid.v4() + ".jpg";
+                image.mv(path.resolve(__dirname, '..', 'static', fileName));
+                post = await postService.updatePost(parseInt(id), desc, fileName);
+            } else {
+                post = await postService.updatePost(parseInt(id), desc, '');
+            }
+            return response.json(post);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async deletePost(request, response, next) {
+        try {
+            const {id} = request.body;
+            const post = await postService.deletePost(parseInt(id));
+            return response.json(post);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async check(request, response, next) {
 
         response.json({message: "Всё отлично"});

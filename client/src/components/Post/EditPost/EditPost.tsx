@@ -1,33 +1,72 @@
-import {FC, ChangeEvent, useState, useRef} from 'react';
-import styles from './SharePost.module.scss';
-import {useAppSelector} from '../../hooks/useTypedRedux';
-import {useAddPostMutation} from '../../services/PostService';
+import {
+    FC,
+    useState,
+    useEffect, 
+    useRef,
+    ChangeEvent
+} from 'react';
+import axios from 'axios';
+import styles from './EditPost.module.scss';
+import {IPostData} from '../../../types/posts';
+import {urlAPIimages} from '../../../env_variables'; 
+import PreviewComponent from '../../SharePost/PreviewComponent/PreviewComponent';
+import {useUpdatePostMutation} from '../../../services/PostService';
 import Alert from '@mui/material/Alert';
 import { 
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
-import PreviewComponent from './PreviewComponent/PreviewComponent';
 
 export type TPreviewImg = string | ArrayBuffer | null;
 
-interface ISharePostProps {
-  userId: number;
-}
+interface IEditPostProps {
+    post: IPostData;
+    postIsEdited: boolean;
+    editPost: (state: boolean) => void;
+    curTheme: string;
+};
 
-const SharePost: FC<ISharePostProps> = ({userId}) => {
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const [addPost, {error}] = useAddPostMutation();
-  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+const EditPost: FC<IEditPostProps> = ({
+    post,
+    postIsEdited,
+    editPost,
+    curTheme
+}) => {
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [selectedFile, setSelectedFile] = useState<File>();
   const [previewImg, setPreviewImg] = useState<TPreviewImg>();
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [updatePost, {error}] = useUpdatePostMutation();
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.value = post.desc;
+    }
+    if (post.image) {
+      loadPreviewImg(urlAPIimages + post.image);
+    }
+  // eslint-disable-next-line
+  }, [postIsEdited]);
+
+  async function loadPreviewImg(urlFile: string) {
+    if (urlFile) {
+      const response = await axios({
+        method: 'get',
+        url: urlFile,
+        responseType: 'blob'
+      });
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewImg(reader.result)
+      reader.readAsDataURL(response.data);
+      setSelectedFile(response.data);
+    }
+  }
 
   function handleImagePost(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
       let file = event.target.files[0];
       if (!file.type.match('image')) return;
       setSelectedFile(file);
-
       const reader = new FileReader();
       reader.onloadend = () => setPreviewImg(reader.result)
       reader.readAsDataURL(file);
@@ -41,10 +80,10 @@ const SharePost: FC<ISharePostProps> = ({userId}) => {
     setPreviewImg(null);
   }
 
-  async function handleUpload() {
+  async function handleUpdate() {
     let textPost;
     const formData = new FormData();
-    formData.append('id', `${userId}`);
+    formData.append('id', `${post.id}`);
     if (textareaRef.current) {
       textPost = textareaRef.current.value;
       formData.append('desc', textPost);
@@ -53,10 +92,8 @@ const SharePost: FC<ISharePostProps> = ({userId}) => {
       formData.append('image', selectedFile);
     }
     if (!textPost && !selectedFile) return;
-    await addPost(formData).unwrap();
-    if (textareaRef.current) textareaRef.current.value = '';
-    setSelectedFile(undefined);
-    setPreviewImg(null);
+    await updatePost(formData).unwrap();
+    editPost(false);
   }
 
   if (error) {
@@ -66,15 +103,11 @@ const SharePost: FC<ISharePostProps> = ({userId}) => {
   }
 
   return (
-    <div
-      className={`${styles.wrapperSharePost} ${
-        currentTheme === "darkMode"
+    <div className={`${styles.container} ${
+        curTheme === "darkMode"
           ? styles["theme-dark"]
           : styles["theme-light"]
-      }`}
-    >
-      <div className={styles.container}>
-        <span className={styles.header}>Создать новый пост</span>
+      }`}>
         <div className={styles.top}>
           <textarea
             ref={textareaRef}
@@ -91,25 +124,23 @@ const SharePost: FC<ISharePostProps> = ({userId}) => {
               className={styles.fileInput}
               type="file"
               accept=".jpeg, .jpg, .png"
-              id="file"
+              id="updateFile"
             />}
-            <label htmlFor="file">
+            <label htmlFor="updateFile">
               <PreviewComponent 
                 dataImg={previewImg}
                 fileMetaData={selectedFile?.name}
-                curTheme={currentTheme}
+                curTheme={curTheme}
                 remove={removeImagePost}
               />
             </label>
           </div>
           <div className={styles.right}>
-            <button onClick={handleUpload} className={styles.Btn}>Опубликовать</button>
+            <button onClick={handleUpdate} className={styles.Btn}>Сохранить</button>
           </div>
         </div>
       </div>
-    </div>
-  );
+  )
 }
 
-
-export default SharePost;
+export default EditPost;

@@ -16,14 +16,19 @@ interface IContentPostProps {
 };
 
 const ContentPost: FC<IContentPostProps> = ({
-  post, 
+  post,
   commentOpen, 
   setCommentOpen
 }) => {
 
+  const rootStyles = [styles.content];
+  if (post.desc==='') {
+    rootStyles.push(styles.hideTopMargin);
+  }
+
   return (
     <>
-      <div className={`${styles.content} ${post.desc==='' ? styles.hideMargin : ''}`}>
+      <div className={rootStyles.join(' ')}>
         <p className={post.desc=== '' ? styles.hideText : ''}>{post.desc}</p>
         {post.image && (
           <img

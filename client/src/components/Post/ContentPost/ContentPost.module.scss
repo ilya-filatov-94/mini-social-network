@@ -11,8 +11,12 @@
     }
 }
 
-.content.hideMargin {
-    margin: 0;
+.content.hideTopMargin {
+    margin: 0 0 20px 0;
+}
+
+.hideText {
+    height: 0;
 }
 
 .info {
@@ -69,8 +73,4 @@
             }
         }
     }
-}
-
-.hideText {
-    height: 0;
 }

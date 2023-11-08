@@ -2,7 +2,7 @@ import {
     createApi, 
 } from "@reduxjs/toolkit/query/react";
 import {baseQueryWithReauth} from './index';
-import {IPostData, ICheckData} from '../types/posts';
+import {IPostData, /*ICheckData*/} from '../types/posts';
 
 
 
@@ -33,15 +33,38 @@ export const postApi = createApi({
           invalidatesTags: ['Posts'],
           extraOptions: { maxRetries: 3 },
         }),
-        checkApi: builder.query<ICheckData, void>({
-          query: () => `/post/auth`,
+        updatePost: builder.mutation<IPostData, FormData>({
+          query: (data) => ({
+            url: `/post/update`,
+            method: 'PATCH',
+            body: data
+          }),
+          invalidatesTags: ['Posts'],
           extraOptions: { maxRetries: 3 },
-          keepUnusedDataFor: 60,
         }),
+        deletePost: builder.mutation<number, number>({
+          query: (data) => ({
+            url: `/post/delete`,
+            method: 'DELETE',
+            body: {id: data}
+          }),
+          invalidatesTags: ['Posts'],
+          extraOptions: { maxRetries: 3 },
+        }),
+        // checkApi: builder.query<ICheckData, void>({
+        //   query: () => `/post/auth`,
+        //   extraOptions: { maxRetries: 3 },
+        //   keepUnusedDataFor: 60,
+        // }),
     })
 });
 
-export const {useGetAllPostsQuery, useAddPostMutation} = postApi;
+export const {
+  useGetAllPostsQuery, 
+  useAddPostMutation,
+  useUpdatePostMutation,
+  useDeletePostMutation
+} = postApi;
 
 
 

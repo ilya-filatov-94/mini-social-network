@@ -11,9 +11,17 @@ interface IPostsProps {
   post: IPostData;
   currentUser: boolean;
   curTheme: string;
+  editPost: (state: boolean) => void;
+  deletePost: () => void;
 };
 
-const InfoAuthorOfPost: FC<IPostsProps> = ({post, currentUser, curTheme}) => {
+const InfoAuthorOfPost: FC<IPostsProps> = ({
+  post, 
+  currentUser, 
+  curTheme,
+  editPost,
+  deletePost
+}) => {
 
   const [menuIsOpen, openMenu] = useState<boolean>(false);
 
@@ -42,9 +50,9 @@ const InfoAuthorOfPost: FC<IPostsProps> = ({post, currentUser, curTheme}) => {
       <MenuPost
         isVisible={menuIsOpen} 
         setVisible={openMenu}
-        idPost={post.id}
+        editPost={editPost}
+        deletePost={deletePost}
         curTheme={curTheme}
-        position={''}
       />}
       {currentUser && 
         <MoreHorizIcon 

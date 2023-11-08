@@ -4,36 +4,34 @@ import styles from './MenuPost.module.scss';
 interface IMenuPostProps {
   isVisible: boolean;
   setVisible: (state: boolean) => void;
-  idPost: number | undefined;
+  editPost: (state: boolean) => void;
+  deletePost: () => void;
   curTheme: string;
-  position: string;
 }
 
 const MenuPost: FC<IMenuPostProps> = ({
   isVisible, 
   setVisible, 
-  idPost, 
+  editPost,
+  deletePost,
   curTheme,
-  position,
 }) => {
 
   if (!isVisible) return null;
 
-  function getIdPost() {
-    console.log(idPost);
-  }
-
   return (
       <div className={styles.menu} onClick={() => setVisible(!isVisible)}>
-        <div className={curTheme ==='darkMode'
-            ? `${styles.contentWindow} ${position} ${styles['theme-dark']}`
-            : `${styles.contentWindow} ${position} ${styles['theme-light']}`
-        }>
-          <div className={styles.button} onClick={getIdPost}>
+        <div className={`${styles.contentWindow} ${curTheme ==='darkMode' 
+        ? styles['theme-dark'] 
+        : styles['theme-light']}`}>
+          <div className={styles.button} onClick={() => editPost(true)}>
             Редактировать
           </div>
-          <div className={styles.button}>
+          <div className={styles.button} onClick={deletePost}>
             Удалить
+          </div>
+          <div className={styles.button} onClick={() => editPost(false)}>
+            Отменить
           </div>
         </div>
       </div>
