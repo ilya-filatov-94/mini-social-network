@@ -5,7 +5,6 @@ import {baseQueryWithReauth} from './index';
 import {IPostData, /*ICheckData*/} from '../types/posts';
 
 
-
 export const postApi = createApi({
     reducerPath: 'postApi',
     baseQuery: baseQueryWithReauth,

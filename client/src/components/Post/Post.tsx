@@ -25,7 +25,7 @@ const Post: FC<IPostsProps> = ({post, currentUser, userId}) => {
   const [postIsEdited, editPost] = useState<boolean>(false);
   const [deletePost, {error}] = useDeletePostMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
-  const [commentOpen, setCommentOpen] = useState<boolean>(false);
+  const [isCommentOpen, setCommentOpen] = useState<boolean>(false);
 
   async function deletePostFn() {
     if (post.id) {
@@ -56,7 +56,7 @@ const Post: FC<IPostsProps> = ({post, currentUser, userId}) => {
         {!postIsEdited &&
           <ContentPost 
             post={post}
-            commentOpen={commentOpen}
+            isCommentOpen={isCommentOpen}
             setCommentOpen={setCommentOpen}
           />
         }
@@ -70,7 +70,7 @@ const Post: FC<IPostsProps> = ({post, currentUser, userId}) => {
           />
         }
 
-        {commentOpen && <Comments userId={userId} currentUser={currentUser} curTheme={currentTheme}/>}
+        {isCommentOpen && <Comments userId={userId} postId={post.id} curTheme={currentTheme}/>}
       </div>
     </div>
   );

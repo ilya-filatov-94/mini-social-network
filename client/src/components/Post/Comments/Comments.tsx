@@ -4,19 +4,19 @@ import {useAppSelector} from '../../../hooks/useTypedRedux';
 import {Link} from 'react-router-dom';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
 import {IComments} from '../../../types/comments';
-
 // import { ReactComponent as SendArrow} from '../../../assets/images/right_arrow.svg';
 
 interface IContentPostProps {
     userId: number;
-    currentUser: boolean;
+    postId: number | undefined;
     curTheme: string;
 };
 
+const Comments: FC<IContentPostProps> = ({userId, postId, curTheme}) => {
 
-const Comments: FC<IContentPostProps> = ({userId, currentUser, curTheme}) => {
-
-  console.log(userId);
+//   const {data: userData, error, isLoading} = useGetUserDataQuery(id as string, {skip: !(userId && postId)});
+  console.log('Айдишник пользователя', userId);
+  console.log('Айдишник поста под которым остален коммент', postId);
   
   //Временно, нужно написать запрос на бэкенд на получение массива комментов по user.id
   const comments: IComments[] = [];
@@ -44,7 +44,7 @@ const Comments: FC<IContentPostProps> = ({userId, currentUser, curTheme}) => {
                 Отправить
             </button>
         </div>
-        {comments?.length !== 0 && 
+        {comments?.length !== 0 &&
             comments.map(comment => 
             <div className={styles.comment} key={comment.id}>
                 <img 

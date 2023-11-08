@@ -31,7 +31,7 @@ const MenuPost: FC<IMenuPostProps> = ({
             Удалить
           </div>
           <div className={styles.button} onClick={() => editPost(false)}>
-            Отменить
+            Отменить редактирование
           </div>
         </div>
       </div>

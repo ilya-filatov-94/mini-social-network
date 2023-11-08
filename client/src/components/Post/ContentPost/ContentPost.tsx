@@ -11,13 +11,13 @@ import {IPostData} from '../../../types/posts';
 
 interface IContentPostProps {
   post: IPostData;
-  commentOpen: boolean;
+  isCommentOpen: boolean;
   setCommentOpen: (state: boolean) => void;
 };
 
 const ContentPost: FC<IContentPostProps> = ({
   post,
-  commentOpen, 
+  isCommentOpen, 
   setCommentOpen
 }) => {
 
@@ -49,7 +49,7 @@ const ContentPost: FC<IContentPostProps> = ({
         </div>
         <div
           className={styles.item}
-          onClick={() => setCommentOpen(!commentOpen)}
+          onClick={() => setCommentOpen(!isCommentOpen)}
         >
           <TextsmsOutlinedIcon />
           <span>
@@ -74,7 +74,7 @@ const ContentPost: FC<IContentPostProps> = ({
           }
           <span>{post.counterLikes}</span>
         </div>
-        <div className={styles.item} onClick={() => setCommentOpen(!commentOpen)}>
+        <div className={styles.item} onClick={() => setCommentOpen(!isCommentOpen)}>
           <TextsmsOutlinedIcon />
           <span>{post.counterComments}</span>
         </div>

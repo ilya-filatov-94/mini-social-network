@@ -1,4 +1,3 @@
-// import {IComments} from './comments';
 
 export interface IPostData {
   id?: number;
@@ -15,15 +14,3 @@ export interface IPostData {
 export interface ICheckData {
   message: string;
 }
-
-// export interface IPost {
-//   id: number;
-//   username: string;
-//   profilePic: string;
-//   refUser: string;
-//   desc: string;
-//   date: string;
-//   img?: string | undefined;
-//   likes: number;
-//   comments: IComments[];
-// }
