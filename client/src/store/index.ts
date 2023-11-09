@@ -3,6 +3,7 @@ import reducerAuth from "./authSlice";
 import reducerTheme from "./themeSlice";
 import {postApi} from '../services/PostService';
 import {userApi} from '../services/UserService';
+import {commentApi} from '../services/CommentService';
 
 
 import storage from "redux-persist/lib/storage";
@@ -20,8 +21,9 @@ import {
 const rootReducer = combineReducers({
   reducerAuth: reducerAuth,
   reducerTheme: reducerTheme,
+  [userApi.reducerPath]: userApi.reducer,
   [postApi.reducerPath]: postApi.reducer,
-  [userApi.reducerPath]: userApi.reducer
+  [commentApi.reducerPath]: commentApi.reducer
 });
 
 const persistConfig = {
@@ -42,6 +44,7 @@ const store = configureStore({
       },
     }).concat(postApi.middleware)
     .concat(userApi.middleware)
+    .concat(commentApi.middleware)
 });
 
 export const persistor = persistStore(store);

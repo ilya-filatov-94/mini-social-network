@@ -1,0 +1,77 @@
+@import '../../../styles/theme.scss';
+
+.menu {
+    font-family: 'Gilroy', 'Arial', sans-serif;
+    font-size: 0.875rem;
+    font-weight: normal;
+
+    .background {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: none;
+        background-color: rgba(0, 0, 0, 0);
+        z-index: 1;
+    }
+
+    .background.active {
+        display: block;
+    }
+
+    .contentWindow {
+        min-width: 100px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        border-radius: 10px;
+        z-index: 2;
+
+        .button {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 10px;
+        }
+        .button:hover {
+            cursor: pointer;
+        }
+
+        &.theme-dark {
+            $curTheme: "dark";
+            background-color: themed($curTheme, "background");
+            color: themed($curTheme, "textColor");
+            border: 2px solid themed($curTheme, "border");
+
+            .button:hover {
+                background-color: rgb(140, 140, 140);
+            }
+        }
+
+        &.theme-light {
+            $curTheme: "light";
+            background-color: themed($curTheme, "background");
+            color: themed($curTheme, "textColor");
+            border: 2px solid themed($curTheme, "border");
+
+            .button:hover {
+                background-color: rgb(229, 227, 227);
+            }
+        }
+    }
+}
+
+.moreIcon {
+    align-self: center;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+}
+

@@ -15,8 +15,8 @@ export const commentApi = createApi({
           query: (data) => ({
             url: `/comment/all`,
             params: {
-              userId: data.userId,
-              postId: data.postId
+              id_user: data.userId,
+              id_post: data.postId
             }
           }),
           providesTags: (result) => result
@@ -25,7 +25,7 @@ export const commentApi = createApi({
           extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
         }),
-        addComment: builder.mutation<IComments, FormData>({
+        addComment: builder.mutation<IComments, ICommentReq>({
           query: (data) => ({
             url: `/comment/create`,
             method: 'POST',
@@ -39,8 +39,8 @@ export const commentApi = createApi({
             url: `/comment/delete`,
             method: 'DELETE',
             body: {
-                userId: data.userId,
-                postId: data.postId
+              postId: data.postId,
+              comId: data.id
             }
           }),
           invalidatesTags: ['Comments'],

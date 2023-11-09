@@ -92,7 +92,6 @@ class UserService {
         if (!userData || !tokenFromDB) {
             throw ApiError.unAuthorizedError();
         }
-
         const user = await User.findOne({where: {id: userData.id}});
         const payload = {id: user.id, refUser: user.refUser, email: user.email};
         const tokens = tokenService.generateTokens(payload);

@@ -1,27 +1,86 @@
-import {FC} from 'react';
+import {FC, useRef} from 'react';
 import styles from './Comments.module.scss';
 import {useAppSelector} from '../../../hooks/useTypedRedux';
 import {Link} from 'react-router-dom';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
-import {IComments} from '../../../types/comments';
 // import { ReactComponent as SendArrow} from '../../../assets/images/right_arrow.svg';
+import {IComments} from '../../../types/comments';
+import {
+    useGetAllCommentsQuery,
+    useAddCommentMutation,
+    useDeleteCommentMutation
+} from '../../../services/CommentService';
+import Loader from '../../Loader/Loader';
+import Alert from '@mui/material/Alert';
+import { 
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query/react";
+import MenuComment from '../MenuComment/MenuComment';
+
 
 interface IContentPostProps {
     userId: number;
-    postId: number | undefined;
+    postId: number;
     curTheme: string;
+    refetchPosts: () => void;
 };
 
-const Comments: FC<IContentPostProps> = ({userId, postId, curTheme}) => {
-
-//   const {data: userData, error, isLoading} = useGetUserDataQuery(id as string, {skip: !(userId && postId)});
-  console.log('Айдишник пользователя', userId);
-  console.log('Айдишник поста под которым остален коммент', postId);
-  
-  //Временно, нужно написать запрос на бэкенд на получение массива комментов по user.id
-  const comments: IComments[] = [];
+const Comments: FC<IContentPostProps> = ({
+    userId, 
+    postId, 
+    curTheme,
+    refetchPosts
+}) => {
+  const {data: comments, error: errorGetComments, isLoading: isLoadingAll} = useGetAllCommentsQuery(
+    {userId, postId}, {skip: !(userId && postId)}
+  );
+  const [addComment, {error: errorAddComment, isLoading: isLoadingAdd}] = useAddCommentMutation();
+  const [deleteComment, {error: errorDeleteComment, isLoading: isLoadingDel}] = useDeleteCommentMutation();
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const curUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  async function handleSendComment() {
+    if (textareaRef.current) {
+        let textPost = textareaRef.current.value;
+        if (!textPost) return;
+        await addComment({userId, postId, desc: textPost}).unwrap();
+        refetchPosts();
+    }
+  }
+
+  async function handleDeleteComment(id: number) {
+    await deleteComment({postId, id});
+    refetchPosts();
+  }
   
+  if (isLoadingAll || isLoadingAdd || isLoadingDel) {
+    return <Loader />
+  }
+
+  if (errorGetComments || errorAddComment || errorDeleteComment) {
+    if (isFetchBaseQueryErrorType(errorGetComments)) {
+      return (
+        <Alert severity="error" sx={{ m: 20 }}>
+          Произошла ошибка при загрузке данных! {errorGetComments.status}
+        </Alert>
+      );
+    }
+    if (isFetchBaseQueryErrorType(errorAddComment)) {
+      return (
+        <Alert severity="error" sx={{ m: 20 }}>
+          Произошла ошибка при отправке данных! {errorAddComment.status}
+        </Alert>
+      );
+    }
+    if (isFetchBaseQueryErrorType(errorDeleteComment)) {
+        return (
+          <Alert severity="error" sx={{ m: 20 }}>
+            Произошла ошибка при удалении данных! {errorDeleteComment.status}
+          </Alert>
+        );
+    }
+  }
 
   return (
     <div className={curTheme ==='darkMode'
@@ -34,35 +93,44 @@ const Comments: FC<IContentPostProps> = ({userId, postId, curTheme}) => {
                 src={curUser.profilePic ? curUser.profilePic : noAvatar} 
                 alt={`user ${curUser.username}`} 
             />
-            <input 
+            <textarea
+                ref={textareaRef}
+                rows={1}
                 className={styles.input}
-                type="text" 
                 placeholder="Напишите комментарий"
             />
             <div className={styles.mobileBtnSend}/>
-            <button className={styles.btn}>
+            <button className={styles.btn} onClick={handleSendComment}>
                 Отправить
             </button>
         </div>
-        {comments?.length !== 0 &&
-            comments.map(comment => 
+
+        {(comments && comments?.length !== 0) &&
+            comments.map((comment: IComments) => 
             <div className={styles.comment} key={comment.id}>
                 <img 
                     className={styles.iconUser}
-                    src={comment.profilePic} 
+                    src={comment.profilePic ? comment.profilePic : noAvatar}
                     alt={`description comment ${comment.id}`} 
                 />
                 <div className={styles.info}>
-                    <Link 
-                        className={styles.username}
-                        to={`/profile/${comment.refUser}`}
-                        replace={true}
-                    >
+                    <div className={styles.ext_info}>
+                        <Link 
+                            className={styles.username}
+                            to={`/profile/${comment.refUser}`}
+                            replace={true}
+                        >
                         <span>{comment.username}</span>
-                    </Link>
+                        </Link>
+                        <span className={styles.date}>{comment.date}</span>
+                    </div>
                     <p className={styles.commDesc}>{comment.desc}</p>
                 </div>
-                <span className={styles.date}>{comment.date}</span>
+                <MenuComment
+                  idComment={comment.id}
+                  deleteComment={handleDeleteComment}
+                  curTheme={curTheme}
+                />
             </div>
         )}
     </div>

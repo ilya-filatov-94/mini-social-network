@@ -15,11 +15,16 @@
         align-items: center;
         justify-content: space-between;
         gap: 20px;
-        margin: 20px 0;
+        margin: 20px 0 0 0;
 
         .input {
             flex: 5;
             padding: 10px;
+            font-family: 'Gilroy', 'Arial', sans-serif;
+            font-weight: normal;
+            font-size: 0.875rem;
+            outline: none;
+            resize: none;
             background-color: transparent;
 
             @include mobile {
@@ -67,43 +72,56 @@
     }
 
     .comment {
-        margin: 30px 0px;
+        margin: 20px 0 0 0;
         display: flex;
         justify-content: space-between;
         gap: 20px;
-  
+        position: relative;
+
+        @include mobile {
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                    &:not(:last-child) {
+                    margin-right: 20px;
+                }
+            }
+        }
+        
         .info {
-          flex:5;
+          flex: 5;
           display: flex;
           flex-direction: column;
-          gap: 3px;
+          gap: 5px;
           align-items: flex-start;
 
           @include mobile {
             @supports (-webkit-touch-callout: none) and (not (translate: none)) {
                     &:not(:last-child) {
-                    margin-left: 20px;
-                    margin-right: 20px;
+                    margin: 5px 0;
                 }
             }
-        }
-  
-          .username {
-            font-weight: 500;
-            text-decoration: none;
-            color: inherit;
           }
-  
+
+          .ext_info {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+
+            .username {
+                font-weight: 500;
+                text-decoration: none;
+                color: inherit;
+                margin-right: 15px;
+            }
+    
+            .date{
+                font-size: 0.75rem;
+            }
+          }
         }
 
         .commDesc {
             font-size: 0.875rem;
-        }
-
-        .date{
-            flex:1;
-            align-self: center;
-            font-size: 0.75rem;
         }
     }
 

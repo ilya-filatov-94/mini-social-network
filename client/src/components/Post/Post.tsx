@@ -17,12 +17,14 @@ interface IPostsProps {
   currentUser: boolean;
   userId: number;
   post: IPostData;
+  refetchPosts: () => void;
 };
 
 const Post: FC<IPostsProps> = ({
   post, 
   currentUser,
   userId,
+  refetchPosts
 }) => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
@@ -73,7 +75,14 @@ const Post: FC<IPostsProps> = ({
           />
         }
 
-        {isCommentOpen && <Comments userId={userId} postId={post.id} curTheme={currentTheme}/>}
+        {isCommentOpen && 
+          <Comments 
+            userId={userId} 
+            postId={post.id!}
+            curTheme={currentTheme}
+            refetchPosts={refetchPosts}
+          />
+        }
       </div>
     </div>
   );

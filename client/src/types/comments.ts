@@ -1,17 +1,20 @@
 
 export interface IComments {
-  id?: number;
+  id: number;
+  desc: string;
   userId: number;
   postId: number;
+  createdAt?: string;
+  updatedAt?: string;
   username: string;
-  profilePic?: string | undefined;
   refUser: string;
-  desc: string;
+  profilePic?: string | undefined;
   date: string;
 }
 
 export interface ICommentReq {
-  userId: number;
+  id?: number;
+  userId?: number;
   postId: number;
   desc?: string;
 }
