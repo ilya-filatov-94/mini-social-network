@@ -11,6 +11,7 @@ import {IPostData} from '../../../types/posts';
 import {urlAPIimages} from '../../../env_variables'; 
 import PreviewComponent from '../../SharePost/PreviewComponent/PreviewComponent';
 import {useUpdatePostMutation} from '../../../services/PostService';
+import Loader from '../../Loader/Loader';
 import Alert from '@mui/material/Alert';
 import { 
   FetchBaseQueryError,
@@ -19,15 +20,13 @@ import {
 export type TPreviewImg = string | ArrayBuffer | null;
 
 interface IEditPostProps {
-    post: IPostData;
-    postIsEdited: boolean;
-    editPost: (state: boolean) => void;
-    curTheme: string;
+  post: IPostData;
+  editPost: (state: boolean) => void;
+  curTheme: string;
 };
 
 const EditPost: FC<IEditPostProps> = ({
     post,
-    postIsEdited,
     editPost,
     curTheme
 }) => {
@@ -35,7 +34,7 @@ const EditPost: FC<IEditPostProps> = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [selectedFile, setSelectedFile] = useState<File>();
   const [previewImg, setPreviewImg] = useState<TPreviewImg>();
-  const [updatePost, {error}] = useUpdatePostMutation();
+  const [updatePost, {isLoading, error}] = useUpdatePostMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   useEffect(() => {
@@ -46,7 +45,7 @@ const EditPost: FC<IEditPostProps> = ({
       loadPreviewImg(urlAPIimages + post.image);
     }
   // eslint-disable-next-line
-  }, [postIsEdited]);
+  }, []);
 
   async function loadPreviewImg(urlFile: string) {
     if (urlFile) {
@@ -94,6 +93,10 @@ const EditPost: FC<IEditPostProps> = ({
     if (!textPost && !selectedFile) return;
     await updatePost(formData).unwrap();
     editPost(false);
+  }
+
+  if (isLoading) {
+    return <Loader />
   }
 
   if (error) {

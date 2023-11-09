@@ -19,7 +19,11 @@ interface IPostsProps {
   post: IPostData;
 };
 
-const Post: FC<IPostsProps> = ({post, currentUser, userId}) => {
+const Post: FC<IPostsProps> = ({
+  post, 
+  currentUser,
+  userId,
+}) => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const [postIsEdited, editPost] = useState<boolean>(false);
@@ -64,7 +68,6 @@ const Post: FC<IPostsProps> = ({post, currentUser, userId}) => {
         {postIsEdited &&
           <EditPost 
             post={post}
-            postIsEdited={postIsEdited}
             editPost={editPost}
             curTheme={currentTheme}
           />

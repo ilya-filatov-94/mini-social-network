@@ -17,10 +17,10 @@ interface IPostsProps {
 
 const Posts: FC<IPostsProps> = ({userId, currentUser}) => {
 
-  const {data: posts, error: errorLoad, isLoading} = useGetAllPostsQuery(userId);
+  const {data: posts, error: errorLoad, isLoading: isLoadingPosts} = useGetAllPostsQuery(userId);
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
-  if (isLoading) {
+  if (isLoadingPosts) {
     return <Loader />
   }
 
@@ -38,7 +38,7 @@ const Posts: FC<IPostsProps> = ({userId, currentUser}) => {
           key={post.id} 
           userId={userId}
           currentUser={currentUser}
-          post={post} 
+          post={post}
         />
       )}
     </div>

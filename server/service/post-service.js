@@ -70,11 +70,12 @@ class PostService {
   }
 
   async updatePost(id, desc, fileName) {
-    const post = await Post.update({ desc: desc, image: fileName}, {
+    await Post.update({ desc: desc, image: fileName}, {
       where: {
         id: id,
       },
     });
+    const post = await Post.findOne({where: {id}})
     return post;
   }
 
