@@ -1,4 +1,4 @@
-import {FC, useRef} from 'react';
+import {FC, useRef, SetStateAction, Dispatch} from 'react';
 import styles from './Comments.module.scss';
 import {useAppSelector} from '../../../hooks/useTypedRedux';
 import {Link} from 'react-router-dom';
@@ -22,7 +22,7 @@ interface IContentPostProps {
     userId: number;
     postId: number;
     curTheme: string;
-    updateCommentCounter: (action: string) => void;
+    updateCommentCounter: Dispatch<SetStateAction<number>>;
 };
 
 const Comments: FC<IContentPostProps> = ({
@@ -45,13 +45,13 @@ const Comments: FC<IContentPostProps> = ({
         let textPost = textareaRef.current.value;
         if (!textPost) return;
         await addComment({userId, postId, desc: textPost}).unwrap();
-        updateCommentCounter('add');
+        updateCommentCounter(prev => prev + 1);
     }
   }
 
   async function handleDeleteComment(id: number) {
     await deleteComment({postId, id});
-    updateCommentCounter('delete');
+    updateCommentCounter(prev => prev - 1);
   }
   
   if (isLoadingAll || isLoadingAdd || isLoadingDel) {

@@ -38,15 +38,6 @@ const Post: FC<IPostsProps> = ({
     }
   }
 
-  function updateComments(action: string) {
-    if (action === 'add') {
-      updateCommentCounter(numberOfComments + 1);
-    }
-    if (action === 'delete') {
-      updateCommentCounter(numberOfComments - 1);
-    }
-  }
-
   if (error) {
     if (isFetchBaseQueryErrorType(error)) {
       return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {error.status}</Alert>
@@ -90,7 +81,7 @@ const Post: FC<IPostsProps> = ({
             userId={userId} 
             postId={post.id!}
             curTheme={currentTheme}
-            updateCommentCounter={updateComments}
+            updateCommentCounter={updateCommentCounter}
           />
         }
       </div>
