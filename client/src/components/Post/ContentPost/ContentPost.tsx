@@ -12,6 +12,7 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 interface IContentPostProps {
   post: IPostData;
   curTheme: string;
+  numberOfComments: number;
   isCommentOpen: boolean;
   setCommentOpen: (state: boolean) => void;
 };
@@ -19,6 +20,7 @@ interface IContentPostProps {
 const ContentPost: FC<IContentPostProps> = ({
   post,
   curTheme,
+  numberOfComments,
   isCommentOpen, 
   setCommentOpen
 }) => {
@@ -48,11 +50,11 @@ const ContentPost: FC<IContentPostProps> = ({
         >
           <TextsmsOutlinedIcon />
           <span>
-            {post.counterComments === 1
-              ? `${post.counterComments} Комменатрий`
-              : post.counterComments > 1 && post.counterComments < 5
-              ? `${post.counterComments} Комментария`
-              : `${post.counterComments} Комментариев`}
+            {numberOfComments === 1
+              ? `${numberOfComments} Комменатрий`
+              : numberOfComments > 1 && numberOfComments < 5
+              ? `${numberOfComments} Комментария`
+              : `${numberOfComments} Комментариев`}
           </span>
         </div>
         <div className={styles.item}>
@@ -65,7 +67,7 @@ const ContentPost: FC<IContentPostProps> = ({
         <Likes likes={users} curTheme={curTheme}/>
         <div className={styles.item} onClick={() => setCommentOpen(!isCommentOpen)}>
           <TextsmsOutlinedIcon />
-          <span>{post.counterComments}</span>
+          <span>{numberOfComments}</span>
         </div>
         <div className={styles.item}>
           <ShareOutlinedIcon />

@@ -15,9 +15,9 @@ const Likes: FC<ILikesProps> = ({likes, curTheme}) => {
 
   const currUser = useAppSelector(state => state.reducerAuth.currentUser);
   const [currLikes, changeLikes] = useState<IUser[]>(likes || []);
+  const hasLike = currLikes.filter(item => item.name === currUser.username);
 
   function toggleLike() {
-    const hasLike = currLikes.filter(item => item.name === currUser.username);
     if (!hasLike.length) {
       changeLikes([{id: currUser.id, name: currUser.username, avatar: currUser.profilePic}, ...currLikes]);
     }
@@ -55,7 +55,7 @@ const Likes: FC<ILikesProps> = ({likes, curTheme}) => {
         </div>
         }
         <div className={styles.wrapperIcon} onClick={toggleLike}>
-        {currLikes.length > 0
+        {hasLike.length
            ? <FavoriteOutlinedIcon className={styles.like}/>
            : <FavoriteBorderOutlinedIcon />
         }

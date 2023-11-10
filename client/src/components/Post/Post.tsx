@@ -17,14 +17,12 @@ interface IPostsProps {
   currentUser: boolean;
   userId: number;
   post: IPostData;
-  refetchPosts: () => void;
 };
 
 const Post: FC<IPostsProps> = ({
   post, 
   currentUser,
   userId,
-  refetchPosts
 }) => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
@@ -32,10 +30,20 @@ const Post: FC<IPostsProps> = ({
   const [deletePost, {error}] = useDeletePostMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const [isCommentOpen, setCommentOpen] = useState<boolean>(false);
+  const [numberOfComments, updateCommentCounter] = useState<number>(post.counterComments || 0);
 
   async function deletePostFn() {
     if (post.id) {
       await deletePost(post.id).unwrap();
+    }
+  }
+
+  function updateComments(action: string) {
+    if (action === 'add') {
+      updateCommentCounter(numberOfComments + 1);
+    }
+    if (action === 'delete') {
+      updateCommentCounter(numberOfComments - 1);
     }
   }
 
@@ -63,6 +71,7 @@ const Post: FC<IPostsProps> = ({
           <ContentPost 
             post={post}
             curTheme={currentTheme}
+            numberOfComments={numberOfComments}
             isCommentOpen={isCommentOpen}
             setCommentOpen={setCommentOpen}
           />
@@ -81,7 +90,7 @@ const Post: FC<IPostsProps> = ({
             userId={userId} 
             postId={post.id!}
             curTheme={currentTheme}
-            refetchPosts={refetchPosts}
+            updateCommentCounter={updateComments}
           />
         }
       </div>

@@ -22,14 +22,14 @@ interface IContentPostProps {
     userId: number;
     postId: number;
     curTheme: string;
-    refetchPosts: () => void;
+    updateCommentCounter: (action: string) => void;
 };
 
 const Comments: FC<IContentPostProps> = ({
     userId, 
     postId, 
     curTheme,
-    refetchPosts
+    updateCommentCounter
 }) => {
   const {data: comments, error: errorGetComments, isLoading: isLoadingAll} = useGetAllCommentsQuery(
     {userId, postId}, {skip: !(userId && postId)}
@@ -45,13 +45,13 @@ const Comments: FC<IContentPostProps> = ({
         let textPost = textareaRef.current.value;
         if (!textPost) return;
         await addComment({userId, postId, desc: textPost}).unwrap();
-        refetchPosts();
+        updateCommentCounter('add');
     }
   }
 
   async function handleDeleteComment(id: number) {
     await deleteComment({postId, id});
-    refetchPosts();
+    updateCommentCounter('delete');
   }
   
   if (isLoadingAll || isLoadingAdd || isLoadingDel) {
