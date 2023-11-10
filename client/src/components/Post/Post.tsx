@@ -62,6 +62,7 @@ const Post: FC<IPostsProps> = ({
         {!postIsEdited &&
           <ContentPost 
             post={post}
+            curTheme={currentTheme}
             isCommentOpen={isCommentOpen}
             setCommentOpen={setCommentOpen}
           />

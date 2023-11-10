@@ -1,22 +1,24 @@
 import {FC} from 'react';
 import styles from './ContentPost.module.scss';
 import {urlAPIimages} from '../../../env_variables'; 
+import {IPostData} from '../../../types/posts';
+import Likes from '../Likes/Likes';
+import {users} from '../Likes/temporaryLikes';
 
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import {IPostData} from '../../../types/posts';
 
 
 interface IContentPostProps {
   post: IPostData;
+  curTheme: string;
   isCommentOpen: boolean;
   setCommentOpen: (state: boolean) => void;
 };
 
 const ContentPost: FC<IContentPostProps> = ({
   post,
+  curTheme,
   isCommentOpen, 
   setCommentOpen
 }) => {
@@ -39,14 +41,7 @@ const ContentPost: FC<IContentPostProps> = ({
         )}
       </div>
       <div className={styles.info}>
-        <div className={styles.item}>
-          {post.counterLikes !== 0 ? (
-            <FavoriteOutlinedIcon className={styles.like} />
-          ) : (
-            <FavoriteBorderOutlinedIcon />
-          )}
-          <span>{post.counterLikes} Нравится</span>
-        </div>
+        <Likes likes={users} curTheme={curTheme}/>
         <div
           className={styles.item}
           onClick={() => setCommentOpen(!isCommentOpen)}
@@ -67,13 +62,7 @@ const ContentPost: FC<IContentPostProps> = ({
       </div>
 
       <div className={styles.mobileInfo}>
-        <div className={styles.item}>
-          {post.counterLikes !== 0
-           ? <FavoriteOutlinedIcon className={styles.like}/>
-           : <FavoriteBorderOutlinedIcon />
-          }
-          <span>{post.counterLikes}</span>
-        </div>
+        <Likes likes={users} curTheme={curTheme}/>
         <div className={styles.item} onClick={() => setCommentOpen(!isCommentOpen)}>
           <TextsmsOutlinedIcon />
           <span>{post.counterComments}</span>

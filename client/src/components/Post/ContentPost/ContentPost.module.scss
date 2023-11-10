@@ -53,6 +53,12 @@
         gap: 20px;
         justify-content: space-around;
 
+        @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+            & > *:not(:last-child) {
+                margin-right: 20px;
+            }
+        }
+
         .item {
             display: flex;
             align-items: center;
@@ -60,16 +66,20 @@
             cursor: pointer;
             font-size: 0.875rem;
 
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                & > *:not(:last-child) {
+                    margin-right: 10px;
+                }
+            }
+
             .like {
                 color: red;
             }
         }
 
-        @include mobile {
-            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                & > *:not(:last-child) {
-                    margin-right: 40px;
-                }
+        @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+            & > *:not(:last-child) {
+                margin-right: 40px;
             }
         }
     }
