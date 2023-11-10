@@ -1,4 +1,4 @@
-const {Post, User} = require('../models/models');
+const {Post, User, Like} = require('../models/models');
 const formatRelativeDate = require('../helpers/dateFormatting');
 
 
@@ -88,6 +88,40 @@ class PostService {
       }) ? id : 0;
     }
     return 0;
+  }
+
+  async addLike(userId, postId) {
+    const like = await Like.create({
+      userId: userId,
+      postId: postId
+    });
+    return like;
+  }
+
+  async removeLike(userId, postId) {
+    if (!userId || !postId) return 0;
+    return await Like.destroy({
+      where: { userId,  postId},
+    }) ? id_com : 0;
+  }
+
+  async getLikes(userId, postId) {
+    if (!userId || !postId) return [];
+    const likes = await Like.findAll({
+      where: { userId: userId,  postId: postId},
+      attributes: [
+        "id",
+        "userId",
+        "postId"
+      ],
+    });
+    const users = await User.findAll({
+      attributes: ["id", "username", "refUser", "profilePic"],
+    });
+
+    return [];
+    //Получение лайков будет вызываться при запросе всех постов и будет встраиваться массивом в массив постов
+
   }
 }
 

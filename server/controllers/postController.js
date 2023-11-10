@@ -72,6 +72,26 @@ class PostController {
         }
     }
 
+    async addLike(request, response, next) {
+        try {
+            const {userId, postId} = request.body;
+            const like = await postService.addLike(parseInt(userId), parseInt(postId));
+            return response.json(like);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async removeLike(request, response, next) {
+        try {
+            const {userId, postId} = request.body;
+            const like = await postService.removeLike(parseInt(userId), parseInt(postId));
+            return response.json(like);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async check(request, response, next) {
 
         response.json({message: "Всё отлично"});
