@@ -11,6 +11,15 @@ export interface IPostData {
   counterComments: number;
 }
 
+export interface ILikes {
+  id?: number;
+  userId: number;
+  postId: number;
+  username?: string;
+  refUser?: string; 
+  profilePic?: string | undefined;
+}
+
 export interface ICheckData {
   message: string;
 }

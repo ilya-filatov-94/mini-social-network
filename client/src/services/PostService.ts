@@ -2,7 +2,7 @@ import {
     createApi, 
 } from "@reduxjs/toolkit/query/react";
 import {baseQueryWithReauth} from './index';
-import {IPostData, /*ICheckData*/} from '../types/posts';
+import {IPostData, ILikes /*ICheckData*/} from '../types/posts';
 
 
 export const postApi = createApi({
@@ -50,11 +50,39 @@ export const postApi = createApi({
           invalidatesTags: ['Posts'],
           extraOptions: { maxRetries: 3 },
         }),
+        getLikes: builder.query<ILikes[], ILikes>({
+          query: (data) => ({
+            url: `/post/getlikes`,
+            params: {
+              user_id: data.userId, 
+              post_id: data.postId
+            }
+          }),
+          extraOptions: { maxRetries: 3 },
+        }),
+        addLike: builder.mutation<ILikes, ILikes>({
+          query: (data) => ({
+            url: `/post/addlike`,
+            method: 'PATCH',
+            body: data
+          }),
+          extraOptions: { maxRetries: 3 },
+        }),
+        removeLike: builder.mutation<ILikes, ILikes>({
+          query: (data) => ({
+            url: `/post/removelike`,
+            method: 'DELETE',
+            body: data
+          }),
+          extraOptions: { maxRetries: 3 },
+        }),
         // checkApi: builder.query<ICheckData, void>({
         //   query: () => `/post/auth`,
         //   extraOptions: { maxRetries: 3 },
         //   keepUnusedDataFor: 60,
         // }),
+//         router.patch('/addlike', authMiddleware, postController.addLike);
+// router.delete('/removelike', authMiddleware, postController.removeLike); 
     })
 });
 

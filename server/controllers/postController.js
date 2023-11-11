@@ -27,7 +27,7 @@ class PostController {
 
     async getAllPosts(request, response, next) {
         try {
-            let {id} = request.query;
+            const {id} = request.query;
             const posts = await postService.getAll(id);
             return response.json(posts);
         } catch (error) {
@@ -86,6 +86,16 @@ class PostController {
         try {
             const {userId, postId} = request.body;
             const like = await postService.removeLike(parseInt(userId), parseInt(postId));
+            return response.json(like);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getLikes(request, response, next) {
+        try {
+            const {user_id, post_id} = request.query;
+            const like = await postService.getLikes(parseInt(user_id), parseInt(post_id));
             return response.json(like);
         } catch (error) {
             next(error);

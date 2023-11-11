@@ -102,7 +102,7 @@ class PostService {
     if (!userId || !postId) return 0;
     return await Like.destroy({
       where: { userId,  postId},
-    }) ? id_com : 0;
+    }) ? {userId, postId} : 0;
   }
 
   async getLikes(userId, postId) {
@@ -118,10 +118,27 @@ class PostService {
     const users = await User.findAll({
       attributes: ["id", "username", "refUser", "profilePic"],
     });
+    getFullDataLikes(users, likes)
+    return likes;
+  }
+}
 
-    return [];
-    //Получение лайков будет вызываться при запросе всех постов и будет встраиваться массивом в массив постов
-
+function getFullDataLikes(users, likes) {
+  const obj = {};
+  let key;
+  let item;
+  for (let i = 0; i < users.length; i++) {
+    key = users[i].dataValues.id;
+    obj[key] = users[i].dataValues;
+  }
+  for (let i = 0; i < likes.length; i++) {
+    key = likes[i].dataValues.userId;
+    item = likes[i].dataValues;
+    if (obj[key]) {
+      item.username = obj[key].username;
+      item.refUser = obj[key].refUser;
+      item.profilePic = obj[key].profilePic;
+    }
   }
 }
 
