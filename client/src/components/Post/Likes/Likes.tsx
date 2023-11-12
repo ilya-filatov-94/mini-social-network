@@ -1,29 +1,71 @@
-import {FC, useState} from 'react';
+import {FC, useState, useEffect} from 'react';
 import styles from './Likes.module.scss';
 import {useAppSelector} from '../../../hooks/useTypedRedux';
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import noAvatar from '../../../assets/images/no-avatar.jpg';
-import {IUser} from '../../../types/users';
+import {ILikes} from '../../../types/posts';
+import {
+  useGetLikesQuery,
+  useAddLikeMutation,
+  useRemoveLikeMutation
+} from '../../../services/PostService';
+import Loader from '../../Loader/Loader';
+import Alert from '@mui/material/Alert';
+import { 
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query/react";
 
 interface ILikesProps {
-  likes: IUser[];
+  postId: number;
   curTheme: string;
 }
 
-const Likes: FC<ILikesProps> = ({likes, curTheme}) => {
+const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
 
+  const {
+    data: likes, 
+    error: errorLoad, 
+    isLoading: isLoadingLikes,
+  } = useGetLikesQuery(postId);
+  const [addLike, {error: errorAddLike}] = useAddLikeMutation();
+  const [removeLike, {error: errorRemoveLike}] = useRemoveLikeMutation();
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+  const [currLikes, changeLikes] = useState<ILikes[]>([]);
+  
+  useEffect(() => {
+    if (likes?.length && !currLikes?.length) {
+      changeLikes(likes);
+    }
+  // eslint-disable-next-line
+  }, [likes]);
+  const counterLikes = currLikes.length;
   const currUser = useAppSelector(state => state.reducerAuth.currentUser);
-  const [currLikes, changeLikes] = useState<IUser[]>(likes || []);
-  const hasLike = currLikes.filter(item => item.name === currUser.username);
-
+  const hasLike = currLikes?.filter(item => item.username === currUser.username);
+  
   function toggleLike() {
     if (!hasLike.length) {
-      changeLikes([{id: currUser.id, name: currUser.username, avatar: currUser.profilePic}, ...currLikes]);
+      changeLikes([{
+        id: currUser.id, 
+        username: currUser.username, 
+        profilePic: currUser.profilePic
+      }, ...currLikes]);
+      addLike({userId: currUser.id, postId});
     }
     if (hasLike.length) {
-      const newArr = currLikes.filter(item => item.name !== currUser.username);
+      const newArr = currLikes.filter(item => item.username !== currUser.username);
       changeLikes(newArr);
+      removeLike({userId: currUser.id, postId});
+    }
+  }
+
+  if (isLoadingLikes) {
+    return <Loader />
+  }
+
+  if (errorLoad || errorAddLike || errorRemoveLike) {
+    if (isFetchBaseQueryErrorType(errorLoad)) {
+      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {errorLoad.status}</Alert>
     }
   }
   
@@ -31,8 +73,8 @@ const Likes: FC<ILikesProps> = ({likes, curTheme}) => {
     <div className={`${styles.wrapper} ${curTheme ==='darkMode' 
     ? styles['theme-dark'] 
     : styles['theme-light']}`}>
-      <div className={`${styles.wrapperIcon} ${currLikes.length > 0 ? styles.icon : ''}`}>
-        {currLikes.length > 0 &&
+      <div className={`${styles.wrapperIcon} ${counterLikes > 0 ? styles.icon : ''}`}>
+        {counterLikes > 0 &&
         <div className={styles.users}>
             <div className={styles.avatars}>
             {currLikes.map((like, index) => {
@@ -40,17 +82,17 @@ const Likes: FC<ILikesProps> = ({likes, curTheme}) => {
                 <img  
                     key={like.id}
                     className={styles.img} 
-                    src={like.avatar ? like.avatar : noAvatar} 
+                    src={like.profilePic ? like.profilePic : noAvatar} 
                     alt='Фото польз.' 
                 />)
                 return null;
             })}
             </div>
-            {currLikes.length === 1 &&
-                <span>Нравится {currLikes[0].name}</span>
+            {counterLikes === 1 &&
+                <span>Нравится {currLikes[0].username}</span>
             }
-            {currLikes.length > 1 &&
-                <span>Нравится {currLikes[0].name} и ещё {currLikes.length-1}</span>
+            {counterLikes > 1 &&
+                <span>Нравится {currLikes[0].username} и ещё {counterLikes-1}</span>
             }
         </div>
         }
@@ -59,8 +101,8 @@ const Likes: FC<ILikesProps> = ({likes, curTheme}) => {
            ? <FavoriteOutlinedIcon className={styles.like}/>
            : <FavoriteBorderOutlinedIcon />
         }
-        <span className={styles.textLike}>{currLikes.length} Нравится</span>
-        <span className={styles.mobileInfo}>{currLikes.length}</span>
+        <span className={styles.textLike}>{counterLikes} Нравится</span>
+        <span className={styles.mobileInfo}>{counterLikes}</span>
         </div>
       </div>
     </div>

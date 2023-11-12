@@ -94,9 +94,9 @@ class PostController {
 
     async getLikes(request, response, next) {
         try {
-            const {user_id, post_id} = request.query;
-            const like = await postService.getLikes(parseInt(user_id), parseInt(post_id));
-            return response.json(like);
+            const {post_id} = request.query;
+            const likes = await postService.getLikes(parseInt(post_id));
+            return response.json(likes);
         } catch (error) {
             next(error);
         }

@@ -105,10 +105,10 @@ class PostService {
     }) ? {userId, postId} : 0;
   }
 
-  async getLikes(userId, postId) {
-    if (!userId || !postId) return [];
+  async getLikes(postId) {
+    if (!postId) return [];
     const likes = await Like.findAll({
-      where: { userId: userId,  postId: postId},
+      where: { postId: postId},
       attributes: [
         "id",
         "userId",

@@ -13,8 +13,8 @@ export interface IPostData {
 
 export interface ILikes {
   id?: number;
-  userId: number;
-  postId: number;
+  userId?: number;
+  postId?: number;
   username?: string;
   refUser?: string; 
   profilePic?: string | undefined;

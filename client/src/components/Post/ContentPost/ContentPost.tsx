@@ -3,7 +3,7 @@ import styles from './ContentPost.module.scss';
 import {urlAPIimages} from '../../../env_variables'; 
 import {IPostData} from '../../../types/posts';
 import Likes from '../Likes/Likes';
-import {users} from '../Likes/temporaryLikes';
+// import {users} from '../Likes/temporaryLikes';
 
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
@@ -43,7 +43,7 @@ const ContentPost: FC<IContentPostProps> = ({
         )}
       </div>
       <div className={styles.info}>
-        <Likes likes={users} curTheme={curTheme}/>
+        <Likes postId={post.id!} curTheme={curTheme}/>
         <div
           className={styles.item}
           onClick={() => setCommentOpen(!isCommentOpen)}
@@ -64,7 +64,7 @@ const ContentPost: FC<IContentPostProps> = ({
       </div>
 
       <div className={styles.mobileInfo}>
-        <Likes likes={users} curTheme={curTheme}/>
+        <Likes postId={post.id!} curTheme={curTheme}/>
         <div className={styles.item} onClick={() => setCommentOpen(!isCommentOpen)}>
           <TextsmsOutlinedIcon />
           <span>{numberOfComments}</span>

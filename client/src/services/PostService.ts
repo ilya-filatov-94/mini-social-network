@@ -50,12 +50,11 @@ export const postApi = createApi({
           invalidatesTags: ['Posts'],
           extraOptions: { maxRetries: 3 },
         }),
-        getLikes: builder.query<ILikes[], ILikes>({
-          query: (data) => ({
+        getLikes: builder.query<ILikes[], number>({
+          query: (postId) => ({
             url: `/post/getlikes`,
             params: {
-              user_id: data.userId, 
-              post_id: data.postId
+              post_id: postId
             }
           }),
           extraOptions: { maxRetries: 3 },
@@ -81,8 +80,6 @@ export const postApi = createApi({
         //   extraOptions: { maxRetries: 3 },
         //   keepUnusedDataFor: 60,
         // }),
-//         router.patch('/addlike', authMiddleware, postController.addLike);
-// router.delete('/removelike', authMiddleware, postController.removeLike); 
     })
 });
 
@@ -90,7 +87,10 @@ export const {
   useGetAllPostsQuery, 
   useAddPostMutation,
   useUpdatePostMutation,
-  useDeletePostMutation
+  useDeletePostMutation,
+  useGetLikesQuery,
+  useAddLikeMutation,
+  useRemoveLikeMutation
 } = postApi;
 
 
