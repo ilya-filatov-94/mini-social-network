@@ -99,7 +99,7 @@ const Comments: FC<IContentPostProps> = ({
                 className={styles.input}
                 placeholder="Напишите комментарий"
             />
-            <div className={styles.mobileBtnSend}/>
+            <div className={styles.mobileBtnSend} onClick={handleSendComment}/>
             <button className={styles.btn} onClick={handleSendComment}>
                 Отправить
             </button>

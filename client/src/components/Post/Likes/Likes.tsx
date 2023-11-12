@@ -43,19 +43,19 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
   const currUser = useAppSelector(state => state.reducerAuth.currentUser);
   const hasLike = currLikes?.filter(item => item.username === currUser.username);
   
-  function toggleLike() {
+  async function toggleLike() {
     if (!hasLike.length) {
       changeLikes([{
         id: currUser.id, 
         username: currUser.username, 
         profilePic: currUser.profilePic
       }, ...currLikes]);
-      addLike({userId: currUser.id, postId});
+      await addLike({userId: currUser.id, postId}).unwrap();
     }
     if (hasLike.length) {
       const newArr = currLikes.filter(item => item.username !== currUser.username);
       changeLikes(newArr);
-      removeLike({userId: currUser.id, postId});
+      await removeLike({userId: currUser.id, postId}).unwrap();
     }
   }
 
@@ -97,12 +97,12 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
         </div>
         }
         <div className={styles.wrapperIcon} onClick={toggleLike}>
-        {hasLike.length
+          {hasLike.length
            ? <FavoriteOutlinedIcon className={styles.like}/>
            : <FavoriteBorderOutlinedIcon />
-        }
-        <span className={styles.textLike}>{counterLikes} Нравится</span>
-        <span className={styles.mobileInfo}>{counterLikes}</span>
+          }
+          <span className={styles.textLike}>{counterLikes} Нравится</span>
+          <span className={styles.mobileInfo}>{counterLikes}</span>
         </div>
       </div>
     </div>

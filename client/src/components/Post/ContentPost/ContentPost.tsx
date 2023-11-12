@@ -49,7 +49,8 @@ const ContentPost: FC<IContentPostProps> = ({
           onClick={() => setCommentOpen(!isCommentOpen)}
         >
           <TextsmsOutlinedIcon />
-          <span>
+          <span className={styles.mobileInfo}>{numberOfComments}</span>
+          <span className={styles.commInfo}>
             {numberOfComments === 1
               ? `${numberOfComments} Комменатрий`
               : numberOfComments > 1 && numberOfComments < 5
@@ -59,18 +60,7 @@ const ContentPost: FC<IContentPostProps> = ({
         </div>
         <div className={styles.item}>
           <ShareOutlinedIcon />
-          <span>Поделиться</span>
-        </div>
-      </div>
-
-      <div className={styles.mobileInfo}>
-        <Likes postId={post.id!} curTheme={curTheme}/>
-        <div className={styles.item} onClick={() => setCommentOpen(!isCommentOpen)}>
-          <TextsmsOutlinedIcon />
-          <span>{numberOfComments}</span>
-        </div>
-        <div className={styles.item}>
-          <ShareOutlinedIcon />
+          <span className={styles.shareInfo}>Поделиться</span>
         </div>
       </div>
     </>

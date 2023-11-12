@@ -25,9 +25,14 @@
     align-items: center;
     gap: 20px;
 
+    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+        & > *:not(:last-child) {
+            margin-right: 20px;
+        }
+    }
+
     @include mobile {
-        justify-content: space-around;
-        display: none;
+        justify-content: space-between;
     }
 
     .item {
@@ -37,49 +42,30 @@
         cursor: pointer;
         font-size: 0.875rem;
 
-        .like {
-            color: red;
-        }
-    }
-}
-
-.mobileInfo {
-    display: none;
-
-    @include mobile {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 20px;
-        justify-content: space-around;
-
         @supports (-webkit-touch-callout: none) and (not (translate: none)) {
             & > *:not(:last-child) {
-                margin-right: 20px;
+                margin-right: 10px;
             }
         }
 
-        .item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            font-size: 0.875rem;
-
-            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                & > *:not(:last-child) {
-                    margin-right: 10px;
-                }
-            }
-
-            .like {
-                color: red;
+        .mobileInfo {
+            display: none;
+            @include mobile {
+                display: block;
             }
         }
 
-        @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-            & > *:not(:last-child) {
-                margin-right: 40px;
+        .commInfo {
+            display: block;
+            @include mobile {
+                display: none;
+            }
+        }
+
+        .shareInfo {
+            display: block;
+            @include mobile {
+                display: none;
             }
         }
     }
