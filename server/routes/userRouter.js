@@ -16,9 +16,9 @@ router.post('/login',
 router.post('/logout', userController.logout);
 router.get('/refresh', userController.refresh);
 
-router.get('/profile', authMiddleware, userController.getProfile);
+router.get('/profile/:ref', authMiddleware, userController.getProfile);
 router.get('/all', authMiddleware, userController.getAll); 
-router.get('/profile/:id', authMiddleware, userController.getOne);
+router.get('/profile/:ref/edit', authMiddleware, userController.getOneEdit);
 router.post('/follow', authMiddleware, userController.followUser);
 router.post('/unfollow', authMiddleware, userController.unsubscribeUser);
 router.get('/followers', authMiddleware, userController.getFollowers);

@@ -1,0 +1,163 @@
+@import '../../styles/responsive.scss';
+@import '../../styles/theme.scss';
+
+.settingsContainer {
+    padding: 10px 30px;
+    font-size: 0.875rem;
+
+    @include mobile {
+        padding: 10px;
+    }
+
+    .wrapperSettings {
+        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow-y: scroll;
+        
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+
+            h1 {
+                font-size: 1.25rem;
+                font-weight: normal;
+            }
+        }
+
+        .fieldImg {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+
+            .preview {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 50%;
+                align-self: flex-start;
+            }
+
+            .previewCover {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                align-self: flex-start;
+            }
+
+            .bgNonCover {
+                background: linear-gradient(181.2deg, rgb(254, 254, 254) 10.5%, rgb(181, 239, 249) 86.8%);
+                min-width: 80px;
+                height: 80px;
+                border-radius: 10px;
+            }
+
+            .wrapperFileInput {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: center;
+                gap: 15px;
+                margin: 0;
+                margin-bottom: 20px;
+                padding: 0;
+
+                .headerFileInput {
+                    font-size: 1rem;
+                }
+    
+                .fileInput {
+                    opacity: 0;
+                    height: 0;
+                    width: 0;
+                    line-height: 0;
+                    overflow: hidden;
+                    padding: 0;
+                    margin: 0;
+                }
+
+                .btnFileInput {
+                    margin: 0;
+                    padding: 7px;
+                    border-radius: 5px;
+                    background-color:#938eef;
+                    color: white;
+                    cursor: pointer;
+                }
+            }
+
+        }
+
+        .inputForm {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: transparent;
+        }
+
+        .wrapperSaveBtn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .saveButton {
+            background-color: #938eef;
+            color: white;
+            width: 30%;
+            padding: 10px;
+            align-self: center;
+
+            @include mobile {
+                align-self: center;
+            }
+            @include tablet {
+                width: 30%;
+            }
+        }
+
+        .saveButton:hover {
+            background-color: rgb(153, 117, 188);
+        }
+        .saveButton:active {
+            background-color: rgb(130, 88, 171);
+        }
+        .saveButton:disabled {
+            background-color: rgb(175, 175, 175);
+        }
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        .inputForm {
+            border: 1px solid themed($curTheme, "border");
+        }
+
+        .wrapperSettings {
+            background-color: themed($curTheme, "background");
+        }
+    }
+    &.theme-light {
+        $curTheme: "light";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        .inputForm {
+            border: 1px solid themed($curTheme, "border");
+        }
+
+        .wrapperSettings {
+            background-color: themed($curTheme, "background");
+        }
+    }
+}

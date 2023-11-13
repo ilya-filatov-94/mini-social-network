@@ -11,7 +11,12 @@ interface IPropsPreview {
   remove: (e: MouseEvent | PointerEvent) => void;
 }
 
-const PreviewComponent: FC<IPropsPreview> = ({ dataImg, fileMetaData, curTheme, remove}) => {
+const PreviewComponent: FC<IPropsPreview> = ({
+  dataImg, 
+  fileMetaData, 
+  curTheme, 
+  remove
+}) => {
   function removeHandler(event: any) {
     remove(event as MouseEvent | PointerEvent);
   }

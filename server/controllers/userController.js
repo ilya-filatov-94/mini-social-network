@@ -62,16 +62,6 @@ class UserController {
         }
     }
 
-    async getProfile(request, response, next) {
-        try {
-            const {ref} = request.params;
-            const user = await userService.getOneUser(ref);
-            return response.json(user);
-        } catch (error) {
-            next(error);
-        }
-    }
-
     async getAll(request, response, next) {
         try {
             const users = await userService.getAllUsers();
@@ -83,11 +73,23 @@ class UserController {
         }
     }
 
-    async getOne(request, response, next) {
+    async getProfile(request, response, next) {
         try {
-            const {id} = request.params;
-            const user = await userService.getOneUser(id);
+            const {ref} = request.params;
+            const user = await userService.getOneUser(ref);
             const profileData = excludeKeysFromObj(user.dataValues, ['email', 'password', 'status', 'createdAt', 'updatedAt']);
+            return response.json(profileData);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getOneEdit(request, response, next) {
+        try {
+            const {ref} = request.params;
+            console.log(ref);
+            const user = await userService.getOneUser(ref);
+            const profileData = excludeKeysFromObj(user.dataValues, ['password', 'status', 'createdAt', 'updatedAt']);
             return response.json(profileData);
         } catch (error) {
             next(error);

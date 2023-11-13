@@ -1,18 +1,18 @@
 import {FC, useEffect} from 'react'
 import styles from './Profile.module.scss';
 
-import {useGetUserDataQuery} from '../../services/UserService';
+import {useGetUserProfileQuery} from '../../services/UserService';
 import { useParams } from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import {useScroll} from '../../hooks/useScroll';
 import { 
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
-
 import Loader from '../../components/Loader/Loader';
 import Alert from '@mui/material/Alert';
 import Posts from '../../components/Posts/Posts';
 import SharePost from '../../components/SharePost/SharePost';
+import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -24,8 +24,8 @@ import LanguageIcon from "@mui/icons-material/Language";
 
 const Profile: FC = () => {
   const {id} = useParams();
+  const {data: userData, error, isLoading} = useGetUserProfileQuery(id as string, {skip: !id});
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
-  const {data: userData, error, isLoading} = useGetUserDataQuery(id as string, {skip: !id});
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const curUser = useAppSelector(state => state.reducerAuth.currentUser);
@@ -105,7 +105,9 @@ const Profile: FC = () => {
                   <button className={styles.Btn}>Написать</button>
                   <button className={styles.Btn}>Подписаться</button>
                 </>
-              : <button className={styles.Btn}>Редактировать профиль</button>
+                : <ButtonLink addClass={styles.Btn} to={`/profile/${id}/edit`}>
+                    Редактировать профиль
+                  </ButtonLink>
               }
             </div>
           </div>

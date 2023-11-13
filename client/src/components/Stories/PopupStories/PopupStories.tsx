@@ -60,7 +60,7 @@ const PopupStories: FC<IPopupStoriesProps> = memo(({
 
   return (
     <Portal>
-      <div className={isVisible ? `${styles.windowPopup} ${styles.active}` : `${styles.windowPopup}`} >
+      <div className={`${styles.windowPopup} ${isVisible ? styles.active : ''}`}>
         <div className={styles.contentPopup}>
 
             <div className={styles.progressBar}>
