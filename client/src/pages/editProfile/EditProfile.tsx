@@ -1,32 +1,43 @@
-import {FC, useState, useEffect, ChangeEvent} from 'react';
+import {
+  FC, 
+  useState,
+  MutableRefObject,
+  FormEventHandler,
+  ChangeEvent
+} from 'react';
 import styles from './EditProfile.module.scss';
 import {useParams} from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import {IUserFullData} from '../../types/users';
-import {useGetUserDataQuery} from '../../services/UserService';
+import {useGetUserDataQuery, useUpdateUserMutation} from '../../services/UserService';
 import { 
     FetchBaseQueryError,
-  } from "@reduxjs/toolkit/query/react";
+} from "@reduxjs/toolkit/query/react";
+import {useAppDispatch} from '../../hooks/useTypedRedux';
+import {updateUserData} from '../../store/authSlice';
 import Loader from '../../components/Loader/Loader';
 import Alert from '@mui/material/Alert';
-import InputWithValidation from '../../components/InputWithValidation/InputWithValidation';
+import InputSettings from './InputSettings/InputSettings';
 import LoadingButton from '../../components/LoadingButton/LoadingButton';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import {inputs} from './editUserInputs';
 
-interface IStatusValidData {
-    [key: string]: boolean;
-}
+
+type TPreviewImg = string | ArrayBuffer | null;
 
 const EditProfile: FC = () => {
   const {ref} = useParams();
-  const {data: userData, error, isLoading} = useGetUserDataQuery(ref as string, {skip: !ref});
+  const {data: userData, error: errorLoading, isLoading: isLoadingData} = useGetUserDataQuery(ref as string);
+  const [updateUser, {isLoading: isLoadingUpdate, error: errorUpdate}] = useUpdateUserMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const [selectedAvatar, setSelectedAvatar] = useState<File>();
+  const [previewAvatar, setPreviewAvatar] = useState<TPreviewImg>();
+  const [selectedCover, setSelectedCover] = useState<File>();
+  const [previewCover, setPreviewCover] = useState<TPreviewImg>();
+  const dispatch = useAppDispatch();
 
-  console.log(userData);
-
-  const [newUserData, setNewUserData] = useState<IUserFullData>({
+  const [newUserData, setNewUserData] = useState({
     name: '',
     lastname: '',
     city: '',
@@ -35,42 +46,107 @@ const EditProfile: FC = () => {
     password: '',
   });
 
-  useEffect(() => {
-    if (userData) {
-        setNewUserData({...newUserData, name: userData.name});
-    }
-
-  }, [userData])
-
-  const [isValidInputs, setValidInput] = useState<IStatusValidData>({
-    name: false,
-    lastname: false,
-    city: false,
-    website: false,
-    email: false,
-    password: false,
+  const [isValidInputs, setValidInput] = useState({
+    name: true,
+    lastname: true,
+    city: true,
+    website: true,
+    email: true,
+    password: true,
   });
 
-  const isValidForm = isValidInputs.name &&
-                      isValidInputs.lastname &&
-                      isValidInputs.email &&
-                      isValidInputs.password;
+  const setValueinForm = (ref: MutableRefObject<null | HTMLInputElement>, error: string) => {
+    if (ref.current) {
+      setNewUserData({...newUserData, [ref.current.name]: ref.current.value});
+      setValidInput({...isValidInputs, [ref.current.name]: !error});
+    }
+  }
+  const isValidForm = Object.entries(isValidInputs).every(key => key[1]);
 
-  function handleInputs(event: ChangeEvent<HTMLInputElement>) {
-    setNewUserData(prev => ({...prev, [event.target.name]: event.target.value}))
+  const onSubmit: FormEventHandler<HTMLFormElement & IUserFullData> = async (event) => {
+    event.preventDefault();
+    console.log(newUserData, selectedAvatar, selectedCover);
+    const formData = new FormData();
+    let newUsername = '';
+    let newRef;
+    formData.append('id', `${userData?.id}`);
+    formData.append('email', `${newUserData?.email}`);
+    formData.append('password', `${newUserData?.password}`);
+    if (newUserData.name !== "" && newUserData.lastname !== "") {
+      newUsername = `${newUserData?.name} ${newUserData?.lastname}`;
+      newRef = newUsername.replace(' ', '') + userData?.id;
+      formData.append('refUser', `${userData?.refUser}`);
+      formData.append('username', newUsername);
+    } else {
+      formData.append('username', '');
+    }
+    if (selectedAvatar) {
+      formData.append('profilePic', selectedAvatar);
+    } else {
+      formData.append('profilePic', '');
+    }
+    if (selectedCover) {
+      formData.append('profilePic', selectedCover);
+    } else {
+      formData.append('profilePic', '');
+    }
+    if (newUserData.city === "") {
+      formData.append('city', 'Не указан');
+    }
+    if (newUserData.website === "") {
+      formData.append('website', 'Отсутствует');
+    }
+    const emptyNewData = Object.entries(newUserData)
+      .every(item => item[1] === '')
+      && !(selectedAvatar && selectedCover);
+    
+    if (emptyNewData) return;
+    await updateUser(formData).unwrap();
+    if (newRef) {
+      dispatch(updateUserData({
+        username: newUsername,
+        refUser: newRef!
+      }));
+    }
   }
 
-  if (isLoading) {
+  function handleImagePost(event: ChangeEvent<HTMLInputElement>) {
+    if (event.target.files) {
+      let file = event.target.files[0];
+      if (!file.type.match('image')) return;
+      const reader = new FileReader();      
+      if (event.target.name === "profilePic") {
+        setSelectedAvatar(file);
+        reader.onloadend = () => setPreviewAvatar(reader.result);
+      }
+      if (event.target.name === "coverPic") {
+        setSelectedCover(file);
+        reader.onloadend = () => setPreviewCover(reader.result);
+      }
+      reader.readAsDataURL(file);
+    }
+  }
+
+  if (isLoadingData || isLoadingUpdate) {
     return <Loader />
   }
 
-  if (error) {
-    if (isFetchBaseQueryErrorType(error)) {
-      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {error.status}</Alert>
+  if (errorLoading || errorUpdate) {
+    if (isFetchBaseQueryErrorType(errorLoading)) {
+      return ( 
+      <Alert severity="error" sx={{m: 20}}>
+        Произошла ошибка при загрузке данных! {errorLoading.status}
+      </Alert>);
+    }
+    if (isFetchBaseQueryErrorType(errorUpdate)) {
+      return ( 
+      <Alert severity="error" sx={{m: 20}}>
+        Произошла ошибка при загрузке данных! {errorUpdate.status}
+      </Alert>);
     }
   }
   
-  if (userData && !error) {
+  if (userData && !(errorLoading || errorUpdate)) {
   return (
     <div className={currentTheme ==='darkMode'
         ? `${styles.settingsContainer} ${styles['theme-dark']}`
@@ -81,11 +157,11 @@ const EditProfile: FC = () => {
                 <h1>Редактирование профиля</h1>
             </div>
 
-            <form className={styles.updateProfile}>
+            <form className={styles.updateProfile} onSubmit={onSubmit}>
                 <div className={styles.fieldImg}>
                     <img 
                         className={styles.preview} 
-                        src={userData?.profilePic ? userData.profilePic : noAvatar}
+                        src={previewAvatar ? previewAvatar : noAvatar}
                         alt={`avatar of ${userData?.name}`} 
                     />
                     <div className={styles.wrapperFileInput}>
@@ -95,19 +171,20 @@ const EditProfile: FC = () => {
                             Изображение должно быть в одном из форматов: .jpeg, .jpg, .png
                         </p>
                         <input
-                            className={styles.fileInput}
-                            type="file"
-                            accept=".jpeg, .jpg, .png"
-                            id="avatarImg"
-                            name="profilePic"
+                          onChange={handleImagePost}
+                          className={styles.fileInput}
+                          type="file"
+                          accept=".jpeg, .jpg, .png"
+                          id="avatarImg"
+                          name="profilePic"
                         />
                     </div>
                 </div>
                 <div className={styles.fieldImg}>
-                    {userData?.coverPic 
+                    {previewCover 
                     ? <img
                         className={styles.previewCover}
-                        src={userData?.coverPic}
+                        src={previewCover as string}
                         alt={`coverImage of ${userData.name}`}
                       />
                     : <div className={styles.bgNonCover}/>
@@ -119,41 +196,40 @@ const EditProfile: FC = () => {
                             Изображение должно быть в одном из форматов: .jpeg, .jpg, .png
                         </p>
                         <input
-                            className={styles.fileInput}
-                            type="file"
-                            accept=".jpeg, .jpg, .png"
-                            id="coverImg"
-                            name="coverPic"
+                          onChange={handleImagePost}
+                          className={styles.fileInput}
+                          type="file"
+                          accept=".jpeg, .jpg, .png"
+                          id="coverImg"
+                          name="coverPic"
                         />
                     </div>
                 </div>
                 {inputs.map((input) => 
-                  <InputWithValidation
+                  <InputSettings
                     key={input.idInput}
+                    defaultValue={userData[input.name as keyof typeof userData]}
+                    isError={{name: input.name, message: ""}}
+                    setValueinForm={setValueinForm}
                     classes={styles.inputForm}
-                    value={newUserData[input.name as keyof typeof newUserData] || ""}
-                    isValidInput={isValidInputs[input.name]}  
-                    setValidInput={setValidInput}
-                    funValidation={{'customFun': undefined}}
-                    onChange={handleInputs}
                     {...input}
                   />
                 )}
                 <div className={styles.wrapperSaveBtn}>
-                    <LoadingButton
+                  <LoadingButton
                     type="submit"
-                    loading={isLoading}
+                    loading={isLoadingData || isLoadingUpdate}
                     disabled={!isValidForm}
                     text="Сохранить"
                     classes={styles.saveButton}
-                    />
+                  />
                 </div>
             </form>
 
         </div>
       </div>
   )
-} else return <Alert severity="error" sx={{m: 20}}>{JSON.stringify(error)}</Alert>
+} else return <Alert severity="error" sx={{m: 20}}>{JSON.stringify(errorLoading || errorUpdate)}</Alert>
 }
 
 export default EditProfile;

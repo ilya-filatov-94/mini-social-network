@@ -1,0 +1,29 @@
+
+.formInput {
+    margin: 5px 0;
+}
+
+.label {
+    font-size: 0.875rem;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0 0 0;
+    border-radius: 3px;
+    background-color: transparent;
+}
+
+.invalidData {
+    border: 1px solid red;
+}
+
+.error {
+    min-height: 16.6px;
+    margin-top: 3px;
+    padding-bottom: 3px;
+    font-size: 0.75rem;
+    color: red;
+}
+

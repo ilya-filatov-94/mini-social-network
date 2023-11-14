@@ -87,10 +87,27 @@ class UserController {
     async getOneEdit(request, response, next) {
         try {
             const {ref} = request.params;
-            console.log(ref);
-            const user = await userService.getOneUser(ref);
-            const profileData = excludeKeysFromObj(user.dataValues, ['password', 'status', 'createdAt', 'updatedAt']);
+            const user = await userService.getUSerDataForEdit(ref);
+            const profileData = excludeKeysFromObj(user.dataValues, ['username', 'password', 'status', 'createdAt', 'updatedAt']);
             return response.json(profileData);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async updateProile(request, response, next) {
+        try {
+            const {id, desc} = request.body;
+            let post;
+            if (request.files) {
+                const {image} = request.files;
+                let fileName = uuid.v4() + ".jpg";
+                image.mv(path.resolve(__dirname, '..', 'static', fileName));
+                post = await postService.updatePost(parseInt(id), desc, fileName);
+            } else {
+                post = await postService.updatePost(parseInt(id), desc, '');
+            }
+            return response.json(post);
         } catch (error) {
             next(error);
         }

@@ -69,12 +69,12 @@ const Login: FC = () => {
     password: false,
   });
 
-  const isValidForm = isValidInputs.email && isValidInputs.password;
+  const isValidForm = Object.entries(isValidInputs).every(key => key[1]);
 
   function handleInputs(event: ChangeEvent<HTMLInputElement>) {
     setLoginData(prev => ({...prev, [event.target.name]: event.target.value}));
     if (status === '403') {
-      dispatch(setErrorStatus(undefined))
+      dispatch(setErrorStatus(undefined));
     }
   }
 

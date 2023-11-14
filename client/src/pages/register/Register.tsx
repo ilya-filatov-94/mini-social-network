@@ -71,10 +71,7 @@ const Register: FC = () => {
     password: false,
   });
 
-  const isValidForm = isValidInputs.name &&
-                      isValidInputs.lastname &&
-                      isValidInputs.email &&
-                      isValidInputs.password;
+  const isValidForm = Object.entries(isValidInputs).every(key => key[1]);
 
   function handleInputs(event: ChangeEvent<HTMLInputElement>) {
     setRegData(prev => ({...prev, [event.target.name]: event.target.value}))

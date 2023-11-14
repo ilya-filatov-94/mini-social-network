@@ -17,8 +17,11 @@ router.post('/logout', userController.logout);
 router.get('/refresh', userController.refresh);
 
 router.get('/profile/:ref', authMiddleware, userController.getProfile);
-router.get('/all', authMiddleware, userController.getAll); 
 router.get('/profile/:ref/edit', authMiddleware, userController.getOneEdit);
+router.patch('/profile/update', authMiddleware, userController.updateProile);
+
+
+router.get('/all', authMiddleware, userController.getAll); 
 router.post('/follow', authMiddleware, userController.followUser);
 router.post('/unfollow', authMiddleware, userController.unsubscribeUser);
 router.get('/followers', authMiddleware, userController.getFollowers);

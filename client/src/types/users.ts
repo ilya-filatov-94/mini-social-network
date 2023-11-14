@@ -1,20 +1,18 @@
-import {IUserData} from './authReducer';
+export interface IUpdateData {
+    username: string;
+    refUser: string;
+}
 
-// export interface IUserProfile {
-//     id: number;
-//     username: string;
-//     email: string;
-//     refUser: string;
-//     profilePic: string;
-//     coverPic: string;
-//     city: string;
-//     website: string;
-//     status: string;
-// }
+export interface IUpdateFormUser {
+    ref: string;
+    dataUser: FormData;
+}
 
 export interface IUserFullData {
+    id?: number;
     name?: string;
     lastname?: string;
+    refUser?: string;
     email?: string;
     profilePic?: string;
     coverPic?: string;

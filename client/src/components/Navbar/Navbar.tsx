@@ -14,10 +14,8 @@ import {useMatchMedia} from '../../hooks/useMatchMedia';
 
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 
 
@@ -57,7 +55,6 @@ const Navbar: FC = () => {
             : <DarkModeOutlinedIcon />
           }
         </div>
-        <GridViewOutlinedIcon />
 
         <div className={styles.search}>
           <SearchOutlinedIcon />
@@ -65,11 +62,8 @@ const Navbar: FC = () => {
         </div>
       </div>
 
-
       <div className={styles.rigthSection}>
-          <EmailOutlinedIcon />
           <NotificationsOutlinedIcon />
-
           <UserAvatar
             onClick={() => openMenu(!menuIsOpen)}
             addClass={styles.avatar}

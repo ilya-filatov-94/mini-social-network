@@ -11,6 +11,7 @@ import {
     ILoginState, 
     IResponseLogout
 } from '../types/authReducer';
+import {IUpdateData} from '../types/users';
 import {initialStateUser} from './initialStore';
 import {API_URL} from '../env_variables';
 
@@ -145,6 +146,10 @@ const authSlice = createSlice({
         updateToken(state, action: PayloadAction<string>) {
             state.accessToken = action.payload;
         },
+        updateUserData(state, action: PayloadAction<IUpdateData>) {
+            state.currentUser.username = action.payload.username;
+            state.currentUser.refUser = action.payload.refUser;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -211,5 +216,5 @@ function isError(action: AnyAction) {
     return action.type.endsWith('rejected');
 }
 
-export const {setErrorStatus, updateToken} = authSlice.actions; 
+export const {setErrorStatus, updateToken, updateUserData} = authSlice.actions; 
 export default authSlice.reducer;

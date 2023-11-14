@@ -24,10 +24,19 @@
             gap: 10px;
             border-radius: 5px;
             padding: 5px;
+            margin-left: 50px;
+
+            @include mobile {
+                margin: 0;
+            }
+
+            @include tablet{
+                margin: 0;
+            }
 
             .inputSearch {
                 border: none;
-                width: 500px;
+                width: 600px;
                 background-color: transparent;
 
                 @include mobile {
@@ -35,7 +44,7 @@
                 }
 
                 @include tablet{
-                    width: 200px;
+                    width: 400px;
                 }
             }
 

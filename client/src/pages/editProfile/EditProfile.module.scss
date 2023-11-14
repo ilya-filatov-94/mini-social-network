@@ -141,6 +141,7 @@
 
         .inputForm {
             border: 1px solid themed($curTheme, "border");
+            color: themed($curTheme, "textColor");
         }
 
         .wrapperSettings {
@@ -154,6 +155,7 @@
 
         .inputForm {
             border: 1px solid themed($curTheme, "border");
+            color: themed($curTheme, "textColor");
         }
 
         .wrapperSettings {
@@ -161,3 +163,5 @@
         }
     }
 }
+
+

@@ -3,7 +3,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import {baseQueryWithReauth} from './index';
 import {IUserData} from '../types/authReducer';
-import {IUserFullData} from '../types/users';
+import {IUserFullData, IUpdateFormUser} from '../types/users';
 
 
 export const userApi = createApi({
@@ -27,10 +27,19 @@ export const userApi = createApi({
           keepUnusedDataFor: 60,
           providesTags: ['ProfileData']
         }),
+        updateUser: builder.mutation<IUserFullData, FormData>({
+          query: (data) => ({
+            url: `/user/profile/update`,
+            method: 'PATCH',
+            body: data
+          }),
+          extraOptions: { maxRetries: 3 },
+        }),
     })
 });
 
 export const {
   useGetUserProfileQuery,
-  useGetUserDataQuery
+  useGetUserDataQuery,
+  useUpdateUserMutation
 } = userApi;

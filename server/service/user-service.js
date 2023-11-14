@@ -111,7 +111,19 @@ class UserService {
             {
                 where: {refUser: refUser},
             },
-        )
+        );
+        return user;
+    }
+
+    async getUSerDataForEdit(refUser) {
+        const user = await User.findOne(
+            {
+                where: {refUser: refUser},
+            },
+        );
+        const fullName = user.dataValues.username.split(' ');
+        user.dataValues.name = fullName[0];
+        user.dataValues.lastname = fullName[1];
         return user;
     }
 
