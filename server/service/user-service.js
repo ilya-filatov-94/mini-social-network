@@ -115,7 +115,7 @@ class UserService {
         return user;
     }
 
-    async getUSerDataForEdit(refUser) {
+    async getUserDataForEdit(refUser) {
         const user = await User.findOne(
             {
                 where: {refUser: refUser},
@@ -125,6 +125,13 @@ class UserService {
         user.dataValues.name = fullName[0];
         user.dataValues.lastname = fullName[1];
         return user;
+    }
+
+    async updateUser(id, email, password, username, city, website, profileImg, coverImg) {
+        if (!id) return;
+        if (id, email, password, username, city, website, profileImg, coverImg) {
+            //Проверить на наличие каждую переменную через if
+        }
     }
 
     async followUser(curUserId, followerId) {

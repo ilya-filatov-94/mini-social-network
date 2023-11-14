@@ -37,14 +37,16 @@ const EditProfile: FC = () => {
   const [previewCover, setPreviewCover] = useState<TPreviewImg>();
   const dispatch = useAppDispatch();
 
-  const [newUserData, setNewUserData] = useState({
+  const initUserData = {
     name: '',
     lastname: '',
     city: '',
     website: '',
     email: '',
     password: '',
-  });
+  }
+
+  const [newUserData, setNewUserData] = useState(initUserData);
 
   const [isValidInputs, setValidInput] = useState({
     name: true,
@@ -65,49 +67,47 @@ const EditProfile: FC = () => {
 
   const onSubmit: FormEventHandler<HTMLFormElement & IUserFullData> = async (event) => {
     event.preventDefault();
-    console.log(newUserData, selectedAvatar, selectedCover);
     const formData = new FormData();
-    let newUsername = '';
-    let newRef;
     formData.append('id', `${userData?.id}`);
     formData.append('email', `${newUserData?.email}`);
     formData.append('password', `${newUserData?.password}`);
+
+    let newUsername = '';
+    let newRef;
     if (newUserData.name !== "" && newUserData.lastname !== "") {
       newUsername = `${newUserData?.name} ${newUserData?.lastname}`;
       newRef = newUsername.replace(' ', '') + userData?.id;
       formData.append('refUser', `${userData?.refUser}`);
       formData.append('username', newUsername);
-    } else {
-      formData.append('username', '');
     }
-    if (selectedAvatar) {
-      formData.append('profilePic', selectedAvatar);
-    } else {
-      formData.append('profilePic', '');
+    if (newUserData.name !== "" && newUserData.lastname === "") {
+      newUsername = `${newUserData?.name} ${userData?.lastname}`;
+      formData.append('username', newUsername);
     }
-    if (selectedCover) {
-      formData.append('profilePic', selectedCover);
-    } else {
-      formData.append('profilePic', '');
+    if (newUserData.name === "" && newUserData.lastname !== "") {
+      newUsername = `${userData?.name} ${newUserData?.lastname}`;
+      formData.append('username', newUsername);
     }
-    if (newUserData.city === "") {
-      formData.append('city', 'Не указан');
-    }
-    if (newUserData.website === "") {
-      formData.append('website', 'Отсутствует');
-    }
+    formData.append('profilePic', (selectedAvatar || ''));
+    formData.append('coverPic', (selectedCover || ''));
+    formData.append('city', (newUserData.city || 'Не указан'));
+    formData.append('website', (newUserData.website || 'Отсутствует'));
+
     const emptyNewData = Object.entries(newUserData)
       .every(item => item[1] === '')
       && !(selectedAvatar && selectedCover);
     
     if (emptyNewData) return;
-    await updateUser(formData).unwrap();
-    if (newRef) {
-      dispatch(updateUserData({
-        username: newUsername,
-        refUser: newRef!
-      }));
-    }
+    setNewUserData(initUserData);
+    const Test = await updateUser(formData).unwrap();
+    console.log(Test);
+    
+    // if (newRef) {
+    //   dispatch(updateUserData({
+    //     username: newUsername,
+    //     refUser: newRef!
+    //   }));
+    // }
   }
 
   function handleImagePost(event: ChangeEvent<HTMLInputElement>) {

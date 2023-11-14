@@ -87,7 +87,7 @@ class UserController {
     async getOneEdit(request, response, next) {
         try {
             const {ref} = request.params;
-            const user = await userService.getUSerDataForEdit(ref);
+            const user = await userService.getUserDataForEdit(ref);
             const profileData = excludeKeysFromObj(user.dataValues, ['username', 'password', 'status', 'createdAt', 'updatedAt']);
             return response.json(profileData);
         } catch (error) {
@@ -97,17 +97,29 @@ class UserController {
 
     async updateProile(request, response, next) {
         try {
-            const {id, desc} = request.body;
-            let post;
+            const {id, email, password, username, city, website} = request.body;
+            // let user;
             if (request.files) {
-                const {image} = request.files;
-                let fileName = uuid.v4() + ".jpg";
-                image.mv(path.resolve(__dirname, '..', 'static', fileName));
-                post = await postService.updatePost(parseInt(id), desc, fileName);
-            } else {
-                post = await postService.updatePost(parseInt(id), desc, '');
-            }
-            return response.json(post);
+                let profileImg, coverImg;
+                const {profilePic, coverPic} = request.files;
+                if (profilePic) {
+                    profileImg = uuid.v4() + ".jpg";
+                    image.mv(path.resolve(__dirname, '..', 'static', profileImg));
+                }
+                if (coverPic) {
+                    coverImg = uuid.v4() + ".jpg";
+                    image.mv(path.resolve(__dirname, '..', 'static', coverImg));
+                }
+                if (!profilePic && coverPic) //Запись без обновления аватара
+                if (profilePic && !coverPic) //Запись без обновления обложки
+                if (!profilePic && !coverPic) //Запись без обновления обложки и аватара
+                if (profilePic && coverPic) //Запись с обновлением обложки и аватара
+                // user = await userService.updateUser(parseInt(id), email, password, username, city, website, profileImg, coverImg);
+            } 
+
+            console.log(id, email, password, username, city, website);
+            const obj = {id, email, password, username, city, website};
+            return response.json(obj);
         } catch (error) {
             next(error);
         }
