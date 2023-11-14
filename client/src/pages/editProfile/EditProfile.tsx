@@ -82,13 +82,15 @@ const EditProfile: FC = () => {
     }
     if (newUserData.name !== '' && newUserData.lastname === '') {
       newUsername = `${newUserData?.name} ${userData?.lastname}`;
+      newRef = newUsername.replace(' ', '') + userData?.id;
       formData.append('username', newUsername);
-      formData.append('refUser', `${userData?.refUser}`);
+      formData.append('refUser', newRef);
     }
     if (newUserData.name === '' && newUserData.lastname !== '') {
       newUsername = `${userData?.name} ${newUserData?.lastname}`;
+      newRef = newUsername.replace(' ', '') + userData?.id;
       formData.append('username', newUsername);
-      formData.append('refUser', `${userData?.refUser}`);
+      formData.append('refUser', newRef);
     }
     formData.append('profilePic', (selectedAvatar || ''));
     formData.append('coverPic', (selectedCover || ''));

@@ -129,9 +129,45 @@ class UserService {
 
     async updateUser(id, email, password, username, city, website, profileImg, coverImg) {
         if (!id) return;
-        if (id, email, password, username, city, website, profileImg, coverImg) {
-            //Проверить на наличие каждую переменную через if
+        let newEmail, newPassword, newUsername, newCity, newWebsite;
+        const user = await User.findOne(
+            {
+                where: {id: id},
+            },
+        );
+        newEmail = email || user.dataValues.email;
+        newUsername = username || user.dataValues.username;
+        let refToUser;
+        if (username) {
+            refToUser = username.replace(' ', '') + String(id);
+        } else {
+            refToUser = user.dataValues.username.replace(' ', '') + String(id);
         }
+        newCity = city || user.dataValues.city;
+        newWebsite = website || user.dataValues.website;
+        if (password) {
+            newPassword = await bcrypt.hash(password, 5);
+            const newDataUser = await User.update({ 
+                email: newEmail,  
+                refUser: refToUser,
+                username: newUsername,
+                password: newPassword,
+                city: newCity,
+                website: newWebsite,
+                profilePic: profileImg,
+                coverPic: coverImg,
+            }, {where: {id: id}});
+            return newDataUser;
+        }
+        await User.update({ 
+            email: newEmail,  
+            refUser: refToUser,
+            username: newUsername,
+            city: newCity,
+            website: newWebsite,
+            profilePic: profileImg,
+            coverPic: coverImg,
+        }, {where: {id: id}});
     }
 
     async followUser(curUserId, followerId) {

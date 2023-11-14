@@ -98,9 +98,9 @@ class UserController {
     async updateProile(request, response, next) {
         try {
             const {id, email, password, username, city, website} = request.body;
-            // let user;
+            let profileImg = '';
+            let coverImg = '';
             if (request.files) {
-                let profileImg, coverImg;
                 const {profilePic, coverPic} = request.files;
                 if (profilePic) {
                     profileImg = uuid.v4() + ".jpg";
@@ -110,16 +110,14 @@ class UserController {
                     coverImg = uuid.v4() + ".jpg";
                     image.mv(path.resolve(__dirname, '..', 'static', coverImg));
                 }
-                if (!profilePic && coverPic) //Запись без обновления аватара
-                if (profilePic && !coverPic) //Запись без обновления обложки
-                if (!profilePic && !coverPic) //Запись без обновления обложки и аватара
-                if (profilePic && coverPic) //Запись с обновлением обложки и аватара
-                // user = await userService.updateUser(parseInt(id), email, password, username, city, website, profileImg, coverImg);
-            } 
+            }
+            const user = await userService.updateUser(parseInt(id), 
+                email, password, username, city, website, profileImg, coverImg
+            );
 
             console.log(id, email, password, username, city, website);
-            const obj = {id, email, password, username, city, website};
-            return response.json(obj);
+            // const obj = {id, email, password, username, city, website};
+            return response.json(user);
         } catch (error) {
             next(error);
         }
