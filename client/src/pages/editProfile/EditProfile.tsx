@@ -69,24 +69,26 @@ const EditProfile: FC = () => {
     event.preventDefault();
     const formData = new FormData();
     formData.append('id', `${userData?.id}`);
-    formData.append('email', `${newUserData?.email}`);
-    formData.append('password', `${newUserData?.password}`);
+    formData.append('email', newUserData?.email || userData?.email || '');
+    formData.append('password', newUserData?.password);
 
     let newUsername = '';
     let newRef;
-    if (newUserData.name !== "" && newUserData.lastname !== "") {
-      newUsername = `${newUserData?.name} ${newUserData?.lastname}`;
+    if (newUserData.name !== '' && newUserData.lastname !== '') {
+      newUsername = newUserData?.name + ' ' + newUserData?.lastname;
       newRef = newUsername.replace(' ', '') + userData?.id;
-      formData.append('refUser', `${userData?.refUser}`);
       formData.append('username', newUsername);
+      formData.append('refUser', newRef);
     }
-    if (newUserData.name !== "" && newUserData.lastname === "") {
+    if (newUserData.name !== '' && newUserData.lastname === '') {
       newUsername = `${newUserData?.name} ${userData?.lastname}`;
       formData.append('username', newUsername);
+      formData.append('refUser', `${userData?.refUser}`);
     }
-    if (newUserData.name === "" && newUserData.lastname !== "") {
+    if (newUserData.name === '' && newUserData.lastname !== '') {
       newUsername = `${userData?.name} ${newUserData?.lastname}`;
       formData.append('username', newUsername);
+      formData.append('refUser', `${userData?.refUser}`);
     }
     formData.append('profilePic', (selectedAvatar || ''));
     formData.append('coverPic', (selectedCover || ''));
@@ -98,7 +100,7 @@ const EditProfile: FC = () => {
       && !(selectedAvatar && selectedCover);
     
     if (emptyNewData) return;
-    setNewUserData(initUserData);
+    // setNewUserData(initUserData);
     const Test = await updateUser(formData).unwrap();
     console.log(Test);
     
