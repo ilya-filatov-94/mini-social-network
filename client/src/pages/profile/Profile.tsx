@@ -1,6 +1,7 @@
 import {FC, useEffect} from 'react'
 import styles from './Profile.module.scss';
 
+import {urlAPIimages} from '../../env_variables'; 
 import {useGetUserProfileQuery} from '../../services/UserService';
 import { useParams } from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
@@ -59,14 +60,14 @@ const Profile: FC = () => {
       <div className={styles.imagesHeader}>
         {userData.coverPic 
         ? <img
-            src={userData.coverPic}
+            src={urlAPIimages + userData.coverPic}
             alt={`coverImage of ${userData.username}`}
             className={styles.cover}
           />
         : <div className={styles.bgNonCover}/>
         }
         <img
-          src={userData.profilePic ? userData.profilePic : noAvatar}
+          src={userData.profilePic ? urlAPIimages + userData.profilePic : noAvatar}
           alt={`avatar of ${userData.username}`}
           className={styles.profilePic}
         />

@@ -75,11 +75,6 @@ export const postApi = createApi({
           }),
           extraOptions: { maxRetries: 3 },
         }),
-        // checkApi: builder.query<ICheckData, void>({
-        //   query: () => `/post/auth`,
-        //   extraOptions: { maxRetries: 3 },
-        //   keepUnusedDataFor: 60,
-        // }),
     })
 });
 

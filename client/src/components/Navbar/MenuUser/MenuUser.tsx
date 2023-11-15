@@ -49,6 +49,15 @@ const MenuUser: FC<IMenuUserProps> = ({
           >
             Мой профиль
           </Link>
+
+          <Link
+            onClick={() => setVisible(!isVisible)}
+            className={styles.link}
+            to={`/profile/${curUser.refUser}/edit`}
+          >
+            Настройки
+          </Link>
+
           <div 
             className={styles.button}
             onClick={handleLogout}

@@ -35,7 +35,6 @@ export const userApi = createApi({
           }),
           extraOptions: { maxRetries: 3 },
           invalidatesTags: (result, error) => error ? [] : ['ProfileData']
-          // invalidatesTags: ['ProfileData']
         }),
     })
 });
