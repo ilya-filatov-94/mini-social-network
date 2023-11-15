@@ -159,7 +159,7 @@ class UserService {
             }, {where: {id: id}});
             return newDataUser;
         }
-        await User.update({ 
+        return await User.update({ 
             email: newEmail,  
             refUser: refToUser,
             username: newUsername,

@@ -3,11 +3,6 @@ export interface IUpdateData {
     refUser: string;
 }
 
-export interface IUpdateFormUser {
-    ref: string;
-    dataUser: FormData;
-}
-
 export interface IUserFullData {
     id?: number;
     name?: string;

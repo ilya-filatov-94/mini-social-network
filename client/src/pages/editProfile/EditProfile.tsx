@@ -1,6 +1,7 @@
 import {
   FC, 
   useState,
+  useRef,
   MutableRefObject,
   FormEventHandler,
   ChangeEvent
@@ -8,27 +9,31 @@ import {
 import styles from './EditProfile.module.scss';
 import {useParams} from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
-import {IUserFullData} from '../../types/users';
 import {useGetUserDataQuery, useUpdateUserMutation} from '../../services/UserService';
 import { 
-    FetchBaseQueryError,
+  FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 import {useAppDispatch} from '../../hooks/useTypedRedux';
 import {updateUserData} from '../../store/authSlice';
+import { useNavigate } from "react-router-dom";
 import Loader from '../../components/Loader/Loader';
 import Alert from '@mui/material/Alert';
 import InputSettings from './InputSettings/InputSettings';
 import LoadingButton from '../../components/LoadingButton/LoadingButton';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import {inputs} from './editUserInputs';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 
 
 type TPreviewImg = string | ArrayBuffer | null;
 
 const EditProfile: FC = () => {
   const {ref} = useParams();
-  const {data: userData, error: errorLoading, isLoading: isLoadingData} = useGetUserDataQuery(ref as string);
-  const [updateUser, {isLoading: isLoadingUpdate, error: errorUpdate}] = useUpdateUserMutation();
+  const newRefUser = useRef(ref);
+  const {data: userData, error: errorLoading, isLoading: isLoadingData} = useGetUserDataQuery(
+    newRefUser.current as string,
+  );
+  const [updateUser, {isLoading: isLoadingUpdate, error: errorUpdate, isSuccess}] = useUpdateUserMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const [selectedAvatar, setSelectedAvatar] = useState<File>();
@@ -36,17 +41,16 @@ const EditProfile: FC = () => {
   const [selectedCover, setSelectedCover] = useState<File>();
   const [previewCover, setPreviewCover] = useState<TPreviewImg>();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const initUserData = {
+  const [newUserData, setNewUserData] = useState({
     name: '',
     lastname: '',
     city: '',
     website: '',
     email: '',
     password: '',
-  }
-
-  const [newUserData, setNewUserData] = useState(initUserData);
+  });
 
   const [isValidInputs, setValidInput] = useState({
     name: true,
@@ -65,11 +69,11 @@ const EditProfile: FC = () => {
   }
   const isValidForm = Object.entries(isValidInputs).every(key => key[1]);
 
-  const onSubmit: FormEventHandler<HTMLFormElement & IUserFullData> = async (event) => {
+  const onSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     const formData = new FormData();
     formData.append('id', `${userData?.id}`);
-    formData.append('email', newUserData?.email || userData?.email || '');
+    formData.append('email', newUserData?.email);
     formData.append('password', newUserData?.password);
 
     let newUsername = '';
@@ -92,26 +96,25 @@ const EditProfile: FC = () => {
       formData.append('username', newUsername);
       formData.append('refUser', newRef);
     }
-    formData.append('profilePic', (selectedAvatar || ''));
-    formData.append('coverPic', (selectedCover || ''));
-    formData.append('city', (newUserData.city || 'Не указан'));
-    formData.append('website', (newUserData.website || 'Отсутствует'));
+    if (selectedAvatar) formData.append('profilePic', selectedAvatar);
+    if (selectedCover) formData.append('coverPic', selectedCover);
+    formData.append('city', newUserData.city);
+    formData.append('website', newUserData.website);
 
     const emptyNewData = Object.entries(newUserData)
       .every(item => item[1] === '')
       && !(selectedAvatar && selectedCover);
     
     if (emptyNewData) return;
-    // setNewUserData(initUserData);
-    const Test = await updateUser(formData).unwrap();
-    console.log(Test);
-    
-    // if (newRef) {
-    //   dispatch(updateUserData({
-    //     username: newUsername,
-    //     refUser: newRef!
-    //   }));
-    // }
+    await updateUser(formData);
+    if (newRef) {
+      dispatch(updateUserData({
+        username: newUsername,
+        refUser: newRef!
+      }));
+      newRefUser.current = newRef;
+      navigate(`/profile/${newRefUser.current}/edit`, {replace: true});
+    }
   }
 
   function handleImagePost(event: ChangeEvent<HTMLInputElement>) {
@@ -159,6 +162,11 @@ const EditProfile: FC = () => {
         <div className={styles.wrapperSettings}>
             <div className={styles.header}>
                 <h1>Редактирование профиля</h1>
+                {isSuccess && 
+                <div className={styles.successUpdate}>
+                  <div className={styles.MuiAlert}><CheckCircleOutlineOutlinedIcon/></div>
+                  <span>Данные успешно обнолены</span>
+                </div>}
             </div>
 
             <form className={styles.updateProfile} onSubmit={onSubmit}>
@@ -229,7 +237,6 @@ const EditProfile: FC = () => {
                   />
                 </div>
             </form>
-
         </div>
       </div>
   )

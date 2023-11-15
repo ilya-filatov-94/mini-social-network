@@ -3,7 +3,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import {baseQueryWithReauth} from './index';
 import {IUserData} from '../types/authReducer';
-import {IUserFullData, IUpdateFormUser} from '../types/users';
+import {IUserFullData} from '../types/users';
 
 
 export const userApi = createApi({
@@ -34,6 +34,8 @@ export const userApi = createApi({
             body: data
           }),
           extraOptions: { maxRetries: 3 },
+          invalidatesTags: (result, error) => error ? [] : ['ProfileData']
+          // invalidatesTags: ['ProfileData']
         }),
     })
 });

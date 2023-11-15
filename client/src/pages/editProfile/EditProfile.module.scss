@@ -24,10 +24,41 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 30px;
+            position: relative;
 
             h1 {
                 font-size: 1.25rem;
                 font-weight: normal;
+            }
+
+            .successUpdate {
+                position: absolute;
+                width: 230px;
+                top: -5px;
+                left: 260px;
+                margin: 0;
+                padding: 5px;
+                border-radius: 5px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                gap: 5px;
+                background-color: #92d89680;
+                color: #4dac52;
+
+                @include mobile {
+                    top: 25px;
+                    left: 20px;
+                }
+                @include tablet {
+                    top: 25px;
+                    left: 20px;
+                }
+
+                .MuiAlert {
+                    width: 25px;
+                    height: 25px;
+                }
             }
         }
 
@@ -163,5 +194,4 @@
         }
     }
 }
-
 
