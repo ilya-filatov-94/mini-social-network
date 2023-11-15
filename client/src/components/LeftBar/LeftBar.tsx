@@ -48,7 +48,8 @@ const LeftBar: FC = () => {
               <MenuElement 
                 key={item.id}
                 image={item.image} 
-                textElem={item.name} 
+                textElem={item.name}
+                menuRef={item.menuRef}
               />
           )} 
         </div>
@@ -61,6 +62,7 @@ const LeftBar: FC = () => {
                 key={item.id}
                 image={item.image} 
                 textElem={item.name} 
+                menuRef={item.menuRef}
               />
           )} 
         </div>
@@ -72,7 +74,8 @@ const LeftBar: FC = () => {
               <MenuElement 
                 key={item.id}
                 image={item.image} 
-                textElem={item.name} 
+                textElem={item.name}
+                menuRef={item.menuRef}
               />
           )} 
         </div>

@@ -10,9 +10,7 @@ import styles from './EditProfile.module.scss';
 import {useParams} from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import {useGetUserDataQuery, useUpdateUserMutation} from '../../services/UserService';
-import { 
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react";
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {useAppDispatch} from '../../hooks/useTypedRedux';
 import {updateUserData} from '../../store/authSlice';
 import { useNavigate } from "react-router-dom";

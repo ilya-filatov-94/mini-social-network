@@ -1,0 +1,41 @@
+@import '../../styles/responsive.scss';
+@import '../../styles/theme.scss';
+
+.container {
+    padding: 10px 30px;
+    font-size: 0.875rem;
+
+    @include mobile {
+        padding: 10px;
+    }
+
+    .wrapper {
+        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow-y: scroll;
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        .wrapper {
+            background-color: themed($curTheme, "background");
+        }
+    }
+    &.theme-light {
+        $curTheme: "light";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        .wrapper {
+            background-color: themed($curTheme, "background");
+        }
+    }
+}
