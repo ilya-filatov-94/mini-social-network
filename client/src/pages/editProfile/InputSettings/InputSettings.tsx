@@ -84,8 +84,8 @@ const InputSettings: FC<ISpreadingInputProps> = memo(({
       <label className={styles.label}>
         {label}
         <input
-            className={`${styles.input} ${errorMessage ? styles.invalidData : ''} 
-            ${classes ? classes : ''}`}
+            className={`${styles.input} ${classes ? classes : ''}
+            ${errorMessage ? styles.invalidData : ''}`}
             ref={refInut}
             onBlur={checkValue}
             onChange={checkError}

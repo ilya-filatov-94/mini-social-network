@@ -4,20 +4,85 @@
 .container {
     padding: 10px 30px;
     font-size: 0.875rem;
+    height: 100vh;
 
     @include mobile {
         padding: 10px;
     }
 
     .wrapper {
+        width: 100%;
         box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
         border-radius: 20px;
         padding: 20px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
         overflow-y: scroll;
+        overflow-x: hidden;
+
+        .wrapperSelectors {
+            margin: 0 0 25px 0;
+            padding: 3px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 5px;
+            border-radius: 5px;
+
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                &:not(:last-child) {
+                    margin-right: 5px;
+                }
+            }
+
+            .selector {
+                font-weight: 500;
+                padding: 5px;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+        }
+
+        .listUsers {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                &:not(:last-child) {
+                    margin-bottom: 15px;
+                }
+            }
+
+            @include mobile {
+                gap: 10px;
+
+                @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                    &:not(:last-child) {
+                    margin-bottom: 10px;
+                    }
+                }
+            }
+
+            .wrapperFollowers {
+                margin: 0;
+                padding: 0;
+            }
+
+            .wrapperFollowers hr {
+                display: none;
+            }
+
+            .wrapperFollowers:not(:last-child) hr {
+                display: inline-block;
+                border: none;
+                height: 0.5px;
+                background-color: lightgrey;
+                width: 100%;
+            }
+        }
     }
 
     &.theme-dark {
@@ -27,6 +92,24 @@
 
         .wrapper {
             background-color: themed($curTheme, "background");
+
+            .wrapperSelectors {
+                background-color: #555;
+
+                .selector {
+                    background-color: #555;
+                    color: white;
+                }
+
+                .selector.active {
+                    background-color: rgba(148, 154, 235, 0.792);
+                    color: black;
+                }
+            }
+
+            hr {
+                background-color: themed($curTheme, "border");
+            }
         }
     }
     &.theme-light {
@@ -36,6 +119,24 @@
 
         .wrapper {
             background-color: themed($curTheme, "background");
+
+            .wrapperSelectors {
+                background-color: rgb(230, 228, 228);
+
+                .selector {
+                    background-color: rgb(230, 228, 228);
+                    color: black;
+                }
+
+                .selector.active {
+                    background-color: rgba(113, 175, 255, 0.853);
+                    color: black;
+                }
+            }
+
+            hr {
+                background-color: themed($curTheme, "border");
+            }
         }
     }
 }

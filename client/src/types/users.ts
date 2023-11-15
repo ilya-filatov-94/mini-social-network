@@ -1,3 +1,5 @@
+import {IUserData} from './authReducer';
+
 export interface IUpdateData {
     username: string;
     refUser: string;
@@ -20,6 +22,11 @@ export interface IUser {
     id: number;
     name: string;
     avatar?: string | undefined;
+}
+
+export interface IFollower 
+extends IUserData {
+    refUser: string;
 }
 
 export interface IActivityOfFriend 

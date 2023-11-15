@@ -15,8 +15,8 @@
     background-color: transparent;
 }
 
-.invalidData {
-    border: 1px solid red;
+.input.invalidData {
+    border: 1px solid red !important;
 }
 
 .error {

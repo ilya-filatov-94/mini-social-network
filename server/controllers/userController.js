@@ -114,9 +114,6 @@ class UserController {
             const user = await userService.updateUser(parseInt(id), 
                 email, password, username, city, website, profileImg, coverImg
             );
-
-            console.log(id, email, password, username, city, website);
-            // const obj = {id, email, password, username, city, website};
             return response.json(user);
         } catch (error) {
             next(error);
@@ -145,7 +142,7 @@ class UserController {
 
     async getFollowers(request, response, next) {
         try {
-            const {id} = request.headers;
+            const {id} = request.query;
             const followers = await userService.getFollowers(id);
             return response.json(followers);
         } catch (error) {

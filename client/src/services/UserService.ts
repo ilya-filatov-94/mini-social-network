@@ -3,7 +3,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import {baseQueryWithReauth} from './index';
 import {IUserData} from '../types/authReducer';
-import {IUserFullData} from '../types/users';
+import {IUserFullData, IFollower} from '../types/users';
 
 
 export const userApi = createApi({
@@ -36,11 +36,19 @@ export const userApi = createApi({
           extraOptions: { maxRetries: 3 },
           invalidatesTags: (result, error) => error ? [] : ['ProfileData']
         }),
+        getFollowers: builder.query<IFollower[], number>({
+          query: (id) => ({
+            url: `/user/followers?id=${id}`,
+          }),
+          extraOptions: { maxRetries: 3 },
+          keepUnusedDataFor: 60,
+        }),
     })
 });
 
 export const {
   useGetUserProfileQuery,
   useGetUserDataQuery,
-  useUpdateUserMutation
+  useUpdateUserMutation,
+  useGetFollowersQuery
 } = userApi;

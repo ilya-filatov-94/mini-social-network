@@ -196,7 +196,7 @@ class UserService {
             // include: [{model: User, as: "users"}]
         });
         const users = await User.findAll({
-            attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
+            attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
         });
         const dataFollowers = intersectionArrays(followers, users);
         return dataFollowers;

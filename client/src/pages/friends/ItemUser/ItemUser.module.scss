@@ -1,0 +1,40 @@
+.userItem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+
+    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+        &:not(:last-child) {
+            margin-right: 20px;
+        }
+    }
+
+    .avatar {
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+        border-radius: 50%;
+    }
+
+    .link {
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        font-size: inherit;
+    }
+
+    .username {
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+
+    .infoText {
+        font-size: 0.75rem;
+        font-weight: normal;
+        margin-bottom: 5px;
+    }
+}
