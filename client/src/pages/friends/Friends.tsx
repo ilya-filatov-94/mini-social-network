@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useState, useMemo} from 'react';
 import styles from './Friends.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import ItemUser from './ItemUser/ItemUser';
@@ -8,12 +8,24 @@ import Loader from '../../components/Loader/Loader';
 import Alert from '@mui/material/Alert';
 import {IFollower} from '../../types/users';
 
+
 const Friends: FC = () => {
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
   const {data: followersData, error, isLoading} = useGetFollowersQuery(currentUser.id);
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const [selectedItem, setSelecteItem] = useState('all');
+
+  const filteredFriends = useMemo(() => {
+    if (!followersData) return [];
+    if (selectedItem === 'online') {
+        return followersData.filter(friend => friend.status === 'online');
+    }
+    if (selectedItem === 'offline') {
+        return followersData.filter(friend => friend.status === 'offline');
+    }
+    return followersData;
+  }, [selectedItem, followersData]);
 
   if (isLoading) {
     return <Loader />
@@ -51,8 +63,8 @@ const Friends: FC = () => {
             </div>
 
             <div className={styles.listUsers}>
-            {(followersData && followersData?.length !== 0) &&
-                followersData.map((follower: IFollower) => 
+            {(filteredFriends && filteredFriends?.length !== 0) &&
+                filteredFriends.map((follower: IFollower) => 
                 <div key={follower.id} className={styles.wrapperFollowers}>
                   <ItemUser
                     username={follower.username}
