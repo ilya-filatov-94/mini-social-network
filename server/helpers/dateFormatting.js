@@ -22,12 +22,9 @@ module.exports = function formatRelativeDate(inputDate) {
       if (hours > 5) return hours + " часов назад";
     }
   
-    let localDate = inputDate.toLocaleString('ru-Ru', {timeZone: 'Europe/Moscow'});
-    let position1 =  localDate.indexOf(', ');
-    let position2 =  localDate.indexOf(':');
-    let currentHours = localDate.slice(position1+1, position2);
+    let localHours = new Intl.DateTimeFormat('ru', {hour: "numeric"}).format(inputDate);
     const dateArr = [
-      '0' + currentHours,
+      '0' + localHours,
       '0' + inputDate.getMinutes(),
       '0' + inputDate.getDate(),
       '0' + (inputDate.getMonth() + 1),
