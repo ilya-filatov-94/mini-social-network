@@ -108,7 +108,7 @@ const Stories: FC = () => {
             key={story.id}
             image={story.image as string}
             username={story.username}
-            curIndex={story.id}
+            curIndex={index+1}
             setIndexStory={setCurrentIndex}
           />
         )})}

@@ -14,7 +14,7 @@ import {IStory} from '../../types/story';
 
 export const stories: IStory[] = [
       {
-        id: 1,
+        id: 15,
         username: "Jane Stone",
         avatar: JaneAvatar,
         image: JaneStory,
