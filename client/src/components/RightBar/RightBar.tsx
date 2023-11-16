@@ -4,11 +4,9 @@ import {useAppSelector} from '../../hooks/useTypedRedux';
 
 import CardOfSuggestionFriend from '../CardOfSuggestionFriend/CardOfSuggestionFriend';
 import CardOfActivitiesFriend from '../CardOfActivitiesFriend/CardOfActivitiesFriend';
-import CardOnlineFriends from '../CardOnlineFriends/CardOnlineFriends';
 import {
   possibleFriends,
   activitiesOfFriends,
-  onlineFriends
 } from './arraysOfActivities';
 
 
@@ -49,18 +47,6 @@ const RightBar: FC = () => {
           )}
         </div>
 
-        <div className={styles.item}>
-          <span className={styles.headerItem}>Друзья онлайн</span>
-          {onlineFriends.map(item => 
-            <CardOnlineFriends 
-              key={item.id}
-              name={item.name} 
-              refUser={item.name}
-              avatar={item.avatar}
-            />
-          )}
-        </div>
-        
       </div>
     </div>
   );

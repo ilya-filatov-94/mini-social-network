@@ -18,13 +18,8 @@ const Friends: FC = () => {
 
   const filteredFriends = useMemo(() => {
     if (!followersData) return [];
-    if (selectedItem === 'online') {
-        return followersData.filter(friend => friend.status === 'online');
-    }
-    if (selectedItem === 'offline') {
-        return followersData.filter(friend => friend.status === 'offline');
-    }
-    return followersData;
+    if (selectedItem === 'all') return followersData;
+    return followersData.filter(friend => friend.status === selectedItem);
   }, [selectedItem, followersData]);
 
   if (isLoading) {

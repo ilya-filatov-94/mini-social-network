@@ -20,7 +20,6 @@ router.get('/profile/:ref', authMiddleware, userController.getProfile);
 router.get('/profile/:ref/edit', authMiddleware, userController.getOneEdit);
 router.patch('/profile/update', authMiddleware, userController.updateProile);
 
-
 router.get('/all', authMiddleware, userController.getAll); 
 router.post('/follow', authMiddleware, userController.followUser);
 router.post('/unfollow', authMiddleware, userController.unsubscribeUser);

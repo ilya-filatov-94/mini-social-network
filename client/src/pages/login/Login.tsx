@@ -36,8 +36,6 @@ const Login: FC = () => {
       navigate('/', {replace: true});
     }
     if (error) {
-      console.log(error);
-      console.log(status);
       if (status === '403' && error.includes('Пользователь с почтовым адресом')) {
         setValidInput({...isValidInputs, email: false});
       }

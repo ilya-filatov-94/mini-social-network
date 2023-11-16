@@ -45,3 +45,51 @@
 .pointer {
     cursor: pointer;
 }
+
+.inox_gloss_blue {
+    color:#fff;
+    background-image: linear-gradient(#bdd7fa, #bababa);
+    border:0px;
+    border-radius:10px;
+    padding:7px 25px;
+    height: 100%;
+
+    .addStory {
+        position: absolute;
+        bottom: 30px;
+        left: 10px;
+        color: white;
+        background-color: #5271ff;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        font-size: 1.7rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        @include mobile {
+            left: 20px;
+            right: 0;
+            bottom: 3px;
+            margin: auto;
+            font-size: 1.4rem;
+        }
+    }
+
+    .fileInput {
+        opacity: 0;
+        height: 0;
+        width: 0;
+        line-height: 0;
+        overflow: hidden;
+        padding: 0;
+        margin: 0;
+    }
+
+    @include mobile {
+        border-radius: 50%;
+    }
+}

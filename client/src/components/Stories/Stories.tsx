@@ -16,11 +16,11 @@ import {stories} from './temporaryData';
 
 
 type TEventTouch = MouseEvent | PointerEvent;
+export type TPreviewImg = string | ArrayBuffer | null;
 
 const Stories: FC = () => {
   const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
-   // eslint-disable-next-line
-  const [hasStoryCurUser, setStoryCurrentUser] = useState(undefined);
+  const [hasStoryCurUser, setStoryCurrentUser] = useState<TPreviewImg>('');
   const [isOpenStories, setOpenStories] = useState<boolean>(false);
   const clickIndex = useRef<number | undefined>(0);
   const [indexCurrentStory, setIndexStory] = useState<number | undefined>(0);
@@ -44,7 +44,7 @@ const Stories: FC = () => {
     event.preventDefault();
     isDragStart.current = false;
   }
-
+  
   const handlerDragging = (event: TEventTouch) => {
     if (!isDragStart.current) return;
     const currentX = event.clientX;
@@ -63,16 +63,18 @@ const Stories: FC = () => {
 
   const setCurrentIndex = useCallback((index?: number) => {
     setIndexStory(index);
+    console.log(index);
+    
     clickIndex.current = index;
   }, []);
 
   function openStory(event: TEventTouch) {
     const currentX = event.clientX;
     const diff = getRefValue(startXRef) - currentX;
-    const notOpen = clickIndex.current === 0 && !hasStoryCurUser;
+    // const notOpen = clickIndex.current === 0 && !hasStoryCurUser;
+    const notOpen = clickIndex.current === stories.length && !hasStoryCurUser;
     if (Math.abs(diff) < 1 && !notOpen) {
       setOpenStories(true);
-      console.log(clickIndex.current);
     }
   }
 
@@ -91,21 +93,25 @@ const Stories: FC = () => {
         style={{ transform: `translate3d(${offsetX}px, 0, 0)` }}
         ref={containerRef}
       >
-        <StoryTemplate 
+        <StoryTemplate
+          userId={currentUser.id}
           image={hasStoryCurUser} 
-          username={currentUser.username}
-          curIndex={0}
+          username='Ваша история'
+          curIndex={stories.length}
           setIndexStory={setCurrentIndex}
+          setStoryCurrentUser={setStoryCurrentUser}
         />
-        {stories.map((story) => (
+        {stories.map((story, index) => {
+          if (index === stories.length-1) return null;
+          return (
           <StoryTemplate
             key={story.id}
-            image={story.image}
+            image={story.image as string}
             username={story.username}
             curIndex={story.id}
             setIndexStory={setCurrentIndex}
           />
-        ))}
+        )})}
       </div>
     </div>
     <PopupStories 

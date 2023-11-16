@@ -67,5 +67,11 @@ export const stories: IStory[] = [
         avatar: AvatarKate,
         image: imageStory4,
       },
+      {
+        id: 10,
+        username: "Ваша история",
+        avatar: AvatarTom,
+        image: '',
+      },
 ];
 

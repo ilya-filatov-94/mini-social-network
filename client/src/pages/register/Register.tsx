@@ -38,8 +38,6 @@ const Register: FC = () => {
       navigate('/', {replace: true});
     }
     if (error) {
-      console.log(error);
-      console.log(status);
       if (status === '403') {
         setValidInput({...isValidInputs, email: false});
       }

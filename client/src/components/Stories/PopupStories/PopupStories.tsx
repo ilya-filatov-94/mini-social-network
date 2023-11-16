@@ -98,7 +98,7 @@ const Content: FC<IPopupStoriesContentProps> = memo(({
   stories,
   closePopup
  }) => {
-  
+
   if (!isVisible) return null;
 
   return (
