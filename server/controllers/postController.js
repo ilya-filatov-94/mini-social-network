@@ -10,10 +10,11 @@ class PostController {
     async createPost(request, response, next) {
         try {
             const {id, desc} = request.body;
-            let post;
+            let post, typeImage, fileName;
             if (request.files) {
                 const {image} = request.files;
-                let fileName = uuid.v4() + ".jpg";
+                typeImage = image.mimetype.replace('image/', '');
+                fileName = uuid.v4() + '.' + typeImage;
                 image.mv(path.resolve(__dirname, '..', 'static', fileName));
                 post = await postService.createNewPost(parseInt(id), desc, fileName);
             } else {
@@ -47,10 +48,11 @@ class PostController {
     async updatePost(request, response, next) {
         try {
             const {id, desc} = request.body;
-            let post;
+            let post, typeImage, fileName;
             if (request.files) {
                 const {image} = request.files;
-                let fileName = uuid.v4() + ".jpg";
+                typeImage = image.mimetype.replace('image/', '');
+                fileName = uuid.v4() + '.' + typeImage;
                 image.mv(path.resolve(__dirname, '..', 'static', fileName));
                 post = await postService.updatePost(parseInt(id), desc, fileName);
             } else {

@@ -2,6 +2,7 @@ import {
   FC, 
   useRef, 
   useState,
+  useEffect,
   useCallback,
   PointerEvent,
   MouseEvent,
@@ -11,8 +12,14 @@ import StoryTemplate from './StoryTemplate/StoryTemplate';
 import PopupStories from './PopupStories/PopupStories';
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import {getRefValue, useStateRef} from '../../hooks/useStateRef';
-
-import {stories} from './temporaryData';
+import {useGetAllStoriesQuery} from '../../services/StoryService';
+import { 
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query/react";
+import Loader from '../Loader/Loader';
+import Alert from '@mui/material/Alert';
+import {IStory} from '../../types/story';
+import {urlAPIimages} from '../../env_variables'; 
 
 
 type TEventTouch = MouseEvent | PointerEvent;
@@ -32,10 +39,23 @@ const Stories: FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const minOffsetXRef = useRef(0);
 
+  const {
+    data: stories, 
+    error, 
+    isLoading
+  } = useGetAllStoriesQuery(currentUser.id);
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+
+  useEffect(() => {
+    if (stories) {
+      setStoryCurrentUser(urlAPIimages + stories[stories.length-1].image as string);
+    }
+  }, [stories]);
+
   const handlerDragStart = (event: MouseEvent<HTMLDivElement>) => {
     isDragStart.current = true;
     const containerEl = getRefValue(containerRef);
-    minOffsetXRef.current = containerEl.offsetWidth - (containerEl.scrollWidth)*0.77;
+    minOffsetXRef.current = containerEl.offsetWidth - (containerEl.scrollWidth);
     currentOffsetXRef.current = getRefValue(offsetXRef);
     startXRef.current = event.clientX;
   };
@@ -51,7 +71,7 @@ const Stories: FC = () => {
     const diff = getRefValue(startXRef) - currentX;
     let newOffsetX = getRefValue(currentOffsetXRef) - diff;
     const maxOffsetX = 0;
-    const minOffsetX = getRefValue(minOffsetXRef);
+    const minOffsetX = getRefValue(minOffsetXRef);    
     if (newOffsetX > maxOffsetX) {
       newOffsetX = maxOffsetX;
     }
@@ -63,18 +83,27 @@ const Stories: FC = () => {
 
   const setCurrentIndex = useCallback((index?: number) => {
     setIndexStory(index);
-    console.log(index);
-    
     clickIndex.current = index;
   }, []);
 
   function openStory(event: TEventTouch) {
-    const currentX = event.clientX;
-    const diff = getRefValue(startXRef) - currentX;
-    // const notOpen = clickIndex.current === 0 && !hasStoryCurUser;
-    const notOpen = clickIndex.current === stories.length && !hasStoryCurUser;
-    if (Math.abs(diff) < 1 && !notOpen) {
-      setOpenStories(true);
+    if (stories) {
+      const currentX = event.clientX;
+      const diff = getRefValue(startXRef) - currentX;
+      const notOpen = clickIndex.current === stories.length && !hasStoryCurUser;
+      if (Math.abs(diff) < 1 && !notOpen) {
+        setOpenStories(true);
+      }
+    }
+  }
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (error) {
+    if (isFetchBaseQueryErrorType(error)) {
+      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {error.status}</Alert>
     }
   }
 
@@ -92,7 +121,7 @@ const Stories: FC = () => {
         className={`${styles.stories} ${isDragStart.current ? styles['is-swiping'] : ''}`}
         style={{ transform: `translate3d(${offsetX}px, 0, 0)` }}
         ref={containerRef}
-      >
+      >{stories &&
         <StoryTemplate
           userId={currentUser.id}
           image={hasStoryCurUser} 
@@ -100,8 +129,9 @@ const Stories: FC = () => {
           curIndex={stories.length}
           setIndexStory={setCurrentIndex}
           setStoryCurrentUser={setStoryCurrentUser}
-        />
-        {stories.map((story, index) => {
+        />}
+        {(stories && stories?.length !== 0) &&
+        stories.map((story: IStory, index: number) => {
           if (index === stories.length-1) return null;
           return (
           <StoryTemplate
@@ -114,13 +144,14 @@ const Stories: FC = () => {
         )})}
       </div>
     </div>
+    {stories &&
     <PopupStories 
       isVisible={isOpenStories}
       setVisible={setOpenStories}
       indexStory={indexCurrentStory}
       setCurrentIndex={setCurrentIndex}
       stories={stories}
-    />
+    />}
     </>
   );
 }

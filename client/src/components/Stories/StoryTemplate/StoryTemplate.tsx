@@ -1,6 +1,10 @@
-import {FC, memo, ChangeEvent, useState} from 'react';
+import {FC, memo, ChangeEvent} from 'react';
 import styles from './StoryTemplate.module.scss';
 import {TPreviewImg} from '../Stories';
+import {useAddStoryMutation} from '../../../services/StoryService';
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import Loader from '../../Loader/Loader';
+import Alert from '@mui/material/Alert';
 
 
 interface IStoryTemplateProps {
@@ -21,24 +25,26 @@ const StoryTemplate: FC<IStoryTemplateProps> = memo(({
   setStoryCurrentUser
 }) => {
 
-  const [selectedStory, selectStory] = useState<File>();
+  const [addStory, {isLoading, error}] = useAddStoryMutation();
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   function openStory() {
     setIndexStory(curIndex);
-    console.log(curIndex);
-    
   }
 
-  function uploadStory(event: ChangeEvent<HTMLInputElement>) {
+  async function uploadStory(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
       let file = event.target.files[0];
       if (!file.type.match('image')) return;
       const reader = new FileReader();      
-      selectStory(file);
       if (setStoryCurrentUser) {
         reader.onloadend = () => setStoryCurrentUser(reader.result);
       }
       reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append('userId', `${userId}`);
+      formData.append('image', file);
+      await addStory(formData).unwrap();
     }
   }
 

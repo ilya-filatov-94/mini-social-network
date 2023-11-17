@@ -10,7 +10,7 @@ module.exports = function formatRelativeDate(inputDate) {
       return sec + " сек. назад";
     }
   
-    let min = Math.floor(diff / 60000);
+    let min = Math.floor(diff / 60*1000);
     if (min < 60) {
       return min + " мин. назад";
     }

@@ -101,14 +101,17 @@ class UserController {
             const {id, email, password, username, city, website} = request.body;
             let profileImg = '';
             let coverImg = '';
+            let typeImage;
             if (request.files) {
                 const {profilePic, coverPic} = request.files;
                 if (profilePic) {
-                    profileImg = uuid.v4() + ".jpg";
+                    typeImage = profilePic.mimetype.replace('image/', '');
+                    profileImg = uuid.v4() + '.' + typeImage;
                     image.mv(path.resolve(__dirname, '..', 'static', profileImg));
                 }
                 if (coverPic) {
-                    coverImg = uuid.v4() + ".jpg";
+                    typeImage = coverPic.mimetype.replace('image/', '');
+                    coverImg = uuid.v4() + '.' + typeImage;
                     image.mv(path.resolve(__dirname, '..', 'static', coverImg));
                 }
             }

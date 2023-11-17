@@ -10,7 +10,8 @@ class StoryController {
             const {userId} = request.body;
             if (request.files) {
                 const {image} = request.files;
-                let fileName = uuid.v4() + ".jpeg";
+                let typeImage = image.mimetype.replace('image/', '');
+                let fileName = uuid.v4() + '.' + typeImage;
                 image.mv(path.resolve(__dirname, '..', 'static', fileName));
                 const story = await StoryService.createNewStory(parseInt(userId), fileName);
                 return response.json(story);
@@ -22,9 +23,12 @@ class StoryController {
     }
 
     async getAllStories(request, response, next) {
-        try {            
-            const stories = await StoryService.getAllStories();
-            return response.json(stories);
+        try {     
+            const {id} = request.query;      
+            const stories = await StoryService.getAllStories(parseInt(id));
+            const storiesData = excludeKeysFromArrObj(stories, ['userId', 'createdAt', 'updatedAt']);
+            return response.json(storiesData);
+            // return response.json(stories);
         } catch (error) {
             next(error);
         }
@@ -41,5 +45,12 @@ class StoryController {
     }
 
 };
+
+function excludeKeysFromArrObj(arr=[], keys=[]) {
+    return arr.map(item => Object.fromEntries(Object.entries(item.dataValues)
+            .filter(item => !keys.includes(item[0]))));
+}
+
+
 
 module.exports = new StoryController();

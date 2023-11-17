@@ -15,63 +15,73 @@ import {IStory} from '../../types/story';
 export const stories: IStory[] = [
       {
         id: 15,
-        username: "Jane Stone",
-        avatar: JaneAvatar,
+        username: "Jane Olsen",
+        profilePic: JaneAvatar,
         image: JaneStory,
+        refUser: '/profile/JaneOlsen22'
       },
       {
         id: 2,
-        username: "Kate Stark",
-        avatar: AvatarKate,
+        username: "Kate Stone",
+        profilePic: AvatarKate,
         image: imageStory1,
+        refUser: '/profile/KateStone24'
       },
       {
         id: 3,
-        username: "Kate Stark",
-        avatar: AvatarRich,
+        username: "Mary Stark",
+        profilePic: AvatarRich,
         image: imageStory2,
+        refUser: '/profile/MaryStark25'
       },
       {
         id: 4,
-        username: "Kate Stark",
-        avatar: AvatarTom,
+        username: "John Doe",
+        profilePic: AvatarTom,
         image: imageStory3,
+        refUser: '/profile/JohnDoe21'
       },
       {
         id: 5,
-        username: "Kate Stark",
-        avatar: JohnAvatar,
+        username: "Rich Skinner",
+        profilePic: JohnAvatar,
         image: imageStory4,
+        refUser: '/profile/RichSkinner23'
       },
       {
         id: 6,
-        username: "Kate Stark",
-        avatar: AvatarKate,
+        username: "Tom Riddle",
+        profilePic: AvatarKate,
         image: imageStory4,
+        refUser: '/profile/TomRiddle16'
       },
       {
         id: 7,
-        username: "Kate Stark",
-        avatar: AvatarKate,
+        username: "Rich Skinner",
+        profilePic: AvatarRich,
         image: imageStory4,
+        refUser: '/profile/RichSkinner23'
       },
       {
         id: 8,
-        username: "Kate Stark",
-        avatar: AvatarKate,
+        username: "Rich Skinner",
+        profilePic: AvatarRich,
         image: imageStory4,
+        refUser: '/profile/RichSkinner23'
       },
       {
         id: 9,
-        username: "Kate Stark",
-        avatar: AvatarKate,
+        username: "Rich Skinner",
+        profilePic: AvatarRich,
         image: imageStory4,
+        refUser: '/profile/RichSkinner23'
       },
       {
         id: 10,
-        username: "Ваша история",
-        avatar: AvatarTom,
-        image: '',
+        username: "Rich Skinner",
+        profilePic: AvatarRich,
+        image: imageStory4,
+        refUser: '/profile/RichSkinner23'
       },
 ];
 

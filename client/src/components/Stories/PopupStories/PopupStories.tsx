@@ -10,6 +10,8 @@ import styles from './PopupStories.module.scss';
 import Portal from '../../../hoc/Portal';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import {IStory} from '../../../types/story';
+import noAvatar from '../../../assets/images/no-avatar.jpg';
+import {urlAPIimages} from '../../../env_variables'; 
 
 interface IPopupStoriesProps {
   isVisible: boolean; 
@@ -107,7 +109,7 @@ const Content: FC<IPopupStoriesContentProps> = memo(({
         <div className={styles.curUser}>
           <img
             className={styles.avatar}
-            src={stories[indexStory! - 1].avatar}
+            src={stories[indexStory! - 1].profilePic || noAvatar}
             alt={`avatar of ${stories[indexStory! - 1].username}`}
           />
           <span>{stories[indexStory! - 1].username}</span>
@@ -117,7 +119,7 @@ const Content: FC<IPopupStoriesContentProps> = memo(({
       <div className={styles.contentStory}>
         <img
           className={styles.storyContent}
-          src={stories[indexStory! - 1].image}
+          src={urlAPIimages + stories[indexStory! - 1].image}
           alt={`Story ${indexStory! - 1} of ${
             stories[indexStory! - 1].username
           }`}

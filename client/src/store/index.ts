@@ -4,6 +4,7 @@ import reducerTheme from "./themeSlice";
 import {postApi} from '../services/PostService';
 import {userApi} from '../services/UserService';
 import {commentApi} from '../services/CommentService';
+import {storyApi} from '../services/StoryService';
 
 
 import storage from "redux-persist/lib/storage";
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
   reducerTheme: reducerTheme,
   [userApi.reducerPath]: userApi.reducer,
   [postApi.reducerPath]: postApi.reducer,
-  [commentApi.reducerPath]: commentApi.reducer
+  [commentApi.reducerPath]: commentApi.reducer,
+  [storyApi.reducerPath]: storyApi.reducer,
 });
 
 const persistConfig = {
@@ -45,6 +47,7 @@ const store = configureStore({
     }).concat(postApi.middleware)
     .concat(userApi.middleware)
     .concat(commentApi.middleware)
+    .concat(storyApi.middleware)
 });
 
 export const persistor = persistStore(store);
