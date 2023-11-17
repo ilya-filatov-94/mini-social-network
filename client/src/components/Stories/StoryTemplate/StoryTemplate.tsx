@@ -47,7 +47,7 @@ const StoryTemplate: FC<IStoryTemplateProps> = memo(({
       await addStory(formData).unwrap();
     }
   }
-
+  
   return (
     <div
       onClick={openStory}

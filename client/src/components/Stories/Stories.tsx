@@ -47,7 +47,7 @@ const Stories: FC = () => {
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   useEffect(() => {
-    if (stories) {
+    if (stories?.length) {
       setStoryCurrentUser(urlAPIimages + stories[stories.length-1].image as string);
     }
   }, [stories]);
@@ -87,7 +87,7 @@ const Stories: FC = () => {
   }, []);
 
   function openStory(event: TEventTouch) {
-    if (stories) {
+    if (stories?.length) {
       const currentX = event.clientX;
       const diff = getRefValue(startXRef) - currentX;
       const notOpen = clickIndex.current === stories.length && !hasStoryCurUser;
@@ -144,13 +144,13 @@ const Stories: FC = () => {
         )})}
       </div>
     </div>
-    {stories &&
+    {Boolean(stories?.length) &&
     <PopupStories 
       isVisible={isOpenStories}
       setVisible={setOpenStories}
       indexStory={indexCurrentStory}
       setCurrentIndex={setCurrentIndex}
-      stories={stories}
+      stories={stories || []}
     />}
     </>
   );
