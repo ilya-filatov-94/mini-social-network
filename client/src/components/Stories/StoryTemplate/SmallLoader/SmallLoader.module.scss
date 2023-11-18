@@ -1,0 +1,33 @@
+@import '../../../../styles/responsive.scss';
+
+.loader {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #92d89680;
+    color: #4dac52;
+    padding: 5px;
+    border-radius: 5px;
+
+    @include mobile {
+        flex-wrap: wrap;
+        width: 75px;
+        padding: 3px;
+    }
+}
+
+.loader>p {
+    margin-right: 5px;
+    font-size: 0.875rem;
+
+    @include mobile {
+        margin: 0;
+    }
+}
+
+.loader>div {
+    padding: 0;
+}

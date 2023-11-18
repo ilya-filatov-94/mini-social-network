@@ -2,9 +2,8 @@ import {FC, memo, ChangeEvent, RefObject} from 'react';
 import styles from './StoryTemplate.module.scss';
 import {TPreviewImg} from '../Stories';
 import {useAddStoryMutation} from '../../../services/StoryService';
-import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
-import Loader from '../../Loader/Loader';
-import Alert from '@mui/material/Alert';
+import SmallLoader from './SmallLoader/SmallLoader';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 import {TEventTouch} from '../Stories';
 
@@ -30,8 +29,7 @@ const StoryTemplate: FC<IStoryTemplateProps> = memo(({
   refElem
 }) => {
 
-  const [addStory, {isLoading, error}] = useAddStoryMutation();
-  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+  const [addStory, {isLoading, isError}] = useAddStoryMutation();
 
   function openCurStory(event: TEventTouch) {
     setIndexStory(curIndex);
@@ -62,12 +60,21 @@ const StoryTemplate: FC<IStoryTemplateProps> = memo(({
     >
       {image
       ? <img
-            className={styles.imgStory}
-            src={image as string}
-            alt={`story from ${username}`}
-            draggable={false}
+          className={styles.imgStory}
+          src={image as string}
+          alt={`story from ${username}`}
+          draggable={false}
         />
       : <div className={styles.inox_gloss_blue}>
+          {isLoading &&
+            <SmallLoader />
+          }
+          {isError &&
+          <div className={styles.errorUpdate}>
+            <div className={styles.MuiAlert}><ErrorOutlineOutlinedIcon /></div>
+            <span>Ошибка!</span>
+          </div>
+          }
           <label htmlFor="btnAddStory" className={styles.addStory}>+</label>
           <input
             onChange={uploadStory}
@@ -83,7 +90,5 @@ const StoryTemplate: FC<IStoryTemplateProps> = memo(({
     </div>
   );
 });
-
-
 
 export default StoryTemplate;

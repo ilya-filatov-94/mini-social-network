@@ -116,7 +116,8 @@ const Content: FC<IPopupStoriesContentProps> = memo(({
             }
             alt={`avatar of ${stories[indexStory! - 1].username}`}
           />
-          <span>{stories[indexStory! - 1].username}</span>
+          <p>{stories[indexStory! - 1].username}</p>
+          <p className={styles.date}>{stories[indexStory! - 1].date}</p>
         </div>
         <CloseOutlinedIcon onClick={closePopup} className={styles.closeBtn} />
       </div>}

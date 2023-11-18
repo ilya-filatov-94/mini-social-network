@@ -14,14 +14,11 @@ import {useAppSelector} from '../../hooks/useTypedRedux';
 import {getRefValue, useStateRef} from '../../hooks/useStateRef';
 import {useMatchMedia} from '../../hooks/useMatchMedia';
 import {useGetAllStoriesQuery} from '../../services/StoryService';
-import { 
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react";
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import Loader from '../Loader/Loader';
 import Alert from '@mui/material/Alert';
 import {IStory} from '../../types/story';
 import {urlAPIimages} from '../../env_variables';
-
 
 export type TEventTouch = MouseEvent | PointerEvent;
 export type TPreviewImg = string | ArrayBuffer | null;
@@ -42,11 +39,7 @@ const Stories: FC = () => {
   const minOffsetXRef = useRef(0);
   const {isMobile} = useMatchMedia();
 
-  const {
-    data: stories, 
-    error, 
-    isLoading
-  } = useGetAllStoriesQuery(currentUser.id);
+  const {data: stories, error, isLoading} = useGetAllStoriesQuery(currentUser.id);
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   useEffect(() => {  
@@ -69,7 +62,6 @@ const Stories: FC = () => {
     if (stories?.length && !isMobile) {
       minOffsetXRef.current = ((itemEl.offsetWidth-10) * stories?.length) - (containerEl.scrollWidth);
     }
-    // minOffsetXRef.current = containerEl.offsetWidth - (containerEl.scrollWidth);
     currentOffsetXRef.current = getRefValue(offsetXRef);
     startXRef.current = event.clientX;
   };

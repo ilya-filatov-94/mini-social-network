@@ -57,6 +57,35 @@
     padding:7px 25px;
     height: 100%;
 
+    .errorUpdate {
+        position: absolute;
+        width: 120px;
+        top: 40%;
+        left: 50%;
+        margin: 0;
+        padding: 5px;
+        border-radius: 5px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        background-color: #d8929280;
+        color: #ac4d4d;
+
+        @include mobile {
+            padding: 0;
+            gap: 0;
+            width: 70px;
+            flex-wrap: wrap;
+        }
+    }
+      
+    .MuiAlert {
+        width: 25px;
+        height: 25px;
+    }
+
     .addStory {
         position: absolute;
         bottom: 30px;
