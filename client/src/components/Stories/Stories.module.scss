@@ -15,16 +15,17 @@
     max-width: 22vw;
     transition: transform 0.5s ease-out;
 
-    @include tablet{
-        height: 150px;
-        gap: 20px;
-        max-width: 40vw;
-    }
-
     @include mobile {
         height: 60px;
         margin-bottom: 20px;
         justify-content: flex-start;
+    }
+
+    @include tablet{
+        height: 150px;
+        gap: 10px;
+        min-width: 130px;
+        max-width: 40vw;
     }
 }
 

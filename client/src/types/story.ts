@@ -1,5 +1,6 @@
 export interface IStory {
   id: number;
+  userId: number;
   username: string;
   profilePic: string | undefined;
   refUser: string;

@@ -1,4 +1,4 @@
-import {FC, memo, ChangeEvent} from 'react';
+import {FC, memo, ChangeEvent, RefObject} from 'react';
 import styles from './StoryTemplate.module.scss';
 import {TPreviewImg} from '../Stories';
 import {useAddStoryMutation} from '../../../services/StoryService';
@@ -6,14 +6,17 @@ import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import Loader from '../../Loader/Loader';
 import Alert from '@mui/material/Alert';
 
+import {TEventTouch} from '../Stories';
 
 interface IStoryTemplateProps {
   userId?: number;
   image: TPreviewImg;
   username: string;
   curIndex?: number;
+  refElem?: RefObject<HTMLDivElement>
   setIndexStory: (index: number | undefined) => void;
   setStoryCurrentUser?: (state: TPreviewImg) => void;
+  openStory: (event: TEventTouch) => void;
 }
 
 const StoryTemplate: FC<IStoryTemplateProps> = memo(({
@@ -22,14 +25,17 @@ const StoryTemplate: FC<IStoryTemplateProps> = memo(({
   username, 
   curIndex, 
   setIndexStory,
-  setStoryCurrentUser
+  setStoryCurrentUser,
+  openStory,
+  refElem
 }) => {
 
   const [addStory, {isLoading, error}] = useAddStoryMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
-  function openStory() {
+  function openCurStory(event: TEventTouch) {
     setIndexStory(curIndex);
+    openStory(event);
   }
 
   async function uploadStory(event: ChangeEvent<HTMLInputElement>) {
@@ -50,8 +56,9 @@ const StoryTemplate: FC<IStoryTemplateProps> = memo(({
   
   return (
     <div
-      onClick={openStory}
+      onClick={openCurStory}
       className={image ? `${styles.story} ${styles.pointer}` : `${styles.story}`}
+      ref={refElem}
     >
       {image
       ? <img

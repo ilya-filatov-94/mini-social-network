@@ -26,7 +26,7 @@ class StoryController {
         try {     
             const {id} = request.query;      
             const stories = await StoryService.getAllStories(parseInt(id));
-            const storiesData = excludeKeysFromArrObj(stories, ['userId', 'createdAt', 'updatedAt']);
+            const storiesData = excludeKeysFromArrObj(stories, ['createdAt', 'updatedAt']);
             return response.json(storiesData);
             // return response.json(stories);
         } catch (error) {

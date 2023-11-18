@@ -15,6 +15,7 @@ import {IStory} from '../../types/story';
 export const stories: IStory[] = [
       {
         id: 15,
+        userId: 22,
         username: "Jane Olsen",
         profilePic: JaneAvatar,
         image: JaneStory,
@@ -22,6 +23,7 @@ export const stories: IStory[] = [
       },
       {
         id: 2,
+        userId: 24,
         username: "Kate Stone",
         profilePic: AvatarKate,
         image: imageStory1,
@@ -29,6 +31,7 @@ export const stories: IStory[] = [
       },
       {
         id: 3,
+        userId: 25,
         username: "Mary Stark",
         profilePic: AvatarRich,
         image: imageStory2,
@@ -36,6 +39,7 @@ export const stories: IStory[] = [
       },
       {
         id: 4,
+        userId: 21,
         username: "John Doe",
         profilePic: AvatarTom,
         image: imageStory3,
@@ -43,6 +47,7 @@ export const stories: IStory[] = [
       },
       {
         id: 5,
+        userId: 23,
         username: "Rich Skinner",
         profilePic: JohnAvatar,
         image: imageStory4,
@@ -50,6 +55,7 @@ export const stories: IStory[] = [
       },
       {
         id: 6,
+        userId: 16,
         username: "Tom Riddle",
         profilePic: AvatarKate,
         image: imageStory4,
@@ -57,6 +63,7 @@ export const stories: IStory[] = [
       },
       {
         id: 7,
+        userId: 23,
         username: "Rich Skinner",
         profilePic: AvatarRich,
         image: imageStory4,
@@ -64,6 +71,7 @@ export const stories: IStory[] = [
       },
       {
         id: 8,
+        userId: 23,
         username: "Rich Skinner",
         profilePic: AvatarRich,
         image: imageStory4,
@@ -71,6 +79,7 @@ export const stories: IStory[] = [
       },
       {
         id: 9,
+        userId: 23,
         username: "Rich Skinner",
         profilePic: AvatarRich,
         image: imageStory4,
@@ -78,6 +87,7 @@ export const stories: IStory[] = [
       },
       {
         id: 10,
+        userId: 23,
         username: "Rich Skinner",
         profilePic: AvatarRich,
         image: imageStory4,

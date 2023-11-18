@@ -23,7 +23,7 @@ class StoryService {
       order: [['createdAt', 'DESC']],
     });
     const curUserStory = await Story.findAll({where: {userId: id},});
-    stories.push(...curUserStory);
+    stories.unshift(...curUserStory);
     const users = await User.findAll({
       attributes: ['id', 'username', 'refUser', 'profilePic']
     });

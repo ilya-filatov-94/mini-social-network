@@ -100,22 +100,27 @@ const Content: FC<IPopupStoriesContentProps> = memo(({
   stories,
   closePopup
  }) => {
-
+  
   if (!isVisible) return null;
 
   return (
     <>
+      {stories &&
       <div className={styles.headerStory}>
         <div className={styles.curUser}>
           <img
             className={styles.avatar}
-            src={stories[indexStory! - 1].profilePic || noAvatar}
+            src={stories[indexStory! - 1].profilePic 
+              ? urlAPIimages + stories[indexStory! - 1].profilePic 
+              : noAvatar
+            }
             alt={`avatar of ${stories[indexStory! - 1].username}`}
           />
           <span>{stories[indexStory! - 1].username}</span>
         </div>
         <CloseOutlinedIcon onClick={closePopup} className={styles.closeBtn} />
-      </div>
+      </div>}
+      {stories &&
       <div className={styles.contentStory}>
         <img
           className={styles.storyContent}
@@ -124,7 +129,7 @@ const Content: FC<IPopupStoriesContentProps> = memo(({
             stories[indexStory! - 1].username
           }`}
         />
-      </div>
+      </div>}
     </>
   );
 });
