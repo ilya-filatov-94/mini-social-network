@@ -29,7 +29,7 @@ class StoryService {
       await Story.destroy({
         where: { id: indexesToDelete},
       });
-      return stories.filter(item => !indexesToDelete.includes(item.dataValues.id))
+      return storiesForClient.filter(item => !indexesToDelete.includes(item.dataValues.id));
     }
     return storiesForClient;
   }
