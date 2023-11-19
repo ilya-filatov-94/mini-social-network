@@ -71,11 +71,13 @@ function getFullDataStories(users, stories, userId, indexesToDelete) {
       item.refUser = obj[key].refUser;
       item.profilePic = obj[key].profilePic;
     }
-    if (stories[i].dataValues.userId === userId) {
-      newArrStories[0] = stories[i];
-    }
-    if (stories[i].dataValues.userId !== userId) {
-      newArrStories[i + 1] = stories[i];
+    if (stories[i].length > 1) {
+      if (stories[i].dataValues.userId === userId) {
+        newArrStories[0] = stories[i];
+      }
+      if (stories[i].dataValues.userId !== userId) {
+        newArrStories[i + 1] = stories[i];
+      }
     }
   }
   return newArrStories;
