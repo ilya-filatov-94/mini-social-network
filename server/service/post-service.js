@@ -115,7 +115,9 @@ class PostService {
         "postId"
       ],
     });
+    const idUsers = likes.map(item => item.dataValues.userId);
     const users = await User.findAll({
+      where: { id: idUsers},
       attributes: ["id", "username", "refUser", "profilePic"],
     });
     getFullDataLikes(users, likes)

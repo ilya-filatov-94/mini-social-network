@@ -14,32 +14,28 @@ class StoryService {
   }
 
   async getAllStories(id) {
+    if (!id) return [];
     const stories = await Story.findAll({
-      where: {
-        userId: {
-          [Op.ne]: id
-        }
-      },
       order: [['createdAt', 'DESC']],
     });
-    const curUserStory = await Story.findAll({where: {userId: id},});
-    stories.unshift(...curUserStory);
+    const idUsers = stories.map(item => item.dataValues.userId);
     const users = await User.findAll({
+      where: { id: idUsers},
       attributes: ['id', 'username', 'refUser', 'profilePic']
     });
     const indexesToDelete = [];
-    getFullDataStories(users, stories, indexesToDelete);
+    const storiesForClient = getFullDataStories(users, stories, id, indexesToDelete);
     if (indexesToDelete.length !== 0) {
       await Story.destroy({
         where: { id: indexesToDelete},
       });
       return stories.filter(item => !indexesToDelete.includes(item.dataValues.id))
     }
-    return stories;
+    return storiesForClient;
   }
 
   async getOneStory(userId) {
-    if (!userId) return;
+    if (!userId) return {};
     const story = await Story.findOne({
       order: [['createdAt', 'DESC']],
     });
@@ -55,8 +51,9 @@ class StoryService {
 
 }
 
-function getFullDataStories(users, stories, indexesToDelete) {
+function getFullDataStories(users, stories, userId, indexesToDelete) {
   const obj = {};
+  const newArrStories = [];
   let key;
   let item;
   let date;
@@ -74,7 +71,14 @@ function getFullDataStories(users, stories, indexesToDelete) {
       item.refUser = obj[key].refUser;
       item.profilePic = obj[key].profilePic;
     }
+    if (stories[i].dataValues.userId === userId) {
+      newArrStories[0] = stories[i];
+    }
+    if (stories[i].dataValues.userId !== userId) {
+      newArrStories[i + 1] = stories[i];
+    }
   }
+  return newArrStories;
 }
 
 function formatAndCheckDate(inputDate, callback) {

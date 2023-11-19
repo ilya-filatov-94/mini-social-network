@@ -128,7 +128,7 @@ class UserService {
     }
 
     async updateUser(id, email, password, username, city, website, profileImg, coverImg) {
-        if (!id) return;
+        if (!id) return {};
         let newEmail, newPassword, newUsername, newCity, newWebsite;
         const user = await User.findOne(
             {
@@ -171,11 +171,14 @@ class UserService {
     }
 
     async followUser(curUserId, followerId) {
-        const relatonship = await Relationship.create({
-            userId: curUserId,
-            followerId: followerId
-        });
-        return relatonship;
+        if (curUserId && followerId) {
+            const relatonship = await Relationship.create({
+                userId: curUserId,
+                followerId: followerId
+            });
+            return relatonship;
+        }
+        return {};
     }
 
     async unsubscribeUser(curUserId, followerId) {
@@ -195,29 +198,30 @@ class UserService {
             where:{userId: curUserId},
             // include: [{model: User, as: "users"}]
         });
+        const idFriends = followers.map(item => item.dataValues.followerId);
         const users = await User.findAll({
+            where: { id: idFriends},
             attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
         });
-        const dataFollowers = intersectionArrays(followers, users);
-        return dataFollowers;
+        return users;
     }
 }
 
-function intersectionArrays(followers, users) {
-    const obj = {};
-    const resultArray = [];
-    let key;
-    for (let i = 0; i < followers.length; i++) {
-        key = followers[i].dataValues.followerId;
-        obj[key] = true;
-    }
-    for (let i = 0; i < users.length; i++) {
-        key = users[i].dataValues.id;
-        if (obj[key]) {
-            resultArray.push(users[i].dataValues);
-        }
-    }
-    return resultArray;
-}
+// function intersectionArrays(followers, users) {
+//     const obj = {};
+//     const resultArray = [];
+//     let key;
+//     for (let i = 0; i < followers.length; i++) {
+//         key = followers[i].dataValues.followerId;
+//         obj[key] = true;
+//     }
+//     for (let i = 0; i < users.length; i++) {
+//         key = users[i].dataValues.id;
+//         if (obj[key]) {
+//             resultArray.push(users[i].dataValues);
+//         }
+//     }
+//     return resultArray;
+// }
 
 module.exports = new UserService();

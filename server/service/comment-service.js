@@ -4,7 +4,7 @@ const formatRelativeDate = require('../helpers/dateFormatting');
 
 class CommentService {
   async createNewComment(id_user, id_post, desc) {
-    if (!id_user || !id_post || !desc) return [];
+    if (!id_user || !id_post || !desc) return {};
     const comment = await Comment.create({
       desc: desc,
       userId: id_user,
@@ -37,7 +37,9 @@ class CommentService {
         "postId"
       ],
     });
+    const idUsers = comments.map(item => item.dataValues.userId);
     const users = await User.findAll({
+      where: { id: idUsers},
       attributes: ['id', 'username', 'refUser', 'profilePic']
     });
     getFullDataComments(users, comments);
