@@ -145,8 +145,8 @@ class UserController {
 
     async getAll(request, response, next) {
         try {
-            const users = await userService.getAllUsers();
             const {cur_user} = request.query; 
+            const users = await userService.getAllUsers(cur_user);
             const usersExcludeCurrent = excludeCurUserFromArr(users, parseInt(cur_user));
             return response.json(usersExcludeCurrent);
         } catch (error) {

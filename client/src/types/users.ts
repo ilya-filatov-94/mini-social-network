@@ -34,3 +34,13 @@ extends IUser {
     textEvent: string;
     timeEvent: string;
 }
+
+export interface IListUsers {
+    id: number;
+    username: string;
+    refUser: string;
+    profilePic: string | undefined,
+    status: string;
+    city: string;
+    subscrStatus: boolean;
+}

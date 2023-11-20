@@ -18,38 +18,6 @@
         align-items: center;
         gap: 30px;
 
-        .search {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-radius: 5px;
-            padding: 5px;
-            margin-left: 50px;
-
-            @include mobile {
-                margin: 0;
-            }
-
-            @include tablet{
-                margin: 0;
-            }
-
-            .inputSearch {
-                border: none;
-                width: 600px;
-                background-color: transparent;
-
-                @include mobile {
-                    display: none;
-                }
-
-                @include tablet{
-                    width: 400px;
-                }
-            }
-
-        }
-
         @include mobile {
             @supports (-webkit-touch-callout: none) and (not (translate: none)) {
                 & > *:not(:last-child) {
@@ -105,28 +73,12 @@
         background-color: themed($curTheme, "background");
         color: themed($curTheme, "textColor");
         border-bottom: 1px solid themed($curTheme, "border");
-
-        .search {
-            border: 1px solid themed($curTheme, "border");
-
-            .inputSearch {
-                color: themed($curTheme, "textColor");
-            }
-        }
     }
     &.theme-light {
         $curTheme: "light";
         background-color: themed($curTheme, "background");
         color: themed($curTheme, "textColor");
         border-bottom: 1px solid themed($curTheme, "border");
-
-        .search {
-            border: 1px solid themed($curTheme, "border");
-
-            .inputSearch {
-                color: themed($curTheme, "textColor");
-            }
-        }
     }
 }
 

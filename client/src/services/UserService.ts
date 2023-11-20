@@ -3,7 +3,7 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import {baseQueryWithReauth} from './index';
 import {IUserData} from '../types/authReducer';
-import {IUserFullData, IFollower} from '../types/users';
+import {IUserFullData, IFollower, IListUsers} from '../types/users';
 
 
 export const userApi = createApi({
@@ -43,6 +43,13 @@ export const userApi = createApi({
           extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
         }),
+        getAllUsers: builder.query<IListUsers[], number>({
+          query: (id) => ({
+            url: `/user/all?cur_user=${id}`,
+          }),
+          extraOptions: { maxRetries: 3 },
+          keepUnusedDataFor: 60,
+        }),
     })
 });
 
@@ -50,5 +57,6 @@ export const {
   useGetUserProfileQuery,
   useGetUserDataQuery,
   useUpdateUserMutation,
-  useGetFollowersQuery
+  useGetFollowersQuery,
+  useGetAllUsersQuery
 } = userApi;

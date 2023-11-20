@@ -99,11 +99,14 @@ class UserService {
         return tokens;
     }
 
-    async getAllUsers() {
+    async getAllUsers(id) {
         const users = await User.findAll({
             attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
         });
-        
+        const followers = await Relationship.findAll({
+            where:{userId: id},
+        });
+        getStatusOfRelationship(users, followers);
         return users;
     }
 
@@ -208,6 +211,24 @@ class UserService {
     }
 }
 
-
+function getStatusOfRelationship(users, relationship) {
+  if (relationship.length === 0) return;
+  const obj = {};
+  let key;
+  let item;
+  for (let i = 0; i < relationship.length; i++) {
+    key = relationship[i].dataValues.followerId;
+    obj[key] = true;
+  }
+  for (let i = 0; i < users.length; i++) {
+    key = users[i].dataValues.id;
+    if (obj[key]) {
+      users[i].dataValues.subscrStatus = obj[key];
+    }
+    if (!obj[key]) {
+      users[i].dataValues.subscrStatus = false;
+    }
+  }
+}
 
 module.exports = new UserService();

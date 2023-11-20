@@ -5,7 +5,6 @@ import {useAppDispatch, useAppSelector} from '../../hooks/useTypedRedux';
 import {switchTheme} from '../../store/themeSlice';
 import Logo from '../Logo/Logo';
 import { useNavigate} from "react-router-dom";
-import Input from '../Input/Input';
 import UserAvatar from '../UserAvatar/UserAvatar';
 import MenuUser from './MenuUser/MenuUser';
 import BurgerElement from './BurgerElement/BurgerElement';
@@ -16,7 +15,6 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 
 
@@ -57,10 +55,6 @@ const Navbar: FC = () => {
           }
         </div>
         < Diversity3OutlinedIcon onClick={()=> navigateTo('/users')} sx={{cursor: 'pointer'}} />
-        {/* <div className={styles.search}>
-          <SearchOutlinedIcon />
-          <Input addClass={styles.inputSearch} type="search" placeholder="Поиск..."/>
-        </div> */}
       </div>
 
       <div className={styles.rigthSection}>
