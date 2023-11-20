@@ -101,8 +101,9 @@ class UserService {
 
     async getAllUsers() {
         const users = await User.findAll({
-            attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
+            attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
         });
+        
         return users;
     }
 
@@ -207,21 +208,6 @@ class UserService {
     }
 }
 
-// function intersectionArrays(followers, users) {
-//     const obj = {};
-//     const resultArray = [];
-//     let key;
-//     for (let i = 0; i < followers.length; i++) {
-//         key = followers[i].dataValues.followerId;
-//         obj[key] = true;
-//     }
-//     for (let i = 0; i < users.length; i++) {
-//         key = users[i].dataValues.id;
-//         if (obj[key]) {
-//             resultArray.push(users[i].dataValues);
-//         }
-//     }
-//     return resultArray;
-// }
+
 
 module.exports = new UserService();

@@ -63,17 +63,6 @@ class UserController {
         }
     }
 
-    async getAll(request, response, next) {
-        try {
-            const users = await userService.getAllUsers();
-            const {current_user} = request.headers;
-            const usersExcludeCurrent = excludeCurUserFromArr(users, current_user);
-            return response.json(usersExcludeCurrent);
-        } catch (error) {
-            next(error);
-        }
-    }
-
     async getProfile(request, response, next) {
         try {
             const {ref} = request.params;
@@ -154,6 +143,17 @@ class UserController {
         }
     }
 
+    async getAll(request, response, next) {
+        try {
+            const users = await userService.getAllUsers();
+            const {cur_user} = request.query; 
+            const usersExcludeCurrent = excludeCurUserFromArr(users, parseInt(cur_user));
+            return response.json(usersExcludeCurrent);
+        } catch (error) {
+            next(error);
+        }
+    }
+
 };
 
 function excludeKeysFromObj(obj={}, keys=[]) {
@@ -161,8 +161,8 @@ function excludeKeysFromObj(obj={}, keys=[]) {
     .filter(key => !keys.includes(key[0])));
 }
 
-function excludeCurUserFromArr(arr=[], refUser='') {
-    return arr.filter(obj => obj.refUser !== refUser);
+function excludeCurUserFromArr(arr=[], id=0) {
+    return arr.filter(item => item.dataValues.id !== id);
 }
 
 module.exports = new UserController();

@@ -10,6 +10,7 @@ const Home = lazy(() => import('./pages/home/Home'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
 const EditProfile = lazy(() => import('./pages/editProfile/EditProfile'));
 const Friends = lazy(() => import('./pages/friends/Friends'));
+const Users = lazy(() => import('./pages/users/Users'));
 
 
 const App: FC = () => {
@@ -37,6 +38,11 @@ const App: FC = () => {
             <Route path="friends" element={
               <RequireAuth >
                 <Friends />
+              </RequireAuth >
+            }/>
+            <Route path="users" element={
+              <RequireAuth >
+                <Users />
               </RequireAuth >
             }/>
           </Route>

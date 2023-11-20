@@ -2,23 +2,26 @@ import {FC} from 'react';
 import styles from './ItemUser.module.scss';
 import { Link } from "react-router-dom";
 import noAvatar from '../../../assets/images/no-avatar.jpg';
+import Button from '../.././../components/Button/Button';
 
 interface IUserItemProps {
-  id?: number;
-  username: string;
-  avatar: string | undefined;
-  refUser: string;
-  status: string;
-  city: string;
+    id?: number;
+    username: string;
+    avatar: string | undefined;
+    refUser: string;
+    status: string;
+    city: string;
+    subscrInformation: boolean;
 }
 
 const ItemUser: FC<IUserItemProps> = ({
-  username, 
-  avatar,
-  refUser,
-  status, 
-  city
-}) => {
+    username, 
+    avatar,
+    refUser,
+    status, 
+    city,
+    subscrInformation
+  }) => {
   return (
     <div className={styles.userItem}>
       <img
@@ -32,9 +35,13 @@ const ItemUser: FC<IUserItemProps> = ({
         </Link>
         <p className={styles.infoText}>{status}</p>
         <p className={styles.infoText}>{city}</p>
+        {subscrInformation 
+        ? <Button addClass={styles.dismissBtn}>Отписаться</Button>
+        : <Button addClass={styles.followBtn}>Подписаться</Button>
+        }
       </div>
     </div>
-  );
+  )
 }
 
 export default ItemUser;

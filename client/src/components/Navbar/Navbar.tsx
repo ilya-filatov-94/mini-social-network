@@ -17,6 +17,7 @@ import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 
 
 
@@ -55,11 +56,11 @@ const Navbar: FC = () => {
             : <DarkModeOutlinedIcon />
           }
         </div>
-
-        <div className={styles.search}>
+        < Diversity3OutlinedIcon onClick={()=> navigateTo('/users')} sx={{cursor: 'pointer'}} />
+        {/* <div className={styles.search}>
           <SearchOutlinedIcon />
           <Input addClass={styles.inputSearch} type="search" placeholder="Поиск..."/>
-        </div>
+        </div> */}
       </div>
 
       <div className={styles.rigthSection}>

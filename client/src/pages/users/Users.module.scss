@@ -1,0 +1,81 @@
+@import '../../styles/responsive.scss';
+@import '../../styles/theme.scss';
+
+.usersContainer {
+    padding: 10px 30px;
+    font-size: 0.875rem;
+
+    @include mobile {
+        padding: 10px;
+    }
+
+    .wrapperUsers {
+        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+        border-radius: 20px;
+        padding: 20px 20px 20px 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        overflow-y: scroll;
+
+        .search {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 5px;
+            padding: 5px;
+
+            @include mobile {
+                margin: 0;
+            }
+
+            @include tablet{
+                margin: 0;
+            }
+
+            .inputSearch {
+                border: none;
+                background-color: transparent;
+            }
+
+        }
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        .search {
+            border: 1px solid themed($curTheme, "border");
+
+            .inputSearch {
+                color: themed($curTheme, "textColor");
+            }
+        }
+
+        .wrapperUsers {
+            background-color: themed($curTheme, "background");
+        }
+    }
+
+    &.theme-light {
+        $curTheme: "light";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        .search {
+            border: 1px solid themed($curTheme, "border");
+
+            .inputSearch {
+                color: themed($curTheme, "textColor");
+            }
+        }
+
+        .wrapperUsers {
+            background-color: themed($curTheme, "background");
+        }
+    }
+}
