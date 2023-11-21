@@ -67,6 +67,12 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
     if (isFetchBaseQueryErrorType(errorLoad)) {
       return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {errorLoad.status}</Alert>
     }
+    if (isFetchBaseQueryErrorType(errorAddLike)) {
+      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {errorAddLike.status}</Alert>
+    }
+    if (isFetchBaseQueryErrorType(errorRemoveLike)) {
+      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {errorRemoveLike.status}</Alert>
+    }
   }
   
   return (

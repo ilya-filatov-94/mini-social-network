@@ -146,7 +146,7 @@ const authSlice = createSlice({
         updateToken(state, action: PayloadAction<string>) {
             state.accessToken = action.payload;
         },
-        updateUserData(state, action: PayloadAction<IUpdateData>) {
+        updateUser(state, action: PayloadAction<IUpdateData>) {
             state.currentUser.username = action.payload.username;
             state.currentUser.refUser = action.payload.refUser;
         }
@@ -216,5 +216,5 @@ function isError(action: AnyAction) {
     return action.type.endsWith('rejected');
 }
 
-export const {setErrorStatus, updateToken, updateUserData} = authSlice.actions; 
+export const {setErrorStatus, updateToken, updateUser} = authSlice.actions; 
 export default authSlice.reducer;

@@ -79,11 +79,11 @@ const Profile: FC = () => {
             <div className={styles.info}>
               <div className={styles.item}>
                 <PlaceIcon />
-                <span className={styles.textInfo}>{userData.city}</span>
+                <span className={styles.textInfo}>город: {userData.city}</span>
               </div>
               <div className={styles.item}>
                 <LanguageIcon />
-                <span className={styles.textInfo}>{userData.website}</span>
+                <span className={styles.textInfo}>сайт: {userData.website}</span>
               </div>
             </div>
             <div className={styles.socials}>

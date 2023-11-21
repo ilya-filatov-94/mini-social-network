@@ -44,6 +44,8 @@ const Users: FC = () => {
             listUsers.map((user: IListUsers) =>
             <ItemUser 
               key={user.id}
+              myId={curUser.id}
+              userId={user.id}
               username={user.username}
               avatar={user.profilePic}
               refUser={user.refUser}

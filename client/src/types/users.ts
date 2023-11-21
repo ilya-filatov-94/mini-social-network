@@ -1,10 +1,5 @@
 import {IUserData} from './authReducer';
 
-export interface IUpdateData {
-    username: string;
-    refUser: string;
-}
-
 export interface IUserFullData {
     id?: number;
     name?: string;
@@ -16,6 +11,11 @@ export interface IUserFullData {
     city?: string;
     website?: string;
     password?: string;
+}
+
+export interface IUpdateData {
+    username: string;
+    refUser: string;
 }
 
 export interface IUser {
@@ -43,4 +43,10 @@ export interface IListUsers {
     status: string;
     city: string;
     subscrStatus: boolean;
+}
+
+export interface IActionSubscribeTo {
+    id?: number;
+    curUserId: number;
+    followerId: number;
 }

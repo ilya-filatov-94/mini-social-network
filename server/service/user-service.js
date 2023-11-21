@@ -174,7 +174,7 @@ class UserService {
         }, {where: {id: id}});
     }
 
-    async followUser(curUserId, followerId) {
+    async subscribeUser(curUserId, followerId) {
         if (curUserId && followerId) {
             const relatonship = await Relationship.create({
                 userId: curUserId,

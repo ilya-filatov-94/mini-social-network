@@ -21,7 +21,7 @@ router.get('/profile/:ref/edit', authMiddleware, userController.getOneEdit);
 router.patch('/profile/update', authMiddleware, userController.updateProile);
 
 router.get('/all', authMiddleware, userController.getAll); 
-router.post('/follow', authMiddleware, userController.followUser);
+router.post('/follow', authMiddleware, userController.subscribeUser);
 router.post('/unfollow', authMiddleware, userController.unsubscribeUser);
 router.get('/followers', authMiddleware, userController.getFollowers);
 

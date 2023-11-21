@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import styles from './ItemUser.module.scss';
 import { Link } from "react-router-dom";
 import noAvatar from '../../../assets/images/no-avatar.jpg';
@@ -12,7 +12,7 @@ interface IUserItemProps {
   city: string;
 }
 
-const ItemUser: FC<IUserItemProps> = ({
+const ItemUser: FC<IUserItemProps> = memo(({
   username, 
   avatar,
   refUser,
@@ -35,6 +35,6 @@ const ItemUser: FC<IUserItemProps> = ({
       </div>
     </div>
   );
-}
+})
 
 export default ItemUser;

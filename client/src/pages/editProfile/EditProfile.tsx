@@ -9,10 +9,10 @@ import {
 import styles from './EditProfile.module.scss';
 import {useParams} from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
-import {useGetUserDataQuery, useUpdateUserMutation} from '../../services/UserService';
+import {useGetUserDataQuery, useUpdateUserDataMutation} from '../../services/UserService';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {useAppDispatch} from '../../hooks/useTypedRedux';
-import {updateUserData} from '../../store/authSlice';
+import {updateUser} from '../../store/authSlice';
 import { useNavigate } from "react-router-dom";
 import Loader from '../../components/Loader/Loader';
 import Alert from '@mui/material/Alert';
@@ -31,7 +31,8 @@ const EditProfile: FC = () => {
   const {data: userData, error: errorLoading, isLoading: isLoadingData} = useGetUserDataQuery(
     newRefUser.current as string,
   );
-  const [updateUser, {isLoading: isLoadingUpdate, error: errorUpdate, isSuccess}] = useUpdateUserMutation();
+  const [updateUserData, 
+    {isLoading: isLoadingUpdate, error: errorUpdate, isSuccess}] = useUpdateUserDataMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const [selectedAvatar, setSelectedAvatar] = useState<File>();
@@ -104,9 +105,9 @@ const EditProfile: FC = () => {
       && !(selectedAvatar && selectedCover);
     
     if (emptyNewData) return;
-    await updateUser(formData);
+    await updateUserData(formData);
     if (newRef) {
-      dispatch(updateUserData({
+      dispatch(updateUser({
         username: newUsername,
         refUser: newRef!
       }));

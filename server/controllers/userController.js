@@ -113,11 +113,12 @@ class UserController {
         }
     }
 
-    async followUser(request, response, next) {
+    async subscribeUser(request, response, next) {
         try {
             const {curUserId, followerId} = request.body;
-            const statusAction = await userService.followUser(curUserId, followerId);
-            return response.json(statusAction);
+            const statusAction = await userService.subscribeUser(curUserId, followerId);
+            const statusActionData = excludeKeysFromObj(statusAction.dataValues, ['createdAt', 'updatedAt']);
+            return response.json(statusActionData);
         } catch (error) {
             next(error);
         }
@@ -126,7 +127,7 @@ class UserController {
     async unsubscribeUser(request, response, next) {
         try {
             const {curUserId, followerId} = request.body;
-            const statusAction = await userService.unsubscribeUser(curUserId, followerId);
+            const statusAction = await userService.unsubscribeUser(String(curUserId), String(followerId));
             return response.json(statusAction);
         } catch (error) {
             next(error);
