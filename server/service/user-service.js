@@ -1,4 +1,5 @@
 const {User, Relationship} = require('../models/models');
+const GraphUsers = require('../helpers/graphUsers');
 const ApiError = require('../error/ApiError');
 const tokenService = require('../service/token-service');
 const bcrypt = require('bcrypt');
@@ -222,7 +223,24 @@ class UserService {
     }
 
     async getPossibleFriends(curUserId) {
-        
+        const users = await User.findAll({
+            attributes: ['id', 'username', 'refUser', 'profilePic']
+        });
+        const followers = await Relationship.findAll();
+        const graphUsers = new GraphUsers();
+        for (let i = 0; i < users.length; i++) {
+            graphUsers.addUser(String(users[i].dataValues.id));
+        }
+        for (let i = 0; i < followers.length; i++) {
+            graphUsers.addFriend(followers[i].dataValues.userId, followers[i].dataValues.followerId);
+        }
+        const idPossibleFriends = graphUsers.getPossibleFriends(String(curUserId));
+        const possibleFriends = [];
+        for (let key in idPossibleFriends) {
+            // possibleFriends.push({possibleFriend: key, mutualFriends: [...idPossibleFriends[key]]});
+            possibleFriends.push({possibleFriend: key, noMutualFriends: idPossibleFriends[key].size});
+        }
+        return possibleFriends;
     }
 }
 

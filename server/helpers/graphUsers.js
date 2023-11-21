@@ -1,4 +1,4 @@
-class Users {
+class GraphUsers {
   constructor() {
     this.noOfUsers = 0;
     this.relationshipList = new Map();
@@ -15,14 +15,15 @@ class Users {
   }
 
   get numberUsers() {
-    return this.noOfUsers;
+    return this.noOfUsers || 0;
   }
 
   getFriendsOfUser(user) {
-    return this.relationshipList.get(user);
+    return this.relationshipList.get(user) || [];
   }
 
   getPossibleFriends(user) {
+    if (!user) return {};
     const possibleFriendData = {};
     const visitedFriends = {};
     const neighbours = this.getFriendsOfUser(user);
@@ -49,4 +50,4 @@ class Users {
   }
 }
 
-module.exports = Users;
+module.exports = GraphUsers;
