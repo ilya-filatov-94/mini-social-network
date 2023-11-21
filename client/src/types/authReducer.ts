@@ -26,6 +26,12 @@ export interface IUserData {
     city: string;
     website: string;
     status: string;
+    isSubscriber?: boolean;
+}
+
+export interface IRequestProfile {
+    ref: string;
+    id: number;
 }
 
 export interface IinitialUser {

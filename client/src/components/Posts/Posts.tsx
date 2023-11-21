@@ -13,9 +13,10 @@ import {
 interface IPostsProps {
   userId: number;
   currentUser: boolean;
+  curUserId: number;
 };
 
-const Posts: FC<IPostsProps> = ({userId, currentUser}) => {
+const Posts: FC<IPostsProps> = ({userId, currentUser, curUserId}) => {
 
   const {
     data: posts, 
@@ -42,6 +43,7 @@ const Posts: FC<IPostsProps> = ({userId, currentUser}) => {
           key={post.id} 
           userId={userId}
           currentUser={currentUser}
+          curUserId={curUserId}
           post={post}
         />
       )}

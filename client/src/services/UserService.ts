@@ -2,7 +2,7 @@ import {
     createApi, 
 } from "@reduxjs/toolkit/query/react";
 import {baseQueryWithReauth} from './index';
-import {IUserData} from '../types/authReducer';
+import {IUserData, IRequestProfile} from '../types/authReducer';
 import {IUserFullData, IFollower, IListUsers, IActionSubscribeTo} from '../types/users';
 
 
@@ -11,9 +11,9 @@ export const userApi = createApi({
     baseQuery: baseQueryWithReauth,
     tagTypes: ['ProfileData'],
     endpoints: (builder) => ({
-        getUserProfile: builder.query<IUserData, string>({
-          query: (refUser) => ({
-            url: `/user/profile/${refUser}`
+        getUserProfile: builder.query<IUserData, IRequestProfile>({
+          query: (data) => ({
+            url: `/user/profile/${data.ref}?id=${data.id}`
           }),
           extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,

@@ -5,6 +5,7 @@ import noAvatar from '../../../assets/images/no-avatar.jpg';
 
 interface IUserItemProps {
   id?: number;
+  curUserId: number;
   username: string;
   avatar: string | undefined;
   refUser: string;
@@ -13,6 +14,7 @@ interface IUserItemProps {
 }
 
 const ItemUser: FC<IUserItemProps> = memo(({
+  curUserId,
   username, 
   avatar,
   refUser,
@@ -27,7 +29,7 @@ const ItemUser: FC<IUserItemProps> = memo(({
         alt={`${username} avatar`}
       />
       <div className={styles.infoUser}>
-        <Link className={styles.link} to={`/profile/${refUser}`}>
+        <Link className={styles.link} to={`/profile/${refUser}?id=${curUserId}`}>
           <p className={styles.username}>{username}</p>
         </Link>
         <p className={styles.infoText}>{status}</p>

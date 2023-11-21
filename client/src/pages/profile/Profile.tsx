@@ -1,19 +1,22 @@
-import {FC, useEffect} from 'react'
+import {FC, useEffect, useState} from 'react'
 import styles from './Profile.module.scss';
 
 import {urlAPIimages} from '../../env_variables'; 
-import {useGetUserProfileQuery} from '../../services/UserService';
-import { useParams } from "react-router-dom";
+import {
+  useGetUserProfileQuery,
+  useSubscribeToUserMutation,
+  useUnSubscribeToUserMutation
+} from '../../services/UserService';
+import {useParams} from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import {useScroll} from '../../hooks/useScroll';
-import { 
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react";
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import Loader from '../../components/Loader/Loader';
 import Alert from '@mui/material/Alert';
 import Posts from '../../components/Posts/Posts';
 import SharePost from '../../components/SharePost/SharePost';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
+import Button from '../../components/Button/Button';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -25,26 +28,61 @@ import LanguageIcon from "@mui/icons-material/Language";
 
 const Profile: FC = () => {
   const {id} = useParams();
-  const {data: userData, error, isLoading} = useGetUserProfileQuery(id as string, {skip: !id});
+  const curUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const currentUser = curUser.refUser === id;
+  const {data: userData, error, isLoading} = useGetUserProfileQuery({
+    ref: id as string, id: curUser.id}, {skip: (!id || !curUser.id)});
+  const [isFollower, follow] = useState<boolean>(false);
+  const [subscribeToUser, {error: errorSubscribe}] = useSubscribeToUserMutation();
+  const [unSubscribeToUser, {error: errorUnsubscribe}] = useUnSubscribeToUserMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const curUser = useAppSelector(state => state.reducerAuth.currentUser);
-  const currentUser = curUser.refUser === id;
 
   const [executeScroll, elRef] = useScroll();
   useEffect(() => {
     executeScroll();
   // eslint-disable-next-line
   }, [id]);
+
+  useEffect(() => {
+    if (!currentUser) {
+      follow(userData?.isSubscriber!); 
+    }
+  // eslint-disable-next-line
+  }, [userData]);
+
+  async function subscribe(subscribeTo: boolean) {
+    if (userData) {
+      follow(!subscribeTo);
+      if (!subscribeTo) {
+        await subscribeToUser({
+          curUserId: curUser.id,
+          followerId: userData?.id,
+        }).unwrap();
+      }
+      if (subscribeTo) {
+        await unSubscribeToUser({
+          curUserId: curUser.id,
+          followerId: userData?.id,
+        }).unwrap();
+      }
+    }
+  }
   
   if (isLoading) {
     return <Loader />
   }
 
-  if (error) {
+  if (error || errorSubscribe || errorUnsubscribe) {
     if (isFetchBaseQueryErrorType(error)) {
       return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {error.status}</Alert>
+    }
+    if (isFetchBaseQueryErrorType(errorSubscribe)) {
+      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {errorSubscribe.status}</Alert>
+    }
+    if (isFetchBaseQueryErrorType(errorUnsubscribe)) {
+      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {errorUnsubscribe.status}</Alert>
     }
   }
 
@@ -104,7 +142,10 @@ const Profile: FC = () => {
               {!currentUser
               ? <>
                   <button className={styles.Btn}>Написать</button>
-                  <button className={styles.Btn}>Подписаться</button>
+                  <Button 
+                    onClick={() => subscribe(isFollower)}
+                    addClass={isFollower ? `${styles.Btn} ${styles.dismissBtn}` : styles.Btn}
+                  >{isFollower ? 'Отписаться' : 'Подписаться'}</Button>
                 </>
                 : <ButtonLink addClass={styles.Btn} to={`/profile/${id}/edit`}>
                     Редактировать профиль
@@ -114,7 +155,7 @@ const Profile: FC = () => {
           </div>
         </div>
         {currentUser && <SharePost userId={userData.id} />}
-        <Posts userId={userData.id} currentUser={currentUser} />
+        <Posts userId={userData.id} currentUser={currentUser} curUserId={curUser.id}/>
       </div>
     </div>
   );

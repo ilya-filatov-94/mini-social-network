@@ -24,7 +24,6 @@ router.get('/all', authMiddleware, userController.getAll);
 router.post('/follow', authMiddleware, userController.subscribeUser);
 router.post('/unfollow', authMiddleware, userController.unsubscribeUser);
 router.get('/followers', authMiddleware, userController.getFollowers);
-
-
+router.get('/suggestions', authMiddleware, userController.getSuggestionsForUser);
 
 module.exports = router;

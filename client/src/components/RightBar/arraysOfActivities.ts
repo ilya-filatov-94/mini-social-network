@@ -1,6 +1,4 @@
-import AvatarRich from '../../assets/images/avatar1.jpg';
-import AvatarTom from '../../assets/images/avatar2.jpg';
-import JaneStory from '../../assets/images/Jane-story.jpeg';
+
 import {IUser, IActivityOfFriend} from '../../types/users';
 
 
@@ -10,17 +8,17 @@ const users: IUser[] = [
     {
         id: 1,
         name: "Rich Skinner",
-        avatar: AvatarRich,
+        avatar: '',
     },
     {
         id: 2,
         name: "Tom Riddle",
-        avatar: AvatarTom,
+        avatar: '',
     },
     {
         id: 3,
         name: "Jane Stone",
-        avatar: JaneStory,
+        avatar: '',
     },
 ]
 

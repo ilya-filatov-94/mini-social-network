@@ -2,7 +2,7 @@ import {FC, useState, useEffect, memo} from 'react';
 import styles from './ItemUser.module.scss';
 import { Link } from "react-router-dom";
 import noAvatar from '../../../assets/images/no-avatar.jpg';
-import Button from '../.././../components/Button/Button';
+import Button from '../../../components/Button/Button';
 import {
   useSubscribeToUserMutation,
   useUnSubscribeToUserMutation
@@ -71,7 +71,7 @@ const ItemUser: FC<IUserItemProps> = memo(({
         alt={`${username} avatar`}
       />
       <div className={styles.infoUser}>
-        <Link className={styles.link} to={`/profile/${refUser}`}>
+        <Link className={styles.link} to={`/profile/${refUser}?id=${myId}`}>
           <p className={styles.username}>{username}</p>
         </Link>
         <p className={styles.infoText}>{status}</p>

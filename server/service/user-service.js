@@ -110,12 +110,23 @@ class UserService {
         return users;
     }
 
-    async getOneUser(refUser) {
+    async getOneUser(refUser, id) {
         const user = await User.findOne(
             {
                 where: {refUser: refUser},
             },
         );
+        if (parseInt(user.dataValues.id) !== parseInt(id)) {
+            const follower = await Relationship.findOne({
+                where:{userId: id, followerId: String(user.dataValues.id)},
+            });
+            if (follower) {
+                user.dataValues.isSubscriber = true;
+            }
+            if (!follower) {
+                user.dataValues.isSubscriber = false;
+            }
+        }
         return user;
     }
 
@@ -208,6 +219,10 @@ class UserService {
             attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
         });
         return users;
+    }
+
+    async getPossibleFriends(curUserId) {
+        
     }
 }
 

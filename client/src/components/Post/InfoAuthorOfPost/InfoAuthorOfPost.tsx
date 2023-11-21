@@ -10,6 +10,7 @@ import MenuPost from '../MenuPost/MenuPost';
 interface IPostsProps {
   post: IPostData;
   currentUser: boolean;
+  curUserId: number;
   curTheme: string;
   editPost: (state: boolean) => void;
   deletePost: () => void;
@@ -18,6 +19,7 @@ interface IPostsProps {
 const InfoAuthorOfPost: FC<IPostsProps> = ({
   post, 
   currentUser, 
+  curUserId,
   curTheme,
   editPost,
   deletePost
@@ -39,7 +41,7 @@ const InfoAuthorOfPost: FC<IPostsProps> = ({
         <div className={styles.details}>
           <Link
             className={styles.link}
-            to={`/profile/${post.refUser}`}
+            to={currentUser ? `/profile/${post.refUser}` : `/profile/${post.refUser}?id=${curUserId}`}
             replace={true}>
             <span className={styles.username}>{post.username}</span>
           </Link>

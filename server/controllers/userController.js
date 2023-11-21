@@ -66,7 +66,8 @@ class UserController {
     async getProfile(request, response, next) {
         try {
             const {ref} = request.params;
-            const user = await userService.getOneUser(ref);
+            const {id} = request.query;
+            const user = await userService.getOneUser(ref, id);
             const profileData = excludeKeysFromObj(user.dataValues, ['email', 'password', 'status', 'createdAt', 'updatedAt']);
             return response.json(profileData);
         } catch (error) {
@@ -150,6 +151,16 @@ class UserController {
             const users = await userService.getAllUsers(cur_user);
             const usersExcludeCurrent = excludeCurUserFromArr(users, parseInt(cur_user));
             return response.json(usersExcludeCurrent);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getSuggestionsForUser(request, response, next) {
+        try {
+            const {id} = request.query;
+            const possibleFriends = await userService.getPossibleFriends(id);
+            return response.json(possibleFriends);
         } catch (error) {
             next(error);
         }

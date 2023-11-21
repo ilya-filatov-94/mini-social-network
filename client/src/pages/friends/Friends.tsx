@@ -62,6 +62,7 @@ const Friends: FC = () => {
                 filteredFriends.map((follower: IFollower) => 
                 <div key={follower.id} className={styles.wrapperFollowers}>
                   <ItemUser
+                    curUserId={currentUser.id}
                     username={follower.username}
                     avatar={follower.profilePic}
                     refUser={follower.refUser}

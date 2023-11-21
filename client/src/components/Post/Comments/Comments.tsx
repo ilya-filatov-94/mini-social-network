@@ -117,7 +117,9 @@ const Comments: FC<IContentPostProps> = ({
                     <div className={styles.ext_info}>
                         <Link 
                             className={styles.username}
-                            to={`/profile/${comment.refUser}`}
+                            to={comment.userId !== curUser.id 
+                              ? `/profile/${comment.refUser}?id=${curUser.id}` 
+                              : `/profile/${comment.refUser}`}
                             replace={true}
                         >
                         <span>{comment.username}</span>

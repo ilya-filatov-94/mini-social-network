@@ -16,6 +16,7 @@ import {
 interface IPostsProps {
   currentUser: boolean;
   userId: number;
+  curUserId: number;
   post: IPostData;
 };
 
@@ -23,6 +24,8 @@ const Post: FC<IPostsProps> = ({
   post, 
   currentUser,
   userId,
+  curUserId
+
 }) => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
@@ -52,7 +55,8 @@ const Post: FC<IPostsProps> = ({
       <div className={styles.container}>
         <InfoAuthorOfPost 
           post={post} 
-          currentUser={currentUser} 
+          currentUser={currentUser}
+          curUserId={curUserId}
           curTheme={currentTheme}
           editPost={editPost}
           deletePost={deletePostFn}

@@ -146,13 +146,28 @@
                   .Btn {
                     min-width: 120px;
                     border: none;
-                    background-color: #5271ff;
+                    background-color: #556fe3da;
                     color: white;
                     padding: 10px 20px;
                     border-radius: 5px;
                     cursor: pointer;
                   }
+
+                  .Btn:hover,
+                  .Btn:active {
+                    background-color: #102db0c1;
+                  }
+
+                  .Btn.dismissBtn {
+                    background-color: #db4742;
+                  }
+
+                  .Btn.dismissBtn:hover,
+                  .Btn.dismissBtn:active {
+                    background-color: #db5e5adb;
+                  }
                 }
+
               }
 
               .socials {
