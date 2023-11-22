@@ -14,6 +14,11 @@ class GraphUsers {
     this.relationshipList.get(friend).push(user);
   }
 
+  removeFriend(user, friend) {
+    const newArrFriends =  this.relationshipList.get(user).filter(item => item !== friend);
+    this.relationshipList.set(user, newArrFriends);
+  }
+
   get numberUsers() {
     return this.noOfUsers || 0;
   }
