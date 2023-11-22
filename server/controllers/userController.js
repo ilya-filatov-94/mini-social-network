@@ -4,6 +4,7 @@ const {validationResult} = require('express-validator');
 const uuid = require('uuid');
 const path = require('path');
 
+userService.init();
 
 class UserController {
     async registration(request, response, next) {

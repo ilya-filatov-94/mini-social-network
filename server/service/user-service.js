@@ -6,8 +6,30 @@ const bcrypt = require('bcrypt');
 
 
 
-
 class UserService {
+    constructor() { 
+        this.graphUsers = new GraphUsers();
+    }
+
+    async init() {
+        const users = await User.findAll({
+            attributes: ['id', 'username', 'refUser', 'profilePic']
+        });
+        if (!users) {
+            return;
+        }
+        for (let i = 0; i < users.length; i++) {
+            this.graphUsers.addUser(String(users[i].dataValues.id));
+        }
+        const followers = await Relationship.findAll();
+        if (!followers) {
+            return;
+        }
+        for (let i = 0; i < followers.length; i++) {
+            this.graphUsers.addFriend(followers[i].dataValues.userId, followers[i].dataValues.followerId);
+        }
+    }
+
     async registration(username, email, password) {
         const candidate = await User.findOne({where: {email}});
         if (candidate) {
@@ -223,18 +245,7 @@ class UserService {
     }
 
     async getPossibleFriends(curUserId) {
-        const users = await User.findAll({
-            attributes: ['id', 'username', 'refUser', 'profilePic']
-        });
-        const followers = await Relationship.findAll();
-        const graphUsers = new GraphUsers();
-        for (let i = 0; i < users.length; i++) {
-            graphUsers.addUser(String(users[i].dataValues.id));
-        }
-        for (let i = 0; i < followers.length; i++) {
-            graphUsers.addFriend(followers[i].dataValues.userId, followers[i].dataValues.followerId);
-        }
-        const idPossibleFriends = graphUsers.getPossibleFriends(String(curUserId));
+        const idPossibleFriends = this.graphUsers.getPossibleFriends(String(curUserId));
         const possibleFriends = [];
         for (let key in idPossibleFriends) {
             // possibleFriends.push({possibleFriend: key, mutualFriends: [...idPossibleFriends[key]]});
@@ -263,5 +274,7 @@ function getStatusOfRelationship(users, relationship) {
     }
   }
 }
+
+
 
 module.exports = new UserService();

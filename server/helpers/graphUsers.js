@@ -11,7 +11,7 @@ class GraphUsers {
 
   addFriend(user, friend) {
     this.relationshipList.get(user).push(friend);
-    // this.relationshipList.get(friend).push(user); //двусторонняя подписка
+    this.relationshipList.get(friend).push(user);
   }
 
   get numberUsers() {
