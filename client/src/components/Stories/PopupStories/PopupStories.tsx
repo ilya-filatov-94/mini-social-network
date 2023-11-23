@@ -29,8 +29,7 @@ const PopupStories: FC<IPopupStoriesProps> = memo(({
   setCurrentIndex
 }) => {
 
-
-  const [filled, setFilled] = useState(0);
+  const [filled, setFilled] = useState<number>(0);
   const timeout = useRef<any>();
 
   useEffect(() => {

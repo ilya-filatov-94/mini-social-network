@@ -25,5 +25,6 @@ router.post('/follow', authMiddleware, userController.subscribeUser);
 router.post('/unfollow', authMiddleware, userController.unsubscribeUser);
 router.get('/followers', authMiddleware, userController.getFollowers);
 router.get('/suggestions', authMiddleware, userController.getSuggestionsForUser);
+router.get('/common', authMiddleware, userController.getMutualFriends);
 
 module.exports = router;

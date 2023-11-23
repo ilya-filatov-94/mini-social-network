@@ -2,6 +2,7 @@ import {FC} from 'react';
 import styles from './UserAvatar.module.scss';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import { Link } from 'react-router-dom';
+import {useAppSelector} from '../../hooks/useTypedRedux';
 
 
 interface IUserAvatarProps {
@@ -20,8 +21,15 @@ const UserAvatar: FC<IUserAvatarProps> = ({
   ...props
 }) => {
 
+  const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
+
   const usernameLink = (
-    <Link className={`${styles.styleText} ${props.textclass}`} to={`/profile/${refUser}`}>
+    <Link 
+      className={`${styles.styleText} ${props.textclass}`} 
+      to={currentUser.refUser === refUser 
+        ? `/profile/${refUser}` 
+        : `/profile/${refUser}?id=${currentUser.id}`}
+    >
         <span>{name}</span>
     </Link>
   );

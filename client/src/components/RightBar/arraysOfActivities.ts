@@ -1,30 +1,37 @@
 
-import {IUser, IActivityOfFriend} from '../../types/users';
 
 
 
-
-const users: IUser[] = [
+const users = [
     {
         id: 1,
-        name: "Rich Skinner",
+        username: "Rich Skinner",
         avatar: '',
+        refUser: 'RichSkinner23'
     },
     {
         id: 2,
-        name: "Tom Riddle",
+        username: "Tom Riddle",
         avatar: '',
+        refUser: 'TomRiddle16'
     },
     {
         id: 3,
-        name: "Jane Stone",
+        username: "Jane Stone",
         avatar: '',
+        refUser: 'JaneStone22'
+    },
+    {
+        id: 4,
+        username: "Jane Stone",
+        avatar: '',
+        refUser: 'JaneStone22'
     },
 ]
 
-export const possibleFriends: IUser[] = [users[0], users[1]];
+export const possibleFriends = [users[0], users[1], users[2], users[3]];
 
-export const activitiesOfFriends: IActivityOfFriend[] = [
+export const activitiesOfFriends = [
     {
         ...users[0], 
         textEvent: "Добавил новое фото",
@@ -42,5 +49,5 @@ export const activitiesOfFriends: IActivityOfFriend[] = [
     },
 ];
 
-export const onlineFriends: IUser[] = [users[1], users[2], users[0]];
+export const onlineFriends = [users[1], users[2], users[0]];
 

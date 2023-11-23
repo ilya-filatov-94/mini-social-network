@@ -28,6 +28,7 @@ class UserService {
         for (let i = 0; i < followers.length; i++) {
             this.graphUsers.addFriend(followers[i].dataValues.userId, followers[i].dataValues.followerId);
         }
+        console.log('Граф пользователей инициализирован');
     }
 
     async registration(username, email, password) {
@@ -51,6 +52,7 @@ class UserService {
                 id: user.id,
             },
         });
+        this.graphUsers.addUser(String(user.id));
         const payload = {id: user.id, refUser: refToUser, email: user.email};
         const tokens = tokenService.generateTokens(payload);
         await tokenService.saveToken(user.id, tokens.refreshToken);
@@ -126,10 +128,8 @@ class UserService {
         const users = await User.findAll({
             attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
         });
-        const followers = await Relationship.findAll({
-            where:{userId: id},
-        });
-        getStatusOfRelationship(users, followers);
+        const friends = this.graphUsers.getFriendsOfUser(String(id));
+        getStatusOfRelationship(users, friends);
         return users;
     }
 
@@ -139,15 +139,14 @@ class UserService {
                 where: {refUser: refUser},
             },
         );
-        if (parseInt(user.dataValues.id) !== parseInt(id)) {
-            const follower = await Relationship.findOne({
-                where:{userId: id, followerId: String(user.dataValues.id)},
-            });
-            if (follower) {
-                user.dataValues.isSubscriber = true;
-            }
-            if (!follower) {
+        let userId = parseInt(user.dataValues.id);
+        if (userId !== parseInt(id)) {
+            userId = String(user.dataValues.id);
+            const friends = this.graphUsers.getFriendsOfUser(String(id));
+            if (!friends.includes(userId)) {
                 user.dataValues.isSubscriber = false;
+            } else {
+                user.dataValues.isSubscriber = true;
             }
         }
         return user;
@@ -214,6 +213,7 @@ class UserService {
                 userId: curUserId,
                 followerId: followerId
             });
+            this.graphUsers.addFriend(String(curUserId), String(followerId));
             return relatonship;
         }
         return {};
@@ -221,22 +221,20 @@ class UserService {
 
     async unsubscribeUser(curUserId, followerId) {
         if (curUserId && followerId) {
-            return await Relationship.destroy({
+            const result = await Relationship.destroy({
                 where: {
                     userId: curUserId,
                     followerId: followerId,
                 },
-            }) ? followerId : false;
+            });
+            this.graphUsers.removeFriend(String(curUserId), String(followerId));
+            return result ? followerId : false;
         }
         return false;
     }
 
     async getFollowers(curUserId) {
-        const followers = await Relationship.findAll({
-            where:{userId: curUserId},
-            // include: [{model: User, as: "users"}]
-        });
-        const idFriends = followers.map(item => item.dataValues.followerId);
+        const idFriends = this.graphUsers.getFriendsOfUser(String(curUserId));
         const users = await User.findAll({
             where: { id: idFriends},
             attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
@@ -246,26 +244,41 @@ class UserService {
 
     async getPossibleFriends(curUserId) {
         const idPossibleFriends = this.graphUsers.getPossibleFriends(String(curUserId));
-        const possibleFriends = [];
-        for (let key in idPossibleFriends) {
-            // possibleFriends.push({possibleFriend: key, mutualFriends: [...idPossibleFriends[key]]});
-            possibleFriends.push({possibleFriend: key, noMutualFriends: idPossibleFriends[key].size});
+        const idUsers = Object.keys(idPossibleFriends).map(item => parseInt(item));
+        const possibleFriendsData = await User.findAll({
+            where: {id: idUsers},
+            attributes: ['id', 'username', 'refUser', 'profilePic']
+        });
+        for (let item of possibleFriendsData) {
+            item.dataValues.numberMutualFriends = idPossibleFriends[String(item.dataValues.id)].size;
         }
-        return possibleFriends;
+        return possibleFriendsData;
+    }
+
+    async getMutualFriends(curUserId, idPosFriend) {
+        const idPossibleFriends = this.graphUsers.getPossibleFriends(String(curUserId));
+        const idUsers = [];
+        for (let value of idPossibleFriends[idPosFriend]) {
+            idUsers.push(parseInt(value));
+        }
+        const mutualFriendsData = await User.findAll({
+            where: {id: idUsers},
+            attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
+        });
+        return mutualFriendsData;
     }
 }
 
-function getStatusOfRelationship(users, relationship) {
-  if (relationship.length === 0) return;
+function getStatusOfRelationship(users, friends) {
+  if (friends.length === 0) return;
   const obj = {};
   let key;
-  let item;
-  for (let i = 0; i < relationship.length; i++) {
-    key = relationship[i].dataValues.followerId;
+  for (let i = 0; i < friends.length; i++) {
+    key = friends[i];
     obj[key] = true;
   }
   for (let i = 0; i < users.length; i++) {
-    key = users[i].dataValues.id;
+    key = String(users[i].dataValues.id);
     if (obj[key]) {
       users[i].dataValues.subscrStatus = obj[key];
     }

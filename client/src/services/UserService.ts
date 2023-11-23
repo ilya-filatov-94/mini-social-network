@@ -3,13 +3,20 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import {baseQueryWithReauth} from './index';
 import {IUserData, IRequestProfile} from '../types/authReducer';
-import {IUserFullData, IFollower, IListUsers, IActionSubscribeTo} from '../types/users';
+import {
+  IUserFullData, 
+  IFollower, 
+  IListUsers, 
+  IActionSubscribeTo,
+  IPossibleFriend,
+  IRequestMutualFriend
+} from '../types/users';
 
 
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['ProfileData'],
+    tagTypes: ['ProfileData', 'PossibleFriend'],
     endpoints: (builder) => ({
         getUserProfile: builder.query<IUserData, IRequestProfile>({
           query: (data) => ({
@@ -56,7 +63,8 @@ export const userApi = createApi({
             method: 'POST',
             body: data
           }),
-          extraOptions: { maxRetries: 3 },
+          extraOptions: { maxRetries: 5 },
+          invalidatesTags: ['PossibleFriend']
         }),
         unSubscribeToUser: builder.mutation<number, IActionSubscribeTo>({
           query: (data) => ({
@@ -64,7 +72,22 @@ export const userApi = createApi({
             method: 'POST',
             body: data
           }),
-          extraOptions: { maxRetries: 3 },
+          extraOptions: { maxRetries: 5 },
+        }),
+        getPossibleFriends: builder.query<IPossibleFriend[], number>({
+          query: (id) => ({
+            url: `/user/suggestions?id=${id}`,
+          }),
+          extraOptions: { maxRetries: 5 },
+          keepUnusedDataFor: 60,
+          providesTags: ['PossibleFriend']
+        }),
+        getMutualFriends: builder.query<IPossibleFriend[], IRequestMutualFriend>({
+          query: (data) => ({
+            url: `/user/common?id=${data.id}&pos_id=${data.pos_id}`,
+          }),
+          extraOptions: { maxRetries: 5 },
+          keepUnusedDataFor: 60,
         }),
     })
 });
@@ -76,5 +99,7 @@ export const {
   useGetFollowersQuery,
   useGetAllUsersQuery,
   useSubscribeToUserMutation,
-  useUnSubscribeToUserMutation
+  useUnSubscribeToUserMutation,
+  useGetPossibleFriendsQuery,
+  useGetMutualFriendsQuery
 } = userApi;

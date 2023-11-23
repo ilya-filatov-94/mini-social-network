@@ -1,6 +1,7 @@
 import {FC, useState, useEffect, memo} from 'react';
 import styles from './ItemUser.module.scss';
 import { Link } from "react-router-dom";
+import {urlAPIimages} from '../../../env_variables';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
 import Button from '../../../components/Button/Button';
 import {
@@ -67,7 +68,7 @@ const ItemUser: FC<IUserItemProps> = memo(({
     <div className={styles.userItem}>
       <img
         className={styles.avatar}
-        src={avatar ? avatar : noAvatar}
+        src={avatar ? urlAPIimages + avatar : noAvatar}
         alt={`${username} avatar`}
       />
       <div className={styles.infoUser}>

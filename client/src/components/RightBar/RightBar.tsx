@@ -1,17 +1,18 @@
 import {FC} from 'react';
 import styles from './RightBar.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
-
 import CardOfSuggestionFriend from '../CardOfSuggestionFriend/CardOfSuggestionFriend';
 import CardOfActivitiesFriend from '../CardOfActivitiesFriend/CardOfActivitiesFriend';
+
+
 import {
-  possibleFriends,
   activitiesOfFriends,
 } from './arraysOfActivities';
 
 
 const RightBar: FC = () => {
 
+  const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
 
   return (
@@ -21,16 +22,9 @@ const RightBar: FC = () => {
     }>
       <div className={styles.container}>
 
-        <div className={styles.item}>
+        <div className={`${styles.item} ${styles.suggestions}`}>
           <span className={styles.headerItem}>Предложения для Вас</span>
-          {possibleFriends.map(item => 
-            <CardOfSuggestionFriend 
-              key={item.id}
-              name={item.name} 
-              refUser={item.name}
-              avatar={item.avatar}
-            />
-          )}
+          <CardOfSuggestionFriend idCurUser={currentUser.id}/>
         </div>
 
         <div className={styles.item}>
@@ -38,8 +32,8 @@ const RightBar: FC = () => {
           {activitiesOfFriends.map(item => 
             <CardOfActivitiesFriend 
               key={item.id}
-              name={item.name}
-              refUser={item.name}
+              name={item.username}
+              refUser={item.refUser}
               avatar={item.avatar}
               textEvent={item.textEvent}
               timeEvent={item.timeEvent}

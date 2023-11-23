@@ -1,45 +1,106 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import styles from './CardOfSuggestionFriend.module.scss';
-import UserAvatar from '../UserAvatar/UserAvatar';
+import {urlAPIimages} from '../../env_variables';
+import noAvatar from '../../assets/images/no-avatar.jpg';
+import {Link} from 'react-router-dom';
 import Button from '../Button/Button';
-import {useAppSelector} from '../../hooks/useTypedRedux';
+import {IPossibleFriend} from '../../types/users';
+import {
+  useGetPossibleFriendsQuery,
+  useSubscribeToUserMutation
+} from '../../services/UserService';
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import Loader from '../../components/Loader/Loader';
+import Alert from '@mui/material/Alert';
+import PopupMutualFriends from './PopupMutualFriends/PopupMutualFriends';
 
 interface ISuggestionProps {
-  name: string;
-  refUser?: string; 
-  avatar?: string | undefined;
-  addClass?: string;
-  [key: string]: string | number | undefined;
+  idCurUser: number;
 }
 
 const CardOfSuggestionFriend: FC<ISuggestionProps> = ({
-  name, 
-  refUser, 
-  avatar,
-  addClass,
-  ...props
+  idCurUser,
 }) => {
 
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const {data: possibleFriends, error: errorLoading, isLoading} = useGetPossibleFriendsQuery(idCurUser, 
+    {skip: !idCurUser});
+  const [subscribeToUser, {error: errorSubscribe}] = useSubscribeToUserMutation();
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+  const [isVisiblePopup, setVisiblePopup] = useState<boolean>(false);
+  const [indexPossibleFriend, setIndexPossibleFriend] = useState<number>(0);
+  const [namePossibleFriend, setNamePossibleFriend] = useState<string>('');
+
+  function showMutualFriends(idUser: number, username: string) {
+    setIndexPossibleFriend(idUser);
+    setNamePossibleFriend(username);
+    setVisiblePopup(true);
+  }
+
+  async function subscribe(idUser: number) {
+    await subscribeToUser({curUserId: idCurUser, followerId: idUser}).unwrap();
+  }
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (errorLoading) {
+    if (isFetchBaseQueryErrorType(errorLoading)) {
+      return ( 
+      <Alert severity="error" sx={{m: 20}}>
+        Произошла ошибка при загрузке данных! {errorLoading.status}
+      </Alert>);
+    }
+    if (isFetchBaseQueryErrorType(errorSubscribe)) {
+      return ( 
+      <Alert severity="error" sx={{m: 20}}>
+        Произошла ошибка при загрузке данных! {errorSubscribe.status}
+      </Alert>);
+    }
+  }
+
+  if (possibleFriends?.length === 0) {
+    return <p className={styles.textOfCard}>Нет предложений</p>
+  }
 
   return (
-    <div className={styles.user} {...props}>
-      <UserAvatar
-        addClass={styles.avatar}
-        avatar={avatar}
-        name={name}
-        textclass={currentTheme ==='darkMode'
-          ? `${styles.textClass} ${styles['theme-dark']}`
-          : `${styles.textClass} ${styles['theme-light']}`
-        }
-        refUser={name.replaceAll(' ', '')}
-        def_size_ico={40}
+    <>
+    {(possibleFriends && possibleFriends?.length !== 0) &&
+    possibleFriends.map((user: IPossibleFriend) => (
+    <div key={user.id} className={styles.user}>
+      <img
+        className={styles.avatar}
+        src={user.profilePic ? urlAPIimages + user.profilePic : noAvatar}
+        alt={`${user.username} avatar`}
       />
-      <div className={styles.buttons}>
-        <Button addClass={styles.followBtn}>Подписаться</Button>
-        <Button addClass={styles.dismissBtn}>Отписаться</Button>
+      <div className={styles.infoUser}>
+        <Link className={styles.link} to={`/profile/${user.refUser}?id=${idCurUser}`}>
+          <p className={styles.username}>{user.username}</p>
+        </Link>
+        <p className={styles.textOfCard}>Общих друзей: {user.numberMutualFriends}</p>
+        <div className={styles.wrapperBtns}>
+          <Button
+            onClick={() => showMutualFriends(user.id, user.username)}
+            addClass={styles.Btn}
+          >Посмотреть друзей</Button>
+          <Button 
+            onClick={() => subscribe(user.id)}
+            addClass={styles.Btn}
+          >Подписаться</Button>
+        </div>
       </div>
     </div>
+    ))}
+    {(possibleFriends && possibleFriends?.length !== 0) &&
+      <PopupMutualFriends
+        isVisible={isVisiblePopup}
+        setVisible={setVisiblePopup}
+        curUserId={idCurUser}
+        usernamePossibleFriend={namePossibleFriend}
+        possibleFriendId={indexPossibleFriend}
+      />
+    }
+    </>
   );
 }
 

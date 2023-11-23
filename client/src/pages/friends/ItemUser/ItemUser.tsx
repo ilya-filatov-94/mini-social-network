@@ -2,6 +2,7 @@ import {FC, memo} from 'react';
 import styles from './ItemUser.module.scss';
 import { Link } from "react-router-dom";
 import noAvatar from '../../../assets/images/no-avatar.jpg';
+import {urlAPIimages} from '../../../env_variables';
 
 interface IUserItemProps {
   id?: number;
@@ -25,7 +26,7 @@ const ItemUser: FC<IUserItemProps> = memo(({
     <div className={styles.userItem}>
       <img
         className={styles.avatar}
-        src={avatar ? avatar : noAvatar}
+        src={avatar ? urlAPIimages + avatar : noAvatar}
         alt={`${username} avatar`}
       />
       <div className={styles.infoUser}>

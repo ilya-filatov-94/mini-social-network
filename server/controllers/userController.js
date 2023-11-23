@@ -167,6 +167,16 @@ class UserController {
         }
     }
 
+    async getMutualFriends(request, response, next) {
+        try {
+            const {id, pos_id} = request.query;
+            const mutualFriends = await userService.getMutualFriends(id, pos_id);
+            return response.json(mutualFriends);
+        } catch (error) {
+            next(error);
+        }
+    }
+
 };
 
 function excludeKeysFromObj(obj={}, keys=[]) {

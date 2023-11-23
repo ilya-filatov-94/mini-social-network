@@ -50,3 +50,17 @@ export interface IActionSubscribeTo {
     curUserId: number;
     followerId: number;
 }
+
+export interface IPossibleFriend {
+    id: number;
+    username: string;
+    refUser: string;
+    profilePic: string | undefined;
+    numberMutualFriends?: number;
+    status?: string;
+}
+
+export interface IRequestMutualFriend {
+    id: number;
+    pos_id: number;
+}

@@ -3,8 +3,8 @@
 .user {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin: 20px 0;
+    justify-content: flex-start;
+    margin-top: 20px;
 
     &.theme-dark {
         $curTheme: "dark";
@@ -14,33 +14,59 @@
         $curTheme: "light";
         color: themed($curTheme, "textColor");
     }
-}
 
-.user .buttons {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    &:not(:last-child) {
+        margin-bottom: 20px;
+    }
+
 }
 
 .avatar {
-    height: 40px;
-    width: 40px;
+    height: 60px;
+    width: 60px;
     border-radius: 50%;
     object-fit: cover;
+    margin-right: 20px;
 }
 
-.followBtn {
-    padding: 5px;
-    background-color: #5271ff;
-    color: white;
-}
+.infoUser {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 6px;
 
-.dismissBtn {
-    padding: 5px;
-    background-color: #f0544f;
-    color: white;
-}
+    .link {
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
 
-.textClass {
-    font-weight: 500;
+    .textOfCard {
+        font-weight: 400;
+        font-size: 0.875rem;
+    }
+
+    .wrapperBtns {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        .Btn {
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #556fe3da;
+            color: white;
+        }
+        .Btn:hover,
+        .Btn:active {
+            background-color: #102db0c1;
+        }
+    }
+
 }
