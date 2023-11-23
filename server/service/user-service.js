@@ -12,16 +12,16 @@ class UserService {
     }
 
     async init() {
-        const users = await User.findAll({
-            attributes: ['id', 'username', 'refUser', 'profilePic']
-        });
+        const users = await User.findAll({attributes: ['id']});
         if (!users) {
             return;
         }
         for (let i = 0; i < users.length; i++) {
             this.graphUsers.addUser(String(users[i].dataValues.id));
         }
-        const followers = await Relationship.findAll();
+        const followers = await Relationship.findAll({
+            attributes: ['userId', 'followerId']
+        });
         if (!followers) {
             return;
         }
