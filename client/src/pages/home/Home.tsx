@@ -2,7 +2,7 @@ import {FC} from 'react';
 import styles from './Home.module.scss';
 
 import Stories from '../../components/Stories/Stories';
-// import Posts from '../../components/Posts/Posts';
+import UserActivity from '../../components/UserActivity/UserActivity';
 
 
 const Home: FC = () => {
@@ -10,7 +10,7 @@ const Home: FC = () => {
   return (
     <div className={styles.home}>
       <Stories />
-      {/* <Posts /> */}
+      <UserActivity />
     </div>
   )
 }

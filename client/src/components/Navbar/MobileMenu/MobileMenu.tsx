@@ -58,7 +58,8 @@ const MobileMenu: FC<IMobileMenuProps> = ({
     >
       <div className={isOpenMobileMenu
         ? `${styles.backDrop} ${styles.backDrop_active}`
-        : styles.backDrop}></div>
+        : styles.backDrop}>
+      </div>
       <div
         className={
           isOpenMobileMenu
