@@ -12,7 +12,7 @@ import Alert from '@mui/material/Alert';
 
 const Users: FC = () => {
   const curUser = useAppSelector(state => state.reducerAuth.currentUser);
-  const {data: listUsers, error, isLoading} = useGetAllUsersQuery(curUser.id);
+  const {data: listUsers, error, isLoading, isSuccess} = useGetAllUsersQuery(curUser.id);
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
 
@@ -53,6 +53,9 @@ const Users: FC = () => {
               city={user.city}
               subscrInformation={user.subscrStatus}
             />)}
+            {isSuccess && !listUsers?.length &&
+              <p>Пользователи не найдены</p>
+            }
         </div>
     </div>
   )

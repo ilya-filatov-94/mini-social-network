@@ -72,6 +72,8 @@ const Friends: FC = () => {
                   <hr />
                 </div>
                 )}
+                {filteredFriends.length === 0 &&
+                <p>Друзья не найдены</p>}
             </div>
         </div>
     </div>
