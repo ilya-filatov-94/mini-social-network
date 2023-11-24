@@ -177,6 +177,15 @@ class UserController {
         }
     }
 
+    async getActivitiesUsers(request, response, next) {
+        try {
+            const activities = await userService.getActivities();
+            return response.json(activities);
+        } catch (error) {
+            next(error);
+        }
+    }
+
 };
 
 function excludeKeysFromObj(obj={}, keys=[]) {

@@ -20,7 +20,10 @@ export const userApi = createApi({
     endpoints: (builder) => ({
         getUserProfile: builder.query<IUserData, IRequestProfile>({
           query: (data) => ({
-            url: `/user/profile/${data.ref}?id=${data.id}`
+            url: `/user/profile/${data.ref}`,
+            params: {
+              id: data.id
+            }
           }),
           extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
@@ -45,14 +48,20 @@ export const userApi = createApi({
         }),
         getFollowers: builder.query<IFollower[], number>({
           query: (id) => ({
-            url: `/user/followers?id=${id}`,
+            url: `/user/followers`,
+            params: {
+              id: id
+            }
           }),
           extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
         }),
         getAllUsers: builder.query<IListUsers[], number>({
           query: (id) => ({
-            url: `/user/all?cur_user=${id}`,
+            url: `/user/all`,
+            params: {
+              cur_user: id
+            }
           }),
           extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
@@ -76,7 +85,10 @@ export const userApi = createApi({
         }),
         getPossibleFriends: builder.query<IPossibleFriend[], number>({
           query: (id) => ({
-            url: `/user/suggestions?id=${id}`,
+            url: `/user/suggestions`,
+            params: {
+              id: id
+            }
           }),
           extraOptions: { maxRetries: 5 },
           keepUnusedDataFor: 60,
@@ -84,7 +96,11 @@ export const userApi = createApi({
         }),
         getMutualFriends: builder.query<IPossibleFriend[], IRequestMutualFriend>({
           query: (data) => ({
-            url: `/user/common?id=${data.id}&pos_id=${data.pos_id}`,
+            url: `/user/common`,
+            params: {
+              id: data.id,
+              pos_id: data.pos_id
+            }
           }),
           extraOptions: { maxRetries: 5 },
           keepUnusedDataFor: 60,

@@ -1,4 +1,4 @@
-const {User, Relationship} = require('../models/models');
+const {User, Relationship, Activity} = require('../models/models');
 const GraphUsers = require('../helpers/graphUsers');
 const ApiError = require('../error/ApiError');
 const tokenService = require('../service/token-service');
@@ -266,6 +266,13 @@ class UserService {
             attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
         });
         return mutualFriendsData;
+    }
+
+    async getActivities() {
+        const activities = await Activity.findAll({
+            order: [['createdAt', 'DESC']],
+        });
+        return activities;
     }
 }
 
