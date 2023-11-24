@@ -30,7 +30,7 @@ const PopupStories: FC<IPopupStoriesProps> = memo(({
 }) => {
 
   const [filled, setFilled] = useState<number>(0);
-  const timeout = useRef<any>();
+  const timeout = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
     if (isVisible) {

@@ -31,12 +31,12 @@ const Stories: FC = () => {
   const [indexCurrentStory, setIndexStory] = useState<number | undefined>(0);
 
   const isDragStart = useRef<boolean>(false);
-  const currentOffsetXRef = useRef(0);
-  const startXRef = useRef(0);
+  const currentOffsetXRef = useRef<number>(0);
+  const startXRef = useRef<number>(0);
   const [offsetX, setOffsetX, offsetXRef] = useStateRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const itemRef = useRef<HTMLDivElement>(null);
-  const minOffsetXRef = useRef(0);
+  const minOffsetXRef = useRef<number>(0);
   const {isMobile} = useMatchMedia();
 
   const {data: stories, error, isLoading} = useGetAllStoriesQuery(currentUser.id);
