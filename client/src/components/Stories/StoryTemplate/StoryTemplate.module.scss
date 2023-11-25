@@ -22,8 +22,16 @@
 
     .imgStory {
         height: 100%;
-        width: 100%;
+        width: 150px;
         object-fit: cover;
+
+        @include tablet {
+            width: 130px;
+        }
+
+        @include mobile {
+            width: 100%;
+        }
     }
 
     .nameUser {

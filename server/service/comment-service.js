@@ -1,5 +1,5 @@
 const {Comment, User, Post} = require('../models/models');
-const formatRelativeDate = require('../helpers/dateFormatting');
+
 
 
 class CommentService {
@@ -14,8 +14,7 @@ class CommentService {
     comment.dataValues.username = user.username;
     comment.dataValues.refUser = user.refUser;
     comment.dataValues.profilePic = user.profilePic;
-    let date = new Date(Date.parse(comment.dataValues.createdAt));
-    comment.dataValues.date = formatRelativeDate(date);
+    comment.dataValues.date = comment.dataValues.createdAt;
 
     const post = await Post.findOne({where: {id: id_post}})
     await Post.update({ counterComments: parseInt(post.counterComments)+1}, {
@@ -40,7 +39,7 @@ class CommentService {
     const idUsers = comments.map(item => item.dataValues.userId);
     const users = await User.findAll({
       where: { id: idUsers},
-      attributes: ['id', 'username', 'refUser', 'profilePic']
+      attributes: ['id', 'username', 'refUser', 'profilePic', 'createdAt']
     });
     getFullDataComments(users, comments);
     return comments;
@@ -62,7 +61,6 @@ function getFullDataComments(users, comments) {
   const obj = {};
   let key;
   let item;
-  let date;
   for (let i = 0; i < users.length; i++) {
     key = users[i].dataValues.id;
     obj[key] = users[i].dataValues;
@@ -71,8 +69,7 @@ function getFullDataComments(users, comments) {
     key = comments[i].dataValues.userId;
     item = comments[i].dataValues;
     if (obj[key]) {
-      date = new Date(Date.parse(item.createdAt));
-      item.date = formatRelativeDate(date);
+      item.date = item.createdAt;
       item.username = obj[key].username;
       item.refUser = obj[key].refUser;
       item.profilePic = obj[key].profilePic;

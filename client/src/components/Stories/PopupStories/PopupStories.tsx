@@ -11,7 +11,8 @@ import Portal from '../../../hoc/Portal';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import {IStory} from '../../../types/story';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
-import {urlAPIimages} from '../../../env_variables'; 
+import {urlAPIimages} from '../../../env_variables';
+import {getRelativeTimeString} from '../../../helpers/dateTimeFormatting';
 
 interface IPopupStoriesProps {
   isVisible: boolean; 
@@ -116,7 +117,9 @@ const Content: FC<IPopupStoriesContentProps> = memo(({
             alt={`avatar of ${stories[indexStory! - 1].username}`}
           />
           <p>{stories[indexStory! - 1].username}</p>
-          <p className={styles.date}>{stories[indexStory! - 1].date}</p>
+          <p className={styles.date}>
+            {getRelativeTimeString(new Date(stories[indexStory! - 1].date!), 'ru')}
+          </p>
         </div>
         <CloseOutlinedIcon onClick={closePopup} className={styles.closeBtn} />
       </div>}

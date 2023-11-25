@@ -16,6 +16,7 @@ import {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react";
 import MenuComment from '../MenuComment/MenuComment';
+import {getRelativeTimeString} from '../../../helpers/dateTimeFormatting';
 
 
 interface IContentPostProps {
@@ -124,7 +125,9 @@ const Comments: FC<IContentPostProps> = ({
                         >
                         <span>{comment.username}</span>
                         </Link>
-                        <span className={styles.date}>{comment.date}</span>
+                        <span className={styles.date}>
+                          {getRelativeTimeString(new Date(comment.date), 'ru')}
+                        </span>
                     </div>
                     <p className={styles.commDesc}>{comment.desc}</p>
                 </div>

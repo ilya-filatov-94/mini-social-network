@@ -1,5 +1,5 @@
 const {Story, User} = require('../models/models');
-const { Op } = require("sequelize");
+// const { Op } = require("sequelize");
 
 
 
@@ -56,7 +56,6 @@ function getFullDataStories(users, stories, userId, indexesToDelete) {
   const newArrStories = [];
   let key;
   let item;
-  let date;
   for (let i = 0; i < users.length; i++) {
     key = users[i].dataValues.id;
     obj[key] = users[i].dataValues;
@@ -65,8 +64,7 @@ function getFullDataStories(users, stories, userId, indexesToDelete) {
     key = stories[i].dataValues.userId;
     item = stories[i].dataValues;
     if (obj[key]) {
-      date = new Date(Date.parse(item.createdAt));
-      item.date = formatAndCheckDate(date, () => indexesToDelete.push(item.id));
+      item.date = formatAndCheckDate(item.createdAt, () => indexesToDelete.push(item.id));
       item.username = obj[key].username;
       item.refUser = obj[key].refUser;
       item.profilePic = obj[key].profilePic;
@@ -80,33 +78,19 @@ function getFullDataStories(users, stories, userId, indexesToDelete) {
       }
     }
   }
-  return newArrStories;
+  return newArrStories.length ? newArrStories : stories;
 }
 
 function formatAndCheckDate(inputDate, callback) {
-  let diff = new Date() - inputDate;
-
-  if (diff < 1000) {
-    return "прямо сейчас";
-  }
-
-  let sec = Math.floor(diff / 1000);
-  if (sec < 60) {
-    return sec + " сек. назад";
-  }
-
-  let min = Math.floor(diff / 60000);
-  if (min < 60) {
-    return min + " мин. назад";
-  }
-
-  let hours = Math.floor(diff / (3600*1000));
-  if (hours === 1) return hours + " час назад";
-  if (hours <= 4 && hours >= 2) return hours + " часа назад";
-  if (hours >= 24) {
+  const createdDate = new Date(Date.parse(inputDate)).getTime();
+  const deltaSeconds = Math.floor((createdDate - Date.now())/1000);
+  const offsetTime = [60, 3600, 86400, 86400*7, 86400*30, 86400*365, Infinity];
+  const unitIndex = offsetTime.findIndex(offsetTime => offsetTime >= Math.abs(deltaSeconds));
+  if (unitIndex >= 4) {
     callback();
+  } else {
+    return inputDate;
   }
-  if (hours > 5) return hours + " часов назад";
 }
 
 

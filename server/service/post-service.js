@@ -1,5 +1,4 @@
 const {Post, User, Like} = require('../models/models');
-const formatRelativeDate = require('../helpers/dateFormatting');
 
 
 
@@ -33,8 +32,7 @@ class PostService {
     });
     for (let item of posts) {
       let post = item.dataValues;
-      let date = new Date(Date.parse(post.createdAt));
-      post.date = formatRelativeDate(date);
+      post.date = post.createdAt;
       post.username = users.dataValues.username;
       post.refUser = users.dataValues.refUser;
       post.profilePic = users.dataValues.profilePic;
@@ -60,8 +58,7 @@ class PostService {
 
     for (let item of posts) {
       let post = item.dataValues;
-      let date = new Date(Date.parse(post.createdAt));
-      post.date = formatRelativeDate(date);
+      post.date = post.updatedAt;
       post.username = users.dataValues.username;
       post.refUser = users.dataValues.refUser;
       post.profilePic = users.dataValues.profilePic;

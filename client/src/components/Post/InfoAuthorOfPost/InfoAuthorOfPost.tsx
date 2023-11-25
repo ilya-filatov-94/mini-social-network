@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
 import {urlAPIimages} from '../../../env_variables';
 import MenuPost from '../MenuPost/MenuPost';
+import {getRelativeTimeString} from '../../../helpers/dateTimeFormatting';
 
 interface IPostsProps {
   post: IPostData;
@@ -45,7 +46,7 @@ const InfoAuthorOfPost: FC<IPostsProps> = ({
             replace={true}>
             <span className={styles.username}>{post.username}</span>
           </Link>
-          <span className={styles.date}>{post.date}</span>
+          <span className={styles.date}>{getRelativeTimeString(new Date(post.date!), 'ru')}</span>
         </div>
       </div>
       {currentUser && 

@@ -43,11 +43,10 @@ const Stories: FC = () => {
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   useEffect(() => {  
-    if (stories?.length) {
-      const hasStory = stories[0].userId === currentUser.id 
-      && stories[0].image !== '';
-      if (hasStory) {
-        setStoryCurrentUser(urlAPIimages + stories[0].image as string);
+    if (stories?.length) { 
+      const hasStoryCurUser = stories.filter(item => item.userId === currentUser.id);   
+      if (hasStoryCurUser.length) {
+        setStoryCurrentUser(urlAPIimages + hasStoryCurUser[0].image as string);
       }
     }
   }, [stories, currentUser.id]);
