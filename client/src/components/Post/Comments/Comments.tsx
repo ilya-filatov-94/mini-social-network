@@ -43,10 +43,10 @@ const Comments: FC<IContentPostProps> = ({
 
   async function handleSendComment() {
     if (textareaRef.current) {
-        let textPost = textareaRef.current.value;
-        if (!textPost) return;
-        await addComment({userId, postId, desc: textPost}).unwrap();
-        updateCommentCounter(prev => prev + 1);
+      let textPost = textareaRef.current.value;
+      if (!textPost) return;
+      await addComment({userId, postId, desc: textPost}).unwrap();
+      updateCommentCounter(prev => prev + 1);
     }
   }
 

@@ -28,6 +28,27 @@ const ContentPost: FC<IContentPostProps> = ({
     rootStyles.push(styles.hideTopMargin);
   }
 
+  function declensionOfComment(number: number) {
+    let word = 'Комментари';
+    const remainderOfdivision = number % 10;
+    if (number === 0 || number === 11) {
+      return number + ' ' + word + 'ев'
+    }
+    if (remainderOfdivision === 1 || number === 1) {
+      return number + ' ' + word + 'й'
+    }
+    if (number !== 12 && number !== 13 && number !== 14 &&
+        (remainderOfdivision === 2 ||
+        remainderOfdivision === 3 ||
+        remainderOfdivision === 4)) {
+          return number + ' ' + word + 'я'
+    } else {
+      return number + ' ' + word + 'ев'
+    }
+  }
+
+  const labelComments = declensionOfComment(numberOfComments);
+
   return (
     <>
       <div className={rootStyles.join(' ')}>
@@ -49,11 +70,7 @@ const ContentPost: FC<IContentPostProps> = ({
           <TextsmsOutlinedIcon />
           <span className={styles.mobileInfo}>{numberOfComments}</span>
           <span className={styles.commInfo}>
-            {numberOfComments === 1
-              ? `${numberOfComments} Комменатрий`
-              : numberOfComments > 1 && numberOfComments < 5
-              ? `${numberOfComments} Комментария`
-              : `${numberOfComments} Комментариев`}
+            {labelComments}
           </span>
         </div>
         <div className={styles.item}>
