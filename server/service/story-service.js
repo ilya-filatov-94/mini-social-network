@@ -86,11 +86,10 @@ function formatAndCheckDate(inputDate, callback) {
   const deltaSeconds = Math.floor((createdDate - Date.now())/1000);
   const offsetTime = [60, 3600, 86400, 86400*7, 86400*30, 86400*365, Infinity];
   const unitIndex = offsetTime.findIndex(offsetTime => offsetTime >= Math.abs(deltaSeconds));
-  if (unitIndex >= 4) {
+  if (unitIndex >= 2) {
     callback();
-  } else {
-    return inputDate;
   }
+  return inputDate;
 }
 
 
