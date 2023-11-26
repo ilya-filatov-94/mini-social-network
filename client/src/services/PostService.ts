@@ -20,7 +20,6 @@ export const postApi = createApi({
           providesTags: (result) => result
           ? [...result.map(({ id }) => ({ type: 'Posts' as const, id })), 'Posts']
           : ['Posts'],
-          extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
         }),
         addPost: builder.mutation<IPostData, FormData>({
@@ -30,7 +29,6 @@ export const postApi = createApi({
             body: data
           }),
           invalidatesTags: ['Posts'],
-          extraOptions: { maxRetries: 3 },
         }),
         updatePost: builder.mutation<IPostData, FormData>({
           query: (data) => ({
@@ -39,7 +37,6 @@ export const postApi = createApi({
             body: data
           }),
           invalidatesTags: ['Posts'],
-          extraOptions: { maxRetries: 3 },
         }),
         deletePost: builder.mutation<number, number>({
           query: (data) => ({
@@ -48,7 +45,6 @@ export const postApi = createApi({
             body: {id: data}
           }),
           invalidatesTags: ['Posts'],
-          extraOptions: { maxRetries: 3 },
         }),
         getLikes: builder.query<ILikes[], number>({
           query: (postId) => ({
@@ -57,7 +53,7 @@ export const postApi = createApi({
               post_id: postId
             }
           }),
-          extraOptions: { maxRetries: 3 },
+          keepUnusedDataFor: 60,
         }),
         addLike: builder.mutation<ILikes, ILikes>({
           query: (data) => ({
@@ -65,7 +61,6 @@ export const postApi = createApi({
             method: 'PATCH',
             body: data
           }),
-          extraOptions: { maxRetries: 3 },
         }),
         removeLike: builder.mutation<ILikes, ILikes>({
           query: (data) => ({
@@ -73,7 +68,6 @@ export const postApi = createApi({
             method: 'DELETE',
             body: data
           }),
-          extraOptions: { maxRetries: 3 },
         }),
     })
 });

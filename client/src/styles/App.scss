@@ -1,8 +1,11 @@
 @import '../assets/fonts/fonts.css';
 
+
 *,
 *:before,
-*:after {
+*:after,
+html,
+body {
     margin: 0;
     padding: 0;
     border: 0;

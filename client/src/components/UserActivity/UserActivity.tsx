@@ -12,9 +12,10 @@ const UserActivity: FC = () => {
         : `${styles.container} ${styles['theme-light']}`
         }>
         <div className={styles.wrapper}>
-            <h2 className={styles.header}>Новости</h2>
-            <hr />
-            <p>Новостей пока нет</p>
+            <h2 className={styles.header}>Активность друзей</h2>
+        </div>
+        <div className={styles.wrapper}>
+          <p>Активности отсутствуют</p>
         </div>
     </div>
   )

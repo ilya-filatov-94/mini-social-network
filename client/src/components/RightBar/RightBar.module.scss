@@ -9,6 +9,7 @@
     top: $heightNav;
     height: calc(100vh - $topBar);
     overflow-y: scroll;
+    height: 100vh;
 
     @include mobile {
         display: none;

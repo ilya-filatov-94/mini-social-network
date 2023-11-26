@@ -22,7 +22,6 @@ export const commentApi = createApi({
           providesTags: (result) => result
           ? [...result.map(({ id }) => ({ type: 'Comments' as const, id })), 'Comments']
           : ['Comments'],
-          extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
         }),
         addComment: builder.mutation<IComments, ICommentReq>({
@@ -32,7 +31,6 @@ export const commentApi = createApi({
             body: data
           }),
           invalidatesTags: ['Comments'],
-          extraOptions: { maxRetries: 3 },
         }),
         deleteComment: builder.mutation<number, ICommentReq>({
           query: (data) => ({
@@ -44,7 +42,6 @@ export const commentApi = createApi({
             }
           }),
           invalidatesTags: ['Comments'],
-          extraOptions: { maxRetries: 3 },
         }),
     })
 });

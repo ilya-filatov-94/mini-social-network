@@ -20,7 +20,6 @@ export const storyApi = createApi({
           providesTags: (result) => result
           ? [...result.map(({ id }) => ({ type: 'Stories' as const, id })), 'Stories']
           : ['Stories'],
-          extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
         }),
         addStory: builder.mutation<IStoryCreate, FormData>({
@@ -30,7 +29,6 @@ export const storyApi = createApi({
             body: data
           }),
           invalidatesTags: ['Stories'],
-          extraOptions: { maxRetries: 3 },
         }),
     })
 });

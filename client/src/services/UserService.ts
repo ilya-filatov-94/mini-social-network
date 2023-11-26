@@ -25,7 +25,6 @@ export const userApi = createApi({
               id: data.id
             }
           }),
-          extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
           providesTags: ['ProfileData']
         }),
@@ -33,7 +32,6 @@ export const userApi = createApi({
           query: (refUser) => ({
             url: `/user/profile/${refUser}/edit`
           }),
-          extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
           providesTags: ['ProfileData']
         }),
@@ -43,7 +41,6 @@ export const userApi = createApi({
             method: 'PATCH',
             body: data
           }),
-          extraOptions: { maxRetries: 3 },
           invalidatesTags: (result, error) => error ? [] : ['ProfileData']
         }),
         getFollowers: builder.query<IFollower[], number>({
@@ -53,7 +50,6 @@ export const userApi = createApi({
               id: id
             }
           }),
-          extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
         }),
         getAllUsers: builder.query<IListUsers[], number>({
@@ -63,7 +59,6 @@ export const userApi = createApi({
               cur_user: id
             }
           }),
-          extraOptions: { maxRetries: 3 },
           keepUnusedDataFor: 60,
         }),
         subscribeToUser: builder.mutation<IActionSubscribeTo, IActionSubscribeTo>({
@@ -72,7 +67,6 @@ export const userApi = createApi({
             method: 'POST',
             body: data
           }),
-          extraOptions: { maxRetries: 5 },
           invalidatesTags: ['PossibleFriend']
         }),
         unSubscribeToUser: builder.mutation<number, IActionSubscribeTo>({
@@ -81,7 +75,6 @@ export const userApi = createApi({
             method: 'POST',
             body: data
           }),
-          extraOptions: { maxRetries: 5 },
         }),
         getPossibleFriends: builder.query<IPossibleFriend[], number>({
           query: (id) => ({
@@ -90,7 +83,6 @@ export const userApi = createApi({
               id: id
             }
           }),
-          extraOptions: { maxRetries: 5 },
           keepUnusedDataFor: 60,
           providesTags: ['PossibleFriend']
         }),
@@ -102,7 +94,6 @@ export const userApi = createApi({
               pos_id: data.pos_id
             }
           }),
-          extraOptions: { maxRetries: 5 },
           keepUnusedDataFor: 60,
         }),
     })
