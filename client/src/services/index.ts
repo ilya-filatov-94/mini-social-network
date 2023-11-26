@@ -23,6 +23,8 @@ const baseQuery = fetchBaseQuery({
     credentials: "include",
 });
 
+let isRetryRequest = false;
+
 export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
     args,
     api,
@@ -30,7 +32,8 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
 ) => {
     let result = await baseQuery(args, api, extraOptions);
 
-    if (result.error && result.error.status === 401) {       
+    if (result.error && result.error.status === 401 && !isRetryRequest) {    
+        isRetryRequest = true;   
         const refreshResult = await baseQuery({
             url: '/user/refresh/',
             method: 'GET'
@@ -41,10 +44,12 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
             api.dispatch(updateToken(tokens.accessToken as string));
             // повторяем запрос
             result = await baseQuery(args, api, extraOptions);
+            isRetryRequest = false;
         } else {
             const state = api.getState() as RootState;
             const userId = state.reducerAuth.currentUser.id;
             api.dispatch(logoutUser(userId));
+            isRetryRequest = false;
         }
     }
     return result;
