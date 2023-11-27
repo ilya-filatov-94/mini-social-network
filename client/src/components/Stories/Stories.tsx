@@ -16,7 +16,7 @@ import {useMatchMedia} from '../../hooks/useMatchMedia';
 import {useGetAllStoriesQuery} from '../../services/StoryService';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import Loader from '../Loader/Loader';
-import Alert from '@mui/material/Alert';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import {IStory} from '../../types/story';
 import {urlAPIimages} from '../../env_variables';
 
@@ -116,7 +116,12 @@ const Stories: FC = () => {
 
   if (error) {
     if (isFetchBaseQueryErrorType(error)) {
-      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {error.status}</Alert>
+      return (
+        <div className={styles.isErrorLoading}>
+          <div className={styles.MuiAlert}><ErrorOutlineOutlinedIcon/></div>
+          <span>Произошла ошибка при загрузке данных! {error.status}</span>
+        </div>
+      )
     }
   }
 

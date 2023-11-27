@@ -3,16 +3,38 @@
 .user {
     width: 100%;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 20px 0;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 20px;
+
+    &:not(:last-child) {
+        margin-bottom: 20px;
+    }
 
     .activities {
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: row;
-        gap: 10px;
+        gap: 20px;
+    }
+
+    &:not(:last-child) .textActivities {
+        padding-bottom: 10px;
+    }
+
+    &:last-child hr {
+        display: none;
+    }
+
+    &:not(:last-child) hr {
+        display: inline-block;
+        border: none;
+        height: 0.5px;
+        background-color: lightgrey;
+        width: 100%;
     }
 
     &.theme-dark {
@@ -45,6 +67,12 @@
 
 .textClass {
     font-weight: 500;
+}
+
+.emptyActivities {
+    font-weight: 400;
+    font-size: 0.875rem;
+    margin-top: 20px;
 }
 
 .avatar {

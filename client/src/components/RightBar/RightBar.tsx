@@ -5,10 +5,6 @@ import CardOfSuggestionFriend from '../CardOfSuggestionFriend/CardOfSuggestionFr
 import CardOfActivitiesFriend from '../CardOfActivitiesFriend/CardOfActivitiesFriend';
 
 
-import {
-  activitiesOfFriends,
-} from './arraysOfActivities';
-
 
 const RightBar: FC = () => {
 
@@ -27,18 +23,9 @@ const RightBar: FC = () => {
           <CardOfSuggestionFriend idCurUser={currentUser.id}/>
         </div>
 
-        <div className={styles.item}>
+        <div className={`${styles.item} ${styles.activities}`}>
           <span className={styles.headerItem}>Последняя активность</span>
-          {activitiesOfFriends.map(item => 
-            <CardOfActivitiesFriend 
-              key={item.id}
-              name={item.username}
-              refUser={item.refUser}
-              avatar={item.avatar}
-              textEvent={item.textEvent}
-              timeEvent={item.timeEvent}
-            />
-          )}
+          <CardOfActivitiesFriend />
         </div>
 
       </div>

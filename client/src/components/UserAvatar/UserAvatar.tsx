@@ -3,6 +3,7 @@ import styles from './UserAvatar.module.scss';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import { Link } from 'react-router-dom';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import {urlAPIimages} from '../../env_variables';
 
 
 interface IUserAvatarProps {
@@ -44,7 +45,7 @@ const UserAvatar: FC<IUserAvatarProps> = ({
       :   styles.userAvatar
       }>
       <img 
-        src={avatar ? avatar : noAvatar} 
+        src={avatar ? urlAPIimages + avatar : noAvatar} 
         alt={`${name} user`} 
         className={addClass}
       />

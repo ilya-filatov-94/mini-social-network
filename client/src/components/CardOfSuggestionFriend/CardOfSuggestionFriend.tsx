@@ -59,7 +59,7 @@ const CardOfSuggestionFriend: FC<ISuggestionProps> = ({
     }
   }
 
-  if (possibleFriends?.length === 0) {
+  if (!possibleFriends || possibleFriends?.length === 0) {
     return <p className={styles.textOfCard}>Нет предложений</p>
   }
 

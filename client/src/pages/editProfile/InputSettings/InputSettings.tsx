@@ -53,10 +53,10 @@ const InputSettings: FC<ISpreadingInputProps> = memo(({
 
   function checkError() {
     if (refInut.current && validations) {
-      const error = getErrorMessage(refInut.current.value, validations) || '';
-      if (!error) {
-        setError(error);
-        setValueinForm(refInut, error || '');
+      const hasNotErrorMsg = getErrorMessage(refInut.current.value, validations) || '';
+      if (!hasNotErrorMsg) {
+        setError(hasNotErrorMsg);
+        setValueinForm(refInut, hasNotErrorMsg || '');
       }
     }
   }
