@@ -10,6 +10,7 @@ import {
 import styles from './EditProfile.module.scss';
 import {useParams} from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import {RootState} from '../../store';
 import {useGetUserDataQuery, useUpdateUserDataMutation} from '../../services/UserService';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {useAppDispatch} from '../../hooks/useTypedRedux';
@@ -28,6 +29,7 @@ import {urlAPIimages} from '../../env_variables';
 type TPreviewImg = string | ArrayBuffer | null;
 
 const EditProfile: FC = () => {
+  const currentTheme = useAppSelector((state: RootState) => state.reducerTheme.themeMode);
   const {ref} = useParams();
   const newRefUser = useRef(ref);
   const {data: userData, error: errorLoading, isLoading: isLoadingData} = useGetUserDataQuery(
@@ -36,7 +38,6 @@ const EditProfile: FC = () => {
   const [updateUserData, 
     {isLoading: isLoadingUpdate, error: errorUpdate, isSuccess}] = useUpdateUserDataMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const [selectedAvatar, setSelectedAvatar] = useState<File>();
   const [previewAvatar, setPreviewAvatar] = useState<TPreviewImg>();
   const [selectedCover, setSelectedCover] = useState<File>();
