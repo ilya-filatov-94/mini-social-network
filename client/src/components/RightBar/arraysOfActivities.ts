@@ -1,4 +1,4 @@
-
+import mockImage from '../../assets/images/bg-for-registration.jpeg';
 
 const users = [
     {
@@ -34,24 +34,32 @@ export const activitiesOfFriends = [
         ...users[0],
         type: "updatedAvatar",
         desc: "Обновил фотографию профиля",
+        content: "",
+        image: '',
         createdAt: "2023-11-25T17:29:46.304Z"
     },
     {
         ...users[1],
         type: "addedComment",
         desc: "Пользователь1 прокомментировал пост Пользователя2",
+        content: "Новый коммент",
+        image: mockImage,
         createdAt: "2023-11-27T19:09:46.304Z"
     },
     {
         ...users[2],
         type: "addedPost",
         desc: "Создал новый пост",
+        content: "Новый пост",
+        image: mockImage,
         createdAt: "2023-11-27T17:29:46.304Z"
     },
     {
         ...users[3],
         type: "addedStory",
         desc: "Добавил новую историю",
+        content: "",
+        image: mockImage,
         createdAt: "2023-11-27T19:12:46.304Z"
     }
 ];

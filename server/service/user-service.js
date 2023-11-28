@@ -166,7 +166,7 @@ class UserService {
 
     async updateUser(id, email, password, username, city, website, profileImg, coverImg) {
         if (!id) return {};
-        let newEmail, newPassword, newUsername, newCity, newWebsite;
+        let newEmail, newPassword, newUsername, newCity, newWebsite, newProfileImg, newCoverImg;
         const user = await User.findOne(
             {
                 where: {id: id},
@@ -182,6 +182,13 @@ class UserService {
         }
         newCity = city || user.dataValues.city;
         newWebsite = website || user.dataValues.website;
+        newProfileImg = profileImg || user.dataValues.profilePic;
+        newCoverImg = coverImg || user.dataValues.coverPic;
+        if (profileImg) {
+            let type = 'updatedAvatar';
+            let desc = `${user.dataValues.username} обновил/а фото профиля`;
+            await this.createActivity(parseInt(id), type, desc, '', profileImg);
+        }
         if (password) {
             newPassword = await bcrypt.hash(password, 5);
             const newDataUser = await User.update({ 
@@ -191,8 +198,8 @@ class UserService {
                 password: newPassword,
                 city: newCity,
                 website: newWebsite,
-                profilePic: profileImg,
-                coverPic: coverImg,
+                profilePic: newProfileImg,
+                coverPic: newCoverImg,
             }, {where: {id: id}});
             return newDataUser;
         }
@@ -202,8 +209,8 @@ class UserService {
             username: newUsername,
             city: newCity,
             website: newWebsite,
-            profilePic: profileImg,
-            coverPic: coverImg,
+            profilePic: newProfileImg,
+            coverPic: newCoverImg,
         }, {where: {id: id}});
     }
 
@@ -272,7 +279,42 @@ class UserService {
         const activities = await Activity.findAll({
             order: [['createdAt', 'DESC']],
         });
+        const idUsers = activities.map(item => item.dataValues.userId);
+        const users = await User.findAll({
+            where: { id: idUsers},
+            attributes: ['id', 'username', 'refUser', 'profilePic']
+        });
+        getFullDataActivities(users, activities);
         return activities;
+    }
+
+    async createActivity(userId, type, desc, text='', image='') {
+        const activity = await Activity.create({
+            userId: userId,
+            type: type,
+            desc: desc,
+            text: text,
+            image: image,
+        });
+        return activity;
+    }
+}
+
+function getFullDataActivities(users, activities) {
+    if (activities.length === 0) return;
+    const obj = {};
+    let key;
+    for (let i = 0; i < users.length; i++) {
+        key = users[i].dataValues.id;
+        obj[key] = users[i].dataValues;
+    }
+    for (let i = 0; i < activities.length; i++) {
+        key = activities[i].dataValues.userId;
+        if (obj[key]) {
+            activities[i].dataValues.username = obj[key].username;
+            activities[i].dataValues.profilePic = obj[key].profilePic;
+            activities[i].dataValues.refUser = obj[key].refUser;
+        }
     }
 }
 

@@ -7,8 +7,7 @@
     position: sticky;
     top: $heightNav;
     height: calc(100vh - $topBar);
-    overflow-y: scroll;
-    height: 100vh;
+    overflow-y: hidden;
 
     @include mobile {
         display: none;

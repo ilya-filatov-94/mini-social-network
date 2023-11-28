@@ -44,9 +44,10 @@ const Like = sequelize.define('like', {
 
 const Activity = sequelize.define('activity', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    desc: {type: DataTypes.STRING, allowNull: false},
+    type: {type: DataTypes.STRING, allowNull: false},
+    desc: {type: DataTypes.STRING},
+    text: {type: DataTypes.STRING},
     image: {type: DataTypes.STRING},
-    type: {type: DataTypes.STRING},
 });
 
 const Relationship = sequelize.define('relationship', {

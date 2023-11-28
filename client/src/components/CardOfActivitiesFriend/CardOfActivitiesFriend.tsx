@@ -7,8 +7,6 @@ import {
   activitiesOfFriends,
 } from '../RightBar/arraysOfActivities';
 
-// '2023-11-25T17:29:46.304Z'
-
 
 const CardOfActivitiesFriend: FC = ()  => {
 

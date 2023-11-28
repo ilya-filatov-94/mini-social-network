@@ -18,16 +18,13 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 
 
-
 const Navbar: FC = () => {
 
   const {isMobile} = useMatchMedia();
-
   const navigate = useNavigate();
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
   const dispatch = useAppDispatch();
-
   const [menuIsOpen, openMenu] = useState<boolean>(false);
 
   function handlerSwitchTheme() {

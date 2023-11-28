@@ -4,7 +4,8 @@ import {
   useRef,
   MutableRefObject,
   FormEventHandler,
-  ChangeEvent
+  ChangeEvent,
+  useEffect
 } from 'react';
 import styles from './EditProfile.module.scss';
 import {useParams} from "react-router-dom";
@@ -21,6 +22,7 @@ import LoadingButton from '../../components/LoadingButton/LoadingButton';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import {inputs} from './editUserInputs';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import {urlAPIimages} from '../../env_variables';
 
 
 type TPreviewImg = string | ArrayBuffer | null;
@@ -42,6 +44,37 @@ const EditProfile: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (userData?.profilePic) {
+      dispatch(updateUser({
+        profilePic: userData?.profilePic
+      }));
+    }
+  // eslint-disable-next-line
+  }, [userData]);
+
+  const getPreviewOfSelectedImages = () => {
+    const previewOfSelectedImages = {avatar: '', cover: ''};
+    if (previewAvatar) {
+      previewOfSelectedImages.avatar = previewAvatar as string;
+    }
+    if (!previewAvatar && userData?.profilePic) {
+      previewOfSelectedImages.avatar = urlAPIimages + userData?.profilePic;
+    }
+    if (!previewAvatar && !userData?.profilePic) {
+      previewOfSelectedImages.avatar = noAvatar;
+    }
+    
+    if (previewCover) {
+      previewOfSelectedImages.cover = previewCover as string;
+    }
+    if (!previewCover && userData?.coverPic) {
+      previewOfSelectedImages.cover = urlAPIimages + userData?.coverPic;
+    }
+    return previewOfSelectedImages;
+  }
+  const previewSelectedImages = getPreviewOfSelectedImages();
+  
   const [newUserData, setNewUserData] = useState({
     name: '',
     lastname: '',
@@ -102,14 +135,14 @@ const EditProfile: FC = () => {
 
     const emptyNewData = Object.entries(newUserData)
       .every(item => item[1] === '')
-      && !(selectedAvatar && selectedCover);
+      && !selectedAvatar && !selectedCover;
     
     if (emptyNewData) return;
     await updateUserData(formData);
     if (newRef) {
       dispatch(updateUser({
         username: newUsername,
-        refUser: newRef!
+        refUser: newRef
       }));
       newRefUser.current = newRef;
       navigate(`/profile/${newRefUser.current}/edit`, {replace: true});
@@ -172,7 +205,7 @@ const EditProfile: FC = () => {
                 <div className={styles.fieldImg}>
                     <img 
                         className={styles.preview} 
-                        src={previewAvatar ? previewAvatar : noAvatar}
+                        src={previewSelectedImages.avatar}
                         alt={`avatar of ${userData?.name}`} 
                     />
                     <div className={styles.wrapperFileInput}>
@@ -192,10 +225,10 @@ const EditProfile: FC = () => {
                     </div>
                 </div>
                 <div className={styles.fieldImg}>
-                    {previewCover 
+                    {previewSelectedImages.cover 
                     ? <img
                         className={styles.previewCover}
-                        src={previewCover as string}
+                        src={previewSelectedImages.cover}
                         alt={`coverImage of ${userData.name}`}
                       />
                     : <div className={styles.bgNonCover}/>

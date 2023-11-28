@@ -6,5 +6,6 @@ export interface IActivityOfUser {
     createdAt: string;
     type: string;
     desc: string;
+    content?: string;
     image?: string | undefined,
 }

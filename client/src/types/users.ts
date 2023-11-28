@@ -14,8 +14,9 @@ export interface IUserFullData {
 }
 
 export interface IUpdateData {
-    username: string;
-    refUser: string;
+    username?: string;
+    refUser?: string;
+    profilePic?: string;
 }
 
 export interface IUser {

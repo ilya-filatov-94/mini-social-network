@@ -94,16 +94,18 @@ class UserController {
             let coverImg = '';
             let typeImage;
             if (request.files) {
-                const {profilePic, coverPic} = request.files;
-                if (profilePic) {
+                const dataFiles = request.files;
+                if (dataFiles?.profilePic) {
+                    const profilePic = dataFiles.profilePic;
                     typeImage = profilePic.mimetype.replace('image/', '');
                     profileImg = uuid.v4() + '.' + typeImage;
-                    image.mv(path.resolve(__dirname, '..', 'static', profileImg));
+                    profilePic.mv(path.resolve(__dirname, '..', 'static', profileImg));
                 }
-                if (coverPic) {
+                if (dataFiles?.coverPic) {
+                    const coverPic = dataFiles.coverPic;
                     typeImage = coverPic.mimetype.replace('image/', '');
                     coverImg = uuid.v4() + '.' + typeImage;
-                    image.mv(path.resolve(__dirname, '..', 'static', coverImg));
+                    coverPic.mv(path.resolve(__dirname, '..', 'static', coverImg));
                 }
             }
             const user = await userService.updateUser(parseInt(id), 
@@ -181,6 +183,16 @@ class UserController {
         try {
             const activities = await userService.getActivities();
             return response.json(activities);
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async createActivityUser(request, response, next) {
+        try {
+            const {userId, type, desc, text, image} = request.body;
+            const activity = await userService.createActivity(parseInt(userId), type, desc, text, image);
+            return response.json(activity);
         } catch (error) {
             next(error);
         }

@@ -153,8 +153,13 @@ const authSlice = createSlice({
             state.accessToken = action.payload;
         },
         updateUser(state, action: PayloadAction<IUpdateData>) {
-            state.currentUser.username = action.payload.username;
-            state.currentUser.refUser = action.payload.refUser;
+            if (action.payload.username && action.payload.refUser) {
+                state.currentUser.username = action.payload.username;
+                state.currentUser.refUser = action.payload.refUser;
+            }
+            if (action.payload.profilePic) {
+                state.currentUser.profilePic = action.payload.profilePic;
+            }
         }
     },
     extraReducers: (builder) => {

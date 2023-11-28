@@ -8,9 +8,9 @@ import Gaming from '../../../assets/images/Gaming.png';
 import Gallery from '../../../assets/images/Gallery.png';
 import Videos from '../../../assets/images/Videos.png';
 import Messages from '../../../assets/images/Messages.png';
-import Tutorials from '../../../assets/images/Tutorials.png';
 import Courses from '../../../assets/images/Courses.png';
-import Fund from '../../../assets/images/Fund.png';
+// import Tutorials from '../../../assets/images/Tutorials.png';
+// import Fund from '../../../assets/images/Fund.png';
 import {IMenu} from '../../../types/menu';
 
 
@@ -87,21 +87,21 @@ export const shortcutsMenuIcons: IMenu[] = [
 export const otherMenuIcons: IMenu[] = [
     {
         id: 11,
-        name: 'Обучение',
-        image: Tutorials,
-        menuRef: '/tutorials'
-    },
-    {
-        id: 12,
         name: 'Курсы',
         image: Courses,
         menuRef: '/courses'
     },
-    {
-        id: 13,
-        name: 'Пожертвования',
-        image: Fund,
-        menuRef: '/fund'
-    },
+    // {
+    //     id: 12,
+    //     name: 'Обучение',
+    //     image: Tutorials,
+    //     menuRef: '/tutorials'
+    // },
+    // {
+    //     id: 13,
+    //     name: 'Пожертвования',
+    //     image: Fund,
+    //     menuRef: '/fund'
+    // },
 ];
 
