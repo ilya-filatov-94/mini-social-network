@@ -4,6 +4,7 @@ import axios from 'axios';
 import jwt_decode from "jwt-decode";
 
 import {
+    IinitialUser,
     IRegState, 
     IAuthState, 
     IAccessToken, 
@@ -12,7 +13,6 @@ import {
     IResponseLogout
 } from '../types/authReducer';
 import {IUpdateData} from '../types/users';
-import {initialStateUser} from './initialStore';
 import {API_URL} from '../env_variables';
 
 
@@ -22,6 +22,13 @@ extends IAuthState {
     error: string | null;
 }
 
+const initialStateUser: IinitialUser = {
+    id: 1,
+    username: "",
+    refUser: "",
+    profilePic: "",
+};
+
 const initialState: IAsyncAuthState = {
     isAuth: false,
     currentUser: initialStateUser,
@@ -29,7 +36,6 @@ const initialState: IAsyncAuthState = {
     status: '',
     error: null
 }
-
 
 export const registerUser = createAsyncThunk<IResponse, IRegState, {rejectValue: string, dispatch: AppDispatch}>(
     'authService/registerUser',
