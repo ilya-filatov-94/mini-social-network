@@ -186,7 +186,7 @@ class UserService {
         newCoverImg = coverImg || user.dataValues.coverPic;
         if (profileImg) {
             let type = 'updatedAvatar';
-            let desc = `${user.dataValues.username} обновил/а фото профиля`;
+            let desc = `Обновил(а) фото профиля`;
             await this.createActivity(parseInt(id), type, desc, '', profileImg);
         }
         if (password) {

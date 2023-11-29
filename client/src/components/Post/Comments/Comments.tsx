@@ -3,6 +3,7 @@ import styles from './Comments.module.scss';
 import {useAppSelector} from '../../../hooks/useTypedRedux';
 import {Link} from 'react-router-dom';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
+import {urlAPIimages} from '../../../env_variables';
 // import { ReactComponent as SendArrow} from '../../../assets/images/right_arrow.svg';
 import {IComments} from '../../../types/comments';
 import {
@@ -12,9 +13,7 @@ import {
 } from '../../../services/CommentService';
 import Loader from '../../Loader/Loader';
 import Alert from '@mui/material/Alert';
-import { 
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react";
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import MenuComment from '../MenuComment/MenuComment';
 import {getRelativeTimeString} from '../../../helpers/dateTimeFormatting';
 
@@ -91,7 +90,7 @@ const Comments: FC<IContentPostProps> = ({
         <div className={styles.writeComment}>
             <img 
                 className={styles.iconUser}
-                src={curUser.profilePic ? curUser.profilePic : noAvatar} 
+                src={curUser.profilePic ? (urlAPIimages + curUser.profilePic) : noAvatar} 
                 alt={`user ${curUser.username}`} 
             />
             <textarea
@@ -111,7 +110,7 @@ const Comments: FC<IContentPostProps> = ({
             <div className={styles.comment} key={comment.id}>
                 <img 
                     className={styles.iconUser}
-                    src={comment.profilePic ? comment.profilePic : noAvatar}
+                    src={comment.profilePic ? (urlAPIimages + comment.profilePic) : noAvatar}
                     alt={`description comment ${comment.id}`} 
                 />
                 <div className={styles.info}>

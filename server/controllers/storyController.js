@@ -2,6 +2,7 @@ const StoryService = require('../service/story-service');
 const uuid = require('uuid');
 const path = require('path');
 const ApiError = require('../error/ApiError');
+const userService = require('../service/user-service');
 
 
 class StoryController {
@@ -14,6 +15,8 @@ class StoryController {
                 let fileName = uuid.v4() + '.' + typeImage;
                 image.mv(path.resolve(__dirname, '..', 'static', fileName));
                 const story = await StoryService.createNewStory(parseInt(userId), fileName);
+                //Новая активность
+                await createUserActivity(userId, fileName, story.dataValues.id);
                 return response.json(story);
             }
             return next(ApiError.forbidden('Ошибка при загрузке story', errors.array()));
@@ -28,7 +31,6 @@ class StoryController {
             const stories = await StoryService.getAllStories(parseInt(id));
             const storiesData = excludeKeysFromArrObj(stories, ['createdAt', 'updatedAt']);
             return response.json(storiesData);
-            // return response.json(stories);
         } catch (error) {
             next(error);
         }
@@ -51,6 +53,12 @@ function excludeKeysFromArrObj(arr=[], keys=[]) {
             .filter(item => !keys.includes(item[0]))));
 }
 
-
+async function createUserActivity(userId, image, idActivity) {
+    console.log('Id добавленной истории', idActivity);
+    let id = parseInt(userId);
+    let typeNewActivity = 'addedStory';
+    let descActivity = 'Добавил(а) историю';
+    await userService.createActivity(id, typeNewActivity, descActivity, '', image);
+}
 
 module.exports = new StoryController();

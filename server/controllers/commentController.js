@@ -1,5 +1,5 @@
 const CommentService = require('../service/comment-service');
-
+const userService = require('../service/user-service');
 
 
 class CommentController {
@@ -7,6 +7,8 @@ class CommentController {
         try {
             const {userId, postId, desc} = request.body;
             const comment = await CommentService.createNewComment(parseInt(userId), parseInt(postId), desc);
+            //Новая активность пользователя
+            await createUserActivity(userId, desc, comment.dataValues.id);
             return response.json(comment);
         } catch (error) {
             next(error);
@@ -33,5 +35,13 @@ class CommentController {
         }
     }
 };
+
+async function createUserActivity(userId, text, idActivity) {
+    console.log('Id созданного коммента', idActivity);
+    let id = parseInt(userId);
+    let typeNewActivity = 'addedComment';
+    let descActivity = 'Добавил(а) комментарий';
+    await userService.createActivity(id, typeNewActivity, descActivity, text, '');
+}
 
 module.exports = new CommentController();

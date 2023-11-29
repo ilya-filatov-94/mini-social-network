@@ -1,8 +1,7 @@
 const postService = require('../service/post-service');
 const uuid = require('uuid');
 const path = require('path');
-
-
+const userService = require('../service/user-service');
 
 
 class PostController {
@@ -10,16 +9,17 @@ class PostController {
     async createPost(request, response, next) {
         try {
             const {id, desc} = request.body;
-            let post, typeImage, fileName;
+            let typeImage;
+            let fileName = '';
             if (request.files) {
                 const {image} = request.files;
                 typeImage = image.mimetype.replace('image/', '');
                 fileName = uuid.v4() + '.' + typeImage;
                 image.mv(path.resolve(__dirname, '..', 'static', fileName));
-                post = await postService.createNewPost(parseInt(id), desc, fileName);
-            } else {
-                post = await postService.createNewPost(parseInt(id), desc, '');
             }
+            const post = await postService.createNewPost(parseInt(id), desc, fileName);
+            //новая активность пользователя
+            await createUserActivity(post.dataValues.userId, desc, fileName, post.dataValues.id);
             return response.json(post);
         } catch (error) {
             next(error);
@@ -106,5 +106,13 @@ class PostController {
 
 
 };
+
+async function createUserActivity(userId, text, image, idActivity) {
+    console.log('Id созданного поста', idActivity);
+    let id = parseInt(userId);
+    let typeNewActivity = 'addedPost';
+    let descActivity = 'Опубликовал(а) новый пост';
+    await userService.createActivity(id, typeNewActivity, descActivity, text, image);
+}
 
 module.exports = new PostController();
