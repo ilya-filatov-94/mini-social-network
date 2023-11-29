@@ -43,12 +43,12 @@
         }
 
         .item.suggestions {
-            height: 335px;
+            max-height: 335px;
             overflow-y: auto;
         }
 
         .item.activities {
-            height: 315px;
+            max-height: 315px;
             overflow-y: auto;
         }
     }

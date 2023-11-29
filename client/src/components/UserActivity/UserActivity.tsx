@@ -5,15 +5,36 @@ import { Link } from 'react-router-dom';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import {urlAPIimages} from '../../env_variables';
 import {getRelativeTimeString} from '../../helpers/dateTimeFormatting';
+import {useGetActivitiesUsersQuery} from '../../services/UserService';
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import Loader from '../Loader/Loader';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
-
-import {
-  activitiesOfFriends,
-} from '../RightBar/arraysOfActivities';
 
 const UserActivity: FC = () => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const {
+    data: activitiesOfUsers, 
+    error, 
+    isLoading
+  } = useGetActivitiesUsersQuery();
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (error) {
+    if (isFetchBaseQueryErrorType(error)) {
+      return (
+        <div className={styles.isErrorLoading}>
+          <div className={styles.MuiAlert}><ErrorOutlineOutlinedIcon/></div>
+          <span>Произошла ошибка при загрузке данных! {error.status}</span>
+        </div>
+      )
+    }
+  }
 
   return (
     <div
@@ -27,52 +48,55 @@ const UserActivity: FC = () => {
         <h2 className={styles.header}>Активность друзей</h2>
       </div>
 
+      {(activitiesOfUsers && activitiesOfUsers.length === 0) &&
       <div className={styles.wrapper}>
         <p>Активности отсутствуют</p>
-      </div>
+      </div>}
 
-
-      <div className={styles.wrapper}>
+      {(activitiesOfUsers && activitiesOfUsers.length !== 0) &&
+      activitiesOfUsers.map((activity) => (
+      <div className={styles.wrapper} key={activity.id}>
         <div className={styles.activityInfo}>
           <div className={styles.userInfo}>
             <img
               className={styles.avatar}
               src={
-              activitiesOfFriends[0].profilePic
-                ? urlAPIimages + activitiesOfFriends[0].profilePic
+                activity.profilePic
+                ? urlAPIimages + activity.profilePic
                 : noAvatar
               }
-              alt={`post ${activitiesOfFriends[0].id} photо`}
+              alt={`post ${activity.id} photо`}
             />
             <div className={styles.details}>
               <Link
                 className={styles.link}
-                to={`/profile/${activitiesOfFriends[0].refUser}?id=${16}`}
+                to={`/profile/${activity.refUser}?id=${16}`}
                 replace={true}
-              ><span className={styles.username}>{activitiesOfFriends[0].username}</span>
+              ><span className={styles.username}>{activity.username}</span>
               </Link>
-              <p>{activitiesOfFriends[1].desc}</p>
+              <p>{activity.desc}</p>
             </div>
           </div>
           <p className={styles.date}>
             {getRelativeTimeString(
-              new Date("2023-11-27T19:12:46.304Z"),
+              new Date(activity.createdAt),
               "ru"
             )}
           </p>
         </div>
+        {(activity.content || activity.image) &&
         <div className={styles.activityContent}>
-          {activitiesOfFriends[1].content && <p>{activitiesOfFriends[1].content}</p>}
-          {activitiesOfFriends[0].image &&
+          {activity.content && <p>{activity.content}</p>}
+          {activity.image &&
           <img 
             className={`${styles.imgPost} 
-              ${activitiesOfFriends[0].content ? styles.notEmpty : ''}`
+              ${activity.content ? styles.notEmpty : ''}`
             }
-            src={activitiesOfFriends[0].image} 
-            alt={`activity of ${activitiesOfFriends[0].username}`} 
+            src={urlAPIimages + activity.image}
+            alt={`activity of ${activity.username}`} 
           />}
-        </div>
-      </div>
+        </div>}
+      </div>))}
 
     </div>
   );

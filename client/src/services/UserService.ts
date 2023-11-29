@@ -11,6 +11,7 @@ import {
   IPossibleFriend,
   IRequestMutualFriend
 } from '../types/users';
+import {IActivityOfUser} from '../types/activities';
 
 
 export const userApi = createApi({
@@ -96,6 +97,12 @@ export const userApi = createApi({
           }),
           keepUnusedDataFor: 60,
         }),
+        getActivitiesUsers: builder.query<IActivityOfUser[], void>({
+          query: () => ({
+            url: 'user/activities'
+          }),
+          keepUnusedDataFor: 60,
+        }),
     })
 });
 
@@ -108,5 +115,6 @@ export const {
   useSubscribeToUserMutation,
   useUnSubscribeToUserMutation,
   useGetPossibleFriendsQuery,
-  useGetMutualFriendsQuery
+  useGetMutualFriendsQuery,
+  useGetActivitiesUsersQuery
 } = userApi;

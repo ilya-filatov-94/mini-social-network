@@ -2,15 +2,21 @@ import {FC} from 'react';
 import styles from './CardOfActivitiesFriend.module.scss';
 import UserAvatar from '../UserAvatar/UserAvatar';
 import {useAppSelector} from '../../hooks/useTypedRedux';
-
-import {
-  activitiesOfFriends,
-} from '../RightBar/arraysOfActivities';
+import {useGetActivitiesUsersQuery} from '../../services/UserService';
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import Loader from '../Loader/Loader';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 
 const CardOfActivitiesFriend: FC = ()  => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const {
+    data: activitiesOfUsers, 
+    error, 
+    isLoading
+  } = useGetActivitiesUsersQuery();
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   const getRelativeTimeString = function (date: Date, lang = navigator.language) {
     const time = date.getTime();
@@ -27,14 +33,29 @@ const CardOfActivitiesFriend: FC = ()  => {
     return rtf.format(Math.floor(deltaSeconds/divisor), units[unitIndex]);
   } 
 
-  if (!activitiesOfFriends || activitiesOfFriends?.length === 0) {
+  if (isLoading) {
+    return <Loader />
+  }
+
+  if (error) {
+    if (isFetchBaseQueryErrorType(error)) {
+      return (
+        <div className={styles.isErrorLoading}>
+          <div className={styles.MuiAlert}><ErrorOutlineOutlinedIcon/></div>
+          <span>Ошибка! {error.status}</span>
+        </div>
+      )
+    }
+  }
+
+  if (activitiesOfUsers && activitiesOfUsers?.length === 0) {
     return <p className={styles.emptyActivities}>Нет новостей активности</p>
   }
 
   return (
     <>
-    {(activitiesOfFriends && activitiesOfFriends?.length !== 0) &&
-    activitiesOfFriends.map((activity, index) => {
+    {(activitiesOfUsers && activitiesOfUsers?.length !== 0) &&
+    activitiesOfUsers.map((activity, index) => {
     if (index <= 2) return (
     <div className={styles.user} key={activity.id}>
       <div className={styles.activities}>
