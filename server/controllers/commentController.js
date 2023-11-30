@@ -37,11 +37,11 @@ class CommentController {
 };
 
 async function createUserActivity(userId, text, idActivity) {
-    console.log('Id созданного коммента', idActivity);
     let id = parseInt(userId);
+    let idAct = parseInt(idActivity);
     let typeNewActivity = 'addedComment';
     let descActivity = 'Добавил(а) комментарий';
-    await userService.createActivity(id, typeNewActivity, descActivity, text, '');
+    await userService.createActivity(id, typeNewActivity, descActivity, text, '', idAct);
 }
 
 module.exports = new CommentController();

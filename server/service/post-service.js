@@ -1,4 +1,4 @@
-const {Post, User, Like} = require('../models/models');
+const {Post, User, Like, Activity} = require('../models/models');
 
 
 
@@ -78,6 +78,9 @@ class PostService {
 
   async deletePost(id) {
     if (id) {
+      await Activity.destroy({
+        where: { idAct: id, type: 'addedPost'},
+      });
       return await Post.destroy({
         where: {
           id: id,

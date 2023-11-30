@@ -1,4 +1,4 @@
-const {Story, User} = require('../models/models');
+const {Story, User, Activity} = require('../models/models');
 // const { Op } = require("sequelize");
 
 
@@ -28,6 +28,9 @@ class StoryService {
     if (indexesToDelete.length !== 0) {
       await Story.destroy({
         where: { id: indexesToDelete},
+      });
+      await Activity.destroy({
+        where: { idAct: indexesToDelete, type: 'addedStory'},
       });
       return storiesForClient.filter(item => !indexesToDelete.includes(item.dataValues.id));
     }
@@ -86,7 +89,7 @@ function formatAndCheckDate(inputDate, callback) {
   const deltaSeconds = Math.floor((createdDate - Date.now())/1000);
   const offsetTime = [60, 3600, 86400, 86400*7, 86400*30, 86400*365, Infinity];
   const unitIndex = offsetTime.findIndex(offsetTime => offsetTime >= Math.abs(deltaSeconds));
-  if (unitIndex >= 2) {
+  if (offsetTime[unitIndex] >= 86400) {
     callback();
   }
   return inputDate;

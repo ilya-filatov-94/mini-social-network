@@ -108,11 +108,11 @@ class PostController {
 };
 
 async function createUserActivity(userId, text, image, idActivity) {
-    console.log('Id созданного поста', idActivity);
     let id = parseInt(userId);
+    let idAct = parseInt(idActivity);
     let typeNewActivity = 'addedPost';
     let descActivity = 'Опубликовал(а) новый пост';
-    await userService.createActivity(id, typeNewActivity, descActivity, text, image);
+    await userService.createActivity(id, typeNewActivity, descActivity, text, image, idAct);
 }
 
 module.exports = new PostController();

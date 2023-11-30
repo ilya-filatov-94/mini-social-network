@@ -15,7 +15,6 @@ class StoryController {
                 let fileName = uuid.v4() + '.' + typeImage;
                 image.mv(path.resolve(__dirname, '..', 'static', fileName));
                 const story = await StoryService.createNewStory(parseInt(userId), fileName);
-                //Новая активность
                 await createUserActivity(userId, fileName, story.dataValues.id);
                 return response.json(story);
             }
@@ -54,11 +53,11 @@ function excludeKeysFromArrObj(arr=[], keys=[]) {
 }
 
 async function createUserActivity(userId, image, idActivity) {
-    console.log('Id добавленной истории', idActivity);
     let id = parseInt(userId);
+    let idAct = parseInt(idActivity);
     let typeNewActivity = 'addedStory';
     let descActivity = 'Добавил(а) историю';
-    await userService.createActivity(id, typeNewActivity, descActivity, '', image);
+    await userService.createActivity(id, typeNewActivity, descActivity, '', image, idAct);
 }
 
 module.exports = new StoryController();

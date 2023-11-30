@@ -187,7 +187,7 @@ class UserService {
         if (profileImg) {
             let type = 'updatedAvatar';
             let desc = `Обновил(а) фото профиля`;
-            await this.createActivity(parseInt(id), type, desc, '', profileImg);
+            await this.createActivity(parseInt(id), type, desc, '', profileImg, parseInt(id));
         }
         if (password) {
             newPassword = await bcrypt.hash(password, 5);
@@ -288,13 +288,14 @@ class UserService {
         return activities;
     }
 
-    async createActivity(userId, type, desc, text='', image='') {
+    async createActivity(userId, type, desc, text='', image='', idAct) {
         const activity = await Activity.create({
             userId: userId,
             type: type,
             desc: desc,
             text: text,
             image: image,
+            idAct: idAct
         });
         return activity;
     }

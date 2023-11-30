@@ -1,4 +1,4 @@
-const {Comment, User, Post} = require('../models/models');
+const {Comment, User, Post, Activity} = require('../models/models');
 
 
 
@@ -50,6 +50,9 @@ class CommentService {
     const post = await Post.findOne({where: {id: id_post}})
     await Post.update({ counterComments: parseInt(post.counterComments)-1}, {
       where: {id: id_post},
+    });
+    await Activity.destroy({
+      where: { idAct: id_com, type: 'addedComment'},
     });
     return await Comment.destroy({
       where: { id: id_com,  postId: id_post},
