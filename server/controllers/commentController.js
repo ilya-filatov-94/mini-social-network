@@ -17,8 +17,8 @@ class CommentController {
 
     async getAllComments(request, response, next) {
         try {
-            const {id_user, id_post} = request.query;
-            const comments = await CommentService.getAll(parseInt(id_user), parseInt(id_post));
+            const {id_post} = request.query;
+            const comments = await CommentService.getAll(parseInt(id_post));
             return response.json(comments);
         } catch (error) {
             next(error);

@@ -23,10 +23,10 @@ class CommentService {
     return comment;
   }
 
-  async getAll(id_user, id_post) {
-    if (!id_user || !id_post) return [];
+  async getAll(id_post) {
+    if (!id_post) return [];
     const comments = await Comment.findAll({
-      where: { userId: id_user,  postId: id_post},
+      where: { postId: id_post},
       order: [['createdAt', 'DESC']],
       attributes: [
         "id",

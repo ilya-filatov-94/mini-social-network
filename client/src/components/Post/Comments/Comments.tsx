@@ -32,7 +32,7 @@ const Comments: FC<IContentPostProps> = ({
     updateCommentCounter
 }) => {
   const {data: comments, error: errorGetComments, isLoading: isLoadingAll} = useGetAllCommentsQuery(
-    {userId, postId}, {skip: !(userId && postId)}
+    {postId}, {skip: !postId}
   );
   const [addComment, {error: errorAddComment, isLoading: isLoadingAdd}] = useAddCommentMutation();
   const [deleteComment, {error: errorDeleteComment, isLoading: isLoadingDel}] = useDeleteCommentMutation();
@@ -44,7 +44,7 @@ const Comments: FC<IContentPostProps> = ({
     if (textareaRef.current) {
       let textPost = textareaRef.current.value;
       if (!textPost) return;
-      await addComment({userId, postId, desc: textPost}).unwrap();
+      await addComment({userId: curUser.id, postId, desc: textPost}).unwrap();
       updateCommentCounter(prev => prev + 1);
     }
   }
