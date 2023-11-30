@@ -22,7 +22,7 @@ Fullstack mini-application for social media with responsive design
 ![Postgres](https://img.shields.io/badge/Postgres-%23316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Sequelize](https://img.shields.io/badge/Sequelize-4d4d4d?style=for-the-badge&logo=Sequelize&logoColor=52B0E7)
 
-### Third party tools
+### Other third party tools
 *   Using icons from Material-UI.
 *   Using Redux-Persist to synchronize state with localStorage.
 *   Using RTK Query - data fetching and caching tool.
