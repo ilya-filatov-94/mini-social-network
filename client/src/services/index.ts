@@ -2,7 +2,8 @@ import {
     fetchBaseQuery, 
     BaseQueryFn, 
     FetchArgs, 
-    FetchBaseQueryError 
+    FetchBaseQueryError,
+    BaseQueryApi
 } from "@reduxjs/toolkit/query/react";
 import {API_URL} from '../env_variables'; 
 import {RootState} from '../store';
@@ -24,6 +25,12 @@ const baseQuery = fetchBaseQuery({
 });
 
 let isRetryRequest = false;
+interface IStackQuery {
+    argsN: string | FetchArgs;
+    apiN: BaseQueryApi;
+    extraOptionsN: {}
+}
+const stackQueries: IStackQuery[] = [];
 
 export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
     args,
@@ -31,6 +38,10 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
     extraOptions
 ) => {
     let result = await baseQuery(args, api, extraOptions);
+
+    if (result.error && result.error.status === 401) {
+        stackQueries.push({argsN: args, apiN: api, extraOptionsN: extraOptions})
+    }
 
     if (result.error && result.error.status === 401 && !isRetryRequest) {    
         isRetryRequest = true;   
@@ -42,15 +53,19 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
         if (refreshResult.data) {
             const tokens = refreshResult.data as IReAuthResponse;
             api.dispatch(updateToken(tokens.accessToken as string));
-            // повторяем запрос
-            result = await baseQuery(args, api, extraOptions);
-            isRetryRequest = false;
+            // повторяем запросы
+            if (stackQueries) {
+                while(stackQueries.length > 0) {
+                    const item = stackQueries.pop();
+                    await baseQuery(item?.argsN!, item?.apiN!, item?.extraOptionsN!);
+                }
+            }
         } else {
             const state = api.getState() as RootState;
             const userId = state.reducerAuth.currentUser.id;
             api.dispatch(logoutUser(userId));
-            isRetryRequest = false;
         }
+        isRetryRequest = false;
     }
     return result;
 };
