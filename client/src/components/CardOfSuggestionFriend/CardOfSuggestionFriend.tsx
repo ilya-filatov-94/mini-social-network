@@ -11,7 +11,7 @@ import {
 } from '../../services/UserService';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import Loader from '../../components/Loader/Loader';
-import Alert from '@mui/material/Alert';
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 import PopupMutualFriends from './PopupMutualFriends/PopupMutualFriends';
 
 interface ISuggestionProps {
@@ -47,15 +47,17 @@ const CardOfSuggestionFriend: FC<ISuggestionProps> = ({
   if (errorLoading) {
     if (isFetchBaseQueryErrorType(errorLoading)) {
       return ( 
-      <Alert severity="error" sx={{m: 20}}>
-        Произошла ошибка при загрузке данных! {errorLoading.status}
-      </Alert>);
+        <div className={styles.isErrorLoading}>
+          <div className={styles.MuiAlert}><ErrorOutlineOutlinedIcon/></div>
+          <span>Ошибка! {errorLoading.status}</span>
+        </div>);
     }
     if (isFetchBaseQueryErrorType(errorSubscribe)) {
       return ( 
-      <Alert severity="error" sx={{m: 20}}>
-        Произошла ошибка при загрузке данных! {errorSubscribe.status}
-      </Alert>);
+        <div className={styles.isErrorLoading}>
+          <div className={styles.MuiAlert}><ErrorOutlineOutlinedIcon/></div>
+          <span>Ошибка! {errorSubscribe.status}</span>
+        </div>);
     }
   }
 

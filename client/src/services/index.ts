@@ -40,7 +40,9 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
     let result = await baseQuery(args, api, extraOptions);
 
     if (result.error && result.error.status === 401) {
-        stackQueries.push({argsN: args, apiN: api, extraOptionsN: extraOptions})
+        stackQueries.push({argsN: args, apiN: api, extraOptionsN: extraOptions});
+        console.log('Записываем параметры для повтора', {argsN: args, apiN: api, extraOptionsN: extraOptions});
+        
     }
 
     if (result.error && result.error.status === 401 && !isRetryRequest) {    
@@ -57,7 +59,8 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
             if (stackQueries) {
                 while(stackQueries.length > 0) {
                     const item = stackQueries.pop();
-                    await baseQuery(item?.argsN!, item?.apiN!, item?.extraOptionsN!);
+                    baseQuery(item?.argsN!, item?.apiN!, item?.extraOptionsN!);
+                    console.log('Повтораяем запросы', item);
                 }
             }
         } else {
