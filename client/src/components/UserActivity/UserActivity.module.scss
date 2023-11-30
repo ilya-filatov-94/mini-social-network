@@ -56,12 +56,13 @@
                 gap: 20px;
 
                 .avatar {
-                    min-width: 40px;
+                    width: 40px;
                     height: 40px;
                     border-radius: 50%;
                     object-fit: cover;
         
                     @include mobile {
+                        min-width: 40px;
                         @supports (-webkit-touch-callout: none) and (not (translate: none)) {
                                 &:not(:last-child) {
                                 margin-right: 20px;

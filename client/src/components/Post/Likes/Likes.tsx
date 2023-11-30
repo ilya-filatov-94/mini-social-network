@@ -12,9 +12,8 @@ import {
 } from '../../../services/PostService';
 import Loader from '../../Loader/Loader';
 import Alert from '@mui/material/Alert';
-import { 
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react";
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import {urlAPIimages} from '../../../env_variables';
 
 interface ILikesProps {
   postId: number;
@@ -88,7 +87,7 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
                 <img  
                     key={like.id}
                     className={styles.img} 
-                    src={like.profilePic ? like.profilePic : noAvatar} 
+                    src={like.profilePic ? (urlAPIimages + like.profilePic) : noAvatar} 
                     alt='Фото польз.' 
                 />)
                 return null;
