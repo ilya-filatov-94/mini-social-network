@@ -84,13 +84,13 @@ const UserActivity: FC = () => {
             )}
           </p>
         </div>
-        {(activity.content || activity.image) &&
+        {(activity.text || activity.image) &&
         <div className={styles.activityContent}>
-          {activity.content && <p>{activity.content}</p>}
+          {activity.text && <p>{activity.text}</p>}
           {activity.image &&
           <img 
             className={`${styles.imgPost} 
-              ${activity.content ? styles.notEmpty : ''}`
+              ${activity.text ? styles.notEmpty : ''}`
             }
             src={urlAPIimages + activity.image}
             alt={`activity of ${activity.username}`} 
