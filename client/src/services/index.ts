@@ -56,7 +56,7 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
             if (stackQueries) {
                 while(stackQueries.length > 0) {
                     const item = stackQueries.pop();
-                    baseQuery(item?.argsN!, item?.apiN!, item?.extraOptionsN!);
+                    await baseQuery(item?.argsN!, item?.apiN!, item?.extraOptionsN!);
                 }
             }
         } else {
