@@ -4,7 +4,7 @@ export const getRelativeTimeString = function (date: Date, lang = navigator.lang
     const offsetTime = [60, 3600, 86400, 86400*7, 86400*30, 86400*365, Infinity];
     const units: Intl.RelativeTimeFormatUnit[] = ['second', 'minute', 'hour', 'day', 'week', 'month', 'year'];
     const unitIndex = offsetTime.findIndex(offsetTime => offsetTime >= Math.abs(deltaSeconds));
-    if (unitIndex >= 3) {
+    if (offsetTime[unitIndex] >= 86400) {
         const dateOptions: Intl.DateTimeFormatOptions = {
             day: "numeric",
             month: "short",
