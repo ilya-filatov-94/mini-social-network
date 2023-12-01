@@ -200,8 +200,8 @@ class UserController {
 
     async getSelectedUsers(request, response, next) {
         try {
-            const {search} = request.query; 
-            const users = await userService.getSelectedUsers(search);
+            const {search, id} = request.query; 
+            const users = await userService.getSelectedUsers(search, id);
             return response.json(users);
         } catch (error) {
             next(error);

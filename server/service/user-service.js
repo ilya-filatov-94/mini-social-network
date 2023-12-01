@@ -300,13 +300,15 @@ class UserService {
         return activity;
     }
 
-    async getSelectedUsers(search) {
+    async getSelectedUsers(search, id) {
         const users = await User.findAll({
             where: {
                 username: {[Op.like]: '%' + search + '%' },
             },
             attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
         });
+        const friends = this.graphUsers.getFriendsOfUser(String(id));
+        getStatusOfRelationship(users, friends);
         return users;
     }
 }
