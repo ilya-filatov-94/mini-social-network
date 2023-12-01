@@ -3,7 +3,7 @@ const GraphUsers = require('../helpers/graphUsers');
 const ApiError = require('../error/ApiError');
 const tokenService = require('../service/token-service');
 const bcrypt = require('bcrypt');
-
+const { Op } = require("sequelize");
 
 
 class UserService {
@@ -298,6 +298,16 @@ class UserService {
             idAct: idAct
         });
         return activity;
+    }
+
+    async getSelectedUsers(search) {
+        const users = await User.findAll({
+            where: {
+                username: {[Op.like]: '%' + search + '%' },
+            },
+            attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
+        });
+        return users;
     }
 }
 

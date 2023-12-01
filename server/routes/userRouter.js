@@ -29,4 +29,9 @@ router.get('/common', authMiddleware, userController.getMutualFriends);
 router.get('/activities', authMiddleware, userController.getActivitiesUsers);
 router.post('/activities', authMiddleware, userController.createActivityUser);
 
+
+router.get('/all-selected', authMiddleware, userController.getSelectedUsers);
+
+
+
 module.exports = router;
