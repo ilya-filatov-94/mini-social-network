@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import styles from './UserAvatar.module.scss';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import { Link } from 'react-router-dom';
@@ -14,7 +14,7 @@ interface IUserAvatarProps {
   [key: string]: string | number | (() => void) | undefined;
 }
 
-const UserAvatar: FC<IUserAvatarProps> = ({
+const UserAvatar: FC<IUserAvatarProps> = memo(({
   avatar, 
   name, 
   refUser, 
@@ -55,6 +55,6 @@ const UserAvatar: FC<IUserAvatarProps> = ({
       }
     </div>
   )
-}
+});
 
 export default UserAvatar

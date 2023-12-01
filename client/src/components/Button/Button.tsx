@@ -1,7 +1,8 @@
 import {
   FC,
   HTMLAttributes,
-  ReactNode
+  ReactNode,
+  memo
 } from 'react';
 import styles from './Button.module.scss';
 
@@ -13,7 +14,7 @@ interface ISpreadingButtonProps
 }
 
 
-const Button: FC<ISpreadingButtonProps> = ({ 
+const Button: FC<ISpreadingButtonProps> = memo(({ 
   addClass, 
   children, 
   ...props 
@@ -26,6 +27,6 @@ const Button: FC<ISpreadingButtonProps> = ({
       {children}
     </button>
   );
-}
+});
 
 export default Button

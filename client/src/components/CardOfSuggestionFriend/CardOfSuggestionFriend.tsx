@@ -1,4 +1,4 @@
-import {FC, useState} from 'react';
+import {FC, useState, memo} from 'react';
 import styles from './CardOfSuggestionFriend.module.scss';
 import {urlAPIimages} from '../../env_variables';
 import noAvatar from '../../assets/images/no-avatar.jpg';
@@ -18,7 +18,7 @@ interface ISuggestionProps {
   idCurUser: number;
 }
 
-const CardOfSuggestionFriend: FC<ISuggestionProps> = ({
+const CardOfSuggestionFriend: FC<ISuggestionProps> = memo(({
   idCurUser,
 }) => {
 
@@ -104,6 +104,6 @@ const CardOfSuggestionFriend: FC<ISuggestionProps> = ({
     }
     </>
   );
-}
+});
 
 export default CardOfSuggestionFriend;

@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import styles from './CardOfActivitiesFriend.module.scss';
 import UserAvatar from '../UserAvatar/UserAvatar';
 import {useAppSelector} from '../../hooks/useTypedRedux';
@@ -8,7 +8,7 @@ import Loader from '../Loader/Loader';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 
-const CardOfActivitiesFriend: FC = ()  => {
+const CardOfActivitiesFriend: FC = memo(()  => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const {
@@ -86,6 +86,6 @@ const CardOfActivitiesFriend: FC = ()  => {
     return null;})}
     </>
   );
-}
+});
 
 export default CardOfActivitiesFriend;

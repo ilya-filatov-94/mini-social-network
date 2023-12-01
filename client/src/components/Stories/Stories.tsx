@@ -6,6 +6,7 @@ import {
   useCallback,
   PointerEvent,
   MouseEvent,
+  memo
 } from 'react';
 import styles from './Stories.module.scss';
 import StoryTemplate from './StoryTemplate/StoryTemplate';
@@ -23,7 +24,7 @@ import {urlAPIimages} from '../../env_variables';
 export type TEventTouch = MouseEvent | PointerEvent;
 export type TPreviewImg = string | ArrayBuffer | null;
 
-const Stories: FC = () => {
+const Stories: FC = memo(() => {
   const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
   const [hasStoryCurUser, setStoryCurrentUser] = useState<TPreviewImg>('');
   const [isOpenStories, setOpenStories] = useState<boolean>(false);
@@ -174,6 +175,6 @@ const Stories: FC = () => {
     />}
     </>
   );
-}
+});
 
 export default Stories;

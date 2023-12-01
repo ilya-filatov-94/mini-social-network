@@ -13,19 +13,19 @@ import Alert from '@mui/material/Alert';
 import {IPossibleFriend} from '../../../types/users';
 
 interface IPopupProps {
-    isVisible: boolean; 
-    setVisible: (state: boolean) => void;
-    curUserId: number;
-    usernamePossibleFriend: string;
-    possibleFriendId: number;
+  isVisible: boolean; 
+  setVisible: (state: boolean) => void;
+  curUserId: number;
+  usernamePossibleFriend: string;
+  possibleFriendId: number;
 }
 
 const PopupMutualFriends: FC<IPopupProps> = ({
-    isVisible,
-    setVisible,
-    curUserId,
-    usernamePossibleFriend,
-    possibleFriendId
+  isVisible,
+  setVisible,
+  curUserId,
+  usernamePossibleFriend,
+  possibleFriendId
 }) => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);

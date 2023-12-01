@@ -1,7 +1,8 @@
 import {
   FC,
   DetailedHTMLProps,
-  InputHTMLAttributes
+  InputHTMLAttributes,
+  memo
 } from 'react';
 import styles from './Input.module.scss';
 
@@ -11,7 +12,7 @@ interface ISpreadingInputProps
   addClass?: string;
 }
 
-const Input: FC<ISpreadingInputProps> = ({
+const Input: FC<ISpreadingInputProps> = memo(({
   addClass, 
   ...props
 }) => {
@@ -21,6 +22,6 @@ const Input: FC<ISpreadingInputProps> = ({
       className={addClass ? `${styles.Input} ${addClass}`: styles.Input}
     />
   );
-}
+});
 
 export default Input;

@@ -1,4 +1,4 @@
-import {FC, useState } from 'react';
+import {FC, useState, memo } from 'react';
 import styles from './Navbar.module.scss';
 
 import {useAppDispatch, useAppSelector} from '../../hooks/useTypedRedux';
@@ -18,7 +18,7 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 
 
-const Navbar: FC = () => {
+const Navbar: FC = memo(() => {
 
   const {isMobile} = useMatchMedia();
   const navigate = useNavigate();
@@ -91,6 +91,6 @@ const Navbar: FC = () => {
       
     </div>
   )
-}
+});
 
 export default Navbar;

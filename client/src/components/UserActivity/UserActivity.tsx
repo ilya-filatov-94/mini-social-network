@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import styles from './UserActivity.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import { Link } from 'react-router-dom';
@@ -11,7 +11,7 @@ import Loader from '../Loader/Loader';
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 
-const UserActivity: FC = () => {
+const UserActivity: FC = memo(() => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const {
@@ -100,6 +100,6 @@ const UserActivity: FC = () => {
 
     </div>
   );
-}
+});
 
 export default UserActivity;
