@@ -3,12 +3,13 @@ import {
     BaseQueryFn, 
     FetchArgs, 
     FetchBaseQueryError,
-    BaseQueryApi
+    // BaseQueryApi
 } from "@reduxjs/toolkit/query/react";
 import {API_URL} from '../env_variables'; 
 import {RootState} from '../store';
 import {logoutUser, updateToken} from '../store/authSlice';
 import {IReAuthResponse} from '../types/authReducer';
+import {Mutex} from 'async-mutex';
 
 
 const baseQuery = fetchBaseQuery({
@@ -25,46 +26,45 @@ const baseQuery = fetchBaseQuery({
 });
 
 let isRetryRequest = false;
-interface IStackQuery {
-    argsN: string | FetchArgs;
-    apiN: BaseQueryApi;
-    extraOptionsN: {}
-}
-const stackQueries: IStackQuery[] = [];
+const mutex = new Mutex();
+
 
 export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
     args,
     api,
     extraOptions
 ) => {
+    await mutex.waitForUnlock();
     let result = await baseQuery(args, api, extraOptions);
-    if (result.error && result.error.status === 401) {
-        stackQueries.push({argsN: args, apiN: api, extraOptionsN: extraOptions});
-    }
 
-    if (result.error && result.error.status === 401 && !isRetryRequest) {    
-        isRetryRequest = true;   
-        const refreshResult = await baseQuery({
-            url: '/user/refresh/',
-            method: 'GET'
-        }, api, extraOptions);
+    if (result.error && result.error.status === 401 && !isRetryRequest) {   
+        if (!mutex.isLocked()) {
+            const release = await mutex.acquire(); 
+            try {
+                isRetryRequest = true;   
+                const refreshResult = await baseQuery({
+                    url: '/user/refresh/',
+                    method: 'GET'
+                }, api, extraOptions);
 
-        if (refreshResult.data) {
-            const tokens = refreshResult.data as IReAuthResponse;
-            api.dispatch(updateToken(tokens.accessToken as string));
-            // повторяем запросы
-            if (stackQueries) {
-                while(stackQueries.length > 0) {
-                    const {argsN, apiN, extraOptionsN} = stackQueries.pop()!;
-                    await baseQuery(argsN, apiN, extraOptionsN);
+                if (refreshResult.data) {
+                    const tokens = refreshResult.data as IReAuthResponse;
+                    api.dispatch(updateToken(tokens.accessToken as string));
+                    //повторяем запрос
+                    result = await baseQuery(args, api, extraOptions);
+                } else {
+                    const state = api.getState() as RootState;
+                    const userId = state.reducerAuth.currentUser.id;
+                    api.dispatch(logoutUser(userId));
                 }
+                isRetryRequest = false;
+            } finally {
+                release();
             }
         } else {
-            const state = api.getState() as RootState;
-            const userId = state.reducerAuth.currentUser.id;
-            api.dispatch(logoutUser(userId));
+            await mutex.waitForUnlock();
+            result = await baseQuery(args, api, extraOptions);
         }
-        isRetryRequest = false;
     }
     return result;
 };
