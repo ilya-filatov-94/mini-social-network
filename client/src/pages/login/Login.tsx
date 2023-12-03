@@ -119,6 +119,7 @@ const Login: FC = () => {
               name="email"
               type="text"
               required
+              maxLength={100}
               placeholder="Электронная почта"
               isValidInput={isValidInputs.email}  
               setValidInput={setValidInput}
@@ -132,6 +133,7 @@ const Login: FC = () => {
               name="password"
               type="password"
               required
+              maxLength={100}
               placeholder="Пароль"
               autoComplete="false"
               isValidInput={isValidInputs.password}  

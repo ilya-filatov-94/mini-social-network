@@ -96,6 +96,7 @@ const Comments: FC<IContentPostProps> = ({
             <textarea
                 ref={textareaRef}
                 rows={1}
+                maxLength={255}
                 className={styles.input}
                 placeholder="Напишите комментарий"
             />

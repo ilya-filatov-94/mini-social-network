@@ -111,6 +111,7 @@ const Register: FC = () => {
               <InputWithValidation
                 key={input.idInput}
                 classes={styles.inputForm}
+                maxLength={100}
                 value={regData[input.name as keyof typeof regData]}
                 isValidInput={isValidInputs[input.name]}  
                 setValidInput={setValidInput}

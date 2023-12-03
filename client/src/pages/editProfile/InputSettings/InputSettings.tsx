@@ -87,6 +87,7 @@ const InputSettings: FC<ISpreadingInputProps> = memo(({
             className={`${styles.input} ${classes ? classes : ''}
             ${errorMessage ? styles.invalidData : ''}`}
             ref={refInut}
+            maxLength={100}
             onBlur={checkValue}
             onChange={checkError}
             {...props}

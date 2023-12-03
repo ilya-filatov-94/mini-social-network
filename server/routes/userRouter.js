@@ -31,6 +31,7 @@ router.post('/activities', authMiddleware, userController.createActivityUser);
 
 
 router.get('/all-selected', authMiddleware, userController.getSelectedUsers);
+// router.get('/all-selected', userController.getSelectedUsers);
 
 
 

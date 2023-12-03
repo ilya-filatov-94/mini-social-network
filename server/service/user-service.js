@@ -301,15 +301,25 @@ class UserService {
     }
 
     async getSelectedUsers(search, id) {
-        const users = await User.findAll({
-            where: {
-                username: {[Op.like]: '%' + search + '%' },
-            },
-            attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
-        });
-        const friends = this.graphUsers.getFriendsOfUser(String(id));
-        getStatusOfRelationship(users, friends);
-        return users;
+        if (!search) {
+            const users = await User.findAll({
+                attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
+            });
+            const friends = this.graphUsers.getFriendsOfUser(String(id));
+            getStatusOfRelationship(users, friends);
+            return users;
+        }
+        if (search) {
+            const users = await User.findAll({
+                where: {
+                    username: {[Op.iLike]: '%' + search + '%' },
+                },
+                attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
+            });
+            const friends = this.graphUsers.getFriendsOfUser(String(id));
+            getStatusOfRelationship(users, friends);
+            return users;
+        }
     }
 }
 

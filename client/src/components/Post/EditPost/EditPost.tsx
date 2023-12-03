@@ -115,6 +115,7 @@ const EditPost: FC<IEditPostProps> = ({
           <textarea
             ref={textareaRef}
             rows={2}
+            maxLength={255}
             className={styles.input}
             placeholder={"Что у Вас нового?"}
           />

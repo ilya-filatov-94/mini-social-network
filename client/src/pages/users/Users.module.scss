@@ -29,18 +29,23 @@
             margin-top: 15px;
 
             @include mobile {
-                margin: 0;
+                margin: 10px 0 0 0;
             }
 
             @include tablet{
-                margin: 0;
+                margin: 15px 0 0 0;
             }
 
             .inputSearch {
+                width: 100%;
                 border: none;
                 background-color: transparent;
             }
 
+        }
+
+        .notFound {
+            margin-top: 20px;
         }
     }
 

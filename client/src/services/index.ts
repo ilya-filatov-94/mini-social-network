@@ -55,8 +55,8 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
             // повторяем запросы
             if (stackQueries) {
                 while(stackQueries.length > 0) {
-                    const item = stackQueries.pop();
-                    await baseQuery(item?.argsN!, item?.apiN!, item?.extraOptionsN!);
+                    const {argsN, apiN, extraOptionsN} = stackQueries.pop()!;
+                    await baseQuery(argsN, apiN, extraOptionsN);
                 }
             }
         } else {
