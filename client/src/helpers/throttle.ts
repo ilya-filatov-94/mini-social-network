@@ -3,7 +3,7 @@ export function throttle<Fn extends (...args: any[]) => any>(callback: Fn, delay
     let savedArgs: any;
     function wrapper(...args: any[]) {
         if (isThrottled) {
-            savedArgs = args;
+            savedArgs = args.slice();
             return;
         }
         callback.apply(null, args);

@@ -94,16 +94,6 @@ const Users: FC = () => {
 }
 
 async function getUsers(search: string, id: number) {
-  // return await axios.get(API_URL + '/user/all-selected',
-  //   {
-  //     headers: {
-  //       'authorization': `Bearer ${token}`
-  //     },
-  //     params: {
-  //       search: search,
-  //       id: id,
-  //     }
-  // });
   return instanceAxios.get<IListUsers[]>(`/user/all-selected?search=${search}&id=${id}`);
 }
 
