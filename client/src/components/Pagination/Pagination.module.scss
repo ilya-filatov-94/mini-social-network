@@ -1,0 +1,119 @@
+@import '../../styles/theme.scss';
+
+.paginationContainer {
+  display: flex;
+  list-style-type: none;
+
+  .paginationItem {
+    padding: 0 12px;
+    height: 32px;
+    text-align: center;
+    margin: auto 2px;
+    display: flex;
+    box-sizing: border-box;
+    align-items: center;
+    border-radius: 16px;
+    line-height: 1.43;
+    letter-spacing: 0.01071em;
+    font-size: 0.875rem;
+    font-weight: 450;
+    min-width: 32px;
+
+    &.dots {
+      letter-spacing: 0.1rem;
+    }
+
+    &.dots:hover {
+      background-color: transparent;
+      cursor: default;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &.selected {
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .arrow {
+      &::before {
+        position: relative;
+        content: '';
+        display: inline-block;
+        align-self: center;
+        width: 0.5em;
+        height: 0.5em;
+        border-right: 0.12em solid rgba(0, 0, 0, 0.87);
+        border-top: 0.12em solid rgba(0, 0, 0, 0.87);
+      }
+
+      &.left {
+        transform: rotate(-135deg) translate(-50%);
+      }
+
+      &.right {
+        transform: rotate(45deg) translate(-10%);
+      }
+    }
+
+    &.disabled {
+      pointer-events: none;
+
+      .arrow::before {
+        border-right: 0.12em solid rgba(0, 0, 0, 0.43);
+        border-top: 0.12em solid rgba(0, 0, 0, 0.43);
+      }
+
+      &:hover {
+        cursor: default;
+      }
+    }
+  }
+
+  &.theme-dark {
+    
+    .paginationItem:hover:not(.dots, .selected) {
+      background-color: rgba(149, 149, 149, 0.582);
+    }
+
+    &.paginationItem {
+      color: themed($curTheme, "textColor");
+    }
+
+    .paginationItem.selected {
+      background-color: rgba(149, 149, 149, 0.77);
+    }
+
+    .paginationItem .arrow {
+      &::before {
+        border-right: 0.12em solid white;
+        border-top: 0.12em solid white;
+      }
+    }
+
+    .paginationItem.disabled .arrow {
+      &::before {
+        border-right: 0.12em solid grey;
+        border-top: 0.12em solid grey;
+      }
+    }
+  }
+
+  &.theme-light {
+
+    .paginationItem:hover:not(.dots, .selected) {
+      background-color: rgba(0, 0, 0, 0.105);
+    }
+
+    &.paginationItem {
+      color: themed($curTheme, "textColor");
+    }
+
+    .paginationItem.selected {
+      background-color: rgba(0, 0, 0, 0.08);
+    }
+  }
+
+}
+

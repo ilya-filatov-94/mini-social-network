@@ -56,7 +56,7 @@ const CardOfActivitiesFriend: FC = memo(()  => {
     <>
     {(activitiesOfUsers && activitiesOfUsers?.length !== 0) &&
     activitiesOfUsers.map((activity, index) => {
-    if (index <= 2) return (
+    if (index <= 1) return (
     <div className={styles.user} key={activity.id}>
       <div className={styles.activities}>
         <div>

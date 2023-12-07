@@ -9,11 +9,14 @@ import axios from 'axios';
 import {instanceAxios} from '../../helpers/instanceAxios';
 import Alert from '@mui/material/Alert';
 import {debounce} from '../../helpers/debounce';
-
+import Pagination from '../../components/Pagination/Pagination';
 
 const Users: FC = () => {
   const curUser = useAppSelector(state => state.reducerAuth.currentUser);
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+
+  //Состояние для пагинации
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const [listUsers, setListUsers] = useState<IListUsers[]>([]);
   const [search, setSearch] = useState<string>('');
@@ -60,19 +63,19 @@ const Users: FC = () => {
     <div className={currentTheme ==='darkMode'
         ? `${styles.usersContainer} ${styles['theme-dark']}`
         : `${styles.usersContainer} ${styles['theme-light']}`
-        }>
-        <div className={styles.wrapperUsers}>
-            <h2>Все пользователи</h2>
-            <div className={styles.search}>
-                <SearchOutlinedIcon />
-                <Input
-                  onChange={handlerChange} 
-                  addClass={styles.inputSearch} 
-                  type="search" 
-                  placeholder="Поиск..."
-                />
-            </div>
-            {(listUsers && listUsers?.length !== 0) &&
+    }>
+      <div className={styles.wrapperUsers}>
+        <h2>Все пользователи</h2>
+          <div className={styles.search}>
+            <SearchOutlinedIcon />
+            <Input
+              onChange={handlerChange} 
+              addClass={styles.inputSearch} 
+              type="search" 
+              placeholder="Поиск..."
+            />
+          </div>
+          {(listUsers && listUsers?.length !== 0) &&
             listUsers.map((user: IListUsers) =>
             <ItemUser 
               key={user.id}
@@ -84,11 +87,17 @@ const Users: FC = () => {
               status={user.status}
               city={user.city}
               subscrInformation={user.subscrStatus}
-            />)}
-            {!listUsers?.length &&
-              <p className={styles.notFound}>Пользователи не найдены</p>
-            }
-        </div>
+          />)}
+          {!listUsers?.length &&
+            <p className={styles.notFound}>Пользователи не найдены</p>
+          }
+        <Pagination
+          currentPage={currentPage}
+          totalCount={50}
+          pageSize={5}
+          onPageChange={(page: number) => setCurrentPage(page)}
+        />
+      </div>
     </div>
   )
 }
