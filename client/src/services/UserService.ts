@@ -6,12 +6,14 @@ import {IUserData, IRequestProfile} from '../types/authReducer';
 import {
   IUserFullData, 
   IFollower, 
-  IListUsers, 
   IActionSubscribeTo,
   IPossibleFriend,
+  IListUsers,
   IRequestMutualFriend,
   IFollowerRequest,
-  IFollowerResponse
+  IFollowerResponse,
+  IAllUsersRequest,
+  IAllUsersResponse
 } from '../types/users';
 import {IActivityOfUser} from '../types/activities';
 
@@ -76,6 +78,18 @@ export const userApi = createApi({
           }),
           keepUnusedDataFor: 60,
         }),
+        getSearchAllUsers: builder.query<IAllUsersResponse, IAllUsersRequest>({
+          query: (data) => ({
+            url: `/user/all-selected`,
+            params: {
+              id: data.id,
+              search: data.search,
+              page: data.page,
+              limit: data.limit,
+            }
+          }),
+          keepUnusedDataFor: 60,
+        }),
         subscribeToUser: builder.mutation<IActionSubscribeTo, IActionSubscribeTo>({
           query: (data) => ({
             url: '/user/follow',
@@ -127,6 +141,7 @@ export const {
   useGetFollowersQuery,
   useGetFollowersPaginationQuery,
   useGetAllUsersQuery,
+  useGetSearchAllUsersQuery,
   useSubscribeToUserMutation,
   useUnSubscribeToUserMutation,
   useGetPossibleFriendsQuery,

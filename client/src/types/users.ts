@@ -71,14 +71,28 @@ export interface IRequestMutualFriend {
     pos_id: number;
 }
 
-export interface IFollowerRequest {
+interface IRequestUsers {
     id: number;
     page: number;
     limit: number;
+}
+
+export interface IFollowerRequest 
+extends IRequestUsers {
     selector: string;
 }
 
 export interface IFollowerResponse {
     count: number;
     rows: IFollower[];
+}
+
+export interface IAllUsersRequest 
+extends IRequestUsers {
+    search: string;
+}
+
+export interface IAllUsersResponse {
+    count: number;
+    rows: IListUsers[];
 }
