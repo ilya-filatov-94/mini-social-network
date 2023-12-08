@@ -1,26 +1,28 @@
-import {FC, useState, useMemo} from 'react';
+import {FC, useState} from 'react';
 import styles from './Friends.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import ItemUser from './ItemUser/ItemUser';
-import {useGetFollowersQuery} from '../../services/UserService';
+import {useGetFollowersPaginationQuery} from '../../services/UserService';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import Loader from '../../components/Loader/Loader';
 import Alert from '@mui/material/Alert';
 import {IFollower} from '../../types/users';
-
+import Pagination from '../../components/Pagination/Pagination';
 
 const Friends: FC = () => {
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
-  const {data: followersData, error, isLoading} = useGetFollowersQuery(currentUser.id);
-  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+  const currentTheme = useAppSelector((state) => state.reducerTheme.themeMode);
+  const currentUser = useAppSelector((state) => state.reducerAuth.currentUser);
   const [selectedItem, setSelecteItem] = useState('all');
+  const numberUsersOnPage = 5;  //Количество друзей, отображаемых на странице
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const filteredFriends = useMemo(() => {
-    if (!followersData) return [];
-    if (selectedItem === 'all') return followersData;
-    return followersData.filter(friend => friend.status === selectedItem);
-  }, [selectedItem, followersData]);
+  const {data: followersData, error, isLoading} = useGetFollowersPaginationQuery({
+    id: currentUser.id,
+    page: currentPage,
+    limit: numberUsersOnPage,
+    selector: selectedItem
+  });
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   if (isLoading) {
     return <Loader />
@@ -58,8 +60,8 @@ const Friends: FC = () => {
             </div>
 
             <div className={styles.listUsers}>
-            {(filteredFriends && filteredFriends?.length !== 0) &&
-                filteredFriends.map((follower: IFollower) => 
+              {(followersData && followersData.count !== 0) &&
+                followersData.rows.map((follower: IFollower) => 
                 <div key={follower.id} className={styles.wrapperFollowers}>
                   <ItemUser
                     curUserId={currentUser.id}
@@ -71,10 +73,19 @@ const Friends: FC = () => {
                   />
                   <hr />
                 </div>
-                )}
-                {filteredFriends.length === 0 &&
-                <p>Друзья не найдены</p>}
+              )}
+              {followersData.count === 0 &&
+                <p>Друзья не найдены</p>
+              }
             </div>
+            {followersData.count &&
+              <Pagination
+                currentPage={currentPage}
+                totalCount={followersData.count}
+                pageSize={numberUsersOnPage}
+                onPageChange={(page: number) => setCurrentPage(page)}
+              />
+            }
         </div>
     </div>
   )

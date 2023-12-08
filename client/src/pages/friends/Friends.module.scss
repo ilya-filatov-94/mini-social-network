@@ -50,6 +50,11 @@
             flex-direction: column;
             gap: 15px;
 
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
+
+
             @supports (-webkit-touch-callout: none) and (not (translate: none)) {
                 &:not(:last-child) {
                     margin-bottom: 15px;

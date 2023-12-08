@@ -46,6 +46,11 @@ export interface IListUsers {
     subscrStatus: boolean;
 }
 
+export interface IResponseListUsers {
+    count: number;
+    rows: IListUsers[];
+}
+
 export interface IActionSubscribeTo {
     id?: number;
     curUserId: number;
@@ -64,4 +69,16 @@ export interface IPossibleFriend {
 export interface IRequestMutualFriend {
     id: number;
     pos_id: number;
+}
+
+export interface IFollowerRequest {
+    id: number;
+    page: number;
+    limit: number;
+    selector: string;
+}
+
+export interface IFollowerResponse {
+    count: number;
+    rows: IFollower[];
 }

@@ -4,8 +4,8 @@ import {useAppSelector} from '../../hooks/useTypedRedux';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Input from '../../components/Input/Input';
 import ItemUser from './ItemUser/ItemUser';
-import {IListUsers} from '../../types/users';
-import axios from 'axios';
+import {IListUsers, IResponseListUsers} from '../../types/users';
+import {AxiosError} from 'axios';
 import {instanceAxios} from '../../helpers/instanceAxios';
 import Alert from '@mui/material/Alert';
 import {debounce} from '../../helpers/debounce';
@@ -16,7 +16,9 @@ const Users: FC = () => {
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
 
   //Состояние для пагинации
+  const numberUsersOnPage = 5;
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [countUsers, setCountUsers] = useState<number>(0);
 
   const [listUsers, setListUsers] = useState<IListUsers[]>([]);
   const [search, setSearch] = useState<string>('');
@@ -28,13 +30,14 @@ const Users: FC = () => {
   }, 1000);
 
   useEffect(() => {
-    getUsers(search, curUser.id)
+    getUsers(search, curUser.id, currentPage, numberUsersOnPage)
     .then(users => {
       setErrorStatus(undefined);
-      setListUsers(users.data);
+      setListUsers(users.data.rows);
+      setCountUsers(users.data.count);
     })
     .catch((error: any) => {      
-      if (error instanceof axios.AxiosError) {
+      if (error instanceof AxiosError) {
         setErrorStatus(error?.response?.status);
         if (error?.response?.data?.message) {
           setErrorStatus(error?.response?.data?.message);
@@ -49,7 +52,7 @@ const Users: FC = () => {
         setErrorStatus(errorMessage || 500);  
       }    
     })
-  }, [search, curUser.id]);
+  }, [search, curUser.id, currentPage]);
 
   if (isErrorStatus) {
     return ( 
@@ -66,44 +69,48 @@ const Users: FC = () => {
     }>
       <div className={styles.wrapperUsers}>
         <h2>Все пользователи</h2>
-          <div className={styles.search}>
-            <SearchOutlinedIcon />
-            <Input
-              onChange={handlerChange} 
-              addClass={styles.inputSearch} 
-              type="search" 
-              placeholder="Поиск..."
-            />
-          </div>
-          {(listUsers && listUsers?.length !== 0) &&
-            listUsers.map((user: IListUsers) =>
-            <ItemUser 
-              key={user.id}
-              myId={curUser.id}
-              userId={user.id}
-              username={user.username}
-              avatar={user.profilePic}
-              refUser={user.refUser}
-              status={user.status}
-              city={user.city}
-              subscrInformation={user.subscrStatus}
-          />)}
-          {!listUsers?.length &&
-            <p className={styles.notFound}>Пользователи не найдены</p>
-          }
-        <Pagination
+        <div className={styles.search}>
+          <SearchOutlinedIcon />
+          <Input
+            onChange={handlerChange} 
+            addClass={styles.inputSearch} 
+            type="search" 
+            placeholder="Поиск..."
+          />
+        </div>
+        {(listUsers && listUsers?.length !== 0) &&
+          listUsers.map((user: IListUsers) =>
+          <ItemUser 
+            key={user.id}
+            myId={curUser.id}
+            userId={user.id}
+            username={user.username}
+            avatar={user.profilePic}
+            refUser={user.refUser}
+            status={user.status}
+            city={user.city}
+            subscrInformation={user.subscrStatus}
+          />
+        )}
+        {!listUsers?.length &&
+          <p className={styles.notFound}>Пользователи не найдены</p>
+        }
+        {listUsers &&
+          <Pagination
           currentPage={currentPage}
-          totalCount={50}
-          pageSize={5}
+          totalCount={countUsers}
+          pageSize={numberUsersOnPage}
           onPageChange={(page: number) => setCurrentPage(page)}
-        />
+        />}
       </div>
     </div>
   )
 }
 
-async function getUsers(search: string, id: number) {
-  return instanceAxios.get<IListUsers[]>(`/user/all-selected?search=${search}&id=${id}`);
+async function getUsers(search: string, id: number, page: number, limit: number) {
+  return instanceAxios.get<IResponseListUsers>(
+    `/user/all-selected?search=${search}&id=${id}&page=${page}&limit=${limit}`
+  );
 }
 
 export default Users;

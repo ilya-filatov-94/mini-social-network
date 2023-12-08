@@ -9,7 +9,9 @@ import {
   IListUsers, 
   IActionSubscribeTo,
   IPossibleFriend,
-  IRequestMutualFriend
+  IRequestMutualFriend,
+  IFollowerRequest,
+  IFollowerResponse
 } from '../types/users';
 import {IActivityOfUser} from '../types/activities';
 
@@ -49,6 +51,18 @@ export const userApi = createApi({
             url: `/user/followers`,
             params: {
               id: id
+            }
+          }),
+          keepUnusedDataFor: 60,
+        }),
+        getFollowersPagination: builder.query<IFollowerResponse, IFollowerRequest>({
+          query: (data) => ({
+            url: `/user/followers-pag`,
+            params: {
+              id: data.id,
+              page: data.page,
+              limit: data.limit,
+              selector: data.selector
             }
           }),
           keepUnusedDataFor: 60,
@@ -111,6 +125,7 @@ export const {
   useGetUserDataQuery,
   useUpdateUserDataMutation,
   useGetFollowersQuery,
+  useGetFollowersPaginationQuery,
   useGetAllUsersQuery,
   useSubscribeToUserMutation,
   useUnSubscribeToUserMutation,

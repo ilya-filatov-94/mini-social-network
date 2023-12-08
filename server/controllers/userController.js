@@ -148,6 +148,16 @@ class UserController {
         }
     }
 
+    async getFollowersSelected(request, response, next) {
+        try {
+            const {id, page, limit, selector} = request.query;
+            const followers = await userService.getFollowersSelected(id, page, limit, selector);
+            return response.json(followers);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async getAll(request, response, next) {
         try {
             const {cur_user} = request.query; 
@@ -200,8 +210,8 @@ class UserController {
 
     async getSelectedUsers(request, response, next) {
         try {
-            const {search, id} = request.query; 
-            const users = await userService.getSelectedUsers(search, id);
+            const {search, id, limit, page} = request.query; 
+            const users = await userService.getSelectedUsers(search, id, limit, page);
             return response.json(users);
         } catch (error) {
             next(error);

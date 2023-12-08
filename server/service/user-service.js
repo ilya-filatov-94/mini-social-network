@@ -300,26 +300,67 @@ class UserService {
         return activity;
     }
 
-    async getSelectedUsers(search, id) {
+    async getSelectedUsers(search, id, limit, page) {
+        page = page || 1;
+        limit = limit || 5;
+        let offset = page * limit - limit;
+        let users = [];
+        let friends = [];
+        if (id) {
+            friends = this.graphUsers.getFriendsOfUser(String(id));
+        }
         if (!search) {
-            const users = await User.findAll({
-                attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
+            users = await User.findAndCountAll({
+                attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city'],
+                limit, 
+                offset,
             });
-            const friends = this.graphUsers.getFriendsOfUser(String(id));
-            getStatusOfRelationship(users, friends);
-            return users;
         }
         if (search) {
-            const users = await User.findAll({
+            users = await User.findAndCountAll({
                 where: {
                     username: {[Op.iLike]: '%' + search + '%' },
                 },
-                attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city']
+                attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city'],
+                limit, 
+                offset
             });
-            const friends = this.graphUsers.getFriendsOfUser(String(id));
-            getStatusOfRelationship(users, friends);
-            return users;
         }
+        getStatusOfRelationship(users, friends);
+        return users;
+    }
+
+    async getFollowersSelected(id, page = 1, limit = 5, selector = 'all') {
+        // page = page || 1;
+        // limit = limit || 5;
+        let offset = page * limit - limit;
+        const idFriends = this.graphUsers.getFriendsOfUser(String(id));
+        let users;
+        if (selector === 'all') {
+            users = await User.findAndCountAll({
+                where: { id: idFriends},
+                attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city'],
+                limit, 
+                offset,
+            });
+        }
+        if (selector === 'online') {
+            users = await User.findAndCountAll({
+                where: { id: idFriends, status: 'online'},
+                attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city'],
+                limit, 
+                offset,
+            });
+        }
+        if (selector === 'offline') {
+            users = await User.findAndCountAll({
+                where: { id: idFriends, status: 'offline'},
+                attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city'],
+                limit, 
+                offset,
+            });
+        }
+        return users;
     }
 }
 
