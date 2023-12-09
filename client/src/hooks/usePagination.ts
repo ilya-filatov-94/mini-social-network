@@ -17,7 +17,8 @@ onPageChange : коллбэк, вызываемый с обновленным з
 siblingCount (необязательно): представляет минимальное количество кнопок страницы, отображаемых с каждой стороны кнопки текущей страницы. По умолчанию 1.
 */
 
-export const DOTS = `&#8230;`;
+// export const DOTS = `&#8230;`;
+export const DOTS = '...';
 
 export const usePagination: TypeHookPagination = ({
     totalCount,

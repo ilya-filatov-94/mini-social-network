@@ -64,7 +64,7 @@ const Pagination: FC<IPaginationProps> = ({
           <li
             key={pageNumber + '' + index}
             className={`${styles.paginationItem} ${styles.dots}`}>
-              ...
+              {DOTS}
           </li>
           );
         }
