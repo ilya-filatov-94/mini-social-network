@@ -6,8 +6,9 @@
     flex: 2;
     position: sticky;
     top: $heightNav;
-    height: calc(100vh - $topBar);
-    overflow-y: hidden;
+    // height: calc(100vh - $topBar);
+    overflow-y: auto;
+    height: 100vh;
 
     @include mobile {
         display: none;

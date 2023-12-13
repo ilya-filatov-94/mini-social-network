@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+// const https = require('https');
 const cors = require('cors');
 const sequelize = require('./db');
 const fileUpload = require('express-fileupload');
@@ -7,6 +8,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const router = require('./routes/index');
 const errorHandler = require('./middleware/ErrorHandlingMiddleware');
+
+
+const { Server } = require('socket.io');
 
 
 const PORT = process.env.PORT || 5000;
@@ -33,7 +37,21 @@ const startApp = async () => {
             .then(() => console.log('Connected to PostgreSQL DB'))
             .catch((error) => console.log(`Error PostgreSQL connected ${error}`));
         await sequelize.sync();
-        app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
+        // const server = https.createServer(app).listen(PORT, () => console.log(`Server started on port ${PORT}`));
+        const server = app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+
+        const socket = new Server(server, {
+            cors: {
+              origin: [process.env.CLIENT_URL],
+              credentials: true
+            },
+        });
+        socket.on("connection", (socket) => {
+            console.log("socket connection : ", socket.id);
+        });
+
+
     } catch (error) {
         console.log(error);
     }

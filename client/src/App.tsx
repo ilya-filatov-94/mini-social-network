@@ -11,6 +11,7 @@ const Profile = lazy(() => import('./pages/profile/Profile'));
 const EditProfile = lazy(() => import('./pages/editProfile/EditProfile'));
 const Friends = lazy(() => import('./pages/friends/Friends'));
 const Users = lazy(() => import('./pages/users/Users'));
+const Messenger = lazy(() => import('./pages/messenger/Messenger'));
 
 
 const App: FC = () => {
@@ -43,6 +44,11 @@ const App: FC = () => {
             <Route path="users" element={
               <RequireAuth >
                 <Users />
+              </RequireAuth >
+            }/>
+            <Route path="messages" element={
+              <RequireAuth >
+                <Messenger />
               </RequireAuth >
             }/>
           </Route>

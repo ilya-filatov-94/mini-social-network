@@ -25,9 +25,7 @@ const baseQuery = fetchBaseQuery({
     credentials: "include",
 });
 
-let isRetryRequest = false;
 const mutex = new Mutex();
-
 
 export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (
     args,
@@ -37,11 +35,10 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
     await mutex.waitForUnlock();
     let result = await baseQuery(args, api, extraOptions);
 
-    if (result.error && result.error.status === 401 && !isRetryRequest) {   
+    if (result.error && result.error.status === 401) {
         if (!mutex.isLocked()) {
             const release = await mutex.acquire(); 
-            try {
-                isRetryRequest = true;   
+            try { 
                 const refreshResult = await baseQuery({
                     url: '/user/refresh/',
                     method: 'GET'
@@ -57,7 +54,6 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
                     const userId = state.reducerAuth.currentUser.id;
                     api.dispatch(logoutUser(userId));
                 }
-                isRetryRequest = false;
             } finally {
                 release();
             }
