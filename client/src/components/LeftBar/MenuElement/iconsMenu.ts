@@ -25,7 +25,7 @@ export const basicMenuIcons: IMenu[] = [
         id: 2,
         name: 'Сообщения',
         image: Messages,
-        menuRef: '/messages'
+        menuRef: '/conversations'
     },
     {
         id: 3,

@@ -6,6 +6,7 @@ import {useAppSelector, useAppDispatch} from '../../../hooks/useTypedRedux';
 import {logoutUser} from '../../../store/authSlice';
 import { useNavigate, useLocation } from "react-router-dom";
 import MobileMenuItem from './MobileMenuItem/MobileMenuItem';
+import {urlAPIimages} from '../../../env_variables';
 
 import {
   basicMenuIcons,
@@ -39,7 +40,7 @@ const MobileMenu: FC<IMobileMenuProps> = ({
   const userMenuItem = {
     name: 'Мой профиль',
     menuRef: `profile/${currentUser.refUser}`,
-    image: currentUser.profilePic,
+    image: urlAPIimages+currentUser.profilePic,
   }
 
   if (isOpenMobileMenu) {

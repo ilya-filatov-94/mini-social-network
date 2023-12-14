@@ -47,8 +47,6 @@ const ContentPost: FC<IContentPostProps> = ({
     }
   }
 
-  const labelComments = declensionOfComment(numberOfComments);
-
   return (
     <>
       <div className={rootStyles.join(' ')}>
@@ -70,7 +68,7 @@ const ContentPost: FC<IContentPostProps> = ({
           <TextsmsOutlinedIcon />
           <span className={styles.mobileInfo}>{numberOfComments}</span>
           <span className={styles.commInfo}>
-            {labelComments}
+            {declensionOfComment(numberOfComments)}
           </span>
         </div>
         <div className={styles.item}>

@@ -1,0 +1,162 @@
+@import '../../styles/responsive.scss';
+@import '../../styles/theme.scss';
+
+
+.container {
+    padding: 10px 30px;
+    font-size: 0.875rem;
+    overflow-y: hidden;
+    height: 100vh;
+
+    @include mobile {
+        padding: 10px 10px;
+    }
+
+    .mainWrapper {
+        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+        border-radius: 20px;
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
+    }
+
+    .mainWrapper::-webkit-scrollbar-thumb {
+        background-color: grey;
+    }
+
+    .wrapper {
+        border-radius: 20px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        overflow-y: auto;
+
+        .wrapperMessages {
+            width: 100%;
+        }
+
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        .mainWrapper::-webkit-scrollbar-track {
+            border: 3px solid themed($curTheme, "bgSoft");
+            border-radius: 20px;
+            background: themed($curTheme, "bgSoft");
+        }
+
+        .mainWrapper {
+            background-color: themed($curTheme, "background");
+        }
+
+        .wrapper.headerWrapper {
+            background-color: themed($curTheme, "background");
+            border-bottom: 2px solid themed($curTheme, "bgSoft");
+        }
+
+        .wrapper.bottomBar {
+            background-color: themed($curTheme, "background");
+            border-top: 2px solid themed($curTheme, "bgSoft");
+        }
+    }
+
+    &.theme-light {
+        $curTheme: "light";
+        background-color: themed($curTheme, "bgSoft");
+        color: themed($curTheme, "textColor");
+
+        .mainWrapper::-webkit-scrollbar-track {
+            border: 3px solid themed($curTheme, "bgSoft");
+            border-radius: 20px;
+            background: themed($curTheme, "bgSoft");
+        }
+
+        .mainWrapper {
+            background-color: themed($curTheme, "background");
+        }
+
+        .wrapper.headerWrapper {
+            background-color: themed($curTheme, "background");
+            border-bottom: 2px solid themed($curTheme, "bgSoft");
+        }
+
+        .wrapper.bottomBar {
+            background-color: themed($curTheme, "background");
+            border-top: 2px solid themed($curTheme, "bgSoft");
+        }
+    }
+}
+
+.wrapper.headerWrapper {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .backBtn {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        font-size: 0.875rem;
+        font-weight: 400;
+        cursor: pointer;
+
+        p:last-child {
+            margin-left: 10px;
+        }
+    }
+
+    .infoConversation {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .link {
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            font-size: inherit;
+        }
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+}
+
+.wrapper.listMessages {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    min-height: calc(100vh - 75px - 80px - 80px);
+}
+
+.wrapper.bottomBar {
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    padding-top: 10px;
+    min-height: 60px;
+}

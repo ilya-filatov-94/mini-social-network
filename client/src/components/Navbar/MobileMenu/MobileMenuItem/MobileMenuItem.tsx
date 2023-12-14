@@ -4,6 +4,7 @@ import noAvatar from '../../../../assets/images/no-avatar.jpg';
 import { Link } from "react-router-dom";
 import {IMenu} from '../../../../types/menu';
 
+
 interface IMobileMenuItemProps {
   item: IMenu;
   avatarStyle?: string;

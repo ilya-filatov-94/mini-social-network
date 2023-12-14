@@ -4,14 +4,25 @@
 .messengerContainer {
     padding: 10px 30px;
     font-size: 0.875rem;
+    overflow-y: hidden;
     height: 100vh;
 
     @include mobile {
         padding: 10px;
     }
 
-    .wrapper {
+    .mainWrapper {
         box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+        border-radius: 20px;
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
+    }
+
+    .mainWrapper::-webkit-scrollbar-thumb {
+        background-color: grey;
+    }
+
+    .wrapper {
         border-radius: 20px;
         padding: 20px 20px 20px 30px;
         display: flex;
@@ -60,12 +71,23 @@
             margin-top: 20px;
             font-weight: 400;
         }
+
+        .wrapperConversations {
+            width: 100%;
+        }
+
     }
 
     &.theme-dark {
         $curTheme: "dark";
         background-color: themed($curTheme, "bgSoft");
         color: themed($curTheme, "textColor");
+
+        .mainWrapper::-webkit-scrollbar-track {
+            border: 3px solid themed($curTheme, "bgSoft");
+            border-radius: 20px;
+            background: themed($curTheme, "bgSoft");
+        }
 
         .search {
             border: 1px solid themed($curTheme, "border");
@@ -75,7 +97,11 @@
             }
         }
 
-        .wrapper {
+        .mainWrapper {
+            background-color: themed($curTheme, "background");
+        }
+
+        .wrapper.headerWrapper {
             background-color: themed($curTheme, "background");
         }
     }
@@ -85,6 +111,12 @@
         background-color: themed($curTheme, "bgSoft");
         color: themed($curTheme, "textColor");
 
+        .mainWrapper::-webkit-scrollbar-track {
+            border: 3px solid themed($curTheme, "bgSoft");;
+            border-radius: 20px;
+            background: themed($curTheme, "bgSoft");;
+        }
+
         .search {
             border: 1px solid themed($curTheme, "border");
 
@@ -93,8 +125,35 @@
             }
         }
 
-        .wrapper {
+        .mainWrapper {
+            background-color: themed($curTheme, "background");
+        }
+
+        .wrapper.headerWrapper {
             background-color: themed($curTheme, "background");
         }
     }
+}
+
+.wrapper.headerWrapper {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-bottom: 10px;
+}
+
+.wrapper.listConversations {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    padding-top: 0;
+}
+
+.itemConversation:hover.theme-dark {
+    background-color: #102db0c1;
+}
+
+.itemConversation:hover {
+    background-color: rgba(172, 213, 248, 0.4);
 }
