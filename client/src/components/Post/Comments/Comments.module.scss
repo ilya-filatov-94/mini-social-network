@@ -39,7 +39,7 @@
 
         .btn {
             border: none;
-            background-color: #5271ff;
+            background-color: #556fe3da;
             color: white;
             padding: 10px;
             cursor: pointer;
@@ -48,6 +48,10 @@
             @include mobile {
                 display: none;
             }
+        }
+
+        .btn:hover, .btn:active {
+            background-color: #102db0c1;
         }
         
         .mobileBtnSend {
@@ -63,11 +67,15 @@
                 align-items: center;
                 justify-content: center;
                 border: none;
-                background-color: #5271ff;
+                background-color: #556fe3da;
                 padding: 10px;
                 cursor: pointer;
                 border-radius: 3px;
             }
+        }
+
+        .mobileBtnSend:hover, .mobileBtnSend:active {
+            background-color: #102db0c1;
         }
     }
 

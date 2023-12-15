@@ -1,13 +1,16 @@
-import {FC} from 'react';
+import {FC, useRef, useState, ChangeEvent} from 'react';
 import styles from './Messages.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import {urlAPIimages} from '../../env_variables';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
 import { Link, useNavigate } from "react-router-dom";
-
+import PreviewAttach from './PreviewAttach/PreviewAttach';
+import {TPreviewImg} from './PreviewAttach/PreviewAttach';
+import MessageItem from './MessageItem/MessageItem';
 
 //Mock Данные диалога
+import photo from '../../assets/images/bg-for-login.jpeg';
 const MockConversation = {
   username: 'John Doe',
   avatar: '',
@@ -17,10 +20,43 @@ const MockConversation = {
   status: 'online',
 }
 
+const MockMessage = {
+  username: 'John Doe',
+  timeMsg: '13 мин. назад',
+  textMsg: 'Привет, Джон, давно не виделись, как твои дела?',
+  imgMsg: '',
+}
+
 const Messages: FC = () => {
   const curUser = useAppSelector(state => state.reducerAuth.currentUser);
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const navigate = useNavigate();
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [previewImg, setPreviewImg] = useState<TPreviewImg>();
+  const [selectedFile, setSelectedFile] = useState<File>();
+
+  function handleAttachImage(event: ChangeEvent<HTMLInputElement>) {
+    if (event.target.files) {
+      let file = event.target.files[0];
+      if (!file.type.match('image')) return;
+      setSelectedFile(file);
+
+      const reader = new FileReader();
+      reader.onloadend = () => setPreviewImg(reader.result)
+      reader.readAsDataURL(file);
+    }
+  }
+
+  function removeAttachImage(event: MouseEvent | PointerEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+    setSelectedFile(undefined);
+    setPreviewImg(null);
+  }
+
+  function handleSend() {
+
+  }
 
   return (
     <div className={`${styles.container}
@@ -49,15 +85,54 @@ const Messages: FC = () => {
 
         <div className={`${styles.wrapper} ${styles.listMessages}`}>
 
-          <h2>Сообщения</h2>
+          <MessageItem 
+            addClass={styles.recipient}
+            username={MockMessage.username}
+            timeMsg={MockMessage.timeMsg}
+            textMsg='Привет!'
+          />
 
-
+          <MessageItem 
+            addClass={styles.sender}
+            username={MockMessage.username}
+            timeMsg={MockMessage.timeMsg}
+            textMsg={MockMessage.textMsg}
+            // imgMsg={photo}
+          />
 
         </div>
 
         <div className={`${styles.wrapper} ${styles.bottomBar}`}>
-          <h2>Отправка сообщения</h2>
+          <textarea
+            ref={textareaRef}
+            rows={2}
+            maxLength={255}
+            className={styles.input}
+            placeholder={"Сообщение..."}
+          />
+          <div className={styles.send}>
+            <input
+              onChange={handleAttachImage}
+              className={styles.fileInput}
+              type="file"
+              accept=".jpeg, .jpg, .png"
+              id="updateFile"
+            />
+            <label htmlFor="updateFile">
+              <PreviewAttach 
+                dataImg={previewImg}
+                curTheme={currentTheme}
+                remove={removeAttachImage}
+                previewAttach='img'
+              />
+            </label>
+            <div className={styles.mobileBtnSend} onClick={handleSend}/>
+            <button className={styles.btn} onClick={handleSend}>
+              Отправить
+            </button>
+          </div>
         </div>
+
       </div>
     </div>
   )

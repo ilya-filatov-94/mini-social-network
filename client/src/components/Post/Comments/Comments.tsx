@@ -94,15 +94,15 @@ const Comments: FC<IContentPostProps> = ({
                 alt={`user ${curUser.username}`} 
             />
             <textarea
-                ref={textareaRef}
-                rows={1}
-                maxLength={255}
-                className={styles.input}
-                placeholder="Напишите комментарий"
+              ref={textareaRef}
+              rows={1}
+              maxLength={255}
+              className={styles.input}
+              placeholder="Напишите комментарий"
             />
             <div className={styles.mobileBtnSend} onClick={handleSendComment}/>
             <button className={styles.btn} onClick={handleSendComment}>
-                Отправить
+              Отправить
             </button>
         </div>
 
