@@ -3,7 +3,6 @@ import {
     BaseQueryFn, 
     FetchArgs, 
     FetchBaseQueryError,
-    // BaseQueryApi
 } from "@reduxjs/toolkit/query/react";
 import {API_URL} from '../env_variables'; 
 import {RootState} from '../store';
