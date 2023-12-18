@@ -63,7 +63,6 @@ const UserRelationship = sequelize.define('user_relationship', {
 });
 
 
-
 //Отношение 1 к 1, доп ключ userId автоматически сгененируется в таблице Token
 User.hasOne(Token);
 Token.belongsTo(User);
@@ -95,6 +94,32 @@ Relationship.belongsToMany(User, {through: UserRelationship, as: "users"});
 User.belongsToMany(Relationship, {through: UserRelationship, as: "relationship"});
 
 
+//Schemes for chat
+const Conversation = sequelize.define('conversation', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    participantId1: {type: DataTypes.INTEGER},
+    participantId2: {type: DataTypes.INTEGER},
+    lastMessageId: {type: DataTypes.INTEGER},
+    lastMessageText: {type: DataTypes.STRING},
+    counterUnreadMessages: {type: DataTypes.INTEGER},
+});
+
+const Message = sequelize.define('message', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    text: {type: DataTypes.STRING},
+    file: {type: DataTypes.STRING},
+    isRead: {type: DataTypes.BOOLEAN},
+});
+
+//1 ко многим
+User.hasMany(Message);
+Message.belongsTo(User);
+
+//1 ко многим
+Conversation.hasMany(Message);
+Message.belongsTo(Conversation);
+
+
 module.exports = {
     User,
     Token,
@@ -104,4 +129,6 @@ module.exports = {
     Like,
     Activity,
     Relationship,
+    Conversation,
+    Message
 };

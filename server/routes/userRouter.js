@@ -21,14 +21,14 @@ router.get('/profile/:ref/edit', authMiddleware, userController.getOneEdit);
 router.patch('/profile/update', authMiddleware, userController.updateProile);
 
 router.get('/all', authMiddleware, userController.getAll); 
+router.get('/all-selected', authMiddleware, userController.getSelectedUsers);
 router.post('/follow', authMiddleware, userController.subscribeUser);
 router.post('/unfollow', authMiddleware, userController.unsubscribeUser);
-router.get('/followers', authMiddleware, userController.getFollowers);
 router.get('/suggestions', authMiddleware, userController.getSuggestionsForUser);
 router.get('/common', authMiddleware, userController.getMutualFriends);
 router.get('/activities', authMiddleware, userController.getActivitiesUsers);
 router.post('/activities', authMiddleware, userController.createActivityUser);
-router.get('/all-selected', authMiddleware, userController.getSelectedUsers);
+router.get('/followers', authMiddleware, userController.getFollowers);
 router.get('/followers-pag', authMiddleware, userController.getFollowersSelected);
 
 module.exports = router;

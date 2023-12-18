@@ -275,13 +275,15 @@ class UserService {
         return mutualFriendsData;
     }
 
-    async getActivities() {
+    async getActivities(curUserId) {
+        const idFriends = this.graphUsers.getFriendsOfUser(String(curUserId));
         const activities = await Activity.findAll({
             order: [['createdAt', 'DESC']],
+            where: {userId: idFriends},
         });
-        const idUsers = activities.map(item => item.dataValues.userId);
+        // const idUsers = activities.map(item => item.dataValues.userId);
         const users = await User.findAll({
-            where: { id: idUsers},
+            where: { id: idFriends},
             attributes: ['id', 'username', 'refUser', 'profilePic']
         });
         getFullDataActivities(users, activities);

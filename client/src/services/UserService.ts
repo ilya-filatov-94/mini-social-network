@@ -125,9 +125,12 @@ export const userApi = createApi({
           }),
           keepUnusedDataFor: 60,
         }),
-        getActivitiesUsers: builder.query<IActivityOfUser[], void>({
-          query: () => ({
-            url: 'user/activities'
+        getActivitiesUsers: builder.query<IActivityOfUser[], number>({
+          query: (id) => ({
+            url: 'user/activities',
+            params: {
+              id: id,
+            }
           }),
           keepUnusedDataFor: 60,
         }),

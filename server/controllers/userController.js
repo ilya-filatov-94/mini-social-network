@@ -191,7 +191,8 @@ class UserController {
 
     async getActivitiesUsers(request, response, next) {
         try {
-            const activities = await userService.getActivities();
+            const {id} = request.query;
+            const activities = await userService.getActivities(id);
             return response.json(activities);
         } catch (error) {
             next(error);

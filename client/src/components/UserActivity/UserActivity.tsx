@@ -14,11 +14,12 @@ import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 const UserActivity: FC = memo(() => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const curUserId = useAppSelector(state => state.reducerAuth.currentUser.id);
   const {
     data: activitiesOfUsers, 
     error, 
     isLoading
-  } = useGetActivitiesUsersQuery();
+  } = useGetActivitiesUsersQuery(curUserId);
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   if (isLoading) {
