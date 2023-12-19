@@ -1,4 +1,10 @@
-import {FC, useRef, useState, ChangeEvent} from 'react';
+import {
+  FC,
+  useRef,
+  useState, 
+  useEffect,
+  ChangeEvent,
+} from 'react';
 import styles from './Messages.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import {urlAPIimages} from '../../env_variables';
@@ -8,6 +14,9 @@ import { Link, useNavigate } from "react-router-dom";
 import PreviewAttach from './PreviewAttach/PreviewAttach';
 import {TPreviewImg} from './PreviewAttach/PreviewAttach';
 import MessageItem from './MessageItem/MessageItem';
+
+import {io, Socket} from 'socket.io-client';
+import {API_SocketURL} from '../../env_variables';
 
 //Mock Данные диалога
 import photo from '../../assets/images/bg-for-login.jpeg';
@@ -34,6 +43,19 @@ const Messages: FC = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [previewImg, setPreviewImg] = useState<TPreviewImg>();
   const [selectedFile, setSelectedFile] = useState<File>();
+
+
+  const socketRef = useRef<Socket>(io(API_SocketURL));
+
+  useEffect(() => {
+    socketRef.current.emit('addUser', curUser.id);
+
+    socketRef.current.on("getUsers", (userId) => {
+      console.log('Пользователь подключен', userId);
+    });
+  }, [curUser]);
+
+
 
   function handleAttachImage(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
