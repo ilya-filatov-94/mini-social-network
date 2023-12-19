@@ -8,9 +8,6 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const router = require('./routes/index');
 const errorHandler = require('./middleware/ErrorHandlingMiddleware');
-
-// const { Server } = require('socket.io');
-// const socketsController = require('./controllers/socketsController');
 const handlingSocketsEvents = require('./routes/socketsRouter');
 
 
@@ -43,26 +40,6 @@ const startApp = async () => {
         const server = app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
         handlingSocketsEvents(server);
-        
-        // const socket = new Server(server, {
-        //     cors: {
-        //       origin: [process.env.CLIENT_URL],
-        //       credentials: true
-        //     },
-        // });
-        // socket.on("connection", (socket) => {
-        //     console.log("socket connection : ");
-        //     socket.on('addUser', userId => {
-        //         socketsController.addUser();
-        //     });
-
-        //     socket.on("disconnect", () => {
-        //         console.log("a user disconnected!");
-        //         removeUser(socket.id);
-        //         io.emit("getUsers", users);
-        //     });
-        // });
-
 
     } catch (error) {
         console.log(error);
