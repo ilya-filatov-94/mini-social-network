@@ -2,11 +2,10 @@ import {
   FC,
   useRef,
   useState, 
-  useEffect,
   ChangeEvent,
 } from 'react';
 import styles from './Messages.module.scss';
-import {useAppSelector} from '../../hooks/useTypedRedux';
+import {useAppSelector, useAppDispatch} from '../../hooks/useTypedRedux';
 import {urlAPIimages} from '../../env_variables';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
@@ -14,9 +13,9 @@ import { Link, useNavigate } from "react-router-dom";
 import PreviewAttach from './PreviewAttach/PreviewAttach';
 import {TPreviewImg} from './PreviewAttach/PreviewAttach';
 import MessageItem from './MessageItem/MessageItem';
+import {send} from '../../store/webSocketSlice';
+import {changeInputMessage} from '../../store/messagesSlice';
 
-import {io, Socket} from 'socket.io-client';
-import {API_SocketURL} from '../../env_variables';
 
 //Mock Данные диалога
 import photo from '../../assets/images/bg-for-login.jpeg';
@@ -33,28 +32,17 @@ const MockMessage = {
   username: 'John Doe',
   timeMsg: '13 мин. назад',
   textMsg: 'Привет, Джон, давно не виделись, как твои дела?',
-  imgMsg: '',
+  imgMsg: photo,
 }
 
 const Messages: FC = () => {
+  const dispatch = useAppDispatch();
   const curUser = useAppSelector(state => state.reducerAuth.currentUser);
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
   const navigate = useNavigate();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [previewImg, setPreviewImg] = useState<TPreviewImg>();
   const [selectedFile, setSelectedFile] = useState<File>();
-
-
-  const socketRef = useRef<Socket>(io(API_SocketURL));
-
-  useEffect(() => {
-    socketRef.current.emit('addUser', curUser.id);
-
-    socketRef.current.on("getUsers", (userId) => {
-      console.log('Пользователь подключен', userId);
-    });
-  }, [curUser]);
-
 
 
   function handleAttachImage(event: ChangeEvent<HTMLInputElement>) {
@@ -77,7 +65,20 @@ const Messages: FC = () => {
   }
 
   function handleSend() {
-
+    let textMessage;
+    if (textareaRef.current) {
+      textMessage = textareaRef.current.value;
+    }
+    if (!textMessage && !selectedFile) return;
+    dispatch(changeInputMessage({
+      conversationId: 1,
+      userId: curUser.id,
+      text: textMessage,
+      file: selectedFile,
+      isRead: false,
+    }));
+    console.log('Отправил', textMessage);
+    dispatch(send());
   }
 
   return (

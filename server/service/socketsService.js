@@ -1,6 +1,6 @@
 
 
-class socketsController {
+class socketsService {
     constructor() { 
         this.onlineUsers = new Map();
     }
@@ -25,4 +25,4 @@ class socketsController {
 }
 
 
-module.exports = new socketsController();
+module.exports = new socketsService();

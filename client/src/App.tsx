@@ -1,8 +1,10 @@
-import {FC, lazy} from 'react';
+import {FC, lazy, useEffect} from 'react';
 import './styles/App.scss';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import RequireAuth from './hoc/RequireAuth';
+import {useAppDispatch} from './hooks/useTypedRedux';
+import {wsConnect, wsDisconnect} from './store/webSocketSlice';
 
 import Register from './pages/register/Register';
 import Login from './pages/login/Login';
@@ -15,6 +17,15 @@ const Messenger = lazy(() => import('./pages/messenger/Messenger'));
 const Messages = lazy(() => import('./pages/messages/Messages'));
 
 const App: FC = () => {
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(wsConnect());
+
+    return () => {
+      dispatch(wsDisconnect());
+    }
+  },[dispatch]);
   
   return (
     <BrowserRouter>

@@ -1,5 +1,6 @@
 import {FC, useState, UIEvent} from 'react';
 import styles from './Messenger.module.scss';
+import {RootState} from '../../store/index';
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Input from '../../components/Input/Input';
@@ -16,16 +17,20 @@ const MockConversation = {
 }
 
 const Messenger: FC = () => {
-  const curUser = useAppSelector(state => state.reducerAuth.currentUser);
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const curUser = useAppSelector((state: RootState) => state.reducerAuth.currentUser);
+  const currentTheme = useAppSelector((state: RootState) => state.reducerTheme.themeMode);
 
   const [stateSearch, setSearch] = useState(false);
+
+  console.log('Рендер Messenger произошёл');
+  
 
   function toggleSearch(event: UIEvent) {
     event.stopPropagation();
     setSearch(prev => !prev);
   }
 
+  
   return (
     <div className={`${styles.messengerContainer}
     ${currentTheme ==='darkMode' 

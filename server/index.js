@@ -8,7 +8,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const router = require('./routes/index');
 const errorHandler = require('./middleware/ErrorHandlingMiddleware');
-const handlingSocketsEvents = require('./routes/socketsRouter');
+const handlingSocketsEvents = require('./gateway/socketsGateway');
 
 
 const PORT = process.env.PORT || 5000;

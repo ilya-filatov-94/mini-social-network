@@ -5,6 +5,9 @@ import {postApi} from '../services/PostService';
 import {userApi} from '../services/UserService';
 import {commentApi} from '../services/CommentService';
 import {storyApi} from '../services/StoryService';
+import {webSocketMiddleware} from './middleware/websocketMiddleware';
+import reducerWebSocket from './webSocketSlice';
+import reducerMessages from './messagesSlice';
 
 
 import storage from "redux-persist/lib/storage";
@@ -26,6 +29,8 @@ const rootReducer = combineReducers({
   [postApi.reducerPath]: postApi.reducer,
   [commentApi.reducerPath]: commentApi.reducer,
   [storyApi.reducerPath]: storyApi.reducer,
+  reducerWebsocket: reducerWebSocket,
+  reducerMessages: reducerMessages,
 });
 
 const persistConfig = {
@@ -44,10 +49,13 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(postApi.middleware)
-    .concat(userApi.middleware)
-    .concat(commentApi.middleware)
-    .concat(storyApi.middleware)
+    }).concat([
+      postApi.middleware,
+      userApi.middleware,
+      commentApi.middleware,
+      storyApi.middleware,
+      webSocketMiddleware
+    ])
 });
 
 export const persistor = persistStore(store);
