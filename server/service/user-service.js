@@ -333,8 +333,6 @@ class UserService {
     }
 
     async getFollowersSelected(id, page = 1, limit = 5, selector = 'all') {
-        // page = page || 1;
-        // limit = limit || 5;
         let offset = page * limit - limit;
         const idFriends = this.graphUsers.getFriendsOfUser(String(id));
         let users;

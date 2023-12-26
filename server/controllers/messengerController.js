@@ -3,12 +3,11 @@ const uuid = require('uuid');
 const path = require('path');
 
 
-
 class messengerController {
-    async createConversation(request, response, next) {
+    async openConversation(request, response, next) {
         try {
             const {curUserId, memberId} = request.body;
-            const conversation = await messengerService.createConversation(curUserId, memberId);
+            const conversation = await messengerService.openConversation(Number(curUserId), Number(memberId));
             return response.json(conversation);
         } catch(error) {
             next(error);
@@ -17,10 +16,20 @@ class messengerController {
 
     async getConversations(request, response, next) {
         try {
-            const {curUserId} = request.query;
-            const conversations = await messengerService.getConversations(curUserId);
+            const {id} = request.query;
+            const conversations = await messengerService.getConversations(Number(id));
             return response.json(conversations);
         } catch(error) {
+            next(error);
+        }
+    }
+
+    async findMembers(request, response, next) {
+        try {
+            const {id, selector} = request.query;
+            const members = await messengerService.findMembers(Number(id), selector);
+            return response.json(members);
+        } catch (error) {
             next(error);
         }
     }
@@ -28,7 +37,7 @@ class messengerController {
     async getMessages(request, response, next) {
         try {
             const {conversationId} = request.query;
-            const messages = await messengerService.getMessages(conversationId);
+            const messages = await messengerService.getMessages(Number(conversationId));
             return response.json(messages);
         } catch(error) {
             next(error);

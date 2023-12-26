@@ -25,7 +25,7 @@ const App: FC = () => {
     return () => {
       dispatch(wsDisconnect());
     }
-  },[dispatch]);
+  }, [dispatch]);
   
   return (
     <BrowserRouter>
@@ -62,7 +62,7 @@ const App: FC = () => {
                 <Messenger />
               </RequireAuth >
             }/>
-            <Route path="messages" element={
+            <Route path="messages/:id" element={
               <RequireAuth >
                 <Messages />
               </RequireAuth >

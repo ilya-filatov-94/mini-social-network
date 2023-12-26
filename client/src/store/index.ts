@@ -5,6 +5,7 @@ import {postApi} from '../services/PostService';
 import {userApi} from '../services/UserService';
 import {commentApi} from '../services/CommentService';
 import {storyApi} from '../services/StoryService';
+import {messengerApi} from '../services/MessengerService';
 import {webSocketMiddleware} from './middleware/websocketMiddleware';
 import reducerWebSocket from './webSocketSlice';
 import reducerMessages from './messagesSlice';
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   [postApi.reducerPath]: postApi.reducer,
   [commentApi.reducerPath]: commentApi.reducer,
   [storyApi.reducerPath]: storyApi.reducer,
+  [messengerApi.reducerPath]: messengerApi.reducer,
   reducerWebsocket: reducerWebSocket,
   reducerMessages: reducerMessages,
 });
@@ -54,6 +56,7 @@ const store = configureStore({
       userApi.middleware,
       commentApi.middleware,
       storyApi.middleware,
+      messengerApi.middleware,
       webSocketMiddleware
     ])
 });

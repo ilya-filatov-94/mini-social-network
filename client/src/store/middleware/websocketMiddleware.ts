@@ -2,6 +2,7 @@ import {Middleware} from "@reduxjs/toolkit";
 import {RootState} from "../index";
 import {io, Socket} from "socket.io-client";
 import {API_SocketURL} from '../../env_variables';
+import axios from 'axios';
 
 import {WebSocketState} from '../../types/websocket';
 import {typeConnect} from '../../types/websocket';
@@ -15,7 +16,7 @@ let initConnection = false;
 
 
 
-export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next) => (action) => {
+export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next) => async (action) => {
     const state = getState() as RootState;
     const webSocketState: WebSocketState = state.reducerWebsocket;
     const messagesState: IMessageList = state.reducerMessages;
@@ -33,16 +34,26 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
             socket.connect();
         });
 
-        socket.on('message', (message) => {
-            dispatch(addMessage({message}));
-            console.log('Сообщение от пользователя', message);
+        socket.on('message', () => {
+            dispatch(addMessage({message: messagesState.inputMessage}));
+            console.log('Сообщение от пользователя', messagesState.inputMessage);
         });
 
     } else if (webSocketState.connect === typeConnect.Connected && socket) {
         //Если соединение создано, выполняем действия согласно заданным событиям  
-        if (action.type === 'webSocket/send' && /\S/ig.test(messagesState.inputMessage.text!)) {
-            socket.emit('message', {...messagesState.inputMessage, socketId: socket.id});
-            const clearTextMessage = {...messagesState.inputMessage, text: ''};
+        if (action.type === 'webSocket/send') {
+            let fileData;
+            if (messagesState.inputMessage.file) {
+                const response = await axios({
+                    method: 'get',
+                    url: messagesState.inputMessage.file,
+                    responseType: 'blob'
+                });
+                fileData = response.data || '';
+            }
+            const messageObj =  {...messagesState.inputMessage, socketId: socket.id, file: fileData};
+            socket.emit('message', messageObj);
+            const clearTextMessage = {...messagesState.inputMessage, text: '', file: ''};
             dispatch(changeInputMessage(clearTextMessage));
         }
 

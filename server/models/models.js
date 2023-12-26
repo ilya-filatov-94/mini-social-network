@@ -106,6 +106,7 @@ const Conversation = sequelize.define('conversation', {
 
 const Message = sequelize.define('message', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    username: {type: DataTypes.STRING},
     text: {type: DataTypes.STRING},
     file: {type: DataTypes.STRING},
     isRead: {type: DataTypes.BOOLEAN},

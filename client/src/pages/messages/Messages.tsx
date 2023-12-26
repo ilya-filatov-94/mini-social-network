@@ -15,31 +15,28 @@ import {TPreviewImg} from './PreviewAttach/PreviewAttach';
 import MessageItem from './MessageItem/MessageItem';
 import {send} from '../../store/webSocketSlice';
 import {changeInputMessage} from '../../store/messagesSlice';
+import {useGetMessagesQuery} from '../../services/MessengerService';
+import Loader from '../../components/Loader/Loader';
+import Alert from '@mui/material/Alert';
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import {getRelativeTimeString} from '../../helpers/dateTimeFormatting';
 
 
-//Mock Данные диалога
-import photo from '../../assets/images/bg-for-login.jpeg';
-const MockConversation = {
-  username: 'John Doe',
-  avatar: '',
-  refUser: 'JohnDoe21',
-  refDialog: '1',
-  lastMessage: 'Привет, Джон, давно не виделись, как твои дела?',
-  status: 'online',
-}
-
-const MockMessage = {
-  username: 'John Doe',
-  timeMsg: '13 мин. назад',
-  textMsg: 'Привет, Джон, давно не виделись, как твои дела?',
-  imgMsg: photo,
-}
 
 const Messages: FC = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const curUser = useAppSelector(state => state.reducerAuth.currentUser);
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const navigate = useNavigate();
+  const currentConversation = useAppSelector(state => state.reducerMessages.currentConversaton);
+
+  const {
+    data: messagesList, 
+    error: errorGetMessages, 
+    isLoading: isLoadingMessages
+  } = useGetMessagesQuery(currentConversation.id);
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [previewImg, setPreviewImg] = useState<TPreviewImg>();
   const [selectedFile, setSelectedFile] = useState<File>();
@@ -66,19 +63,32 @@ const Messages: FC = () => {
 
   function handleSend() {
     let textMessage;
+    let notEmptyText;
     if (textareaRef.current) {
       textMessage = textareaRef.current.value;
+      notEmptyText = /\S/ig.test(textMessage);
+      textareaRef.current.value = '';
     }
-    if (!textMessage && !selectedFile) return;
+    if (!notEmptyText && !selectedFile) return;
     dispatch(changeInputMessage({
       conversationId: 1,
       userId: curUser.id,
       text: textMessage,
-      file: selectedFile,
+      file: selectedFile ? URL.createObjectURL(selectedFile) : '',
       isRead: false,
     }));
-    console.log('Отправил', textMessage);
     dispatch(send());
+    setSelectedFile(undefined);
+    setPreviewImg(null);
+  }
+
+  if (errorGetMessages) {
+    if (isFetchBaseQueryErrorType(errorGetMessages)) {
+      return ( 
+      <Alert severity="error" sx={{m: 20}}>
+        Ошибка при поиске собеседника! {errorGetMessages.status}
+      </Alert>);
+    }
   }
 
   return (
@@ -94,35 +104,40 @@ const Messages: FC = () => {
             <p>Назад</p>
           </div>
           <div className={styles.infoConversation}>
-            <Link className={styles.link} to={`/profile/${MockConversation.refUser}?id=${curUser.id}`}>
-            <h2>{MockConversation.username}</h2>
+            <Link className={styles.link} to={`/profile/${currentConversation.refUser}?id=${curUser.id}`}>
+            <h2>{currentConversation.username}</h2>
             </Link>
-            <p>{MockConversation.status}</p>
+            <p>{currentConversation.status}</p>
           </div>
           <img
             className={styles.avatar}
-            src={MockConversation.avatar ? urlAPIimages + MockConversation.avatar : noAvatar}
-            alt={`${MockConversation.username} avatar`}
+            src={currentConversation.profilePic ? urlAPIimages + currentConversation.profilePic : noAvatar}
+            alt={`${currentConversation.username} avatar`}
           />
         </div>
 
         <div className={`${styles.wrapper} ${styles.listMessages}`}>
+          {isLoadingMessages && <Loader />}
 
-          <MessageItem 
-            addClass={styles.recipient}
-            username={MockMessage.username}
-            timeMsg={MockMessage.timeMsg}
-            textMsg='Привет!'
-          />
+          {(messagesList && messagesList.length !== 0) &&
+            messagesList.map(message =>
+              <MessageItem 
+                addClass={message.userId === curUser.id 
+                  ? styles.sender 
+                  : styles.recipient
+                  }
+                username={message.username!}
+                timeMsg={getRelativeTimeString(new Date(message.createdAt!), 'ru')}
+                textMsg={message.text}
+                imgMsg={message.file}
+              />
+            )
+          }
 
-          <MessageItem 
-            addClass={styles.sender}
-            username={MockMessage.username}
-            timeMsg={MockMessage.timeMsg}
-            textMsg={MockMessage.textMsg}
-            // imgMsg={photo}
-          />
-
+          {(messagesList && messagesList.length === 0) &&
+            <p className={styles.emptyConversation}>Сообщений пока нет</p>
+          }
+          
         </div>
 
         <div className={`${styles.wrapper} ${styles.bottomBar}`}>

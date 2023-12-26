@@ -3,33 +3,66 @@ import styles from './Conversation.module.scss';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
 import {urlAPIimages} from '../../../env_variables';
 import {useNavigate} from "react-router-dom";
+import {useOpenConversationMutation} from '../../../services/MessengerService';
+import Loader from '../../../components/Loader/Loader';
+import Alert from '@mui/material/Alert';
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import {useAppDispatch} from '../../../hooks/useTypedRedux';
+import {setCurrentConversationData} from '../../../store/messagesSlice';
+import {IConversation} from '../../../types/messenger';
 
-{/* <Link className={styles.link} to={`/messages/${refUser}/${refDialog}`}> */}
-
-interface IUserItemProps {
-    username: string;
-    avatar: string | undefined;
-    refUser: string;
-    refDialog: string;
-    lastMessage?: string;
-    status: string;
-    addClass?: string;
+export interface IPropsConversation {
+  id?: number;
+  curUserId: number;
+  memberId: number;
+  lastMessageText?: string;
+  username: string;
+  profilePic: string | undefined;
+  refUser: string;
+  status?: string;
+  addClass?: string;
 }
 
-const Conversation: FC<IUserItemProps> = ({
-    username,
-    avatar,
-    refUser,
-    refDialog,
-    lastMessage,
-    status,
-    addClass,
+interface IDataResponseConversation {
+  data: IConversation;
+}
+
+const Conversation: FC<IPropsConversation> = ({
+  id,
+  lastMessageText,
+  curUserId,
+  memberId,
+  username,
+  profilePic,
+  refUser,
+  status,
+  addClass,
 }) => {
 
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [openConversation, {
+    error: errorOpenConversation, 
+    isLoading: isLoadingOpenConversation
+  }] = useOpenConversationMutation();
 
-  function openConversation() {
-    navigate('/messages');
+  async function clickConversation() {
+    const {data} = await openConversation({
+      userId: curUserId, 
+      memberId: memberId
+    }) as IDataResponseConversation;
+
+    dispatch(setCurrentConversationData({
+      id: data.id,
+      memberId: data.memberId,
+      lastMessageId: data.lastMessageId,
+      lastMessageText: data.lastMessageText,
+      username: data.username,
+      profilePic: data.profilePic,
+      refUser: data.refUser,
+      status: data.status
+    }));
+    navigate(`/messages/${data.id}`);
   }
 
   function previewTruncMsg(text: string, maxlength: number) {
@@ -39,19 +72,21 @@ const Conversation: FC<IUserItemProps> = ({
 
   return (
     <div 
-      onClick={openConversation}
+      onClick={clickConversation}
       className={`${styles.userItem} ${addClass ? addClass : ''}`}
     >
       <img
         className={styles.avatar}
-        src={avatar ? urlAPIimages + avatar : noAvatar}
+        src={profilePic ? urlAPIimages + profilePic : noAvatar}
         alt={`${username} avatar`}
       />
       <div className={styles.infoUser}>
         <p className={styles.username}>{username}</p>
-        <p className={styles.infoText}>{status}</p>
-        {lastMessage &&
-          <p className={styles.previewMsg}>{previewTruncMsg(lastMessage, 32)}</p>
+        {status &&
+          <p className={styles.infoText}>{status}</p>
+        }
+        {lastMessageText &&
+          <p className={styles.previewMsg}>{previewTruncMsg(lastMessageText, 32)}</p>
         }
       </div>
 

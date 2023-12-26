@@ -13,7 +13,7 @@ interface ISpreadingInputProps
 }
 
 const Input: FC<ISpreadingInputProps> = memo(({
-  addClass, 
+  addClass,
   ...props
 }) => {
   return (

@@ -79,10 +79,10 @@ const Users: FC = () => {
         {!listUsers?.count &&
           <p className={styles.notFound}>Пользователи не найдены</p>
         }
-        {listUsers?.count &&
+        {listUsers?.count !== 0 &&
           <Pagination
             currentPage={currentPage}
-            totalCount={listUsers.count}
+            totalCount={listUsers?.count || 0}
             pageSize={numberUsersOnPage}
             onPageChange={(page: number) => setCurrentPage(page)}
           />
