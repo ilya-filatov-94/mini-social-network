@@ -27,6 +27,7 @@ const initialStateUser: IinitialUser = {
     username: "",
     refUser: "",
     profilePic: "",
+    status: 'offline',
 };
 
 const initialState: IAsyncAuthState = {
@@ -160,6 +161,14 @@ const authSlice = createSlice({
             if (action.payload.profilePic) {
                 state.currentUser.profilePic = action.payload.profilePic;
             }
+        },
+        changeStatusUser(state, action: PayloadAction<boolean>) {
+            if (action.payload) {
+                state.currentUser.status = 'online';
+            }
+            if (!action.payload) {
+                state.currentUser.status = 'offline';
+            }
         }
     },
     extraReducers: (builder) => {
@@ -227,5 +236,5 @@ function isError(action: AnyAction) {
     return action.type.endsWith('rejected');
 }
 
-export const {setErrorStatus, updateToken, updateUser} = authSlice.actions; 
+export const {setErrorStatus, updateToken, updateUser, changeStatusUser} = authSlice.actions; 
 export default authSlice.reducer;

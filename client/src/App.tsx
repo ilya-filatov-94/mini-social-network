@@ -3,8 +3,9 @@ import './styles/App.scss';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import RequireAuth from './hoc/RequireAuth';
-import {useAppDispatch} from './hooks/useTypedRedux';
+import {useAppDispatch, useAppSelector} from './hooks/useTypedRedux';
 import {wsConnect, wsDisconnect} from './store/webSocketSlice';
+import {changeStatusUser} from './store/authSlice';
 
 import Register from './pages/register/Register';
 import Login from './pages/login/Login';
@@ -18,14 +19,19 @@ const Messages = lazy(() => import('./pages/messages/Messages'));
 
 const App: FC = () => {
 
+  const {isAuth} = useAppSelector(state => state.reducerAuth);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(wsConnect());
+    if (isAuth) {
+      dispatch(wsConnect());
+      dispatch(changeStatusUser(true));
+    }
 
     return () => {
+      dispatch(changeStatusUser(false));
       dispatch(wsDisconnect());
     }
-  }, [dispatch]);
+  }, [dispatch, isAuth]);
   
   return (
     <BrowserRouter>

@@ -1,5 +1,6 @@
 const { Server } = require('socket.io');
 const socketsService = require('../service/socketsService');
+const {User} = require('../models/models');
 
 let sessionId = '';
 
@@ -16,13 +17,15 @@ module.exports = function handlingSocketsEvents(server) {
         sessionId = socket.id;
 
         socket.on('addUser', (userId) => {
-            // console.log('Подключил пользователя', userId);
-            // console.log('Текущее соединение сокета', sessionId);
             socketsService.addUser(userId, sessionId);
-
             const socketId = socketsService.getUser(userId);
+
+            User.update({ 
+                status: "online"
+            }, {where: {id: Number(userId)}});
+
+            console.log('Подключил пользователя', userId);
             console.log('Айди сессси по Id user', socketId);
-            // socketIO.emit("getUsers", socket);
         });
 
         socket.on("message", (socket) => {
@@ -33,9 +36,16 @@ module.exports = function handlingSocketsEvents(server) {
         });
 
         socket.on("disconnect", () => {
-            console.log("user disconnected!");
-            socketsService.removeUser(socket.id);
-            // socketIO.emit("getUsers", JSON.stringify(userId));
+            const userId = socketsService.getUser(socket.id);
+
+            User.update({ 
+                status: "offline"
+            }, {where: {id: userId}});
+            socketsService.removeUser(userId);
+
+            console.log('Отключил пользователя по id: ', userId);
+            console.log("user disconnected!", userId);
+
         });
     });
 }

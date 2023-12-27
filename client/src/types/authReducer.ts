@@ -39,6 +39,7 @@ export interface IinitialUser {
     username: string;
     refUser: string;
     profilePic: string | undefined;
+    status?: string;
 }
 
 export interface IResponse {
