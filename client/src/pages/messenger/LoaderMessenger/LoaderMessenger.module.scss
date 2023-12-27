@@ -1,0 +1,16 @@
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 5px 5px 0 5px;
+}
+
+.loader>p {
+    margin-right: 10px;
+    font-size: 1rem;
+}
+
+.loader>div {
+    padding: 0;
+    margin-bottom: -8px;
+}

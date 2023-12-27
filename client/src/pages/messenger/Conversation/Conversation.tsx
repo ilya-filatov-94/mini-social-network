@@ -1,15 +1,12 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import styles from './Conversation.module.scss';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
 import {urlAPIimages} from '../../../env_variables';
 import {useNavigate} from "react-router-dom";
-import {useOpenConversationMutation} from '../../../services/MessengerService';
-import Loader from '../../../components/Loader/Loader';
-import Alert from '@mui/material/Alert';
-import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {useAppDispatch} from '../../../hooks/useTypedRedux';
 import {setCurrentConversationData} from '../../../store/messagesSlice';
 import {IConversation} from '../../../types/messenger';
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 
 export interface IPropsConversation {
   id?: number;
@@ -21,13 +18,10 @@ export interface IPropsConversation {
   refUser: string;
   status?: string;
   addClass?: string;
+  openConversation: (params: any) => any;
 }
 
-interface IDataResponseConversation {
-  data: IConversation;
-}
-
-const Conversation: FC<IPropsConversation> = ({
+const Conversation: FC<IPropsConversation> = memo(({
   id,
   lastMessageText,
   curUserId,
@@ -37,32 +31,41 @@ const Conversation: FC<IPropsConversation> = ({
   refUser,
   status,
   addClass,
+  openConversation
 }) => {
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [openConversation, {
-    error: errorOpenConversation, 
-    isLoading: isLoadingOpenConversation
-  }] = useOpenConversationMutation();
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
-  async function clickConversation() {
-    const {data} = await openConversation({
+  function clickConversation() {
+    openConversation({
       userId: curUserId, 
       memberId: memberId
-    }) as IDataResponseConversation;
-
-    dispatch(setCurrentConversationData({
-      id: data.id,
-      memberId: data.memberId,
-      lastMessageId: data.lastMessageId,
-      lastMessageText: data.lastMessageText,
-      username: data.username,
-      profilePic: data.profilePic,
-      refUser: data.refUser,
-      status: data.status
-    }));
-    navigate(`/messages/${data.id}`);
+    })
+    .unwrap()
+    .then((conversationData: IConversation) => {  
+      
+      console.log('Данные диалога', conversationData);
+      
+      
+      dispatch(setCurrentConversationData({
+        id: conversationData.id,
+        memberId: conversationData.memberId,
+        lastMessageId: conversationData.lastMessageId,
+        lastMessageText: conversationData.lastMessageText,
+        username: conversationData.username,
+        profilePic: conversationData.profilePic,
+        refUser: conversationData.refUser,
+        status: conversationData.status
+      }));
+      // navigate(`/messages/${conversationData.id}`);
+    })
+    .catch((error: unknown) => {
+        if (isFetchBaseQueryErrorType(error)) {
+          console.error(error);
+        }
+    });
   }
 
   function previewTruncMsg(text: string, maxlength: number) {
@@ -92,6 +95,6 @@ const Conversation: FC<IPropsConversation> = ({
 
     </div>
   )
-}
+});
 
 export default Conversation;

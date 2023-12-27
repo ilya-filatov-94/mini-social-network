@@ -6,11 +6,12 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Conversation from './Conversation/Conversation';
 import {
   useSearchSelectedMembersQuery, 
-  useGetConversationsQuery
+  useGetConversationsQuery,
+  useOpenConversationMutation
 } from '../../services/MessengerService';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {debounce} from '../../helpers/debounce';
-import Loader from '../../components/Loader/Loader';
+import LoaderMessenger from './LoaderMessenger/LoaderMessenger';
 import Alert from '@mui/material/Alert';
 
 
@@ -35,11 +36,18 @@ const Messenger: FC = () => {
     id: curUser.id,
     selector: searchLine
   });
+
   const {
     data: listConversations, 
     error: errorGetConversations, 
     isLoading: isLoadingConversations
   } = useGetConversationsQuery(curUser.id);
+
+  const [openConversation, {
+    isError: isErrorOpenConversation, 
+    isLoading: isLoadingOpenConversation
+  }] = useOpenConversationMutation();
+
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   function toggleSearch(event: UIEvent) {
@@ -63,6 +71,19 @@ const Messenger: FC = () => {
       <Alert severity="error" sx={{m: 20}}>
         Ошибка при загрузке диалогов! {errorGetConversations.status}
       </Alert>);
+    }
+  }
+
+  function loadProcessing(
+    isLoadingSearch: boolean, 
+    isLoadingConversations: boolean, 
+    isLoadingOpenConversation: boolean
+  ) {
+    const isLoading = isLoadingSearch || isLoadingConversations || isLoadingOpenConversation;
+    if (isLoading) {
+      return <LoaderMessenger />
+    } else {
+      return <div className={styles.filler}/>
     }
   }
 
@@ -93,8 +114,9 @@ const Messenger: FC = () => {
             Отменить
           </button>}
         </div>
-        {isLoadingSearch && <Loader />}
-        {isLoadingConversations && <Loader />}
+        {isErrorOpenConversation && <Alert />}
+        {loadProcessing(isLoadingSearch, isLoadingConversations, isLoadingOpenConversation)}
+
       </div>
 
       <div className={`${styles.wrapper} ${styles.listConversations}`}>
@@ -110,6 +132,7 @@ const Messenger: FC = () => {
                 refUser={user.refUser}
                 profilePic={user.profilePic}
                 status={user.status}
+                openConversation={openConversation}
               />
           )
         }
@@ -129,6 +152,7 @@ const Messenger: FC = () => {
                 profilePic={conversation.profilePic}
                 refUser={conversation.refUser}
                 status={conversation.status}
+                openConversation={openConversation}
               />
             )}
             {(listConversations && listConversations.length === 0) && 

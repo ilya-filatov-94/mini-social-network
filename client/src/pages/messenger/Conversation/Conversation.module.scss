@@ -4,10 +4,18 @@
     justify-content: flex-start;
     align-items: center;
     gap: 20px;
-    margin-top: 15px;
+    margin-top: 0;
     width: 100%;
     border-radius: 5px;
     cursor: pointer;
+
+    // &:first-child {
+    //     margin-top: 20px;
+    // }
+
+    &:not(:first-child) {
+        margin-top: 15px;
+    }
 
     @supports (-webkit-touch-callout: none) and (not (translate: none)) {
         &:not(:last-child) {

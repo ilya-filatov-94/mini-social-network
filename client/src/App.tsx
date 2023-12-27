@@ -28,7 +28,6 @@ const App: FC = () => {
     }
 
     return () => {
-      dispatch(changeStatusUser(false));
       dispatch(wsDisconnect());
     }
   }, [dispatch, isAuth]);
