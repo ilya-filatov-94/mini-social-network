@@ -48,7 +48,11 @@ const Messenger: FC = () => {
     isLoading: isLoadingOpenConversation
   }] = useOpenConversationMutation();
 
-  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+  function isFetchBaseQueryError(
+    error: unknown
+  ): error is FetchBaseQueryError {
+    return typeof error === 'object' && error != null && 'status' in error
+  }
 
   function toggleSearch(event: UIEvent) {
     event.stopPropagation();
@@ -59,22 +63,7 @@ const Messenger: FC = () => {
     setFocusInput(false);
   }
 
-  if (errorSearchUser || errorGetConversations) {
-    if (isFetchBaseQueryErrorType(errorSearchUser)) {
-      return ( 
-      <Alert severity="error" sx={{m: 20}}>
-        Ошибка при поиске собеседника! {errorSearchUser.status}
-      </Alert>);
-    }
-    if (isFetchBaseQueryErrorType(errorGetConversations)) {
-      return ( 
-      <Alert severity="error" sx={{m: 20}}>
-        Ошибка при загрузке диалогов! {errorGetConversations.status}
-      </Alert>);
-    }
-  }
-
-  function loadProcessing(
+  function setErrorOrLoading(
     isLoadingSearch: boolean, 
     isLoadingConversations: boolean, 
     isLoadingOpenConversation: boolean
@@ -82,7 +71,28 @@ const Messenger: FC = () => {
     const isLoading = isLoadingSearch || isLoadingConversations || isLoadingOpenConversation;
     if (isLoading) {
       return <LoaderMessenger />
-    } else {
+    } else if (isFetchBaseQueryError(errorSearchUser)) {
+      return (
+        <Alert severity="error" sx={{m: 5}}>
+          Ошибка {errorSearchUser.status}
+        </Alert>
+      )
+    }
+    else if (isFetchBaseQueryError(errorGetConversations)) {
+      return (
+        <Alert severity="error" sx={{ m: 5 }}>
+          Произошла ошибка при загрузке данных! {errorGetConversations.status}
+        </Alert>
+      );
+    }
+    else if (isErrorOpenConversation) {
+      return (
+        <Alert severity="error" sx={{m: 5}}>
+          Ошибка открытия диалога
+        </Alert>
+      )
+    }
+    else {
       return <div className={styles.filler}/>
     }
   }
@@ -114,9 +124,7 @@ const Messenger: FC = () => {
             Отменить
           </button>}
         </div>
-        {isErrorOpenConversation && <Alert />}
-        {loadProcessing(isLoadingSearch, isLoadingConversations, isLoadingOpenConversation)}
-
+        {setErrorOrLoading(isLoadingSearch, isLoadingConversations, isLoadingOpenConversation)}
       </div>
 
       <div className={`${styles.wrapper} ${styles.listConversations}`}>

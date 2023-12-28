@@ -26,13 +26,13 @@ import {
 const rootReducer = combineReducers({
   reducerAuth: reducerAuth,
   reducerTheme: reducerTheme,
+  reducerWebsocket: reducerWebSocket,
+  reducerMessages: reducerMessages,
   [userApi.reducerPath]: userApi.reducer,
   [postApi.reducerPath]: postApi.reducer,
   [commentApi.reducerPath]: commentApi.reducer,
   [storyApi.reducerPath]: storyApi.reducer,
   [messengerApi.reducerPath]: messengerApi.reducer,
-  reducerWebsocket: reducerWebSocket,
-  reducerMessages: reducerMessages,
 });
 
 const persistConfig = {
