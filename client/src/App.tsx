@@ -20,7 +20,7 @@ const Messages = lazy(() => import('./pages/messages/Messages'));
 
 const App: FC = () => {
 
-  const {isAuth} = useAppSelector(state => state.reducerAuth, shallowEqual);
+  const isAuth = useAppSelector(state => state.reducerAuth.isAuth, shallowEqual);
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (isAuth) {

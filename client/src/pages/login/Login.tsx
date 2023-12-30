@@ -30,7 +30,9 @@ interface ILoginValue {
 const Login: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {isAuth, status, error} = useAppSelector(state => state.reducerAuth, shallowEqual);
+  const isAuth = useAppSelector(state => state.reducerAuth.isAuth, shallowEqual);
+  const status = useAppSelector(state => state.reducerAuth.status, shallowEqual);
+  const error = useAppSelector(state => state.reducerAuth.error, shallowEqual);
 
   useEffect(() => {
     if (isAuth && status === 'resolved') {
