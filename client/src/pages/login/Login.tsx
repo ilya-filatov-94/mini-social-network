@@ -47,7 +47,7 @@ const Login: FC = () => {
   }, [status, error]);
   
 
-  const [executeScroll, elRef] = useScroll();
+  const [executeScroll, elRef] = useScroll('start');
   const {isMobile} = useMatchMedia();
 
   useEffect(() => {

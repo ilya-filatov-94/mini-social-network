@@ -46,7 +46,7 @@ const Register: FC = () => {
   }, [status, error]);
 
   const {isMobile} = useMatchMedia();
-  const [executeScroll, elRef] = useScroll();
+  const [executeScroll, elRef] = useScroll('start');
 
   useEffect(() => {
     if (isMobile) {

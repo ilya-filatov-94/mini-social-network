@@ -39,7 +39,7 @@ const Profile: FC = () => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
 
-  const [executeScroll, elRef] = useScroll();
+  const [executeScroll, elRef] = useScroll('start');
   useEffect(() => {
     executeScroll();
   // eslint-disable-next-line

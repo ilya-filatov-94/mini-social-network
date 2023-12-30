@@ -45,10 +45,6 @@ const Conversation: FC<IPropsConversation> = memo(({
     })
     .unwrap()
     .then((conversationData: IConversation) => {  
-      
-      console.log('Данные диалога', conversationData);
-      
-      
       dispatch(setCurrentConversationData({
         id: conversationData.id,
         memberId: conversationData.memberId,
@@ -59,7 +55,7 @@ const Conversation: FC<IPropsConversation> = memo(({
         refUser: conversationData.refUser,
         status: conversationData.status
       }));
-      // navigate(`/messages/${conversationData.id}`);
+      navigate(`/messages/${conversationData.id}`);
     })
     .catch((error: unknown) => {
         if (isFetchBaseQueryErrorType(error)) {

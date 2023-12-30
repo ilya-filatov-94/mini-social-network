@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, MutableRefObject} from 'react';
 import styles from './MessageItem.module.scss';
 import {urlAPIimages} from '../../../env_variables';
 
@@ -8,6 +8,7 @@ interface IMessageItemProps {
   timeMsg: string;
   textMsg?: string;
   imgMsg?: string;
+  refMsg?: MutableRefObject<null | HTMLDivElement>;
 }
 
 const MessageItem: FC<IMessageItemProps> = ({
@@ -15,10 +16,11 @@ const MessageItem: FC<IMessageItemProps> = ({
   username,
   timeMsg,
   textMsg,
-  imgMsg
+  imgMsg,
+  refMsg
 }) => {
   return (
-    <div className={`${styles.messageItem} ${addClass}`}>
+    <div className={`${styles.messageItem} ${addClass}`} ref={refMsg}>
       <div className={styles.messageInfo}>
         <p className={styles.username}>{username}</p>
         <p className={styles.time}>{timeMsg}</p>
@@ -27,7 +29,7 @@ const MessageItem: FC<IMessageItemProps> = ({
         {imgMsg &&
           <img
             className={styles.img}
-            src={imgMsg}
+            src={urlAPIimages + urlAPIimages}
             alt="Картинка к сообщению"
           />
         }

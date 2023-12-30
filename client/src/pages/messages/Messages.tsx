@@ -3,6 +3,7 @@ import {
   useRef,
   useState, 
   ChangeEvent,
+  useEffect,
 } from 'react';
 import styles from './Messages.module.scss';
 import {useAppSelector, useAppDispatch} from '../../hooks/useTypedRedux';
@@ -17,10 +18,9 @@ import {send} from '../../store/webSocketSlice';
 import {changeInputMessage} from '../../store/messagesSlice';
 import {useGetMessagesQuery} from '../../services/MessengerService';
 import Loader from '../../components/Loader/Loader';
-import Alert from '@mui/material/Alert';
+import AlertWidget from '../../components/AlertWidget/AlertWidget';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {getRelativeTimeString} from '../../helpers/dateTimeFormatting';
-
 
 
 const Messages: FC = () => {
@@ -41,13 +41,21 @@ const Messages: FC = () => {
   const [previewImg, setPreviewImg] = useState<TPreviewImg>();
   const [selectedFile, setSelectedFile] = useState<File>();
 
+  const refMessageList = useRef<HTMLDivElement>(null);
+  const refMsg = useRef<HTMLDivElement | HTMLParagraphElement>(null);
+
+  document.body.style.overflow = "hidden";
+  useEffect(() => {
+    if (messagesList && refMessageList.current && refMsg.current) {
+      refMsg.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [messagesList]);
 
   function handleAttachImage(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
       let file = event.target.files[0];
       if (!file.type.match('image')) return;
       setSelectedFile(file);
-
       const reader = new FileReader();
       reader.onloadend = () => setPreviewImg(reader.result)
       reader.readAsDataURL(file);
@@ -84,10 +92,7 @@ const Messages: FC = () => {
 
   if (errorGetMessages) {
     if (isFetchBaseQueryErrorType(errorGetMessages)) {
-      return ( 
-      <Alert severity="error" sx={{m: 20}}>
-        Ошибка при поиске собеседника! {errorGetMessages.status}
-      </Alert>);
+      return <AlertWidget error={errorGetMessages} errorMessage='Ошибка загрузки сообщений' />
     }
   }
 
@@ -116,12 +121,13 @@ const Messages: FC = () => {
           />
         </div>
 
-        <div className={`${styles.wrapper} ${styles.listMessages}`}>
+        <div className={`${styles.wrapper} ${styles.listMessages}`} ref={refMessageList}>
           {isLoadingMessages && <Loader />}
 
           {(messagesList && messagesList.length !== 0) &&
-            messagesList.map(message =>
-              <MessageItem 
+            messagesList.map((message, index) =>
+              <MessageItem
+                refMsg={index === (messagesList.length-1) ? refMsg : undefined}
                 addClass={message.userId === curUser.id 
                   ? styles.sender 
                   : styles.recipient
@@ -135,7 +141,11 @@ const Messages: FC = () => {
           }
 
           {(messagesList && messagesList.length === 0) &&
-            <p className={styles.emptyConversation}>Сообщений пока нет</p>
+            <p 
+              ref={refMsg}
+              className={styles.emptyConversation}>
+              Сообщений пока нет
+            </p>
           }
           
         </div>

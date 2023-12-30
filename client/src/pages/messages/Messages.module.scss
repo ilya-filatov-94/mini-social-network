@@ -6,10 +6,18 @@
     padding: 10px 30px;
     font-size: 0.875rem;
     overflow-y: hidden;
-    height: 100%;
+    position: fixed;
+    top: 50px;
+    width: 55%;
+
+    @include tablet {
+        padding: 10px 10px;
+        width: 75%;
+    }
 
     @include mobile {
         padding: 10px 10px;
+        width: 100%;
     }
 
     .mainWrapper {
