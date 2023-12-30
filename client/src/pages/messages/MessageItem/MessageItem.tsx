@@ -1,4 +1,4 @@
-import {FC, MutableRefObject} from 'react';
+import {FC, MutableRefObject, memo} from 'react';
 import styles from './MessageItem.module.scss';
 import {urlAPIimages} from '../../../env_variables';
 
@@ -11,7 +11,7 @@ interface IMessageItemProps {
   refMsg?: MutableRefObject<null | HTMLDivElement>;
 }
 
-const MessageItem: FC<IMessageItemProps> = ({
+const MessageItem: FC<IMessageItemProps> = memo(({
   addClass,
   username,
   timeMsg,
@@ -37,6 +37,6 @@ const MessageItem: FC<IMessageItemProps> = ({
       </div>
     </div>
   )
-}
+})
 
 export default MessageItem;

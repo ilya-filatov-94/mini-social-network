@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import {FC, memo} from 'react';
 import styles from './PreviewAttach.module.scss';
 import imageIcon from '../../../assets/images/img-attach-chat.png';
 import fileIcon from '../../../assets/images/attach-chat.png';
@@ -12,7 +12,7 @@ interface IPropsPreviewAttach {
   previewAttach: string;
 }
 
-const PreviewAttach: FC<IPropsPreviewAttach> = ({
+const PreviewAttach: FC<IPropsPreviewAttach> = memo(({
   dataImg, 
   curTheme, 
   remove,
@@ -46,6 +46,6 @@ const PreviewAttach: FC<IPropsPreviewAttach> = ({
       }
     </div>
   );
-};
+});
 
 export default PreviewAttach;
