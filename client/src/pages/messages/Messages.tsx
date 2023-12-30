@@ -30,9 +30,6 @@ const Messages: FC = () => {
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
   const currentConversation = useAppSelector(state => state.reducerMessages.currentConversaton, shallowEqual);
 
-  console.log(currentConversation);
-  
-
   const {
     data: messagesList, 
     error: errorGetMessages, 
