@@ -13,7 +13,6 @@ import {
     useDeleteCommentMutation
 } from '../../../services/CommentService';
 import Loader from '../../Loader/Loader';
-import Alert from '@mui/material/Alert';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import MenuComment from '../MenuComment/MenuComment';
 import {getRelativeTimeString} from '../../../helpers/dateTimeFormatting';

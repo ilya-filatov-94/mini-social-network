@@ -70,6 +70,7 @@ const Messages: FC = () => {
   }
 
   function handleSend() {
+    if (!currentConversation || !curUser) return;
     let textMessage;
     let notEmptyText;
     if (textareaRef.current) {
@@ -79,7 +80,7 @@ const Messages: FC = () => {
     }
     if (!notEmptyText && !selectedFile) return;
     dispatch(changeInputMessage({
-      conversationId: 1,
+      conversationId: currentConversation.id,
       userId: curUser.id,
       text: textMessage,
       file: selectedFile ? URL.createObjectURL(selectedFile) : '',
