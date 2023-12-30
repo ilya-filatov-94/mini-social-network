@@ -7,6 +7,7 @@ import {
 } from 'react';
 import styles from './Messages.module.scss';
 import {useAppSelector, useAppDispatch} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {urlAPIimages} from '../../env_variables';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
@@ -25,9 +26,12 @@ import {getRelativeTimeString} from '../../helpers/dateTimeFormatting';
 const Messages: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const curUser = useAppSelector(state => state.reducerAuth.currentUser);
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const currentConversation = useAppSelector(state => state.reducerMessages.currentConversaton);
+  const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
+  const currentConversation = useAppSelector(state => state.reducerMessages.currentConversaton, shallowEqual);
+
+  console.log(currentConversation);
+  
 
   const {
     data: messagesList, 
