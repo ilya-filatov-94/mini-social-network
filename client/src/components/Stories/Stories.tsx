@@ -12,6 +12,7 @@ import styles from './Stories.module.scss';
 import StoryTemplate from './StoryTemplate/StoryTemplate';
 import PopupStories from './PopupStories/PopupStories';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {getRefValue, useStateRef} from '../../hooks/useStateRef';
 import {useMatchMedia} from '../../hooks/useMatchMedia';
 import {useGetAllStoriesQuery} from '../../services/StoryService';
@@ -25,7 +26,7 @@ export type TEventTouch = MouseEvent | PointerEvent;
 export type TPreviewImg = string | ArrayBuffer | null;
 
 const Stories: FC = memo(() => {
-  const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const currentUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const [hasStoryCurUser, setStoryCurrentUser] = useState<TPreviewImg>('');
   const [isOpenStories, setOpenStories] = useState<boolean>(false);
   const clickIndex = useRef<number | undefined>(0);

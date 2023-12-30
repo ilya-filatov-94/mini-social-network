@@ -1,6 +1,7 @@
 import {FC, useRef, SetStateAction, Dispatch} from 'react';
 import styles from './Comments.module.scss';
 import {useAppSelector} from '../../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {Link} from 'react-router-dom';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
 import {urlAPIimages} from '../../../env_variables';
@@ -37,7 +38,7 @@ const Comments: FC<IContentPostProps> = ({
   const [addComment, {error: errorAddComment, isLoading: isLoadingAdd}] = useAddCommentMutation();
   const [deleteComment, {error: errorDeleteComment, isLoading: isLoadingDel}] = useDeleteCommentMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
-  const curUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   async function handleSendComment() {

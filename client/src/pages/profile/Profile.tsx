@@ -9,6 +9,7 @@ import {
 } from '../../services/UserService';
 import {useParams} from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {useScroll} from '../../hooks/useScroll';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import Loader from '../../components/Loader/Loader';
@@ -28,7 +29,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 
 const Profile: FC = () => {
   const {id} = useParams();
-  const curUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const currentUser = curUser.refUser === id;
   const {data: userData, error, isLoading} = useGetUserProfileQuery({
     ref: id as string, id: curUser.id}, {skip: (!id || !curUser.id)});
@@ -37,13 +38,12 @@ const Profile: FC = () => {
   const [unSubscribeToUser, {error: errorUnsubscribe}] = useUnSubscribeToUserMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
 
   const [executeScroll, elRef] = useScroll('start');
   useEffect(() => {
     executeScroll();
-  // eslint-disable-next-line
-  }, [id]);
+  }, [id, executeScroll]);
 
   useEffect(() => {
     if (!currentUser) {

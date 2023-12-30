@@ -13,6 +13,7 @@ import LoadingButton from '../../components/LoadingButton/LoadingButton';
 
 import { useNavigate } from "react-router-dom";
 import {useAppDispatch, useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {loginUser, setErrorStatus} from '../../store/authSlice';
 import {useMatchMedia} from '../../hooks/useMatchMedia';
 import {useScroll} from '../../hooks/useScroll';
@@ -29,7 +30,7 @@ interface ILoginValue {
 const Login: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {isAuth, status, error} = useAppSelector(state => state.reducerAuth);
+  const {isAuth, status, error} = useAppSelector(state => state.reducerAuth, shallowEqual);
 
   useEffect(() => {
     if (isAuth && status === 'resolved') {

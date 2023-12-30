@@ -2,6 +2,7 @@ import {FC, useState, ChangeEvent, useRef, UIEvent} from 'react';
 import styles from './Messenger.module.scss';
 import {RootState} from '../../store/index';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Conversation from './Conversation/Conversation';
 import {
@@ -16,8 +17,8 @@ import AlertWidget from '../../components/AlertWidget/AlertWidget';
 
 
 const Messenger: FC = () => {
-  const curUser = useAppSelector((state: RootState) => state.reducerAuth.currentUser);
-  const currentTheme = useAppSelector((state: RootState) => state.reducerTheme.themeMode);
+  const curUser = useAppSelector((state: RootState) => state.reducerAuth.currentUser, shallowEqual);
+  const currentTheme = useAppSelector((state: RootState) => state.reducerTheme.themeMode, shallowEqual);
 
   const [focusInput, setFocusInput] = useState(false);
   const [searchLine, setSearchLine] = useState<string>('');

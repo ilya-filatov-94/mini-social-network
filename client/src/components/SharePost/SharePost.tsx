@@ -1,6 +1,7 @@
 import {FC, ChangeEvent, useState, useRef, memo} from 'react';
 import styles from './SharePost.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {useAddPostMutation} from '../../services/PostService';
 import Alert from '@mui/material/Alert';
 import { 
@@ -15,7 +16,7 @@ interface ISharePostProps {
 }
 
 const SharePost: FC<ISharePostProps> = memo(({userId}) => {
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
   const [addPost, {error}] = useAddPostMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const [selectedFile, setSelectedFile] = useState<File>();

@@ -2,6 +2,7 @@ import {FC} from 'react';
 import styles from './Pagination.module.scss';
 import { usePagination, DOTS } from '../../hooks/usePagination';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 
 interface IPaginationProps {
   onPageChange: (page: number) => void;
@@ -21,7 +22,7 @@ const Pagination: FC<IPaginationProps> = ({
   siblingCount = 1,
 }) => {
 
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
   const paginationRange = usePagination({
     currentPage,
     totalCount,

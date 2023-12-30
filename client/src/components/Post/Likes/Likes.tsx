@@ -1,6 +1,7 @@
 import {FC, useState, useEffect} from 'react';
 import styles from './Likes.module.scss';
 import {useAppSelector} from '../../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import noAvatar from '../../../assets/images/no-avatar.jpg';
@@ -36,10 +37,10 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
     if (likes?.length && !currLikes?.length) {
       changeLikes(likes);
     }
-  // eslint-disable-next-line
-  }, [likes]);
+  }, [likes, currLikes?.length]);
+
   const counterLikes = currLikes.length;
-  const currUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const currUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const hasLike = currLikes?.filter(item => item.username === currUser.username).length;
   
   async function toggleLike() {

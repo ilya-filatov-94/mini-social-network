@@ -1,6 +1,7 @@
 import {FC, memo} from 'react';
 import styles from './UserActivity.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import { Link } from 'react-router-dom';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import {urlAPIimages} from '../../env_variables';
@@ -13,8 +14,8 @@ import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 const UserActivity: FC = memo(() => {
 
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const curUserId = useAppSelector(state => state.reducerAuth.currentUser.id);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
+  const curUserId = useAppSelector(state => state.reducerAuth.currentUser.id, shallowEqual);
   const {
     data: activitiesOfUsers, 
     error, 

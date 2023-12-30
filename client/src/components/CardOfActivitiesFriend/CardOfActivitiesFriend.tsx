@@ -2,6 +2,7 @@ import {FC, memo} from 'react';
 import styles from './CardOfActivitiesFriend.module.scss';
 import UserAvatar from '../UserAvatar/UserAvatar';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {useGetActivitiesUsersQuery} from '../../services/UserService';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import Loader from '../Loader/Loader';
@@ -10,8 +11,8 @@ import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined';
 
 const CardOfActivitiesFriend: FC = memo(()  => {
 
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const curUserId = useAppSelector(state => state.reducerAuth.currentUser.id);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
+  const curUserId = useAppSelector(state => state.reducerAuth.currentUser.id, shallowEqual);
   const {
     data: activitiesOfUsers, 
     error, 

@@ -4,6 +4,7 @@ import {
 } from 'react';
 import styles from './LeftBar.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 
 import MenuElement from './MenuElement/MenuElement';
 import MenuUser from '../Navbar/MenuUser/MenuUser';
@@ -17,8 +18,8 @@ import {
 
 const LeftBar: FC = () => {
 
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
+  const currentUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const [menuIsOpen, openMenu] = useState<boolean>(false);
 
   return (

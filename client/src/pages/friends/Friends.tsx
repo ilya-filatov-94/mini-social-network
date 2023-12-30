@@ -1,6 +1,7 @@
 import {FC, useState} from 'react';
 import styles from './Friends.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import ItemUser from './ItemUser/ItemUser';
 import {useGetFollowersPaginationQuery} from '../../services/UserService';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
@@ -10,8 +11,8 @@ import {IFollower} from '../../types/users';
 import Pagination from '../../components/Pagination/Pagination';
 
 const Friends: FC = () => {
-  const currentTheme = useAppSelector((state) => state.reducerTheme.themeMode);
-  const currentUser = useAppSelector((state) => state.reducerAuth.currentUser);
+  const currentTheme = useAppSelector((state) => state.reducerTheme.themeMode, shallowEqual);
+  const currentUser = useAppSelector((state) => state.reducerAuth.currentUser, shallowEqual);
   const [selectedItem, setSelecteItem] = useState('all');
   const numberUsersOnPage = 5;  //Количество друзей, отображаемых на странице
   const [currentPage, setCurrentPage] = useState<number>(1);

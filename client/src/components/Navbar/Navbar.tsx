@@ -2,6 +2,7 @@ import {FC, useState, memo } from 'react';
 import styles from './Navbar.module.scss';
 
 import {useAppDispatch, useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {switchTheme} from '../../store/themeSlice';
 import Logo from '../Logo/Logo';
 import { useNavigate} from "react-router-dom";
@@ -22,8 +23,8 @@ const Navbar: FC = memo(() => {
 
   const {isMobile} = useMatchMedia();
   const navigate = useNavigate();
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
+  const currentUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const dispatch = useAppDispatch();
   const [menuIsOpen, openMenu] = useState<boolean>(false);
 

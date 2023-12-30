@@ -2,6 +2,7 @@ import {FC, useState} from 'react';
 import styles from './Post.module.scss';
 
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import InfoAuthorOfPost from './InfoAuthorOfPost/InfoAuthorOfPost';
 import ContentPost from './ContentPost/ContentPost';
 import EditPost from './EditPost/EditPost';
@@ -28,7 +29,7 @@ const Post: FC<IPostsProps> = ({
 
 }) => {
 
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
   const [postIsEdited, editPost] = useState<boolean>(false);
   const [deletePost, {error}] = useDeletePostMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;

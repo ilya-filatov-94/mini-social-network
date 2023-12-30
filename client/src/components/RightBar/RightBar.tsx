@@ -2,14 +2,15 @@ import {FC} from 'react';
 import styles from './RightBar.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import CardOfSuggestionFriend from '../CardOfSuggestionFriend/CardOfSuggestionFriend';
+import { shallowEqual } from 'react-redux';
 import CardOfActivitiesFriend from '../CardOfActivitiesFriend/CardOfActivitiesFriend';
 
 
 
 const RightBar: FC = () => {
 
-  const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const currentUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
 
   return (
     <div className={currentTheme ==='darkMode'

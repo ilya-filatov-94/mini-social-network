@@ -6,11 +6,12 @@ import LeftBar from '../LeftBar/LeftBar';
 import { Outlet } from 'react-router-dom';
 import RightBar from '../RightBar/RightBar';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import Loader from '../Loader/Loader';
 
 const Layout: FC = () => {
 
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
 
   return (
     <div>

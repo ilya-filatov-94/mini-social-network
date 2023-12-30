@@ -8,6 +8,7 @@ import {
 import styles from './Register.module.scss';
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {registerUser, setErrorStatus} from '../../store/authSlice';
 import {useMatchMedia} from '../../hooks/useMatchMedia';
 import {useScroll} from '../../hooks/useScroll';
@@ -31,7 +32,7 @@ interface IRegValue {
 const Register: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const {isAuth, status, error} = useAppSelector(state => state.reducerAuth);
+  const {isAuth, status, error} = useAppSelector(state => state.reducerAuth, shallowEqual);
 
   useEffect(() => {
     if (isAuth && status === 'resolved') {

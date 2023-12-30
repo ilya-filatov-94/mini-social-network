@@ -10,6 +10,7 @@ import {
 import styles from './EditProfile.module.scss';
 import {useParams} from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {RootState} from '../../store';
 import {useGetUserDataQuery, useUpdateUserDataMutation} from '../../services/UserService';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
@@ -29,10 +30,14 @@ import {urlAPIimages} from '../../env_variables';
 type TPreviewImg = string | ArrayBuffer | null;
 
 const EditProfile: FC = () => {
-  const currentTheme = useAppSelector((state: RootState) => state.reducerTheme.themeMode);
+  const currentTheme = useAppSelector((state: RootState) => state.reducerTheme.themeMode, shallowEqual);
   const {ref} = useParams();
   const newRefUser = useRef(ref);
-  const {data: userData, error: errorLoading, isLoading: isLoadingData} = useGetUserDataQuery(
+  const {
+    data: userData, 
+    error: errorLoading, 
+    isLoading: isLoadingData
+  } = useGetUserDataQuery(
     newRefUser.current as string,
   );
   const [updateUserData, 

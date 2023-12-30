@@ -3,6 +3,7 @@ import styles from './MobileMenu.module.scss';
 import exitIcon from '../../../assets/images/exit.png'
 
 import {useAppSelector, useAppDispatch} from '../../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {logoutUser} from '../../../store/authSlice';
 import { useNavigate, useLocation } from "react-router-dom";
 import MobileMenuItem from './MobileMenuItem/MobileMenuItem';
@@ -29,8 +30,8 @@ const MobileMenu: FC<IMobileMenuProps> = ({
   const fromPage = location.state?.from?.pathname || '/';
   const dispatch = useAppDispatch();
 
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
-  const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
+  const currentUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
 
   function handleLogout() {
     dispatch(logoutUser(currentUser.id));

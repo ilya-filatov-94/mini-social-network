@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import RequireAuth from './hoc/RequireAuth';
 import {useAppDispatch, useAppSelector} from './hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {wsConnect, wsDisconnect} from './store/webSocketSlice';
 import {changeStatusUser} from './store/authSlice';
 
@@ -19,7 +20,7 @@ const Messages = lazy(() => import('./pages/messages/Messages'));
 
 const App: FC = () => {
 
-  const {isAuth} = useAppSelector(state => state.reducerAuth);
+  const {isAuth} = useAppSelector(state => state.reducerAuth, shallowEqual);
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (isAuth) {

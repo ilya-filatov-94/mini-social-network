@@ -1,6 +1,7 @@
 import {FC, useState, ChangeEvent} from 'react';
 import styles from './Users.module.scss';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import Input from '../../components/Input/Input';
 import ItemUser from './ItemUser/ItemUser';
@@ -13,8 +14,8 @@ import {debounce} from '../../helpers/debounce';
 import Pagination from '../../components/Pagination/Pagination';
 
 const Users: FC = () => {
-  const curUser = useAppSelector(state => state.reducerAuth.currentUser);
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
 
   const numberUsersOnPage = 5;  //Количество отображаемых пользователей на одной странице
   const [currentPage, setCurrentPage] = useState<number>(1);

@@ -3,6 +3,7 @@ import styles from './UserAvatar.module.scss';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import { Link } from 'react-router-dom';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import {urlAPIimages} from '../../env_variables';
 
 
@@ -22,7 +23,7 @@ const UserAvatar: FC<IUserAvatarProps> = memo(({
   ...props
 }) => {
 
-  const currentUser = useAppSelector(state => state.reducerAuth.currentUser);
+  const currentUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
 
   const usernameLink = (
     <Link 
