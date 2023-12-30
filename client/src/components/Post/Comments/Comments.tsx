@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
 import {urlAPIimages} from '../../../env_variables';
 // import { ReactComponent as SendArrow} from '../../../assets/images/right_arrow.svg';
+import AlertWidget from '../../AlertWidget/AlertWidget';
 import {IComments} from '../../../types/comments';
 import {
     useGetAllCommentsQuery,
@@ -61,23 +62,29 @@ const Comments: FC<IContentPostProps> = ({
   if (errorGetComments || errorAddComment || errorDeleteComment) {
     if (isFetchBaseQueryErrorType(errorGetComments)) {
       return (
-        <Alert severity="error" sx={{ m: 20 }}>
-          Произошла ошибка при загрузке данных! {errorGetComments.status}
-        </Alert>
+        <AlertWidget
+          addClass={styles.alertStyle}
+          error={errorGetComments} 
+          errorMessage='Ошибка открытия комментариев!'
+        />
       );
     }
     if (isFetchBaseQueryErrorType(errorAddComment)) {
       return (
-        <Alert severity="error" sx={{ m: 20 }}>
-          Произошла ошибка при отправке данных! {errorAddComment.status}
-        </Alert>
+        <AlertWidget
+          addClass={styles.alertStyle}
+          error={errorAddComment} 
+          errorMessage='Ошибка добавления комментария!'
+        />
       );
     }
     if (isFetchBaseQueryErrorType(errorDeleteComment)) {
         return (
-          <Alert severity="error" sx={{ m: 20 }}>
-            Произошла ошибка при удалении данных! {errorDeleteComment.status}
-          </Alert>
+          <AlertWidget
+            addClass={styles.alertStyle}
+            error={errorDeleteComment} 
+            errorMessage='Ошибка удаления комментария!'
+          />
         );
     }
   }

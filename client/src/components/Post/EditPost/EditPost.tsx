@@ -12,10 +12,8 @@ import {urlAPIimages} from '../../../env_variables';
 import PreviewComponent from '../../SharePost/PreviewComponent/PreviewComponent';
 import {useUpdatePostMutation} from '../../../services/PostService';
 import Loader from '../../Loader/Loader';
-import Alert from '@mui/material/Alert';
-import { 
-  FetchBaseQueryError,
-} from "@reduxjs/toolkit/query/react";
+import AlertWidget from '../../AlertWidget/AlertWidget';
+import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 
 export type TPreviewImg = string | ArrayBuffer | null;
 
@@ -101,7 +99,12 @@ const EditPost: FC<IEditPostProps> = ({
 
   if (error) {
     if (isFetchBaseQueryErrorType(error)) {
-      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {error.status}</Alert>
+      return (
+      <AlertWidget
+        addClass={styles.alertStyle}
+        error={error} 
+        errorMessage='Ошибка редактирования поста!'
+      />)
     }
   }
 

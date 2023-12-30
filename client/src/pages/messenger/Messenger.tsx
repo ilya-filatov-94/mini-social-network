@@ -12,7 +12,7 @@ import {
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {debounce} from '../../helpers/debounce';
 import LoaderMessenger from './LoaderMessenger/LoaderMessenger';
-import Alert from '@mui/material/Alert';
+import AlertWidget from '../../components/AlertWidget/AlertWidget';
 
 
 const Messenger: FC = () => {
@@ -73,23 +73,17 @@ const Messenger: FC = () => {
       return <LoaderMessenger />
     } else if (isFetchBaseQueryError(errorSearchUser)) {
       return (
-        <Alert severity="error" sx={{m: 5}}>
-          Ошибка {errorSearchUser.status}
-        </Alert>
+        <AlertWidget error={errorSearchUser} errorMessage='Ошибка поиска собеседника' />
       )
     }
     else if (isFetchBaseQueryError(errorGetConversations)) {
       return (
-        <Alert severity="error" sx={{ m: 5 }}>
-          Произошла ошибка при загрузке данных! {errorGetConversations.status}
-        </Alert>
+        <AlertWidget error={errorGetConversations} errorMessage='Ошибка загрузки диалогов'/>
       );
     }
     else if (isErrorOpenConversation) {
       return (
-        <Alert severity="error" sx={{m: 5}}>
-          Ошибка открытия диалога
-        </Alert>
+        <AlertWidget error={isErrorOpenConversation} errorMessage='Ошибка открытия диалога'/>
       )
     }
     else {

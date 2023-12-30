@@ -11,7 +11,7 @@ import {
   useRemoveLikeMutation
 } from '../../../services/PostService';
 import Loader from '../../Loader/Loader';
-import Alert from '@mui/material/Alert';
+import AlertWidget from '../../AlertWidget/AlertWidget';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {urlAPIimages} from '../../../env_variables';
 
@@ -64,13 +64,26 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
 
   if (errorLoad || errorAddLike || errorRemoveLike) {
     if (isFetchBaseQueryErrorType(errorLoad)) {
-      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {errorLoad.status}</Alert>
+      return (
+        <AlertWidget
+          error={errorLoad} 
+          errorMessage='Ошибка загрузки лайков!'
+        />
+      )
     }
     if (isFetchBaseQueryErrorType(errorAddLike)) {
-      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {errorAddLike.status}</Alert>
+      return (
+      <AlertWidget
+        error={errorAddLike} 
+        errorMessage='Ошибка добавления лайка!'
+      />)
     }
     if (isFetchBaseQueryErrorType(errorRemoveLike)) {
-      return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {errorRemoveLike.status}</Alert>
+      return (
+        <AlertWidget
+          error={errorRemoveLike} 
+          errorMessage='Ошибка отмены лайка!'
+        />)
     }
   }
   
