@@ -34,14 +34,14 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
             socket.connect();
         });
 
-        socket.on('message', () => {
-            dispatch(addMessage({message: messagesState.inputMessage}));
-            console.log('Сообщение от пользователя', messagesState.inputMessage);
+        socket.on('message', (message) => {
+            // dispatch(addMessage({message: messagesState.inputMessage}));
+            console.log('Сообщение от пользователя', message);
         });
 
     } else if (webSocketState.connect === typeConnect.Connected && socket) {
         //Если соединение создано, выполняем действия согласно заданным событиям  
-        if (action.type === 'webSocket/send') {
+        if (action.type === 'messages/send') {
             let fileData;
             if (messagesState.inputMessage.file) {
                 const response = await axios({
@@ -57,7 +57,7 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
             dispatch(changeInputMessage(clearTextMessage));
         }
 
-        if (userId !== 1 && !initConnection) {
+        if (userId !== 0 && !initConnection) {
             initConnection = true;        
             dispatch(initUser(userId));
             socket.emit('addUser', userId);

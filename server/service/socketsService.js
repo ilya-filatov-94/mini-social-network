@@ -6,21 +6,21 @@ class socketsService {
     }
 
     addUser(userId, socketId) {
-        let hasUser = this.onlineUsers.has(userId);
+        let hasUser = this.onlineUsers.has(String(userId));
         if (!hasUser) {
-            this.onlineUsers.set(userId, socketId);
-            this.onlineUsers.set(socketId, userId);
+            this.onlineUsers.set(String(userId), socketId);
+            this.onlineUsers.set(socketId, String(userId));
         }
     }
 
     getUser(userId) {
-        return this.onlineUsers.get(userId);
+        return this.onlineUsers.get(String(userId));
     }
 
     removeUser(socketId) {
         let userId = this.onlineUsers.get(socketId);
         this.onlineUsers.delete(socketId);
-        this.onlineUsers.delete(userId);
+        this.onlineUsers.delete(String(userId));
     }
 }
 

@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import reducerAuth from "./authSlice";
 import reducerTheme from "./themeSlice";
+import reducerConversation from "./conversationSlice";
 import {postApi} from '../services/PostService';
 import {userApi} from '../services/UserService';
 import {commentApi} from '../services/CommentService';
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   reducerAuth: reducerAuth,
   reducerTheme: reducerTheme,
   reducerWebsocket: reducerWebSocket,
+  reducerConversation: reducerConversation,
   reducerMessages: reducerMessages,
   [userApi.reducerPath]: userApi.reducer,
   [postApi.reducerPath]: postApi.reducer,
@@ -39,7 +41,7 @@ const persistConfig = {
   key: "root",
   version: 1,
   storage,
-  whitelist: ["reducerAuth", "reducerTheme"]
+  whitelist: ["reducerAuth", "reducerTheme", "reducerConversation"]
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -14,8 +14,7 @@ import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutl
 import { Link, useNavigate } from "react-router-dom";
 import PreviewAttach, {TPreviewImg} from './PreviewAttach/PreviewAttach';
 import MessageItem from './MessageItem/MessageItem';
-import {send} from '../../store/webSocketSlice';
-import {changeInputMessage} from '../../store/messagesSlice';
+import {changeInputMessage, send} from '../../store/messagesSlice';
 import {useGetMessagesQuery} from '../../services/MessengerService';
 import Loader from '../../components/Loader/Loader';
 import AlertWidget from '../../components/AlertWidget/AlertWidget';
@@ -28,7 +27,7 @@ const Messages: FC = () => {
   const dispatch = useAppDispatch();
   const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
-  const currentConversation = useAppSelector(state => state.reducerMessages.currentConversaton, shallowEqual);
+  const currentConversation = useAppSelector(state => state.reducerConversation.currentConversaton, shallowEqual);
 
   const {
     data: messagesList, 
@@ -81,7 +80,8 @@ const Messages: FC = () => {
     if (!notEmptyText && !selectedFile) return;
     dispatch(changeInputMessage({
       conversationId: currentConversation.id,
-      userId: curUser.id,
+      userId: currentConversation.memberId,
+      username: curUser.username,
       text: textMessage,
       file: selectedFile ? URL.createObjectURL(selectedFile) : '',
       isRead: false,
@@ -128,6 +128,7 @@ const Messages: FC = () => {
           {(messagesList && messagesList.length !== 0) &&
             messagesList.map((message, index) =>
               <MessageItem
+                key={message.id}
                 refMsg={index === (messagesList.length-1) ? refMsg : undefined}
                 addClass={message.userId === curUser.id 
                   ? styles.sender 
@@ -148,7 +149,6 @@ const Messages: FC = () => {
               Сообщений пока нет
             </p>
           }
-          
         </div>
 
         <div className={`${styles.wrapper} ${styles.bottomBar}`}>

@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
 // const https = require('https');
 const cors = require('cors');
 const sequelize = require('./db');
@@ -10,14 +12,12 @@ const router = require('./routes/index');
 const errorHandler = require('./middleware/ErrorHandlingMiddleware');
 const handlingSocketsEvents = require('./gateway/socketsGateway');
 
-
 const PORT = process.env.PORT || 5000;
 const corsOptions = {
     origin: [process.env.CLIENT_URL],
     credentials: true,
     exposedHeaders: ['set-cookie'],
 }
-
 
 const app = express();
 app.use(cors(corsOptions));
@@ -28,6 +28,13 @@ app.use(fileUpload({}));
 app.use('/api', router);
 app.use(errorHandler);
 
+const server = http.createServer(app);
+const socketIO = new Server(server, {
+    cors: {
+      origin: [process.env.CLIENT_URL],
+      credentials: true
+    },
+});
 
 const startApp = async () => {
     try {
@@ -37,9 +44,8 @@ const startApp = async () => {
         await sequelize.sync();
 
         // const server = https.createServer(app).listen(PORT, () => console.log(`Server started on port ${PORT}`));
-        const server = app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
-
-        handlingSocketsEvents(server);
+        server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+        handlingSocketsEvents(socketIO);
 
     } catch (error) {
         console.log(error);

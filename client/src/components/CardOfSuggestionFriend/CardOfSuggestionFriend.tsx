@@ -62,7 +62,7 @@ const CardOfSuggestionFriend: FC<ISuggestionProps> = memo(({
   }
 
   if (!possibleFriends || possibleFriends?.length === 0) {
-    return <p className={styles.textOfCard}>Нет предложений</p>
+    return <p className={styles.emptyActivities}>Нет предложений</p>
   }
 
   return (

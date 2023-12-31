@@ -1,28 +1,21 @@
-import { IMessage, IConversation } from '../types/messenger';
+import { IMessage } from '../types/messenger';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface IMessageList {
     messages: IMessage[];
     inputMessage: IMessage;
-    currentConversaton: IConversation;
 }
 
 const initialState : IMessageList = {
     messages: [],
     inputMessage: {
-        id: 1,
-        conversationId: 1,
-        userId: 1,
+        id: 0,
+        conversationId: 0,
+        userId: 0,
+        username: '',
         isRead: false,
         createdAt: ''
     },
-    currentConversaton: {
-        id: 1,
-        memberId: 1,
-        username: '',
-        profilePic: '',
-        refUser: ''
-    }
 }
 
 const MessagesSlice = createSlice({
@@ -38,16 +31,14 @@ const MessagesSlice = createSlice({
         changeInputMessage(state, action: PayloadAction<IMessage>) {
             state.inputMessage = action.payload;
         },
-        setCurrentConversationData(state, action: PayloadAction<IConversation>) {
-            state.currentConversaton = action.payload;
-        }
+        send() {}
     }
 });
 
 export const {
     addMessage, 
     changeInputMessage, 
-    initUser, 
-    setCurrentConversationData
+    initUser,
+    send
 } = MessagesSlice.actions;
 export default MessagesSlice.reducer;

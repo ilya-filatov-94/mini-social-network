@@ -16,9 +16,8 @@ const WebSocketSlice = createSlice({
         wsDisconnect(state) {
             state.connect = typeConnect.Disconnected;
         },
-        send() {}
     }
 });
 
-export const {wsConnect, wsDisconnect, send} = WebSocketSlice.actions;
+export const {wsConnect, wsDisconnect} = WebSocketSlice.actions;
 export default WebSocketSlice.reducer;

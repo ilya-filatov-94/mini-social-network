@@ -4,7 +4,7 @@ import noAvatar from '../../../assets/images/no-avatar.jpg';
 import {urlAPIimages} from '../../../env_variables';
 import {useNavigate} from "react-router-dom";
 import {useAppDispatch} from '../../../hooks/useTypedRedux';
-import {setCurrentConversationData} from '../../../store/messagesSlice';
+import {setCurrentConversationData} from '../../../store/conversationSlice';
 import {IConversation} from '../../../types/messenger';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 
