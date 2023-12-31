@@ -7,13 +7,11 @@ import axios from 'axios';
 import {WebSocketState} from '../../types/websocket';
 import {typeConnect} from '../../types/websocket';
 import {ClientToServerListen, ServerToClientListen} from './types';
-import {IMessageList} from '../messagesSlice';
-import {addMessage, changeInputMessage, initUser} from '../messagesSlice';
-
+import {changeInputMessage, initUser, IMessageList} from '../messagesSlice';
+import {updateLastMessage} from '../conversationSlice';
 
 let socket: Socket<ServerToClientListen, ClientToServerListen>
 let initConnection = false;
-
 
 
 export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next) => async (action) => {
@@ -35,7 +33,7 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
         });
 
         socket.on('message', (message) => {
-            // dispatch(addMessage({message: messagesState.inputMessage}));
+            dispatch(updateLastMessage(message.text));
             console.log('Сообщение от пользователя', message);
         });
 

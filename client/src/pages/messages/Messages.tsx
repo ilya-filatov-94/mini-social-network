@@ -28,11 +28,13 @@ const Messages: FC = () => {
   const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
   const currentConversation = useAppSelector(state => state.reducerConversation.currentConversaton, shallowEqual);
+  const lastMessage = useAppSelector(state => state.reducerConversation.lastMessage);
 
   const {
     data: messagesList, 
     error: errorGetMessages, 
-    isLoading: isLoadingMessages
+    isLoading: isLoadingMessages,
+    refetch: updateMessagesList,
   } = useGetMessagesQuery(currentConversation.id);
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
@@ -48,7 +50,10 @@ const Messages: FC = () => {
     if (messagesList && refMessageList.current && refMsg.current) {
       refMsg.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-  }, [messagesList]);
+    if (lastMessage) {
+      updateMessagesList();
+    }
+  }, [messagesList, lastMessage, updateMessagesList]);
 
   function handleAttachImage(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
@@ -89,6 +94,7 @@ const Messages: FC = () => {
     dispatch(send());
     setSelectedFile(undefined);
     setPreviewImg(null);
+    updateMessagesList();
   }
 
   if (errorGetMessages) {
@@ -133,7 +139,7 @@ const Messages: FC = () => {
                 addClass={message.userId === curUser.id 
                   ? styles.sender 
                   : styles.recipient
-                  }
+                }
                 username={message.username!}
                 timeMsg={getRelativeTimeString(new Date(message.createdAt!), 'ru')}
                 textMsg={message.text}

@@ -3,6 +3,7 @@ import {IConversation} from '../types/messenger';
 
 export interface IConversationSlice {
     currentConversaton: IConversation;
+    lastMessage: string | undefined;
 }
 
 const initialState: IConversationSlice = {
@@ -12,7 +13,8 @@ const initialState: IConversationSlice = {
         username: '',
         profilePic: '',
         refUser: ''
-    }
+    },
+    lastMessage: '',
 }
 
 const conversationSlice = createSlice({
@@ -22,8 +24,11 @@ const conversationSlice = createSlice({
         setCurrentConversationData(state, action: PayloadAction<IConversation>) {
             state.currentConversaton = action.payload;
         },
+        updateLastMessage(state, action: PayloadAction<string | undefined>) {
+            state.lastMessage = action.payload;
+        }
     }
 });
 
-export const {setCurrentConversationData} = conversationSlice.actions; 
+export const {setCurrentConversationData, updateLastMessage} = conversationSlice.actions; 
 export default conversationSlice.reducer;

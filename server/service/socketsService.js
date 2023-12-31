@@ -48,7 +48,10 @@ class socketsService {
         this.lastMessage.username = data.dataValues.username;
         this.lastMessage.text = data.dataValues.text;
         this.lastMessage.isRead = data.dataValues.isRead;
-        this.lastMessage.createdAt = new Date(data.dataValues.createdAt);
+        this.lastMessage.createdAt = data.dataValues.createdAt;
+
+        // this.lastMessage.createdAt = new Date(data.dataValues.createdAt);
+        // this.lastMessage.createdAt = new Date(Date.parse(data.dataValues.createdAt));
     }
 
     getLastMessage() {

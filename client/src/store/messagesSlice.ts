@@ -25,9 +25,6 @@ const MessagesSlice = createSlice({
         initUser(state, action: PayloadAction<number>) {
             state.inputMessage.userId = action.payload;
         },
-        addMessage(state, action: PayloadAction<{message: IMessage}>) {
-            state.messages.push(action.payload.message)
-        },
         changeInputMessage(state, action: PayloadAction<IMessage>) {
             state.inputMessage = action.payload;
         },
@@ -36,7 +33,6 @@ const MessagesSlice = createSlice({
 });
 
 export const {
-    addMessage, 
     changeInputMessage, 
     initUser,
     send

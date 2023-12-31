@@ -3,15 +3,6 @@ const {User, Conversation, Message} = require('../models/models');
 const uuid = require('uuid');
 const path = require('path');
 
-// let lastMessage = {
-//     id: 0,
-//     conversationId: 0,
-//     userId: 0,
-//     username: '',
-//     text: '',
-//     isRead: false,
-//     createdAt: '',
-// }
 
 module.exports = function handlingSocketsEvents(socketIO) {
 
@@ -64,14 +55,6 @@ module.exports = function handlingSocketsEvents(socketIO) {
                 username: message.username,
             })
             .then((result) => {
-                // lastMessage.id = result.dataValues.id;
-                // lastMessage.conversationId = result.dataValues.conversationId;
-                // lastMessage.userId = result.dataValues.userId;
-                // lastMessage.username = result.dataValues.username;
-                // lastMessage.text = result.dataValues.text;
-                // lastMessage.isRead = result.dataValues.isRead;
-                // lastMessage.createdAt = new Date(result.dataValues.createdAt);
-
                 socketsService.updateLastMessage(result);
                 
                 Conversation.update({ 
@@ -89,6 +72,7 @@ module.exports = function handlingSocketsEvents(socketIO) {
                             text: lastMessage.text,
                             isRead: lastMessage.isRead,
                             createdAt: String(lastMessage.createdAt),
+                            socketId: idSocketSender
                         });
                     }
                 });
