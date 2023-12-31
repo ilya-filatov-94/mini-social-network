@@ -2,7 +2,25 @@
 
 class socketsService {
     constructor() { 
+        this.sessionId = '';
         this.onlineUsers = new Map();
+        this.lastMessage = {
+            id: 0,
+            conversationId: 0,
+            userId: 0,
+            username: '',
+            text: '',
+            isRead: false,
+            createdAt: '',
+        }
+    }
+
+    updateSessionId(id) {
+        this.sessionId = id;
+    }
+
+    getCurSessionId() {
+        return this.sessionId;
     }
 
     addUser(userId, socketId) {
@@ -21,6 +39,20 @@ class socketsService {
         let userId = this.onlineUsers.get(socketId);
         this.onlineUsers.delete(socketId);
         this.onlineUsers.delete(String(userId));
+    }
+
+    updateLastMessage(data) {
+        this.lastMessage.id = data.dataValues.id;
+        this.lastMessage.conversationId = data.dataValues.conversationId;
+        this.lastMessage.userId = data.dataValues.userId;
+        this.lastMessage.username = data.dataValues.username;
+        this.lastMessage.text = data.dataValues.text;
+        this.lastMessage.isRead = data.dataValues.isRead;
+        this.lastMessage.createdAt = new Date(data.dataValues.createdAt);
+    }
+
+    getLastMessage() {
+        return this.lastMessage;
     }
 }
 

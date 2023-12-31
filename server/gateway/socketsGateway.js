@@ -3,35 +3,36 @@ const {User, Conversation, Message} = require('../models/models');
 const uuid = require('uuid');
 const path = require('path');
 
-let sessionId = '';
-let lastMessage = {
-    id: 0,
-    conversationId: 0,
-    userId: 0,
-    username: '',
-    text: '',
-    isRead: false,
-    createdAt: '',
-}
+// let lastMessage = {
+//     id: 0,
+//     conversationId: 0,
+//     userId: 0,
+//     username: '',
+//     text: '',
+//     isRead: false,
+//     createdAt: '',
+// }
 
 module.exports = function handlingSocketsEvents(socketIO) {
 
     socketIO.on("connection", (socket) => {
         console.log("user connected", socket.id);
-        sessionId = socket.id;
+        socketsService.updateSessionId(socket.id);
 
         socket.on('addUser', (userId) => {
-            socketsService.addUser(userId, sessionId);
-            const socketId = socketsService.getUser(userId);
+            if (userId) {
+                const sessionId = socketsService.getCurSessionId();
+                socketsService.addUser(userId, sessionId);
+                const socketId = socketsService.getUser(userId);
 
-            User.update({ 
-                status: "online"
-            }, {where: {id: Number(userId)}})
-            .then(result => {
-                console.log(result);
-                console.log('Подключил пользователя', userId);
-                console.log('Айди сессси по Id user', socketId);
-            });
+                User.update({ 
+                    status: "online"
+                }, {where: {id: Number(userId)}})
+                .then(result => {
+                    console.log('Подключил пользователя', userId);
+                    console.log('Айди сессси по Id user', socketId);
+                });
+            }
         });
 
         socket.on("message", (message) => {
@@ -58,28 +59,33 @@ module.exports = function handlingSocketsEvents(socketIO) {
                 username: message.username,
             })
             .then((result) => {
-                lastMessage.id = result.dataValues.id;
-                lastMessage.conversationId = result.dataValues.conversationId;
-                lastMessage.userId = result.dataValues.userId;
-                lastMessage.username = result.dataValues.username;
-                lastMessage.text = result.dataValues.text;
-                lastMessage.isRead = result.dataValues.isRead;
-                lastMessage.createdAt = new Date(result.dataValues.createdAt);
+                // lastMessage.id = result.dataValues.id;
+                // lastMessage.conversationId = result.dataValues.conversationId;
+                // lastMessage.userId = result.dataValues.userId;
+                // lastMessage.username = result.dataValues.username;
+                // lastMessage.text = result.dataValues.text;
+                // lastMessage.isRead = result.dataValues.isRead;
+                // lastMessage.createdAt = new Date(result.dataValues.createdAt);
+
+                socketsService.updateLastMessage(result);
                 
                 Conversation.update({ 
                     lastMessageId: result.dataValues.id,
                     lastMessageText: result.dataValues.text
                 }, {where: {id: Number(result.dataValues.conversationId)}})
                 .then(result => {
-                    socketIO.to(idSocketSender).emit("message", {
-                        id: lastMessage.id,
-                        conversationId: lastMessage.conversationId,
-                        userId: lastMessage.userId,
-                        username: lastMessage.username,
-                        text: lastMessage.text,
-                        isRead: lastMessage.isRead,
-                        createdAt: String(lastMessage.createdAt),
-                    });
+                    const lastMessage = socketsService.getLastMessage();
+                    if (idSocketSender) {
+                        socketIO.to(idSocketSender).emit("message", {
+                            id: lastMessage.id,
+                            conversationId: lastMessage.conversationId,
+                            userId: lastMessage.userId,
+                            username: lastMessage.username,
+                            text: lastMessage.text,
+                            isRead: lastMessage.isRead,
+                            createdAt: String(lastMessage.createdAt),
+                        });
+                    }
                 });
             });
         });
