@@ -4,8 +4,7 @@ import {io, Socket} from "socket.io-client";
 import {API_SocketURL} from '../../env_variables';
 import axios from 'axios';
 
-import {WebSocketState} from '../../types/websocket';
-import {typeConnect} from '../../types/websocket';
+import {WebSocketState, typeConnect} from '../../types/websocket';
 import {ClientToServerListen, ServerToClientListen} from './types';
 import {changeInputMessage, initUser, IMessageList} from '../messagesSlice';
 import {updateLastMessage} from '../conversationSlice';

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { typeConnect } from '../types/websocket';
-import { WebSocketState } from '../types/websocket';
+import { typeConnect, WebSocketState } from '../types/websocket';
+
 
 const initialState : WebSocketState = {
     connect: typeConnect.Disconnected,

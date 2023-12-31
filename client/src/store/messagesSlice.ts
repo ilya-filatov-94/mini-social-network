@@ -2,12 +2,10 @@ import { IMessage } from '../types/messenger';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface IMessageList {
-    messages: IMessage[];
     inputMessage: IMessage;
 }
 
 const initialState : IMessageList = {
-    messages: [],
     inputMessage: {
         id: 0,
         conversationId: 0,
