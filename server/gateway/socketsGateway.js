@@ -37,8 +37,13 @@ module.exports = function handlingSocketsEvents(socketIO) {
 
         socket.on("message", (message) => {
             console.log(message);
+
+            if (!message.userId || !message.socketId) return;
             const idSocketSender = socketsService.getUser(message.userId); //По userId получателя достаём его socketId
             const userIdSender = socketsService.getUser(message.socketId);  //по socketId отправителя достаём его userId
+            
+            if (!idSocketSender || !userIdSender) return;
+            
             console.log(message.socketId, 'От кого сообщение', userIdSender);
             console.log(idSocketSender, 'Для кого сообщение', message.userId);
 
@@ -92,16 +97,17 @@ module.exports = function handlingSocketsEvents(socketIO) {
 
         socket.on("disconnect", () => {
             const userId = socketsService.getUser(socket.id);
-
-            User.update({ 
-                status: "offline"
-            }, {where: {id: userId}})
-            .then(result => {
-                console.log(result);
-                socketsService.removeUser(userId);
-                console.log('Отключил пользователя по id: ', userId);
-                console.log("user disconnected!", userId);
-            });
+            if (userId) {
+                User.update({ 
+                    status: "offline"
+                }, {where: {id: userId}})
+                .then(result => {
+                    console.log(result);
+                    socketsService.removeUser(userId);
+                    console.log('Отключил пользователя по id: ', userId);
+                    console.log("user disconnected!", userId);
+                });
+            }
         });
     });
 }
