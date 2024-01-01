@@ -28,8 +28,14 @@ export interface IMessage {
     username?: string;
     text?: string;
     file?: string;
+    mimeTypeAttach?: string;
     isRead: boolean;
     createdAt?: string;
     socketId?: string;
+}
+
+export interface IAttachFile {
+    body?: string;
+    mimeType?: string;
 }
 

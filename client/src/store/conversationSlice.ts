@@ -1,9 +1,14 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {IConversation} from '../types/messenger';
 
+interface ILastMessage {
+    text?: string | undefined;
+    file?: string | undefined;
+}
+
 export interface IConversationSlice {
     currentConversaton: IConversation;
-    lastMessage: string | undefined;
+    lastMessage: ILastMessage;
 }
 
 const initialState: IConversationSlice = {
@@ -14,7 +19,10 @@ const initialState: IConversationSlice = {
         profilePic: '',
         refUser: ''
     },
-    lastMessage: '',
+    lastMessage: {
+        text: '',
+        file: '',
+    },
 }
 
 const conversationSlice = createSlice({
@@ -24,8 +32,9 @@ const conversationSlice = createSlice({
         setCurrentConversationData(state, action: PayloadAction<IConversation>) {
             state.currentConversaton = action.payload;
         },
-        updateLastMessage(state, action: PayloadAction<string | undefined>) {
-            state.lastMessage = action.payload;
+        updateLastMessage(state, action: PayloadAction<ILastMessage>) {
+            state.lastMessage.text = action.payload?.text;
+            state.lastMessage.file = action.payload?.file;
         }
     }
 });

@@ -79,7 +79,7 @@ const Friends: FC = () => {
                 <p>Друзья не найдены</p>
               }
             </div>
-            {followersData.count &&
+            {followersData?.count !== 0 &&
               <Pagination
                 currentPage={currentPage}
                 totalCount={followersData.count}

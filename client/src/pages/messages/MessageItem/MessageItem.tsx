@@ -19,6 +19,7 @@ const MessageItem: FC<IMessageItemProps> = memo(({
   imgMsg,
   refMsg
 }) => {
+
   return (
     <div className={`${styles.messageItem} ${addClass}`} ref={refMsg}>
       <div className={styles.messageInfo}>
@@ -29,7 +30,7 @@ const MessageItem: FC<IMessageItemProps> = memo(({
         {imgMsg &&
           <img
             className={styles.img}
-            src={urlAPIimages + urlAPIimages}
+            src={urlAPIimages + imgMsg}
             alt="Картинка к сообщению"
           />
         }

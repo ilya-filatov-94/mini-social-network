@@ -10,6 +10,7 @@ class socketsService {
             userId: 0,
             username: '',
             text: '',
+            file: '',
             isRead: false,
             createdAt: '',
         }
@@ -47,11 +48,9 @@ class socketsService {
         this.lastMessage.userId = data.dataValues.userId;
         this.lastMessage.username = data.dataValues.username;
         this.lastMessage.text = data.dataValues.text;
+        this.lastMessage.file = data.dataValues.file;
         this.lastMessage.isRead = data.dataValues.isRead;
         this.lastMessage.createdAt = data.dataValues.createdAt;
-
-        // this.lastMessage.createdAt = new Date(data.dataValues.createdAt);
-        // this.lastMessage.createdAt = new Date(Date.parse(data.dataValues.createdAt));
     }
 
     getLastMessage() {

@@ -8,6 +8,7 @@ import {WebSocketState, typeConnect} from '../../types/websocket';
 import {ClientToServerListen, ServerToClientListen} from './types';
 import {changeInputMessage, initUser, IMessageList} from '../messagesSlice';
 import {updateLastMessage} from '../conversationSlice';
+import {IAttachFile} from '../../types/messenger';
 
 let socket: Socket<ServerToClientListen, ClientToServerListen>
 let initConnection = false;
@@ -32,25 +33,27 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
         });
 
         socket.on('message', (message) => {
-            dispatch(updateLastMessage(message.text));
+            dispatch(updateLastMessage({text: message.text, file: message.file}));
             console.log('Сообщение от пользователя', message);
         });
 
     } else if (webSocketState.connect === typeConnect.Connected && socket) {
         //Если соединение создано, выполняем действия согласно заданным событиям  
         if (action.type === 'messages/send') {
-            let fileData;
+            const fileData: IAttachFile = {};
             if (messagesState.inputMessage.file) {
                 const response = await axios({
                     method: 'get',
                     url: messagesState.inputMessage.file,
                     responseType: 'blob'
                 });
-                fileData = response.data || '';
+                fileData.body = response.data || '';
+                fileData.mimeType = messagesState.inputMessage?.mimeTypeAttach || '';
             }
-            const messageObj =  {...messagesState.inputMessage, socketId: socket.id, file: fileData};
+
+            const messageObj =  {...messagesState.inputMessage, socketId: socket.id, file: fileData.body};
             socket.emit('message', messageObj);
-            const clearTextMessage = {...messagesState.inputMessage, text: '', file: ''};
+            const clearTextMessage = {...messagesState.inputMessage, text: '', file: '', mimeTypeAttach: ''};
             dispatch(changeInputMessage(clearTextMessage));
         }
 

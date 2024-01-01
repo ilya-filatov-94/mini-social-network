@@ -15,6 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import PreviewAttach, {TPreviewImg} from './PreviewAttach/PreviewAttach';
 import MessageItem from './MessageItem/MessageItem';
 import {changeInputMessage, send} from '../../store/messagesSlice';
+import {updateLastMessage} from '../../store/conversationSlice';
 import {useGetMessagesQuery} from '../../services/MessengerService';
 import Loader from '../../components/Loader/Loader';
 import AlertWidget from '../../components/AlertWidget/AlertWidget';
@@ -28,7 +29,7 @@ const Messages: FC = () => {
   const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
   const currentConversation = useAppSelector(state => state.reducerConversation.currentConversaton, shallowEqual);
-  const lastMessage = useAppSelector(state => state.reducerConversation.lastMessage);
+  const lastMessage = useAppSelector(state => state.reducerConversation.lastMessage, shallowEqual);
 
   const {
     data: messagesList, 
@@ -45,20 +46,25 @@ const Messages: FC = () => {
   const refMessageList = useRef<HTMLDivElement>(null);
   const refMsg = useRef<HTMLDivElement | HTMLParagraphElement>(null);
 
-  document.body.style.overflow = "hidden";
   useEffect(() => {
+    document.body.style.overflow = "hidden";
     if (messagesList && refMessageList.current && refMsg.current) {
       refMsg.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     if (lastMessage) {
       updateMessagesList();
     }
-  }, [messagesList, lastMessage, updateMessagesList]);
+    document.body.style.overflow = "auto";
+  }, [messagesList, 
+    lastMessage,
+    updateMessagesList
+  ]);
 
   function handleAttachImage(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
       let file = event.target.files[0];
       if (!file.type.match('image')) return;
+
       setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => setPreviewImg(reader.result)
@@ -73,7 +79,7 @@ const Messages: FC = () => {
     setPreviewImg(null);
   }
 
-  function handleSend() {
+  async function handleSend() {
     if (!currentConversation || !curUser) return;
     let textMessage;
     let notEmptyText;
@@ -89,11 +95,16 @@ const Messages: FC = () => {
       username: curUser.username,
       text: textMessage,
       file: selectedFile ? URL.createObjectURL(selectedFile) : '',
+      mimeTypeAttach: selectedFile?.type,
       isRead: false,
     }));
     dispatch(send());
     setSelectedFile(undefined);
     setPreviewImg(null);
+    // dispatch(updateLastMessage({
+    //   text: '',
+    //   file: '',
+    // }));
     updateMessagesList();
   }
 
@@ -166,13 +177,14 @@ const Messages: FC = () => {
             placeholder={"Сообщение..."}
           />
           <div className={styles.send}>
+            {!previewImg &&
             <input
               onChange={handleAttachImage}
               className={styles.fileInput}
               type="file"
               accept=".jpeg, .jpg, .png"
               id="updateFile"
-            />
+            />}
             <label htmlFor="updateFile">
               <PreviewAttach 
                 dataImg={previewImg}

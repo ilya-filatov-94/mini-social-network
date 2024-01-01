@@ -1,8 +1,8 @@
 require('dotenv').config();
 const express = require('express');
+// const https = require('https');
 const http = require('http');
 const { Server } = require('socket.io');
-// const https = require('https');
 const cors = require('cors');
 const sequelize = require('./db');
 const fileUpload = require('express-fileupload');
@@ -30,6 +30,7 @@ app.use(errorHandler);
 
 const server = http.createServer(app);
 const socketIO = new Server(server, {
+    maxHttpBufferSize: 1e8,
     cors: {
       origin: [process.env.CLIENT_URL],
       credentials: true
