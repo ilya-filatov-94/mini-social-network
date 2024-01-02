@@ -87,6 +87,7 @@ class MessengerService {
     const messages = await Message.findAll(
         {
           where: { conversationId: conversationId },
+          order: [['createdAt', 'ASC']],
         },
     );
     return messages;

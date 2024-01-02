@@ -43,6 +43,16 @@ class messengerController {
             next(error);
         }
     }
+
+    async sendMessage(request, response, next) {
+        try {
+            const {conversationId} = request.body;
+            const messages = await messengerService.getMessages(Number(conversationId));
+            return response.json(messages);
+        } catch(error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = new messengerController();

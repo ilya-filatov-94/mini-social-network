@@ -40,6 +40,10 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
     } else if (webSocketState.connect === typeConnect.Connected && socket) {
         //Если соединение создано, выполняем действия согласно заданным событиям  
         if (action.type === 'messages/send') {
+            dispatch(updateLastMessage({
+                text: messagesState.inputMessage.text, 
+                file:messagesState.inputMessage.file
+            }));
             const fileData: IAttachFile = {};
             if (messagesState.inputMessage.file) {
                 const response = await axios({
@@ -48,9 +52,7 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
                     responseType: 'blob'
                 });
                 fileData.body = response.data || '';
-                fileData.mimeType = messagesState.inputMessage?.mimeTypeAttach || '';
             }
-
             const messageObj =  {...messagesState.inputMessage, socketId: socket.id, file: fileData.body};
             socket.emit('message', messageObj);
             const clearTextMessage = {...messagesState.inputMessage, text: '', file: '', mimeTypeAttach: ''};

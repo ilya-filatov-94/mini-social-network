@@ -9,5 +9,7 @@ router.post('/conversation', authMiddleware, messengerController.openConversatio
 router.get('/conversations', authMiddleware, messengerController.getConversations);
 router.get('/messages', authMiddleware, messengerController.getMessages); 
 
+router.post('/send-message', authMiddleware, messengerController.sendMessage); 
+
 
 module.exports = router;

@@ -15,8 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import PreviewAttach, {TPreviewImg} from './PreviewAttach/PreviewAttach';
 import MessageItem from './MessageItem/MessageItem';
 import {changeInputMessage, send} from '../../store/messagesSlice';
-import {updateLastMessage} from '../../store/conversationSlice';
-import {useGetMessagesQuery} from '../../services/MessengerService';
+import {useGetMessagesQuery, useSendMesageMutation} from '../../services/MessengerService';
 import Loader from '../../components/Loader/Loader';
 import AlertWidget from '../../components/AlertWidget/AlertWidget';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
@@ -29,14 +28,15 @@ const Messages: FC = () => {
   const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
   const currentConversation = useAppSelector(state => state.reducerConversation.currentConversaton, shallowEqual);
-  const lastMessage = useAppSelector(state => state.reducerConversation.lastMessage, shallowEqual);
+  const lastMessage = useAppSelector(state => state.reducerConversation.lastMessage);
 
   const {
     data: messagesList, 
     error: errorGetMessages, 
     isLoading: isLoadingMessages,
-    refetch: updateMessagesList,
+    refetch,
   } = useGetMessagesQuery(currentConversation.id);
+  const [sendMesage] = useSendMesageMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -51,13 +51,12 @@ const Messages: FC = () => {
     if (messagesList && refMessageList.current && refMsg.current) {
       refMsg.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
-    if (lastMessage) {
-      updateMessagesList();
-    }
+    refetch();
     document.body.style.overflow = "auto";
-  }, [messagesList, 
-    lastMessage,
-    updateMessagesList
+  }, [
+     messagesList,
+     lastMessage,
+     refetch,
   ]);
 
   function handleAttachImage(event: ChangeEvent<HTMLInputElement>) {
@@ -101,11 +100,7 @@ const Messages: FC = () => {
     dispatch(send());
     setSelectedFile(undefined);
     setPreviewImg(null);
-    // dispatch(updateLastMessage({
-    //   text: '',
-    //   file: '',
-    // }));
-    updateMessagesList();
+    await sendMesage(currentConversation.id).unwrap();
   }
 
   if (errorGetMessages) {

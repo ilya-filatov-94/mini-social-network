@@ -49,7 +49,18 @@ export const messengerApi = createApi({
               conversationId: conversationId
             }
           }),
+          providesTags: ['Messages'],
           keepUnusedDataFor: 60,
+        }),
+        sendMesage: builder.mutation<IMessage[], number>({
+          query: (conversationId) => ({
+            url: `/messenger/send-message`,
+            method: 'POST',
+            body: {
+              conversationId: conversationId
+            }
+          }),
+          invalidatesTags: ['Messages'],
         }),
     })
 });
@@ -59,4 +70,5 @@ export const {
   useSearchSelectedMembersQuery,
   useOpenConversationMutation,
   useGetMessagesQuery,
+  useSendMesageMutation,
 } = messengerApi;
