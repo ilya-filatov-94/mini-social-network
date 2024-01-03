@@ -36,6 +36,8 @@ module.exports = function handlingSocketsEvents(socketIO) {
             console.log(message.socketId, 'От кого сообщение', userIdSender);
             console.log(idSocketSender, 'Для кого сообщение', message.userId);
 
+            if (!userIdSender) return;
+
             let fileName, typeFile;
             if (message?.file) {
                 typeFile = message.mimeTypeAttach.replace('image/', '');
@@ -43,7 +45,6 @@ module.exports = function handlingSocketsEvents(socketIO) {
                 await fs.promises.writeFile('./static/' + fileName, message.file);
             }
 
-            if (!userIdSender) return;
             const newMessage = await Message.create({
                 text: message.text,
                 file: fileName || '',
@@ -56,7 +57,7 @@ module.exports = function handlingSocketsEvents(socketIO) {
             socketsService.updateLastMessage(newMessage);
             await Conversation.update({ 
                 lastMessageId: newMessage.dataValues.id,
-                lastMessageText: newMessage.dataValues.text ? newMessage.dataValues.text : 'картинка'
+                lastMessageText: newMessage.dataValues.text || 'картинка'
             }, {where: {id: Number(newMessage.dataValues.conversationId)}});
 
             const lastMessage = socketsService.getLastMessage();
@@ -82,9 +83,7 @@ module.exports = function handlingSocketsEvents(socketIO) {
                     status: "offline"
                 }, {where: {id: userId}})
                 .then(result => {
-                    console.log(result);
                     socketsService.removeUser(userId);
-                    console.log('Отключил пользователя по id: ', userId);
                     console.log("user disconnected!", userId);
                 });
             }
