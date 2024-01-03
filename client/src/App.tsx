@@ -18,6 +18,7 @@ const Users = lazy(() => import('./pages/users/Users'));
 const Messenger = lazy(() => import('./pages/messenger/Messenger'));
 const Messages = lazy(() => import('./pages/messages/Messages'));
 
+
 const App: FC = () => {
 
   const isAuth = useAppSelector(state => state.reducerAuth.isAuth, shallowEqual);

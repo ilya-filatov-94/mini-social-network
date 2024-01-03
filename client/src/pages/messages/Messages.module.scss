@@ -1,41 +1,200 @@
 @import '../../styles/responsive.scss';
 @import '../../styles/theme.scss';
 
-
 .container {
-    padding: 10px 30px;
+    padding: 10px 20px;
     font-size: 0.875rem;
     overflow-y: hidden;
-    position: fixed;
-    top: 50px;
-    width: 55%;
+    height: 100vh;
 
     @include tablet {
         padding: 10px 10px;
-        width: 75%;
     }
 
     @include mobile {
         padding: 10px 10px;
-        width: 100%;
-    }
-
-    .mainWrapper {
-        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
-        border-radius: 20px;
-        max-height: calc(100vh - 70px);
-        overflow-y: auto;
-    }
-
-    .mainWrapper::-webkit-scrollbar-thumb {
-        background-color: grey;
     }
 
     .wrapper {
-        padding: 20px;
+        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+        height: calc(100vh - 80px);
+        overflow-y: hidden;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
+        align-items: center;
+        border-radius: 20px;
+
+        .topBar {
+            min-height: 75px;
+            width: 100%;
+            align-self: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-top-right-radius: 20px;
+            border-top-left-radius: 20px;
+
+            .backBtn {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                font-size: 0.875rem;
+                font-weight: 400;
+                cursor: pointer;
+        
+                p:last-child {
+                    margin-left: 10px;
+                }
+            }
+
+            .infoConversation {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+        
+                .link {
+                    margin: 0;
+                    padding: 0;
+                    cursor: pointer;
+                    text-decoration: none;
+                    color: inherit;
+                    font-size: inherit;
+                }
+            }
+
+            .avatar {
+                width: 40px;
+                height: 40px;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+        }
+
+        .listMessages {
+            flex: 1;
+            width: 100%;
+            align-self: center;
+            overflow-y: auto;
+            padding: 0 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .listMessages .sender {
+            width: 80%;
+            align-self: flex-end;
+            border-top-left-radius: 15px;
+            background-color: rgba(0, 195, 255, 0.345);
+        }
+        
+        .listMessages .recipient {
+            width: 80%;
+            align-self: flex-start;
+            border-top-right-radius: 15px;
+            background-color: rgba(128, 128, 128, 0.345);
+        }
+
+        .bottomBar {
+            min-height: 95px;
+            width: 100%;
+            align-self: center;
+            padding: 15px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 10px;
+            border-bottom-right-radius: 20px;
+            border-bottom-left-radius: 20px;
+            
+            @include mobile {
+                gap: 5px;
+            }
+
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+              &:not(:last-child) {
+                margin-right: 5px;
+              }
+            }
+
+            .input {
+                width: 100%;
+                font-family: "Gilroy", "Arial", sans-serif;
+                font-weight: normal;
+                font-size: 1rem;
+                outline: none;
+                padding: 10px;
+                background-color: transparent;
+                resize: none;
+            }
+
+            .send {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                padding: 0;
+                margin: 0;
+
+                .fileInput {
+                    opacity: 0;
+                    height: 0;
+                    width: 0;
+                    line-height: 0;
+                    overflow: hidden;
+                    padding: 0;
+                    margin: 0;
+                }
+
+                .btn {
+                    border: none;
+                    background-color: #556fe3da;
+                    color: white;
+                    padding: 5px;
+                    cursor: pointer;
+                    border-radius: 3px;
+                    margin-left: 15px;
+
+                    @include mobile {
+                        display: none;
+                    }
+                }
+
+                .btn:hover, .btn:active {
+                    background-color: #102db0c1;
+                }
+        
+                .mobileBtnSend {
+                    display: none;
+
+                    @include mobile {
+                        background-image: url(../../assets/images/right_arrow.svg);
+                        background-size: 20px 20px;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        width: 35px;
+                        height: 25px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border: none;
+                        background-color: #556fe3da;
+                        padding: 10px;
+                        cursor: pointer;
+                        border-radius: 3px;
+                        margin-left: 10px;
+                    }
+                }
+
+                .mobileBtnSend:hover, .mobileBtnSend:active {
+                    background-color: #102db0c1;
+                }
+            }
+        }
     }
 
     &.theme-dark {
@@ -43,23 +202,15 @@
         background-color: themed($curTheme, "bgSoft");
         color: themed($curTheme, "textColor");
 
-        .mainWrapper::-webkit-scrollbar-track {
-            border: 3px solid themed($curTheme, "bgSoft");
-            border-radius: 20px;
-            background: themed($curTheme, "bgSoft");
-        }
-
-        .mainWrapper {
+        .wrapper {
             background-color: themed($curTheme, "background");
         }
 
-        .wrapper.headerWrapper {
-            background-color: themed($curTheme, "background");
+        .topBar {
             border-bottom: 2px solid themed($curTheme, "bgSoft");
         }
 
-        .wrapper.bottomBar {
-            background-color: themed($curTheme, "background");
+        .bottomBar {
             border-top: 2px solid themed($curTheme, "bgSoft");
             
             .input {
@@ -75,23 +226,15 @@
         background-color: themed($curTheme, "bgSoft");
         color: themed($curTheme, "textColor");
 
-        .mainWrapper::-webkit-scrollbar-track {
-            border: 3px solid themed($curTheme, "bgSoft");
-            border-radius: 20px;
-            background: themed($curTheme, "bgSoft");
-        }
-
-        .mainWrapper {
+        .wrapper {
             background-color: themed($curTheme, "background");
         }
 
-        .wrapper.headerWrapper {
-            background-color: themed($curTheme, "background");
+        .topBar {
             border-bottom: 2px solid themed($curTheme, "bgSoft");
         }
 
-        .wrapper.bottomBar {
-            background-color: themed($curTheme, "background");
+        .bottomBar {
             border-top: 2px solid themed($curTheme, "bgSoft");
 
             .input {
@@ -102,185 +245,3 @@
         }
     }
 }
-
-.wrapper.headerWrapper {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    border-top-right-radius: 20px;
-    border-top-left-radius: 20px;
-    padding-bottom: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-
-    .backBtn {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        font-size: 0.875rem;
-        font-weight: 400;
-        cursor: pointer;
-
-        p:last-child {
-            margin-left: 10px;
-        }
-    }
-
-    .infoConversation {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        .link {
-            margin: 0;
-            padding: 0;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
-            font-size: inherit;
-        }
-    }
-
-    .avatar {
-        width: 40px;
-        height: 40px;
-        object-fit: cover;
-        border-radius: 50%;
-    }
-}
-
-.wrapper.listMessages {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    min-height: calc(100vh - 70px - 75px - 60px);
-    overflow-y: auto;
-
-    .sender {
-        width: 80%;
-        align-self: flex-end;
-        border-top-left-radius: 15px;
-        background-color: rgba(0, 195, 255, 0.345);
-    }
-
-    .recipient {
-        width: 80%;
-        align-self: flex-start;
-        border-top-right-radius: 15px;
-        background-color: rgba(128, 128, 128, 0.345);
-    }
-
-    .emptyConversation {
-        text-align: center;
-        font-weight: 500;
-        font-size: 1rem;
-    }
-}
-
-
-.wrapper.bottomBar {
-    position: sticky;
-    bottom: 0;
-    z-index: 100;
-    border-bottom-right-radius: 20px;
-    border-bottom-left-radius: 20px;
-    min-height: 60px;
-
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 10px;
-    padding-top: 10px;
-
-    @include mobile {
-        gap: 5px;
-    }
-
-    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-        &:not(:last-child) {
-            margin-right: 5px;
-        }
-    }
-
-    .input {
-        width: 100%;
-        font-family: "Gilroy", "Arial", sans-serif;
-        font-weight: normal;
-        font-size: 1rem;
-        outline: none;
-        padding: 10px;
-        background-color: transparent;
-        resize: none;
-    }
-
-    .send {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 0;
-        margin: 0;
-
-        .fileInput {
-            opacity: 0;
-            height: 0;
-            width: 0;
-            line-height: 0;
-            overflow: hidden;
-            padding: 0;
-            margin: 0;
-        }
-
-        .btn {
-            border: none;
-            background-color: #556fe3da;
-            color: white;
-            padding: 5px;
-            cursor: pointer;
-            border-radius: 3px;
-            margin-left: 15px;
-
-            @include mobile {
-                display: none;
-            }
-        }
-
-        .btn:hover, .btn:active {
-            background-color: #102db0c1;
-        }
-        
-        .mobileBtnSend {
-            display: none;
-            @include mobile {
-                background-image: url(../../assets/images/right_arrow.svg);
-                background-size: 20px 20px;
-                background-repeat: no-repeat;
-                background-position: center;
-                width: 35px;
-                height: 25px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border: none;
-                background-color: #556fe3da;
-                padding: 10px;
-                cursor: pointer;
-                border-radius: 3px;
-                margin-left: 10px;
-            }
-        }
-
-        .mobileBtnSend:hover, .mobileBtnSend:active {
-            background-color: #102db0c1;
-        }
-    }
-}
-
-

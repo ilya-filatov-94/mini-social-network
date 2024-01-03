@@ -16,7 +16,7 @@ import PreviewAttach, {TPreviewImg} from './PreviewAttach/PreviewAttach';
 import MessageItem from './MessageItem/MessageItem';
 import {changeInputMessage, send} from '../../store/messagesSlice';
 import {useGetMessagesQuery, useSendMesageMutation} from '../../services/MessengerService';
-import Loader from '../../components/Loader/Loader';
+import LoaderMessenger from '../messenger/LoaderMessenger/LoaderMessenger';
 import AlertWidget from '../../components/AlertWidget/AlertWidget';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {getRelativeTimeString} from '../../helpers/dateTimeFormatting';
@@ -25,48 +25,44 @@ import {getRelativeTimeString} from '../../helpers/dateTimeFormatting';
 const Messages: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
-  const currentConversation = useAppSelector(state => state.reducerConversation.currentConversaton, shallowEqual);
-  const lastMessage = useAppSelector(state => state.reducerConversation.lastMessage);
+  const curUser = useAppSelector((state) => state.reducerAuth.currentUser,shallowEqual);
+  const currentTheme = useAppSelector((state) => state.reducerTheme.themeMode,shallowEqual);
+  const currentConversation = useAppSelector(
+    (state) => state.reducerConversation.currentConversaton,
+    shallowEqual
+  );
+  const lastMessage = useAppSelector((state) => state.reducerConversation.lastMessage);
 
   const {
-    data: messagesList, 
-    error: errorGetMessages, 
+    data: messagesList,
+    error: errorGetMessages,
     isLoading: isLoadingMessages,
     refetch,
   } = useGetMessagesQuery(currentConversation.id);
   const [sendMesage] = useSendMesageMutation();
-  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+  const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => "status" in error;
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [previewImg, setPreviewImg] = useState<TPreviewImg>();
   const [selectedFile, setSelectedFile] = useState<File>();
 
-  const refMessageList = useRef<HTMLDivElement>(null);
   const refMsg = useRef<HTMLDivElement | HTMLParagraphElement>(null);
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
-    if (messagesList && refMessageList.current && refMsg.current) {
-      refMsg.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (messagesList && refMsg.current) {
+      refMsg.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
     refetch();
-    document.body.style.overflow = "auto";
-  }, [
-     messagesList,
-     lastMessage,
-     refetch,
-  ]);
+  }, [messagesList, refMsg, lastMessage, refetch]);
 
   function handleAttachImage(event: ChangeEvent<HTMLInputElement>) {
     if (event.target.files) {
       let file = event.target.files[0];
-      if (!file.type.match('image')) return;
+      if (!file.type.match("image")) return;
 
       setSelectedFile(file);
       const reader = new FileReader();
-      reader.onloadend = () => setPreviewImg(reader.result)
+      reader.onloadend = () => setPreviewImg(reader.result);
       reader.readAsDataURL(file);
     }
   }
@@ -85,18 +81,20 @@ const Messages: FC = () => {
     if (textareaRef.current) {
       textMessage = textareaRef.current.value;
       notEmptyText = /\S/ig.test(textMessage);
-      textareaRef.current.value = '';
+      textareaRef.current.value = "";
     }
     if (!notEmptyText && !selectedFile) return;
-    dispatch(changeInputMessage({
-      conversationId: currentConversation.id,
-      userId: currentConversation.memberId,
-      username: curUser.username,
-      text: textMessage,
-      file: selectedFile ? URL.createObjectURL(selectedFile) : '',
-      mimeTypeAttach: selectedFile?.type,
-      isRead: false,
-    }));
+    dispatch(
+      changeInputMessage({
+        conversationId: currentConversation.id,
+        userId: currentConversation.memberId,
+        username: curUser.username,
+        text: textMessage,
+        file: selectedFile ? URL.createObjectURL(selectedFile) : "",
+        mimeTypeAttach: selectedFile?.type,
+        isRead: false,
+      })
+    );
     dispatch(send());
     setSelectedFile(undefined);
     setPreviewImg(null);
@@ -105,65 +103,81 @@ const Messages: FC = () => {
 
   if (errorGetMessages) {
     if (isFetchBaseQueryErrorType(errorGetMessages)) {
-      return <AlertWidget error={errorGetMessages} errorMessage='Ошибка загрузки сообщений' />
+      return (
+        <AlertWidget
+          error={errorGetMessages}
+          errorMessage="Ошибка загрузки сообщений"
+        />
+      );
     }
   }
 
   return (
-    <div className={`${styles.container}
-    ${currentTheme ==='darkMode' 
-    ? styles['theme-dark']
-    : styles['theme-light']
-    }`}>
-      <div className={styles.mainWrapper}>
-        <div className={`${styles.wrapper} ${styles.headerWrapper}`}>
+    <div
+      className={`${styles.container} ${
+        currentTheme === "darkMode"
+          ? styles["theme-dark"]
+          : styles["theme-light"]
+      }`}
+    >
+      <div className={styles.wrapper}>
+        <div className={styles.topBar}>
           <div className={styles.backBtn} onClick={() => navigate(-1)}>
             <ArrowBackIosNewOutlinedIcon />
             <p>Назад</p>
           </div>
           <div className={styles.infoConversation}>
-            <Link className={styles.link} to={`/profile/${currentConversation.refUser}?id=${curUser.id}`}>
-            <h2>{currentConversation.username}</h2>
+            <Link
+              className={styles.link}
+              to={`/profile/${currentConversation.refUser}?id=${curUser.id}`}
+            >
+              <h2>{currentConversation.username}</h2>
             </Link>
             <p>{currentConversation.status}</p>
           </div>
           <img
             className={styles.avatar}
-            src={currentConversation.profilePic ? urlAPIimages + currentConversation.profilePic : noAvatar}
+            src={
+              currentConversation.profilePic
+                ? urlAPIimages + currentConversation.profilePic
+                : noAvatar
+            }
             alt={`${currentConversation.username} avatar`}
           />
         </div>
 
-        <div className={`${styles.wrapper} ${styles.listMessages}`} ref={refMessageList}>
-          {isLoadingMessages && <Loader />}
+        <div className={styles.listMessages}>
+          {isLoadingMessages && <LoaderMessenger />}
 
-          {(messagesList && messagesList.length !== 0) &&
-            messagesList.map((message, index) =>
+          {messagesList &&
+            messagesList.length !== 0 &&
+            messagesList.map((message, index) => (
               <MessageItem
                 key={message.id}
-                refMsg={index === (messagesList[messagesList.length-1].id) ? refMsg : undefined}
-                addClass={message.userId === curUser.id 
-                  ? styles.sender 
-                  : styles.recipient
+                refMsg={index === messagesList.length - 1 ? refMsg : undefined}
+                addClass={
+                  message.userId === curUser.id
+                    ? styles.sender
+                    : styles.recipient
                 }
                 username={message.username!}
-                timeMsg={getRelativeTimeString(new Date(message.createdAt!), 'ru')}
+                timeMsg={getRelativeTimeString(
+                  new Date(message.createdAt!),
+                  "ru"
+                )}
                 textMsg={message.text}
                 imgMsg={message.file}
               />
-            )
-          }
+            ))}
 
-          {(messagesList && messagesList.length === 0) &&
-            <p 
-              ref={refMsg}
-              className={styles.emptyConversation}>
+          {messagesList && messagesList.length === 0 && (
+            <p ref={refMsg} className={styles.emptyConversation}>
               Сообщений пока нет
             </p>
-          }
+          )}
         </div>
 
-        <div className={`${styles.wrapper} ${styles.bottomBar}`}>
+        <div className={styles.bottomBar}>
           <textarea
             ref={textareaRef}
             rows={2}
@@ -172,32 +186,33 @@ const Messages: FC = () => {
             placeholder={"Сообщение..."}
           />
           <div className={styles.send}>
-            {!previewImg &&
-            <input
-              onChange={handleAttachImage}
-              className={styles.fileInput}
-              type="file"
-              accept=".jpeg, .jpg, .png"
-              id="updateFile"
-            />}
+            {!previewImg && (
+              <input
+                onChange={handleAttachImage}
+                className={styles.fileInput}
+                type="file"
+                accept=".jpeg, .jpg, .png"
+                id="updateFile"
+              />
+            )}
             <label htmlFor="updateFile">
-              <PreviewAttach 
+              <PreviewAttach
                 dataImg={previewImg}
                 curTheme={currentTheme}
                 remove={removeAttachImage}
-                previewAttach='img'
+                previewAttach="img"
               />
             </label>
-            <div className={styles.mobileBtnSend} onClick={handleSend}/>
+            <div className={styles.mobileBtnSend} onClick={handleSend} />
             <button className={styles.btn} onClick={handleSend}>
               Отправить
             </button>
           </div>
         </div>
-
       </div>
     </div>
-  )
+  );
 }
 
 export default Messages;
+  
