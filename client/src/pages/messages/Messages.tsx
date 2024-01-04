@@ -154,7 +154,7 @@ const Messages: FC = () => {
             messagesList.map((message, index) => (
               <MessageItem
                 key={message.id}
-                refMsg={index === messagesList.length - 1 ? refMsg : undefined}
+                refMsg={index === (messagesList.length - 1) ? refMsg : undefined}
                 addClass={
                   message.userId === curUser.id
                     ? styles.sender
