@@ -12,9 +12,8 @@ Fullstack mini-application for social media with responsive design
 ![CSS3](https://img.shields.io/static/v1?style=for-the-badge&message=CSS3&color=4d4d4d&logo=CSS3&logoColor=264de4&label=)
 ![CSS Modules](https://img.shields.io/static/v1?style=for-the-badge&message=CSS+Modules&color=4d4d4d&logo=CSS+Modules&logoColor=FFFFFF&label=)
 ![HTML5](https://img.shields.io/static/v1?style=for-the-badge&message=HTML5&color=4d4d4d&logo=CSS3&logoColor=e44d26&label=)
-
 ![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&color=4d4d4d&logoColor=FFFFFF)
-![React Router](https://img.shields.io/static/v1?style=for-the-badge&message=Socket.io&color=4d4d4d&logo=Socket.io&logoColor=FFFFFF&label=)
+
 
 ## Languages and Tools for Backend:
 ![Node.js](https://img.shields.io/badge/-Node.js-4d4d4d?style=for-the-badge&logo=Node.js&logoColor=#339933)
@@ -24,6 +23,7 @@ Fullstack mini-application for social media with responsive design
 ![Nodemon](https://img.shields.io/badge/NODEMON-4d4d4d?style=for-the-badge&logo=nodemon&logoColor=%BBDEAD)
 ![Postgres](https://img.shields.io/badge/Postgres-%23316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Sequelize](https://img.shields.io/badge/Sequelize-4d4d4d?style=for-the-badge&logo=Sequelize&logoColor=52B0E7)
+![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&color=4d4d4d&logoColor=FFFFFF)
 
 ### Other third party tools
 *   Using icons from Material-UI.
