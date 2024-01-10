@@ -13,7 +13,7 @@ Fullstack mini-application for social media with responsive design
 ![CSS Modules](https://img.shields.io/static/v1?style=for-the-badge&message=CSS+Modules&color=4d4d4d&logo=CSS+Modules&logoColor=FFFFFF&label=)
 ![HTML5](https://img.shields.io/static/v1?style=for-the-badge&message=HTML5&color=4d4d4d&logo=CSS3&logoColor=e44d26&label=)
 
-![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&color=4d4d4d&logoColor=010101&badgeColor=111111)
+![Socket.io](https://img.shields.io/badge/Socket.io-black?style=for-the-badge&logo=socket.io&color=4d4d4d&logoColor=FFFFFF)
 ![React Router](https://img.shields.io/static/v1?style=for-the-badge&message=Socket.io&color=4d4d4d&logo=Socket.io&logoColor=FFFFFF&label=)
 
 ## Languages and Tools for Backend:
