@@ -15,12 +15,8 @@ import {useScroll} from '../../hooks/useScroll';
 
 import LoadingButton from '../../components/LoadingButton/LoadingButton';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
-import InputWithValidation from '../../components/InputWithValidation/InputWithValidation';
+import InputWithValidation, {TStatusValidData} from '../../components/InputWithValidation/InputWithValidation';
 import {inputs} from './regInputs';
-
-interface IStatusValidData {
-  [key: string]: boolean;
-}
 
 interface IRegValue {
   name: string;
@@ -65,7 +61,7 @@ const Register: FC = () => {
     password: '',
   });
 
-  const [isValidInputs, setValidInput] = useState<IStatusValidData>({
+  const [isValidInputs, setValidInput] = useState<TStatusValidData>({
     name: false,
     lastname: false,
     email: false,

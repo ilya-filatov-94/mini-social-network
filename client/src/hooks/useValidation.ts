@@ -3,12 +3,9 @@ import { useEffect, useState } from "react";
 
 export type TFnOfValidation = (() => string) | undefined;
 
-export interface IValidations {
-    [key: string]: number | boolean | TFnOfValidation;
-}
+export type TValidations = Record<string, number | boolean | TFnOfValidation>;
 
-
-export const useValidation = (value: string, validations: IValidations) => {
+export const useValidation = (value: string, validations: TValidations) => {
 
     const [isValid, setValid] = useState(true);
     const [errorMessage, setErrorMessage] = useState('');

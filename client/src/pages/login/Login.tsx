@@ -8,7 +8,7 @@ import {
 import styles from './Login.module.scss';
 
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
-import InputWithValidation from '../../components/InputWithValidation/InputWithValidation';
+import InputWithValidation, {TStatusValidData} from '../../components/InputWithValidation/InputWithValidation';
 import LoadingButton from '../../components/LoadingButton/LoadingButton';
 
 import { useNavigate } from "react-router-dom";
@@ -18,11 +18,7 @@ import {loginUser, setErrorStatus} from '../../store/authSlice';
 import {useMatchMedia} from '../../hooks/useMatchMedia';
 import {useScroll} from '../../hooks/useScroll';
 
-interface IStatusValidData {
-  [key: string]: boolean;
-}
-
-interface ILoginValue {
+export interface ILoginValue {
   email: string;
   password: string;
 }
@@ -40,14 +36,19 @@ const Login: FC = () => {
     }
     if (error) {
       if (status === '403' && error.includes('Пользователь с почтовым адресом')) {
-        setValidInput({...isValidInputs, email: false});
+        setValidInput(prev => ({...prev, email: false}));
       }
       if (status === '403' && error === 'Неверный пароль') {
-        setValidInput({...isValidInputs, password: false});
+        setValidInput(prev => ({...prev, password: false}));
       }
     }
-  // eslint-disable-next-line
-  }, [status, error]);
+
+  }, [
+    status, 
+    error, 
+    navigate, 
+    isAuth
+  ]);
   
 
   const [executeScroll, elRef] = useScroll('start');
@@ -60,14 +61,14 @@ const Login: FC = () => {
   // eslint-disable-next-line
   }, []);
 
+  const [isValidInputs, setValidInput] = useState<TStatusValidData>({
+    email: false,
+    password: false,
+  });
+
   const [loginData, setLoginData] = useState<ILoginValue>({
     email: '',
     password: ''
-  });
-
-  const [isValidInputs, setValidInput] = useState<IStatusValidData>({
-    email: false,
-    password: false,
   });
 
   const isValidForm = Object.entries(isValidInputs).every(key => key[1]);

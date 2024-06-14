@@ -9,11 +9,7 @@ import {
     memo
 } from 'react';
 import styles from './InputSettings.module.scss';
-import {getErrorMessage, IValidations} from '../editUserInputs';
-
-interface IError {
-  [key: string]: string;
-}
+import {getErrorMessage, TValidation} from '../editUserInputs';
 
 interface ISpreadingInputProps
   extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, 
@@ -21,8 +17,8 @@ interface ISpreadingInputProps
   idInput: number;
   label: string;
   defaultValue: string | number | undefined;
-  isError: IError;
-  validations: IValidations;
+  isError: Record<string, string>;
+  validations: TValidation;
   setValueinForm: (ref: MutableRefObject<null | HTMLInputElement>, error: string) => void;
   classes?: string;
 }

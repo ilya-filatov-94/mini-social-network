@@ -35,6 +35,29 @@ body::-webkit-scrollbar-track {
     border: 3px solid rgb(215, 215, 215);       /* отступ вокруг бегунка */
 }
 
+*::-webkit-scrollbar-button:vertical:start {
+    display: none;
+}
+
+*::-webkit-scrollbar-button:vertical:end:increment {
+    display: none;
+}
+
+.scroller {
+    --scrollbar-color-thumb: rgb(215, 215, 215);
+    --scrollbar-color-track: grey;
+    --scrollbar-width: thin;
+    --scrollbar-width-legacy: 10px;
+}
+
+/* Modern browsers with `scrollbar-*` support */
+@supports (scrollbar-width: auto) {
+    .scroller {
+        scrollbar-color: var(--scrollbar-color-thumb) var(--scrollbar-color-track);
+        scrollbar-width: var(--scrollbar-width);
+    }
+}
+
 .App {
     font-family: 'Gilroy', 'Arial', sans-serif;
     font-size: 1rem;

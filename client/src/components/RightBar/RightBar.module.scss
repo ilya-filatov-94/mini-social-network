@@ -1,4 +1,4 @@
-@import '../Layout//sizeCoontainer.scss';
+@import '../Layout/sizeCoontainer.scss';
 @import '../../styles/theme.scss';
 @import '../../styles/responsive.scss';
 
@@ -6,10 +6,9 @@
 .rightBar {
     flex: 3;
     position: sticky;
+    position: sticky;
     top: $heightNav;
-    // height: calc(100vh - $topBar);
-    overflow-y: auto;
-    height: 100vh;
+    height: calc(100vh - $topBar);
 
     @include mobile {
         display: none;

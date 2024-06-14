@@ -9,16 +9,9 @@ import {
   SetStateAction
 } from 'react';
 import styles from './InputWithValidation.module.scss';
-import {useValidation, IValidations, TFnOfValidation} from '../../hooks/useValidation';
+import {useValidation, TValidations, TFnOfValidation} from '../../hooks/useValidation';
 
-
-type TfunValidation = {
-  customFun: TFnOfValidation;
-}
-
-interface IStatusValidData {
-  [key: string]: boolean;
-}
+export type TStatusValidData = Record<string, boolean>;
 
 interface ISpreadingInputProps
   extends DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -26,9 +19,9 @@ interface ISpreadingInputProps
   classes?: string;
   value: string;
   isValidInput: boolean;
-  setValidInput: (value: SetStateAction<IStatusValidData>) => void;
-  funValidation: TfunValidation;
-  validations: IValidations;
+  setValidInput: (value: SetStateAction<TStatusValidData>) => void;
+  funValidation: Record<'customFun', TFnOfValidation>;
+  validations: TValidations;
 }
 
 const InputWithValidation: FC<ISpreadingInputProps> = memo(({

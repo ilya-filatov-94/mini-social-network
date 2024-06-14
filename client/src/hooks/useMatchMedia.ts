@@ -7,7 +7,7 @@ const queries = [
 ];
 
 
-type IReturnMatchMedia = () => {[key: string]: boolean};
+type IReturnMatchMedia = () => Record<string, boolean>;
 
 export const useMatchMedia: IReturnMatchMedia  = () => {
     const mediaQueryLists = queries.map(query => matchMedia(query));

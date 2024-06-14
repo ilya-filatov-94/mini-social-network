@@ -56,8 +56,7 @@ const EditProfile: FC = () => {
         profilePic: userData?.profilePic
       }));
     }
-  // eslint-disable-next-line
-  }, [userData]);
+  }, [userData, dispatch]);
 
   const getPreviewOfSelectedImages = () => {
     const previewOfSelectedImages = {avatar: '', cover: ''};

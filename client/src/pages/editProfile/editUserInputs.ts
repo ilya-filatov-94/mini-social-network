@@ -70,11 +70,9 @@ export const inputs = [
     }
 ];
 
-export interface IValidations {
-    [key: string]: number | boolean | undefined;
-}
+export type TValidation = Record<string,  number | boolean | undefined>;
 
-export const getErrorMessage = (value: string, validations: IValidations) => {
+export const getErrorMessage = (value: string, validations: TValidation) => {
     for (const validation in validations) {
         switch (validation) {    
             case 'firstCharacterIsLetter':
