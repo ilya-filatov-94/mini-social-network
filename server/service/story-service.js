@@ -79,7 +79,14 @@ function getFullDataStories(stories, userId, indexesToDelete) {
     }
   });
   if (flatStories.length > 1 && indexStoryCurUser) {
-    [flatStories[0], flatStories[indexStoryCurUser]] = [flatStories[indexStoryCurUser], flatStories[0]];
+    const shaffleStories = [];
+    shaffleStories.push(flatStories[indexStoryCurUser]);
+    for (const story of flatStories) {
+      if (story.userId !== userId) {
+        shaffleStories.push(story);
+      }
+    }
+    return shaffleStories;
   }
   return flatStories;
 }
