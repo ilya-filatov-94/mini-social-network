@@ -7,7 +7,7 @@ import {
 import {API_URL} from '../env_variables'; 
 import {RootState} from '../store';
 import {logoutUser, updateToken} from '../store/authSlice';
-import {IReAuthResponse} from '../types/authReducer';
+import {TReAuthResponse} from '../types/authReducer';
 import {Mutex} from 'async-mutex';
 
 
@@ -44,7 +44,7 @@ export const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, Fetch
                 }, api, extraOptions);
 
                 if (refreshResult.data) {
-                    const tokens = refreshResult.data as IReAuthResponse;
+                    const tokens = refreshResult.data as TReAuthResponse;
                     api.dispatch(updateToken(tokens.accessToken as string));
                     //повторяем запрос
                     result = await baseQuery(args, api, extraOptions);

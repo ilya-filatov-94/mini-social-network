@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {API_URL} from '../env_variables';
-import {IReAuthResponse} from '../types/authReducer';
+import {TReAuthResponse} from '../types/authReducer';
 
 
 export const instanceAxios = axios.create({
@@ -22,7 +22,7 @@ instanceAxios.interceptors.response.use(
         if (error?.response?.status === 401 && error.config && !error.config._isRetry) {
             originalRequest._isRetry = true;
             try {
-                const response = await axios.get<IReAuthResponse>(`${API_URL}/user/refresh/`, {
+                const response = await axios.get<TReAuthResponse>(`${API_URL}/user/refresh/`, {
                     withCredentials: true
                 });
                 localStorage.setItem('accessToken', response.data.accessToken);

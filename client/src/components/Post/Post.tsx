@@ -26,7 +26,6 @@ const Post: FC<IPostsProps> = ({
   currentUser,
   userId,
   curUserId
-
 }) => {
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);

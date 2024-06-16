@@ -36,15 +36,6 @@ class PostController {
         }
     }
 
-    async getLatestPosts(request, response, next) {
-        try {
-            const posts = await postService.getLatestPosts();
-            return response.json(posts);
-        } catch (error) {
-            next(error);
-        }
-    }
-
     async updatePost(request, response, next) {
         try {
             const {id, desc} = request.body;

@@ -2,7 +2,7 @@ import {
     createApi, 
 } from "@reduxjs/toolkit/query/react";
 import {baseQueryWithReauth} from './index';
-import {IComments, ICommentReq} from '../types/comments';
+import {IComments, TCommentReq} from '../types/comments';
 
 
 
@@ -11,7 +11,7 @@ export const commentApi = createApi({
     baseQuery: baseQueryWithReauth,
     tagTypes: ['Comments'],
     endpoints: (builder) => ({
-        getAllComments: builder.query<IComments[], ICommentReq>({
+        getAllComments: builder.query<IComments[], TCommentReq>({
           query: (data) => ({
             url: `/comment/all`,
             params: {
@@ -23,7 +23,7 @@ export const commentApi = createApi({
           : ['Comments'],
           keepUnusedDataFor: 60,
         }),
-        addComment: builder.mutation<IComments, ICommentReq>({
+        addComment: builder.mutation<IComments, TCommentReq>({
           query: (data) => ({
             url: `/comment/create`,
             method: 'POST',
@@ -31,7 +31,7 @@ export const commentApi = createApi({
           }),
           invalidatesTags: ['Comments'],
         }),
-        deleteComment: builder.mutation<number, ICommentReq>({
+        deleteComment: builder.mutation<number, TCommentReq>({
           query: (data) => ({
             url: `/comment/delete`,
             method: 'DELETE',

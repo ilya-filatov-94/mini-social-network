@@ -36,15 +36,15 @@ const InfoAuthorOfPost: FC<IPostsProps> = ({
       <div className={styles.userInfo}>
         <img
           className={styles.avatar}
-          src={post.profilePic ? urlAPIimages + post.profilePic : noAvatar}
+          src={post.user.profilePic ? urlAPIimages + post.user.profilePic : noAvatar}
           alt={`post ${post.id} photо`}
         />
         <div className={styles.details}>
           <Link
             className={styles.link}
-            to={currentUser ? `/profile/${post.refUser}` : `/profile/${post.refUser}?id=${curUserId}`}
+            to={currentUser ? `/profile/${post.user.refUser}` : `/profile/${post.user.refUser}?id=${curUserId}`}
             replace={true}>
-            <span className={styles.username}>{post.username}</span>
+            <span className={styles.username}>{post.user.username}</span>
           </Link>
           <span className={styles.date}>{getRelativeTimeString(new Date(post.date!), 'ru')}</span>
         </div>

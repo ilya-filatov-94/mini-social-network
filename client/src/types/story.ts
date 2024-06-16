@@ -8,10 +8,8 @@ export interface IStory {
   date?: string;
 }
 
-export interface IStoryCreate {
-  id: number;
-  image: string;
-  userId: number;
+export interface IStoryCreate
+extends Pick<IStory, "id" | "image" | "userId"> {
   updatedAt: string;
   createdAt: string;
 }

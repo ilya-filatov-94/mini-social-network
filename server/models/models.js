@@ -24,7 +24,6 @@ const Post = sequelize.define('post', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     desc: {type: DataTypes.STRING, allowNull: false},
     image: {type: DataTypes.STRING},
-    counterLikes: {type: DataTypes.STRING, defaultValue: "0"},
     counterComments: {type: DataTypes.STRING, defaultValue: "0"},
 });
 
@@ -62,14 +61,13 @@ const UserRelationship = sequelize.define('user_relationship', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 });
 
-
 //Отношение 1 к 1, доп ключ userId автоматически сгененируется в таблице Token
 User.hasOne(Token);
 Token.belongsTo(User);
 
-//1 ко многим. Авто ключ со ссылкой на пользователя создаётся в модели Post
-User.hasMany(Post);
-Post.belongsTo(User);
+//1 ко многим. Явное указание внешнего ключа userId со ссылкой на пользователя, ключ создаётся в модели Post
+User.hasMany(Post, { foreignKey: 'userId' });
+Post.belongsTo(User, { foreignKey: 'userId' });
 
 User.hasMany(Comment);
 Comment.belongsTo(User);
@@ -93,8 +91,7 @@ Activity.belongsTo(User);
 Relationship.belongsToMany(User, {through: UserRelationship, as: "users"});
 User.belongsToMany(Relationship, {through: UserRelationship, as: "relationship"});
 
-
-//Schemes for chat
+//Схемы для чата
 const Conversation = sequelize.define('conversation', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     participantId1: {type: DataTypes.INTEGER},
@@ -112,14 +109,11 @@ const Message = sequelize.define('message', {
     isRead: {type: DataTypes.BOOLEAN},
 });
 
-//1 ко многим
 User.hasMany(Message);
 Message.belongsTo(User);
 
-//1 ко многим
 Conversation.hasMany(Message);
 Message.belongsTo(Conversation);
-
 
 module.exports = {
     User,

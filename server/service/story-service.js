@@ -1,7 +1,4 @@
 const {Story, User, Activity} = require('../models/models');
-// const { Op } = require("sequelize");
-
-
 
 class StoryService {
   async createNewStory(userId, fileName) {
@@ -17,14 +14,13 @@ class StoryService {
     if (!id) return [];
     const stories = await Story.findAll({
       order: [['createdAt', 'DESC']],
-    });
-    const idUsers = stories.map(item => item.dataValues.userId);
-    const users = await User.findAll({
-      where: { id: idUsers},
-      attributes: ['id', 'username', 'refUser', 'profilePic']
+      include: [{
+        model: User,
+        attributes: ["username", "refUser", "profilePic"]
+      }],
     });
     const indexesToDelete = [];
-    const storiesForClient = getFullDataStories(users, stories, id, indexesToDelete);
+    const storiesForClient = getFullDataStories(stories, id, indexesToDelete);
     if (indexesToDelete.length !== 0) {
       await Story.destroy({
         where: { id: indexesToDelete},
@@ -39,49 +35,53 @@ class StoryService {
 
   async getOneStory(userId) {
     if (!userId) return {};
-    const story = await Story.findOne({
+    const stories = await Story.findOne({
       order: [['createdAt', 'DESC']],
+      where: { userId},
+      include: [{
+        model: User,
+        attributes: ["username", "refUser", "profilePic"]
+      }],
     });
-    const user = await User.findOne(
-      {
-        where: {id: userId},
-      },
-    );
-    const indexesToDelete = [];
-    getFullDataStories(user, stories, indexesToDelete);
-    return story;
+    const flatStories = stories.map(story => {
+      item = story.dataValues;
+      const createdAt = formatAndCheckDate(item.createdAt, () => indexesToDelete.push(item.id))
+      return {
+        id: item.id,
+        image: item.image,
+        userId: item.userId,
+        date: createdAt,
+        username: item.user.dataValues.username,
+        refUser: item.user.dataValues.refUser,
+        profilePic: item.user.dataValues.profilePic,
+      }
+    });
+    return flatStories;
   } 
 
 }
 
-function getFullDataStories(users, stories, userId, indexesToDelete) {
-  const obj = {};
-  const newArrStories = [];
-  let key;
+function getFullDataStories(stories, userId, indexesToDelete) {
   let item;
-  for (let i = 0; i < users.length; i++) {
-    key = users[i].dataValues.id;
-    obj[key] = users[i].dataValues;
-  }
-  for (let i = 0; i < stories.length; i++) {
-    key = stories[i].dataValues.userId;
-    item = stories[i].dataValues;
-    if (obj[key]) {
-      item.date = formatAndCheckDate(item.createdAt, () => indexesToDelete.push(item.id));
-      item.username = obj[key].username;
-      item.refUser = obj[key].refUser;
-      item.profilePic = obj[key].profilePic;
+  let indexStoryCurUser;
+  const flatStories = stories.map((story, index) => {
+    item = story.dataValues;
+    if (item.userId === userId) indexStoryCurUser = index;
+    const createdAt = formatAndCheckDate(item.createdAt, () => indexesToDelete.push(item.id))
+    return {
+      id: item.id,
+      image: item.image,
+      userId: item.userId,
+      date: createdAt,
+      username: item.user.dataValues.username,
+      refUser: item.user.dataValues.refUser,
+      profilePic: item.user.dataValues.profilePic,
     }
-    if (stories[i].length > 1) {
-      if (stories[i].dataValues.userId === userId) {
-        newArrStories[0] = stories[i];
-      }
-      if (stories[i].dataValues.userId !== userId) {
-        newArrStories[i + 1] = stories[i];
-      }
-    }
+  });
+  if (flatStories.length > 1 && indexStoryCurUser) {
+    [flatStories[0], flatStories[indexStoryCurUser]] = [flatStories[indexStoryCurUser], flatStories[0]];
   }
-  return newArrStories.length ? newArrStories : stories;
+  return flatStories;
 }
 
 function formatAndCheckDate(inputDate, callback) {

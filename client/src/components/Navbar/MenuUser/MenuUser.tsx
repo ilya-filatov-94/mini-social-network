@@ -4,12 +4,12 @@ import Portal from '../../../hoc/Portal';
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import {useAppDispatch} from '../../../hooks/useTypedRedux';
 import {logoutUser} from '../../../store/authSlice';
-import {IinitialUser} from '../../../types/authReducer';
+import {TinitialUser} from '../../../types/authReducer';
 
 interface IMenuUserProps {
   isVisible: boolean;
   setVisible: (state: boolean) => void;
-  curUser: IinitialUser;
+  curUser: TinitialUser;
   curTheme: string;
   position: string;
 }

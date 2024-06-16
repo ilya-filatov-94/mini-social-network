@@ -4,12 +4,12 @@ import axios from 'axios';
 import jwt_decode from "jwt-decode";
 
 import {
-    IinitialUser,
+    TinitialUser,
     IRegState, 
     IAuthState, 
     IAccessToken, 
     IResponse, 
-    ILoginState, 
+    TLoginState, 
     IResponseLogout
 } from '../types/authReducer';
 import {IUpdateData} from '../types/users';
@@ -22,7 +22,7 @@ extends IAuthState {
     error: string | null;
 }
 
-const initialStateUser: IinitialUser = {
+const initialStateUser: TinitialUser = {
     id: 1,
     username: "",
     refUser: "",
@@ -72,7 +72,7 @@ export const registerUser = createAsyncThunk<IResponse, IRegState, {rejectValue:
     }
 );
 
-export const loginUser = createAsyncThunk<IResponse, ILoginState, {rejectValue: string, dispatch: AppDispatch}>(
+export const loginUser = createAsyncThunk<IResponse, TLoginState, {rejectValue: string, dispatch: AppDispatch}>(
     'authService/loginUser',
     function (data, {rejectWithValue, dispatch}) {
         return axios.post(API_URL + '/user/login',

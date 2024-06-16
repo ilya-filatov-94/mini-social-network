@@ -1,7 +1,5 @@
 const {Comment, User, Post, Activity} = require('../models/models');
 
-
-
 class CommentService {
   async createNewComment(id_user, id_post, desc) {
     if (!id_user || !id_post || !desc) return {};
@@ -10,13 +8,13 @@ class CommentService {
       userId: id_user,
       postId: id_post,
     });
-    const user = await User.findOne({where: {id: id_user}});
+    const user = await User.findByPk(id_user);
     comment.dataValues.username = user.username;
     comment.dataValues.refUser = user.refUser;
     comment.dataValues.profilePic = user.profilePic;
     comment.dataValues.date = comment.dataValues.createdAt;
 
-    const post = await Post.findOne({where: {id: id_post}})
+    const post = await Post.findByPk(id_post);
     await Post.update({ counterComments: parseInt(post.counterComments)+1}, {
       where: {id: id_post},
     });
@@ -35,19 +33,29 @@ class CommentService {
         "userId",
         "postId"
       ],
+      include: [{
+        model: User,
+        attributes: ["username", "refUser", "profilePic"]
+      }],
     });
-    const idUsers = comments.map(item => item.dataValues.userId);
-    const users = await User.findAll({
-      where: { id: idUsers},
-      attributes: ['id', 'username', 'refUser', 'profilePic', 'createdAt']
-    });
-    getFullDataComments(users, comments);
-    return comments;
+    const flatComments = comments.map(comment => (
+      {
+        id: comment.id,
+        desc: comment.desc,
+        date: comment.createdAt,
+        userId: comment.userId,
+        postId: comment.postId,
+        username: comment.user.username,
+        refUser: comment.user.refUser,
+        profilePic: comment.user.profilePic
+      }
+    ));
+    return flatComments;
   }
 
   async deleteComment(id_post, id_com) {
     if (!id_post || !id_com) return 0;
-    const post = await Post.findOne({where: {id: id_post}})
+    const post = await Post.findByPk(id_post);
     await Post.update({ counterComments: parseInt(post.counterComments)-1}, {
       where: {id: id_post},
     });
@@ -57,26 +65,6 @@ class CommentService {
     return await Comment.destroy({
       where: { id: id_com,  postId: id_post},
     }) ? id_com : 0;
-  }
-}
-
-function getFullDataComments(users, comments) {
-  const obj = {};
-  let key;
-  let item;
-  for (let i = 0; i < users.length; i++) {
-    key = users[i].dataValues.id;
-    obj[key] = users[i].dataValues;
-  }
-  for (let i = 0; i < comments.length; i++) {
-    key = comments[i].dataValues.userId;
-    item = comments[i].dataValues;
-    if (obj[key]) {
-      item.date = item.createdAt;
-      item.username = obj[key].username;
-      item.refUser = obj[key].refUser;
-      item.profilePic = obj[key].profilePic;
-    }
   }
 }
 

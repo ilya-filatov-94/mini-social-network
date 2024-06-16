@@ -1,14 +1,10 @@
-
 export interface IRegState {
     username: string;
     email: string;
     password: string;
 }
 
-export interface ILoginState {
-    email: string;
-    password: string;
-}
+export type TLoginState = Pick<IRegState, "email" | "password">;
 
 export interface IAccessToken {
     id: number,
@@ -29,30 +25,22 @@ export interface IUserData {
     isSubscriber?: boolean;
 }
 
+export type TinitialUser = Pick<IUserData, "id" | "username" | "profilePic"> & Partial<Pick<IUserData, "status">> & {refUser: string};
+
 export interface IRequestProfile {
     ref: string;
     id: number;
 }
 
-export interface IinitialUser {
-    id: number;
-    username: string;
-    refUser: string;
-    profilePic: string | undefined;
-    status?: string;
-}
-
 export interface IResponse {
     accessToken: string,
-    user: IinitialUser;
+    user: TinitialUser;
 }
 
-export interface IReAuthResponse {
-    accessToken: string;
-}
+export type TReAuthResponse = Pick<IResponse, "accessToken">;
 
 export interface IAuthState {
-    currentUser: IinitialUser;
+    currentUser: TinitialUser;
     isAuth: boolean;
     accessToken: string;
 }

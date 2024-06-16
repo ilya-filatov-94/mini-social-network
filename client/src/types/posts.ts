@@ -1,23 +1,21 @@
+import {TinitialUser} from './authReducer';
+
+export type TUserInfo = Pick<TinitialUser, "username" | "refUser" | "profilePic">;
 
 export interface IPostData {
   id?: number;
-  username: string;
-  profilePic?: string | undefined;
-  refUser: string;
+  user: TUserInfo;
   desc: string;
-  date?: string;
   image?: string | undefined;
-  counterLikes: number;
+  date?: string;
   counterComments: number;
 }
 
-export interface ILikes {
+export interface ILikes 
+extends Pick<TinitialUser, "username" | "refUser" | "profilePic"> {
   id?: number;
   userId?: number;
-  postId?: number;
-  username?: string;
-  refUser?: string; 
-  profilePic?: string | undefined;
+  postId: number;
 }
 
 export interface ICheckData {

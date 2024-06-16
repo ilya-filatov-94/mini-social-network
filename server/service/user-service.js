@@ -281,7 +281,6 @@ class UserService {
             order: [['createdAt', 'DESC']],
             where: {userId: idFriends},
         });
-        // const idUsers = activities.map(item => item.dataValues.userId);
         const users = await User.findAll({
             where: { id: idFriends},
             attributes: ['id', 'username', 'refUser', 'profilePic']

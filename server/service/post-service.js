@@ -1,7 +1,5 @@
 const {Post, User, Like, Comment, Activity} = require('../models/models');
 
-
-
 class PostService {
   async createNewPost(userId, desc, fileName) {
     const post = await Post.create({
@@ -14,66 +12,35 @@ class PostService {
 
   async getAll(userId) {
     if (!userId) return [];
-    const posts = await Post.findAll({
-      where: { userId: userId },
+    const postsInfo = await Post.findAll({
+      where: {
+        userId: userId,
+      },
       order: [['createdAt', 'DESC']],
       attributes: [
         "id",
         "desc",
         "image",
-        "counterLikes",
+        ["updatedAt", "date"],
+        "userId",
         "counterComments",
-        "createdAt"
       ],
+      include: [{
+        model: User,
+        attributes: ["username", "refUser", "profilePic"]
+      }],
     });
-    const users = await User.findOne({
-      where: { id: userId },
-      attributes: ["id", "username", "refUser", "profilePic"],
-    });
-    for (let item of posts) {
-      let post = item.dataValues;
-      post.date = post.createdAt;
-      post.username = users.dataValues.username;
-      post.refUser = users.dataValues.refUser;
-      post.profilePic = users.dataValues.profilePic;
-    }
-    return posts;
-  }
-
-  async getLatestPosts() {
-    const posts = await Post.findAll({
-      order: [['createdAt', 'DESC']],
-      attributes: [
-        "id",
-        "desc",
-        "image",
-        "counterLikes",
-        "counterComments",
-        "updatedAt",
-      ],
-    });
-    const users = await User.findAll({
-      attributes: ["id", "username", "refUser", "profilePic"],
-    });
-
-    for (let item of posts) {
-      let post = item.dataValues;
-      post.date = post.updatedAt;
-      post.username = users.dataValues.username;
-      post.refUser = users.dataValues.refUser;
-      post.profilePic = users.dataValues.profilePic;
-    }
-    return posts;
+    return postsInfo;
   }
 
   async updatePost(id, desc, fileName) {
-    await Post.update({ desc: desc, image: fileName}, {
+    const [_, affectedRows] =  await Post.update({ desc: desc, image: fileName}, {
       where: {
         id: id,
       },
+      returning: true,
     });
-    const post = await Post.findOne({where: {id}})
-    return post;
+    return affectedRows;
   }
 
   async deletePost(id) {
@@ -116,33 +83,22 @@ class PostService {
         "userId",
         "postId"
       ],
+      include: [{
+        model: User,
+        attributes: ["username", "refUser", "profilePic"]
+      }],
     });
-    const idUsers = likes.map(item => item.dataValues.userId);
-    const users = await User.findAll({
-      where: { id: idUsers},
-      attributes: ["id", "username", "refUser", "profilePic"],
-    });
-    getFullDataLikes(users, likes)
-    return likes;
-  }
-}
-
-function getFullDataLikes(users, likes) {
-  const obj = {};
-  let key;
-  let item;
-  for (let i = 0; i < users.length; i++) {
-    key = users[i].dataValues.id;
-    obj[key] = users[i].dataValues;
-  }
-  for (let i = 0; i < likes.length; i++) {
-    key = likes[i].dataValues.userId;
-    item = likes[i].dataValues;
-    if (obj[key]) {
-      item.username = obj[key].username;
-      item.refUser = obj[key].refUser;
-      item.profilePic = obj[key].profilePic;
-    }
+    const flatLikes = likes.map(like => (
+      {
+        id: like.id,
+        userId: like.userId,
+        postId: like.postId,
+        username: like.user.username,
+        refUser: like.user.refUser,
+        profilePic: like.user.profilePic
+      }
+    ));
+    return flatLikes;
   }
 }
 

@@ -44,18 +44,22 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
   const hasLike = currLikes?.filter(item => item.username === currUser.username).length;
   
   async function toggleLike() {
+    const curUserLike = {
+      id: currUser.id,  //т.к. userId уникален для массива лайков (дважды лайк поставить нельзя)
+      userId: currUser.id,
+      postId,
+      username: currUser.username, 
+      profilePic: currUser.profilePic,
+      refUser: currUser.refUser
+    }
     if (!hasLike) {
-      changeLikes([{
-        id: currUser.id, 
-        username: currUser.username, 
-        profilePic: currUser.profilePic
-      }, ...currLikes]);
-      await addLike({userId: currUser.id, postId}).unwrap();
+      changeLikes([curUserLike, ...currLikes]);
+      await addLike(curUserLike).unwrap();
     }
     if (hasLike) {
-      const newArr = currLikes.filter(item => item.username !== currUser.username);
-      changeLikes(newArr);
-      await removeLike({userId: currUser.id, postId}).unwrap();
+      const newArrlikes = currLikes.filter(item => item.username !== currUser.username);
+      changeLikes(newArrlikes);
+      await removeLike(curUserLike).unwrap();
     }
   }
 
