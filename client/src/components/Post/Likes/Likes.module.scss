@@ -6,16 +6,51 @@
     outline: none;
 }
 
-.wrapper {
+.wrapper .wrapperIcon {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
 }
 
-.wrapperIcon {
+.wrapper .wrapperIcon .users {
+    position: absolute;
+    bottom: 32px;
+    left: -5px;
+    width: 195px;
+    height: 65px;
+    background-color: inherit;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.7s 0.3s;
+}
+
+.wrapper .wrapperIcon .users::before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    background-color: inherit;
+    opacity: 0.9;
+    top: 90%;
+    left: 8%;
+    transform: translate(-50%) rotate(45deg);
+    z-index: -1;
+}
+
+.wrapper .wrapperIcon:hover .users {
+    visibility: visible;
+    opacity: 0.9;
+}
+
+.infoLike {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    cursor: pointer; 
 
     @include mobile {
         @supports (-webkit-touch-callout: none) and (not (translate: none)) {
@@ -26,14 +61,36 @@
     }
 }
 
-.wrapper .icon {
-    position: relative;
-    background-color: inherit;
+.wrapper .wrapperIcon .users p {
+    padding-left: 7px;
 }
 
-.wrapper .icon .users {
-    position: absolute;
-    display: none;
+.wrapper.theme-dark {
+    $curTheme: "dark";
+    .wrapperIcon .users::before {
+        border-right: 1px solid themed($curTheme, "border");
+        border-bottom: 1px solid themed($curTheme, "border");
+    }
+
+    .wrapperIcon .users {
+        background-color: themed($curTheme, "background");
+        border: 1px solid themed($curTheme, "border");
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.7);
+    }
+}
+
+.wrapper.theme-light {
+    $curTheme: "light";
+    .wrapperIcon .users::before {
+        border-right: 1px solid themed($curTheme, "border");
+        border-bottom: 1px solid themed($curTheme, "border");
+    }
+
+    .wrapperIcon .users {
+        background-color: themed($curTheme, "background");
+        border: 1px solid themed($curTheme, "border");
+        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
+    }
 }
 
 .img {
@@ -43,75 +100,33 @@
     border-radius: 50%;
 }
 
+.wrapper.theme-light {
+    $curTheme: "light";
+    .wrapperIcon .users .avatars .img {
+        border: 1px solid themed($curTheme, "textColorSoft");
+    }
+}
+
+.wrapper.theme-dark {
+    $curTheme: "light";
+    .wrapperIcon .users .avatars .img {
+        border: 1px solid themed($curTheme, "textColorSoft");
+    }
+}
+
 .avatars {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
-    gap: 5px;
-    padding: 5px;
+    gap: 7px;
+    padding: 7px;
 
     @include mobile {
         @supports (-webkit-touch-callout: none) and (not (translate: none)) {
             & > *:not(:last-child) {
-                margin-right: 5px;
+                margin-right: 7px;
             }
         }
-    }
-}
-
-.wrapper .icon .users::before {
-    position: absolute;
-    content: "";
-    height: 12px;
-    width: 12px;
-    background-color: inherit;
-    top: 90%;
-    left: 11.5%;
-    z-index: -1;
-    transform: translate(-50%) rotate(45deg);
-}
-
-.wrapper .icon:hover .users {
-    top: -65px;
-    left: -10px;
-    width: 190px;
-    height: 60px;
-    padding: 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    border-radius: 5px;
-    color: inherit;
-    font-size: 0.75rem;
-    z-index: 1;
-}
-
-.wrapper.theme-dark {
-    $curTheme: "dark";
-    .icon .users::before {
-        border-right: 1px solid themed($curTheme, "border");
-        border-bottom: 1px solid themed($curTheme, "border");
-    }
-
-    .icon:hover .users {
-        background-color: themed($curTheme, "background");
-        border: 1px solid themed($curTheme, "border");
-        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.7);
-    }
-}
-
-.wrapper.theme-light {
-    $curTheme: "light";
-    .icon .users::before {
-        border-right: 1px solid themed($curTheme, "border");
-        border-bottom: 1px solid themed($curTheme, "border");
-    }
-
-    .icon:hover .users {
-        background-color: themed($curTheme, "background");
-        border: 1px solid themed($curTheme, "border");
-        box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
     }
 }
 

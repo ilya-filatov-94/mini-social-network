@@ -63,8 +63,8 @@ const UserActivity: FC = memo(() => {
             <img
               className={styles.avatar}
               src={
-                activity.profilePic
-                ? urlAPIimages + activity.profilePic
+                activity.user.profilePic
+                ? urlAPIimages + activity.user.profilePic
                 : noAvatar
               }
               alt={`post ${activity.id} photо`}
@@ -72,9 +72,9 @@ const UserActivity: FC = memo(() => {
             <div className={styles.details}>
               <Link
                 className={styles.link}
-                to={`/profile/${activity.refUser}?id=${16}`}
+                to={`/profile/${activity.user.refUser}?id=${16}`}
                 replace={true}
-              ><span className={styles.username}>{activity.username}</span>
+              ><span className={styles.username}>{activity.user.username}</span>
               </Link>
               <p>{activity.desc}</p>
             </div>
@@ -95,7 +95,7 @@ const UserActivity: FC = memo(() => {
               ${activity.text ? styles.notEmpty : ''}`
             }
             src={urlAPIimages + activity.image}
-            alt={`activity of ${activity.username}`} 
+            alt={`activity of ${activity.user.username}`} 
           />}
         </div>}
       </div>))}

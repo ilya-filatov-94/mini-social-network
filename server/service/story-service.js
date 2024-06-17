@@ -28,7 +28,7 @@ class StoryService {
       await Activity.destroy({
         where: { idAct: indexesToDelete, type: 'addedStory'},
       });
-      return storiesForClient.filter(item => !indexesToDelete.includes(item.dataValues.id));
+      return storiesForClient.filter(item => !indexesToDelete.includes(item));
     }
     return storiesForClient;
   }
@@ -45,18 +45,18 @@ class StoryService {
     });
     const flatStories = stories.map(story => {
       item = story.dataValues;
-      const createdAt = formatAndCheckDate(item.createdAt, () => indexesToDelete.push(item.id))
+      checkDate(item.createdAt, () => indexesToDelete.push(item.id))
       return {
         id: item.id,
         image: item.image,
         userId: item.userId,
-        date: createdAt,
+        date: item.createdAt,
         username: item.user.dataValues.username,
         refUser: item.user.dataValues.refUser,
         profilePic: item.user.dataValues.profilePic,
       }
     });
-    return flatStories;
+    return flatStories || [];
   } 
 
 }
@@ -64,42 +64,40 @@ class StoryService {
 function getFullDataStories(stories, userId, indexesToDelete) {
   let item;
   let indexStoryCurUser;
+  const shaffleStories = [];
   const flatStories = stories.map((story, index) => {
     item = story.dataValues;
     if (item.userId === userId) indexStoryCurUser = index;
-    const createdAt = formatAndCheckDate(item.createdAt, () => indexesToDelete.push(item.id))
+    checkDate(item.createdAt, () => indexesToDelete.push(item.id));
     return {
       id: item.id,
       image: item.image,
       userId: item.userId,
-      date: createdAt,
+      date: item.createdAt,
       username: item.user.dataValues.username,
       refUser: item.user.dataValues.refUser,
       profilePic: item.user.dataValues.profilePic,
     }
   });
-  if (flatStories.length > 1 && indexStoryCurUser) {
-    const shaffleStories = [];
+  if (indexStoryCurUser !== undefined) {
     shaffleStories.push(flatStories[indexStoryCurUser]);
-    for (const story of flatStories) {
-      if (story.userId !== userId) {
-        shaffleStories.push(story);
-      }
-    }
-    return shaffleStories;
   }
-  return flatStories;
+  for (const story of flatStories) {
+    if (story.userId !== userId) {
+      shaffleStories.push(story);
+    }
+  }
+  return shaffleStories || [];
 }
 
-function formatAndCheckDate(inputDate, callback) {
-  const createdDate = new Date(Date.parse(inputDate)).getTime();
-  const deltaSeconds = Math.floor((createdDate - Date.now())/1000);
-  const offsetTime = [60, 3600, 86400, 86400*7, 86400*30, 86400*365, Infinity];
-  const unitIndex = offsetTime.findIndex(offsetTime => offsetTime >= Math.abs(deltaSeconds));
-  if (offsetTime[unitIndex] >= 86400) {
+function checkDate(inputDate, callback) {
+  const createdDate = new Date(inputDate).getTime();
+  const curDate = Date.now();
+  const deltaSeconds = Math.floor((curDate - createdDate)/1000);
+  const oneDaySeconds = 86400;
+  if (deltaSeconds >= oneDaySeconds) {
     callback();
   }
-  return inputDate;
 }
 
 

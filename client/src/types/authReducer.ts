@@ -48,3 +48,5 @@ export interface IAuthState {
 export interface IResponseLogout {
     id: string;
 }
+
+export type TUserInfo = Pick<TinitialUser, "username" | "refUser" | "profilePic">;

@@ -48,6 +48,30 @@
             }
         }
 
+        .contentStory {
+            position: relative;
+        }
+
+        .contentStory .clickArea {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 102;
+            display: flex;
+
+            .leftArea {
+                flex: 1;
+            }
+            .centerArea {
+                flex: 4;
+            }
+            .rightArea {
+                flex: 1;
+            }
+        }
+
         .contentStory .storyContent {
             max-height: 80vh;
             width: 60vw;

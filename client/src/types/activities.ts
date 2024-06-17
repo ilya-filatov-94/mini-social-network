@@ -1,8 +1,8 @@
+import {TUserInfo} from './authReducer';
+
 export interface IActivityOfUser {
     id: number;
-    username: string;
-    profilePic: string;
-    refUser: string;
+    user: TUserInfo;
     createdAt: string;
     type: string;
     desc: string;

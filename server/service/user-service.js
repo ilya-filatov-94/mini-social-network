@@ -4,7 +4,7 @@ const ApiError = require('../error/ApiError');
 const tokenService = require('../service/token-service');
 const bcrypt = require('bcrypt');
 const { Op } = require("sequelize");
-
+const { changeKeyboardLayout } = require('../helpers/changeKeyboardLayout');
 
 class UserService {
     constructor() { 
@@ -280,12 +280,11 @@ class UserService {
         const activities = await Activity.findAll({
             order: [['createdAt', 'DESC']],
             where: {userId: idFriends},
+            include: [{
+                model: User,
+                attributes: ["username", "refUser", "profilePic"]
+            }],
         });
-        const users = await User.findAll({
-            where: { id: idFriends},
-            attributes: ['id', 'username', 'refUser', 'profilePic']
-        });
-        getFullDataActivities(users, activities);
         return activities;
     }
 
@@ -318,9 +317,10 @@ class UserService {
             });
         }
         if (search) {
+            const searchOtherKeys = changeKeyboardLayout(search);
             users = await User.findAndCountAll({
                 where: {
-                    username: {[Op.iLike]: '%' + search + '%' },
+                    username: {[Op.or]: [{[Op.iLike]: '%' + search + '%' }, {[Op.iLike]: '%' + searchOtherKeys + '%' }]}
                 },
                 attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city'],
                 limit, 
@@ -363,24 +363,6 @@ class UserService {
     }
 }
 
-function getFullDataActivities(users, activities) {
-    if (activities.length === 0) return;
-    const obj = {};
-    let key;
-    for (let i = 0; i < users.length; i++) {
-        key = users[i].dataValues.id;
-        obj[key] = users[i].dataValues;
-    }
-    for (let i = 0; i < activities.length; i++) {
-        key = activities[i].dataValues.userId;
-        if (obj[key]) {
-            activities[i].dataValues.username = obj[key].username;
-            activities[i].dataValues.profilePic = obj[key].profilePic;
-            activities[i].dataValues.refUser = obj[key].refUser;
-        }
-    }
-}
-
 function getStatusOfRelationship(users, friends) {
   if (friends.length === 0) return;
   const obj = {};
@@ -399,7 +381,5 @@ function getStatusOfRelationship(users, friends) {
     }
   }
 }
-
-
 
 module.exports = new UserService();

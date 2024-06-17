@@ -27,7 +27,7 @@ export type TPreviewImg = string | ArrayBuffer | null;
 
 const Stories: FC = memo(() => {
   const currentUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
-  const [hasStoryCurUser, setStoryCurrentUser] = useState<TPreviewImg>('');
+  const [hasStoryCurUser, setStoryCurrentUser] = useState<TPreviewImg>(null);
   const [isOpenStories, setOpenStories] = useState<boolean>(false);
   const clickIndex = useRef<number | undefined>(0);
   const [indexCurrentStory, setIndexStory] = useState<number | undefined>(0);
@@ -48,12 +48,12 @@ const Stories: FC = memo(() => {
     if (stories?.length) { 
       const hasStoryCurUser = stories.filter(item => item.userId === currentUser.id);   
       if (hasStoryCurUser.length) {
-        setStoryCurrentUser(urlAPIimages + hasStoryCurUser[0].image as string);
+        setStoryCurrentUser(urlAPIimages + hasStoryCurUser[0].image);
       }
     }
   }, [stories, currentUser.id]);
 
-  const handlerDragStart = (event: MouseEvent<HTMLDivElement>) => {
+  const handlerDragStart = (event: MouseEvent<HTMLDivElement> | PointerEvent<HTMLDivElement>) => {
     isDragStart.current = true;
     const containerEl = getRefValue(containerRef);
     const itemEl = getRefValue(itemRef);
@@ -97,15 +97,7 @@ const Stories: FC = memo(() => {
     if (stories?.length) {
       const currentX = event.clientX;
       const diff = getRefValue(startXRef) - currentX;
-      let notOpen = true;
-      if (!Boolean(hasStoryCurUser)) {
-        notOpen = clickIndex.current === 0 
-        && !Boolean(hasStoryCurUser);
-      }
-      if (Boolean(hasStoryCurUser)) {
-        notOpen = clickIndex.current === 1 
-        && !Boolean(hasStoryCurUser);
-      }
+      let notOpen = clickIndex.current === 0 && !hasStoryCurUser;
       if (Math.abs(diff) < 1 && !notOpen) {
         setOpenStories(true);
       }

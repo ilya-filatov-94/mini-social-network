@@ -1,14 +1,14 @@
-import {TinitialUser} from './authReducer';
+import {TUserInfo} from './authReducer';
 
 export interface ILikes 
-extends Pick<TinitialUser, "username" | "refUser" | "profilePic"> {
+extends TUserInfo {
   id?: number;
   userId?: number;
   postId: number;
 }
 
 export interface IComments 
-extends Pick<TinitialUser, "username" | "refUser" | "profilePic"> {
+extends TUserInfo {
   id: number;
   desc: string;
   userId: number;

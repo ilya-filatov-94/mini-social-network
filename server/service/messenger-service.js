@@ -1,6 +1,6 @@
 const {Conversation, Message, User} = require('../models/models');
 const { Op } = require("sequelize");
-
+const { changeKeyboardLayout } = require('../helpers/changeKeyboardLayout');
 
 class MessengerService {
   
@@ -43,10 +43,11 @@ class MessengerService {
   async findMembers(id, selector) {
     let members = [];
     if (selector) {
+      const searchOtherKeys = changeKeyboardLayout(selector);
       members = await User.findAll({
           where: {
             [Op.and]: {
-              username: { [Op.iLike]: '%' + selector + '%' },
+              username:  {[Op.or]: [{ [Op.iLike]: '%' + selector + '%' }, { [Op.iLike]: '%' + searchOtherKeys + '%' }]},
               id: { [Op.ne]: id },
             },
           },

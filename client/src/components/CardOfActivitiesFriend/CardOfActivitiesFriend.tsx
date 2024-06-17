@@ -64,13 +64,13 @@ const CardOfActivitiesFriend: FC = memo(()  => {
         <div>
           <UserAvatar
             addClass={styles.avatar}
-            avatar={activity.profilePic}
-            name={activity.username}
+            avatar={activity.user.profilePic}
+            name={activity.user.username}
             textclass={currentTheme ==='darkMode'
               ? `${styles.textClass} ${styles['theme-dark']}`
               : `${styles.textClass} ${styles['theme-light']}`
             }
-            refUser={activity.refUser}
+            refUser={activity.user.refUser}
             def_size_ico={40}
           />
         </div>

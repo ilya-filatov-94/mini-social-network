@@ -74,6 +74,7 @@ const App: FC = () => {
                 <Messages />
               </RequireAuth >
             }/>
+            <Route path='*' element={<div>Страница находится в разработке</div>} />
           </Route>
           <Route path="login" element={<Login />}/>
           <Route path="register" element={<Register />}/>

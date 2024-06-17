@@ -4,7 +4,7 @@ import {
   useState, 
   useRef,
   memo,
-  useCallback
+  useCallback,
 } from 'react';
 import styles from './PopupStories.module.scss';
 import Portal from '../../../hoc/Portal';
@@ -32,19 +32,24 @@ const PopupStories: FC<IPopupStoriesProps> = memo(({
 
   const [filled, setFilled] = useState<number>(0);
   const timeout = useRef<ReturnType<typeof setTimeout>>();
+  const pause = useRef<boolean>(false);
 
   useEffect(() => {
+    const frameSize = 30;  //чем меньше, тем плавнее прогресс-бар
+    const step = 1;
     if (isVisible) {
       if (filled < 100) {
-        timeout.current = setTimeout(() => setFilled((prev) => prev + 2), 100);
+        if (!pause?.current) {
+          timeout.current = setTimeout(() => setFilled((prev) => prev + step), frameSize);
+        }
       }
-      if (indexStory! > stories.length) {
+      if (indexStory && indexStory > stories.length) {
         closePopup();
       }
-      if (filled === 100 && stories.length === indexStory!) {
+      if (indexStory && filled >= 100 && stories.length === indexStory) {
         closePopup();
       }
-      if (filled === 100 && stories.length > indexStory!) {
+      if (indexStory && filled >= 100 && stories.length > indexStory) {
         setCurrentIndex(indexStory! + 1);
         setFilled(0);
       }
@@ -58,6 +63,32 @@ const PopupStories: FC<IPopupStoriesProps> = memo(({
     setVisible(!isVisible);
   }, [isVisible, setVisible]);
 
+  function pauseStartStory() {
+    pause.current = true;
+    clearTimeout(timeout.current)
+  }
+
+  function pauseStopStory() {
+    pause.current = false;
+    const frameSize = 30;  //чем меньше, тем плавнее прогресс-бар
+    const step = 1;
+    timeout.current = setTimeout(() => setFilled((prev) => prev + step), frameSize);
+  }
+
+  function prevStory() {
+    if (indexStory && indexStory > 1) {
+      setCurrentIndex(indexStory - 1);
+      setFilled(0);
+    }
+  }
+
+  function nextStory() {
+    if (indexStory && stories.length > indexStory) {
+      setCurrentIndex(indexStory + 1);
+      setFilled(0);
+    }
+  }
+
   if (!isVisible) return null;
 
   return (
@@ -68,16 +99,20 @@ const PopupStories: FC<IPopupStoriesProps> = memo(({
             <div className={styles.progressBar}>
                 <div style={{
                     height: "100%",
-                    width: `${filled}%`,
                     backgroundColor: "white",
-                    transition: "width: 0.3s linear 0.3s"
-                }}></div>
+                    transformOrigin: "0% 50%",
+                    transform: `scaleX(${filled/100})`
+                }}/>
             </div>
 
             <Content
               isVisible={isVisible}
               indexStory={indexStory}
               stories={stories}
+              prevStory={prevStory}
+              nextStory={nextStory}
+              pauseStartStory={pauseStartStory}
+              pauseStopStory={pauseStopStory}
               closePopup={closePopup}
             />
 
@@ -91,6 +126,10 @@ interface IPopupStoriesContentProps {
   isVisible: boolean;
   indexStory?: number;
   stories: IStory[];
+  nextStory: () => void;
+  prevStory: () => void;
+  pauseStartStory: () => void;
+  pauseStopStory: () => void;
   closePopup: () => void;
 }
 
@@ -98,6 +137,10 @@ const Content: FC<IPopupStoriesContentProps> = memo(({
   isVisible,
   indexStory, 
   stories,
+  nextStory,
+  prevStory,
+  pauseStartStory,
+  pauseStopStory,
   closePopup
  }) => {
   
@@ -132,6 +175,11 @@ const Content: FC<IPopupStoriesContentProps> = memo(({
             stories[indexStory! - 1].username
           }`}
         />
+        <div className={styles.clickArea}>
+          <div className={styles.leftArea} onPointerDown={prevStory}/>
+          <div className={styles.centerArea} onPointerDown={pauseStartStory} onPointerUp={pauseStopStory}/>
+          <div className={styles.rightArea} onPointerDown={nextStory}/>
+        </div>
       </div>}
     </>
   );

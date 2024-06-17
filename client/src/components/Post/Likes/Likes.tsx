@@ -32,16 +32,18 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
   const [removeLike, {error: errorRemoveLike}] = useRemoveLikeMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const [currLikes, changeLikes] = useState<ILikes[]>([]);
-  
-  useEffect(() => {
-    if (likes?.length && !currLikes?.length) {
-      changeLikes(likes);
-    }
-  }, [likes, currLikes?.length]);
 
   const counterLikes = currLikes.length;
   const currUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const hasLike = currLikes?.filter(item => item.username === currUser.username).length;
+  
+  useEffect(() => {
+    if (likes?.length) {
+      const currUserLike = likes.filter(item => item.username === currUser.username);
+      const otherLikes = likes.filter(item => item.username !== currUser.username);
+      changeLikes([...currUserLike, ...otherLikes]);
+    }
+  }, [likes, currUser.username]);
   
   async function toggleLike() {
     const curUserLike = {
@@ -96,11 +98,11 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
     <div className={`${styles.wrapper} ${curTheme ==='darkMode' 
     ? styles['theme-dark'] 
     : styles['theme-light']}`}>
-      <div className={`${styles.wrapperIcon} ${counterLikes > 0 ? styles.icon : ''}`}>
-        {counterLikes > 0 &&
-        <div className={styles.users}>
-            <div className={styles.avatars}>
-            {currLikes.map((like, index) => {
+      <div className={styles.wrapperIcon}>
+          {counterLikes > 0 &&
+            <div className={styles.users} onClick={() => console.log('Открытие окна с лайками')}>
+              <div className={styles.avatars}>
+              {currLikes.map((like, index) => {
                 if (index <= 4) return (
                 <img  
                     key={like.id}
@@ -109,24 +111,24 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
                     alt='Фото польз.' 
                 />)
                 return null;
-            })}
+              })}
+              </div>
+              {counterLikes === 1 &&
+                <p>Нравится {currLikes[0].username}</p>
+              }
+              {counterLikes > 1 &&
+                <p>Нравится {currLikes[0].username} и ещё {counterLikes-1}</p>
+              }
             </div>
-            {counterLikes === 1 &&
-                <span>Нравится {currLikes[0].username}</span>
-            }
-            {counterLikes > 1 &&
-                <span>Нравится {currLikes[0].username} и ещё {counterLikes-1}</span>
-            }
-        </div>
-        }
-        <div className={styles.wrapperIcon} onClick={toggleLike}>
-          {hasLike
-           ? <FavoriteOutlinedIcon className={styles.like}/>
-           : <FavoriteBorderOutlinedIcon />
           }
-          <span className={styles.textLike}>{counterLikes} Нравится</span>
-          <span className={styles.mobileInfo}>{counterLikes}</span>
-        </div>
+          <div className={styles.infoLike} onClick={toggleLike}>
+            {hasLike
+            ? <FavoriteOutlinedIcon className={styles.like}/>
+            : <FavoriteBorderOutlinedIcon />
+            }
+            <p className={styles.textLike}>{counterLikes} Нравится</p>
+            <p className={styles.mobileInfo}>{counterLikes}</p>
+          </div>
       </div>
     </div>
   )
