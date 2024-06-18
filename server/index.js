@@ -28,6 +28,7 @@ app.use(fileUpload({}));
 app.use('/api', router);
 app.use(errorHandler);
 
+// const server = https.createServer(app)
 const server = http.createServer(app);
 const socketIO = new Server(server, {
     maxHttpBufferSize: 1e8,
@@ -42,9 +43,9 @@ const startApp = async () => {
         sequelize.authenticate()
             .then(() => console.log('Connected to PostgreSQL DB'))
             .catch((error) => console.log(`Error PostgreSQL connected ${error}`));
+        // await sequelize.sync({ alter: true });
         await sequelize.sync();
 
-        // const server = https.createServer(app).listen(PORT, () => console.log(`Server started on port ${PORT}`));
         server.listen(PORT, () => console.log(`Server started on port ${PORT}`));
         handlingSocketsEvents(socketIO);
 

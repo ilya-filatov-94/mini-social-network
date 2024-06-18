@@ -48,8 +48,6 @@ class PostService {
       await Activity.destroy({
         where: { idAct: id, type: 'addedPost'},
       });
-      await Like.destroy({where: {postId: id},});
-      await Comment.destroy({where: {postId: id},});
       return await Post.destroy({
         where: {
           id: id,

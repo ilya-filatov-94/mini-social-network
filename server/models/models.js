@@ -66,25 +66,25 @@ User.hasOne(Token);
 Token.belongsTo(User);
 
 //1 ко многим. Явное указание внешнего ключа userId со ссылкой на пользователя, ключ создаётся в модели Post
-User.hasMany(Post, { foreignKey: 'userId' });
+User.hasMany(Post, { foreignKey: 'userId', onDelete: 'CASCADE' });
 Post.belongsTo(User, { foreignKey: 'userId' });
 
-User.hasMany(Comment);
+User.hasMany(Comment, { onDelete: 'CASCADE' });
 Comment.belongsTo(User);
 
-Post.hasMany(Comment);
+Post.hasMany(Comment, { onDelete: 'CASCADE' });
 Comment.belongsTo(Post);
 
-User.hasMany(Story);
+User.hasMany(Story, { onDelete: 'CASCADE' });
 Story.belongsTo(User);
 
-User.hasMany(Like);
+User.hasMany(Like, { onDelete: 'CASCADE' });
 Like.belongsTo(User);
 
-Post.hasMany(Like);
+Post.hasMany(Like, { onDelete: 'CASCADE' });
 Like.belongsTo(Post);
 
-User.hasMany(Activity);
+User.hasMany(Activity, { onDelete: 'CASCADE' });
 Activity.belongsTo(User);
 
 //Связь многие ко многим
