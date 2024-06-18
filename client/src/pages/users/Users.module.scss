@@ -4,21 +4,29 @@
 .usersContainer {
     padding: 10px 30px;
     font-size: 0.875rem;
+    overflow-y: hidden;
     height: 100vh;
 
     @include mobile {
         padding: 10px;
     }
 
-    .wrapperUsers {
-        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
-        border-radius: 20px;
-        padding: 20px 20px 20px 30px;
+    .wrapperList {
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        align-items: flex-start;
+        justify-content: space-between;
+        padding: 20px 20px 20px 30px;
+        height: calc(100vh - 80px);
         overflow-y: auto;
+        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+        border-radius: 20px;
+    }
+
+    .wrapperUsers {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
 
         .search {
             width: 100%;
@@ -63,7 +71,7 @@
             }
         }
 
-        .wrapperUsers {
+        .wrapperList {
             background-color: themed($curTheme, "background");
         }
     }
@@ -81,7 +89,7 @@
             }
         }
 
-        .wrapperUsers {
+        .wrapperList {
             background-color: themed($curTheme, "background");
         }
     }

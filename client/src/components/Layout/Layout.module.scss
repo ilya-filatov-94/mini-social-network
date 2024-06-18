@@ -3,6 +3,7 @@
 
 .main {
     display: flex;
+    height: 100vh;
 
     &.theme-dark {
         $curTheme: "dark";

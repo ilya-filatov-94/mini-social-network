@@ -149,3 +149,83 @@
         font-size: 0.875rem;
     }
 }
+
+.wrapperUsers {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    max-height: 300px;
+    min-width: 250px;
+    gap: 10px;
+    overflow: auto;
+
+    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+        &:not(:last-child) {
+            margin-bottom: 10px;
+        }
+    }
+
+    .infoUser {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        .avatar {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+            
+        .link {
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .username {
+            font-weight: 500;
+            font-size: 0.875rem;
+            margin-bottom: 5px;
+        }
+            
+        .textOfCard {
+            font-weight: 400;
+            font-size: 0.875rem;
+        }
+    }
+
+    &.theme-dark {
+        $curTheme: "dark";
+        background-color: themed($curTheme, "background");
+        color: themed($curTheme, "textColor");
+
+        hr {
+            background-color: themed($curTheme, "border");
+        }
+    }
+
+    &.theme-light {
+        $curTheme: "light";
+        background-color: themed($curTheme, "background");
+        color: themed($curTheme, "textColor");
+
+        hr {
+            background-color: themed($curTheme, "border");
+        }
+    }
+}

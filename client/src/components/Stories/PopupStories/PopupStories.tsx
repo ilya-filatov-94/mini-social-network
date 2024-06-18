@@ -100,7 +100,7 @@ const PopupStories: FC<IPopupStoriesProps> = memo(({
                 <div style={{
                     height: "100%",
                     backgroundColor: "white",
-                    transformOrigin: "0% 50%",
+                    transformOrigin: "0% 100%",
                     transform: `scaleX(${filled/100})`
                 }}/>
             </div>

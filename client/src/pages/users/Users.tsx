@@ -12,12 +12,14 @@ import Loader from '../../components/Loader/Loader';
 import Alert from '@mui/material/Alert';
 import {debounce} from '../../helpers/debounce';
 import Pagination from '../../components/Pagination/Pagination';
+import {useMatchMedia} from '../../hooks/useMatchMedia';
 
 const Users: FC = () => {
   const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
+  const {isMobile} = useMatchMedia();
 
-  const numberUsersOnPage = 5;  //Количество отображаемых пользователей на одной странице
+  const numberUsersOnPage = isMobile ? 5 : 4;  //Количество отображаемых пользователей на одной странице
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState<string>('');
 
@@ -52,7 +54,8 @@ const Users: FC = () => {
         ? `${styles.usersContainer} ${styles['theme-dark']}`
         : `${styles.usersContainer} ${styles['theme-light']}`
     }>
-      <div className={styles.wrapperUsers}>
+      <div className={styles.wrapperList}>
+        <div className={styles.wrapperUsers}>
         <h2>Все пользователи</h2>
         <div className={styles.search}>
           <SearchOutlinedIcon />
@@ -80,6 +83,8 @@ const Users: FC = () => {
         {!listUsers?.count &&
           <p className={styles.notFound}>Пользователи не найдены</p>
         }
+        </div>
+        <div className={styles.wrapperPagination}>
         {listUsers?.count !== 0 &&
           <Pagination
             currentPage={currentPage}
@@ -88,6 +93,7 @@ const Users: FC = () => {
             onPageChange={(page: number) => setCurrentPage(page)}
           />
         }
+        </div>
       </div>
     </div>
   )

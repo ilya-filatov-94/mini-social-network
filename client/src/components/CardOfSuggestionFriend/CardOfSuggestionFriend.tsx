@@ -18,6 +18,11 @@ interface ISuggestionProps {
   idCurUser: number;
 }
 
+export interface IDataPosFriend {
+  indexPossibleFriend: number;
+  namePossibleFriend: string;
+}
+
 const CardOfSuggestionFriend: FC<ISuggestionProps> = memo(({
   idCurUser,
 }) => {
@@ -27,12 +32,16 @@ const CardOfSuggestionFriend: FC<ISuggestionProps> = memo(({
   const [subscribeToUser, {error: errorSubscribe}] = useSubscribeToUserMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const [isVisiblePopup, setVisiblePopup] = useState<boolean>(false);
-  const [indexPossibleFriend, setIndexPossibleFriend] = useState<number>(0);
-  const [namePossibleFriend, setNamePossibleFriend] = useState<string>('');
+  const [dataPossibleFr, setDataPossibleFr] = useState<IDataPosFriend>({
+    indexPossibleFriend: 0, 
+    namePossibleFriend: ''
+  });
 
   function showMutualFriends(idUser: number, username: string) {
-    setIndexPossibleFriend(idUser);
-    setNamePossibleFriend(username);
+    setDataPossibleFr({
+      indexPossibleFriend: idUser, 
+      namePossibleFriend: username
+    });
     setVisiblePopup(true);
   }
 
@@ -98,8 +107,7 @@ const CardOfSuggestionFriend: FC<ISuggestionProps> = memo(({
         isVisible={isVisiblePopup}
         setVisible={setVisiblePopup}
         curUserId={idCurUser}
-        usernamePossibleFriend={namePossibleFriend}
-        possibleFriendId={indexPossibleFriend}
+        dataPossibleFr={dataPossibleFr}
       />
     }
     </>

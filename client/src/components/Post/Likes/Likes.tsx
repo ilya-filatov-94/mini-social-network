@@ -15,6 +15,8 @@ import Loader from '../../Loader/Loader';
 import AlertWidget from '../../AlertWidget/AlertWidget';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {urlAPIimages} from '../../../env_variables';
+import {Link} from 'react-router-dom';
+import TemplatePopup from '../../TemplatePopup/TemplatePopup';
 
 interface ILikesProps {
   postId: number;
@@ -32,6 +34,7 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
   const [removeLike, {error: errorRemoveLike}] = useRemoveLikeMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const [currLikes, changeLikes] = useState<ILikes[]>([]);
+  const [isVisiblePopup, setVisiblePopup] = useState<boolean>(false);
 
   const counterLikes = currLikes.length;
   const currUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
@@ -93,6 +96,27 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
         />)
     }
   }
+
+  const renderContentPopup = (likers: ILikes[] | undefined) => {
+    return (
+      <div className={styles.wrapperUsers}>
+      {(likers && likers?.length !== 0) &&
+      likers.map((user: ILikes) => (
+      <div key={user.id} className={styles.infoUser}>
+          <img
+              className={styles.avatar}
+              src={user.profilePic ? (urlAPIimages + user.profilePic) : noAvatar}
+              alt={`${user.username} avatar`}
+          />
+          <div className={styles.info}>
+              <Link className={styles.link} to={`/profile/${user.refUser}?id=${user.refUser}`}>
+                  <p className={styles.username}>{user.username}</p>
+              </Link>
+          </div>
+      </div>))}
+      </div>
+    )
+  };
   
   return (
     <div className={`${styles.wrapper} ${curTheme ==='darkMode' 
@@ -100,7 +124,7 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
     : styles['theme-light']}`}>
       <div className={styles.wrapperIcon}>
           {counterLikes > 0 &&
-            <div className={styles.users} onClick={() => console.log('Открытие окна с лайками')}>
+            <div className={styles.users} onClick={() => setVisiblePopup(true)}>
               <div className={styles.avatars}>
               {currLikes.map((like, index) => {
                 if (index <= 4) return (
@@ -130,6 +154,12 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
             <p className={styles.mobileInfo}>{counterLikes}</p>
           </div>
       </div>
+      <TemplatePopup 
+          isVisible={isVisiblePopup} 
+          setVisible={setVisiblePopup}
+          headerPopup={`Понравилось ${counterLikes} людям`}
+          contentPopup={renderContentPopup(currLikes)}
+      />
     </div>
   )
 }

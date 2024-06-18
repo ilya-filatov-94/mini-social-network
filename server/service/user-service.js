@@ -311,6 +311,7 @@ class UserService {
         }
         if (!search) {
             users = await User.findAndCountAll({
+                where: {id: { [Op.ne]: id } },
                 attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city'],
                 limit, 
                 offset,
@@ -320,14 +321,15 @@ class UserService {
             const searchOtherKeys = changeKeyboardLayout(search);
             users = await User.findAndCountAll({
                 where: {
-                    username: {[Op.or]: [{[Op.iLike]: '%' + search + '%' }, {[Op.iLike]: '%' + searchOtherKeys + '%' }]}
+                    username: {[Op.or]: [{[Op.iLike]: '%' + search + '%' }, {[Op.iLike]: '%' + searchOtherKeys + '%' }],},
+                    id: { [Op.ne]: id },
                 },
                 attributes: ['id', 'username', 'refUser', 'profilePic', 'status', 'city'],
                 limit, 
                 offset
             });
         }
-        getStatusOfRelationship(users, friends);
+        getStatusOfRelationship(users.rows, friends);
         return users;
     }
 

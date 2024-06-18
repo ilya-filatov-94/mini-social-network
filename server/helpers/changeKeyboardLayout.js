@@ -67,7 +67,7 @@ const keyboardCharMap = {
 
 function changeKeyboardLayout(str) {
     let strInOtherKeyboardLayout = '';
-    for (let char of str.toLowerCase()) {
+    for (const char of str.toLowerCase()) {
         strInOtherKeyboardLayout += keyboardCharMap[char];
     }
     return strInOtherKeyboardLayout;

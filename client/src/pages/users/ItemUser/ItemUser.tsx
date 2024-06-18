@@ -42,8 +42,7 @@ const ItemUser: FC<IUserItemProps> = memo(({
     if (userId) {
       follow(subscrInformation);
     }
-  // eslint-disable-next-line
-  }, [subscrInformation]);
+  }, [subscrInformation, userId]);
 
   async function subscribe(subscribeTo: boolean) {
     follow(!subscribeTo);

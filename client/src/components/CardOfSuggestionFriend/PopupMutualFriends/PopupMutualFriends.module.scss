@@ -2,135 +2,85 @@
 @import '../../../styles/theme.scss';
 
 
-.windowPopup {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 101;
-    background-color: rgba(0,0,0,0.4);
-    font-family: 'Gilroy', 'Arial', sans-serif;
-    font-size: 0.875rem;
-    font-weight: normal;
-    display: none;
+.secondHeader {
+    text-align: center;
+}
 
-    .contentPopup {
-        min-width: 320px;
-        max-height: 235px;
-        padding: 10px 20px 20px 20px;
+.wrapperUsers {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    min-width: 290px; 
+    max-height: 235px;
+    gap: 10px;
+
+    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+        &:not(:last-child) {
+            margin-bottom: 10px;
+        }
+    }
+
+    .infoUser {
         display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        border-radius: 12px;
-        overflow-y: auto;
+        flex-direction: row;
+        justify-content: center;
+        align-items: flex-start;
 
-        .headerWindow {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            .wrapperHeader {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: flex-start;
-                margin-right: 10px;
-            }
+        .avatar {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
         }
 
-        hr {
-            margin: 5px 0 10px 0;
-            border: none;
-            height: 0.5px;
-            width: 100%;
-        }
-
-        .wrapperUsers {
+        .info {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            gap: 10px;
-
-            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                &:not(:last-child) {
-                    margin-bottom: 10px;
-                }
-            }
-
-            .infoUser {
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: flex-start;
-
-                .avatar {
-                    height: 50px;
-                    width: 50px;
-                    border-radius: 50%;
-                    object-fit: cover;
-                    margin-right: 15px;
-                }
-
-                .info {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: flex-start;
-                }
+        }
             
-                .link {
-                    margin: 0;
-                    padding: 0;
-                    cursor: pointer;
-                    text-decoration: none;
-                    color: inherit;
-                    font-size: 0.875rem;
-                    font-weight: 500;
-                }
-
-                .username {
-                    font-weight: 500;
-                    font-size: 0.875rem;
-                    margin-bottom: 5px;
-                }
-            
-                .textOfCard {
-                    font-weight: 400;
-                    font-size: 0.875rem;
-                }
-            }
+        .link {
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            font-size: 0.875rem;
+            font-weight: 500;
         }
 
-        &.theme-dark {
-            $curTheme: "dark";
-            background-color: themed($curTheme, "background");
-            color: themed($curTheme, "textColor");
-
-            hr {
-                background-color: themed($curTheme, "border");
-            }
+        .username {
+            font-weight: 500;
+            font-size: 0.875rem;
+            margin-bottom: 5px;
         }
-        &.theme-light {
-            $curTheme: "light";
-            background-color: themed($curTheme, "background");
-            color: themed($curTheme, "textColor");
-
-            hr {
-                background-color: themed($curTheme, "border");
-            }
+            
+        .textOfCard {
+            font-weight: 400;
+            font-size: 0.875rem;
         }
     }
-}
 
-.windowPopup.active {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    &.theme-dark {
+        $curTheme: "dark";
+        background-color: themed($curTheme, "background");
+        color: themed($curTheme, "textColor");
 
-.closeBtn {
-    cursor: pointer;
-    align-self: flex-start;
+        hr {
+            background-color: themed($curTheme, "border");
+        }
+    }
+
+    &.theme-light {
+        $curTheme: "light";
+        background-color: themed($curTheme, "background");
+        color: themed($curTheme, "textColor");
+
+        hr {
+            background-color: themed($curTheme, "border");
+        }
+    }
 }

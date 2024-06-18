@@ -8,6 +8,7 @@
     top: $heightNav;
     height: calc(100vh - $topBar);
     overflow-y: auto;
+    cursor: pointer;
 
     @include mobile {
         display: none;

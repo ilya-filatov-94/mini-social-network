@@ -9,12 +9,14 @@ import Loader from '../../components/Loader/Loader';
 import Alert from '@mui/material/Alert';
 import {IFollower} from '../../types/users';
 import Pagination from '../../components/Pagination/Pagination';
+import {useMatchMedia} from '../../hooks/useMatchMedia';
 
 const Friends: FC = () => {
   const currentTheme = useAppSelector((state) => state.reducerTheme.themeMode, shallowEqual);
   const currentUser = useAppSelector((state) => state.reducerAuth.currentUser, shallowEqual);
+  const {isMobile} = useMatchMedia();
   const [selectedItem, setSelecteItem] = useState('all');
-  const numberUsersOnPage = 5;  //Количество друзей, отображаемых на странице
+  const numberUsersOnPage = isMobile ? 6 : 5;  //Количество друзей, отображаемых на странице
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const {data: followersData, error, isLoading} = useGetFollowersPaginationQuery({
@@ -45,6 +47,7 @@ const Friends: FC = () => {
         : `${styles.container} ${styles['theme-light']}`
         }>
         <div className={styles.wrapper}>
+          <div className={styles.wrapperFriends}>
             <div className={styles.wrapperSelectors}>
                 <button className={`${styles.selector} 
                 ${selectedItem === 'all' ? styles.active : ''}`}
@@ -79,6 +82,8 @@ const Friends: FC = () => {
                 <p>Друзья не найдены</p>
               }
             </div>
+            </div>
+            <div className={styles.wrapperPagination}>
             {followersData?.count !== 0 &&
               <Pagination
                 currentPage={currentPage}
@@ -87,6 +92,7 @@ const Friends: FC = () => {
                 onPageChange={(page: number) => setCurrentPage(page)}
               />
             }
+            </div>
         </div>
     </div>
   )
