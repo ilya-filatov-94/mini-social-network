@@ -19,12 +19,14 @@ import SharePost from '../../components/SharePost/SharePost';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import Button from '../../components/Button/Button';
 import noAvatar from '../../assets/images/no-avatar.jpg';
-import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import TwitterIcon from "@mui/icons-material/Twitter";
-import PlaceIcon from "@mui/icons-material/Place";
-import LanguageIcon from "@mui/icons-material/Language";
+import {
+  FacebookTwoTone as FacebookTwoToneIcon,
+  LinkedIn as LinkedInIcon,
+  Instagram as InstagramIcon,
+  Twitter as TwitterIcon,
+  Place as PlaceIcon,
+  Language as LanguageIcon,
+} from "@mui/icons-material";
 
 
 const Profile: FC = () => {

@@ -10,7 +10,10 @@ import {useAppSelector, useAppDispatch} from '../../hooks/useTypedRedux';
 import { shallowEqual } from 'react-redux';
 import {urlAPIimages} from '../../env_variables';
 import noAvatar from '../../assets/images/no-avatar.jpg';
-import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined';
+import { 
+  ArrowBackIosNewOutlined as ArrowBackIosNewOutlinedIcon, 
+  Check as CheckIcon, 
+  DoneAll as DoneAllIcon } from '@mui/icons-material';
 import { Link, useNavigate } from "react-router-dom";
 import PreviewAttach, {TPreviewImg} from './PreviewAttach/PreviewAttach';
 import MessageItem from './MessageItem/MessageItem';

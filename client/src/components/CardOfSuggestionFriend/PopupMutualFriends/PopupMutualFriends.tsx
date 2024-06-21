@@ -1,4 +1,4 @@
-import {FC, memo} from 'react';
+import {FC, memo, useCallback} from 'react';
 import styles from './PopupMutualFriends.module.scss';
 import {Link} from 'react-router-dom';
 import {urlAPIimages} from '../../../env_variables';
@@ -31,16 +31,16 @@ const PopupMutualFriends: FC<IPopupProps> = memo(({
   }, {skip: !isVisible});
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
-  const renderHeader = (title: string) => {
+  const renderHeader = useCallback((title: string) => {
     return (
       <div>
         <h3>Общие друзья с пользователем</h3>
         <h3 className={styles.secondHeader}>{title}</h3>
       </div>
     )
-  };
+  }, []);
 
-  const renderContent = (mutualFriends: IPossibleFriend[] | undefined) => {
+  const renderContent = useCallback((mutualFriends: IPossibleFriend[] | undefined) => {
     return (
       <div className={styles.wrapperUsers}>
       {(mutualFriends && mutualFriends?.length !== 0) &&
@@ -60,7 +60,7 @@ const PopupMutualFriends: FC<IPopupProps> = memo(({
       </div>))}
       </div>
     )
-  };
+  }, []);
 
   if (isLoading) {
     return <Loader />

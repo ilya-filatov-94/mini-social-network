@@ -3,8 +3,11 @@ import styles from './ContentPost.module.scss';
 import {urlAPIimages} from '../../../env_variables'; 
 import {IPostData} from '../../../types/posts';
 import Likes from '../Likes/Likes';
-import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
-import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
+import {
+  TextsmsOutlined as TextsmsOutlinedIcon,
+  ShareOutlined as ShareOutlinedIcon
+} from "@mui/icons-material";
+
 
 
 interface IContentPostProps {

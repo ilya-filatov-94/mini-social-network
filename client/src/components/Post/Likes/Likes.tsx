@@ -1,9 +1,8 @@
-import {FC, useState, useEffect} from 'react';
+import {FC, useState, useEffect, useCallback} from 'react';
 import styles from './Likes.module.scss';
 import {useAppSelector} from '../../../hooks/useTypedRedux';
 import { shallowEqual } from 'react-redux';
-import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import {FavoriteOutlined, FavoriteBorderOutlined} from "@mui/icons-material";
 import noAvatar from '../../../assets/images/no-avatar.jpg';
 import {ILikes} from '../../../types/posts';
 import {
@@ -68,6 +67,27 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
     }
   }
 
+  const renderContentPopup = useCallback((likers: ILikes[] | undefined) => {
+    return (
+      <div className={styles.wrapperUsers}>
+      {(likers && likers?.length !== 0) &&
+      likers.map((user: ILikes) => (
+      <div key={user.id} className={styles.infoUser}>
+          <img
+              className={styles.avatar}
+              src={user.profilePic ? (urlAPIimages + user.profilePic) : noAvatar}
+              alt={`${user.username} avatar`}
+          />
+          <div className={styles.info}>
+              <Link className={styles.link} to={`/profile/${user.refUser}?id=${user.refUser}`}>
+                  <p className={styles.username}>{user.username}</p>
+              </Link>
+          </div>
+      </div>))}
+      </div>
+    )
+  }, []);
+  
   if (isLoadingLikes) {
     return <Loader />
   }
@@ -96,27 +116,6 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
         />)
     }
   }
-
-  const renderContentPopup = (likers: ILikes[] | undefined) => {
-    return (
-      <div className={styles.wrapperUsers}>
-      {(likers && likers?.length !== 0) &&
-      likers.map((user: ILikes) => (
-      <div key={user.id} className={styles.infoUser}>
-          <img
-              className={styles.avatar}
-              src={user.profilePic ? (urlAPIimages + user.profilePic) : noAvatar}
-              alt={`${user.username} avatar`}
-          />
-          <div className={styles.info}>
-              <Link className={styles.link} to={`/profile/${user.refUser}?id=${user.refUser}`}>
-                  <p className={styles.username}>{user.username}</p>
-              </Link>
-          </div>
-      </div>))}
-      </div>
-    )
-  };
   
   return (
     <div className={`${styles.wrapper} ${curTheme ==='darkMode' 
@@ -147,8 +146,8 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
           }
           <div className={styles.infoLike} onClick={toggleLike}>
             {hasLike
-            ? <FavoriteOutlinedIcon className={styles.like}/>
-            : <FavoriteBorderOutlinedIcon />
+            ? <FavoriteOutlined className={styles.like}/>
+            : <FavoriteBorderOutlined />
             }
             <p className={styles.textLike}>{counterLikes} Нравится</p>
             <p className={styles.mobileInfo}>{counterLikes}</p>

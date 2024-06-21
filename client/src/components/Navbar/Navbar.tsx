@@ -11,12 +11,14 @@ import MenuUser from './MenuUser/MenuUser';
 import BurgerElement from './BurgerElement/BurgerElement';
 import MobileMenu from './MobileMenu/MobileMenu';
 import {useMatchMedia} from '../../hooks/useMatchMedia';
+import {
+  HomeOutlined as HomeOutlinedIcon,
+  DarkModeOutlined as DarkModeOutlinedIcon,
+  WbSunnyOutlined as WbSunnyOutlinedIcon,
+  NotificationsOutlined as NotificationsOutlinedIcon,
+  Diversity3Outlined as Diversity3OutlinedIcon
+} from '@mui/icons-material';
 
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
-import WbSunnyOutlinedIcon from '@mui/icons-material/WbSunnyOutlined';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
-import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 
 
 const Navbar: FC = memo(() => {
@@ -88,8 +90,6 @@ const Navbar: FC = memo(() => {
         />
         </>
       }
-
-      
     </div>
   )
 });

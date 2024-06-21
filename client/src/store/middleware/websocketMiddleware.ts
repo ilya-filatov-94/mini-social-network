@@ -27,8 +27,8 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
             console.log("Вы успешно подключии сокет");
         });
 
-        socket.on('connect_error', () => {
-            console.log("Вы не подключены");
+        socket.on('connect_error', (err) => {
+            console.log("Ошибка websocket", err.message);
             socket.connect();
         });
 
