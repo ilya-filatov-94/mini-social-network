@@ -204,12 +204,6 @@ const Messages: FC = () => {
     }
   }
 
-  async function goToBack() {
-    const changeMsgs = !!messages?.length && !!messagesList?.length && (messages?.length > messagesList?.length);
-    if (changeMsgs) await refetch();
-    navigate(-1);
-  }
-
   if (errorGetMessages) {
     if (isFetchBaseQueryErrorType(errorGetMessages)) {
       return (
@@ -231,7 +225,7 @@ const Messages: FC = () => {
     >
       <div className={styles.wrapper}>
         <div className={styles.topBar}>
-          <div className={styles.backBtn} onClick={goToBack}>
+          <div className={styles.backBtn} onClick={() => navigate(-1)}>
             <ArrowBackIosNewOutlinedIcon />
             <p>Назад</p>
           </div>
