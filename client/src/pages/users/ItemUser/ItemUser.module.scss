@@ -47,7 +47,12 @@
         background-color: #556fe3da;
         color: white;
     }
-    .followBtn:hover,
+    @media (hover: hover) {
+        .followBtn:hover {
+            background-color: #102db0c1;
+        } 
+    }
+
     .followBtn:active {
         background-color: #102db0c1;
     }
@@ -59,7 +64,11 @@
         background-color: #db4742;
         color: white;
     }
-    .dismissBtn:hover,
+    @media (hover: hover) {
+        .dismissBtn:hover {
+            background-color: #db5e5adb;
+        }
+    }
     .dismissBtn:active {
         background-color: #db5e5adb;
     }

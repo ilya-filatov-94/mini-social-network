@@ -55,14 +55,40 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-        
-                .link {
-                    margin: 0;
-                    padding: 0;
-                    cursor: pointer;
-                    text-decoration: none;
-                    color: inherit;
-                    font-size: inherit;
+
+                .wrapperHeader {
+                    display: flex;                
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 15px;
+
+                    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                        &:not(:last-child) {
+                            margin-right: 15px;
+                        }
+                    }
+
+                    .link {
+                        margin: 0;
+                        padding: 0;
+                        cursor: pointer;
+                        text-decoration: none;
+                        color: inherit;
+                        font-size: inherit;
+                    }
+
+                    .counterMsg {
+                        color: white;
+                        background-color: #7089f9;
+                        border: none;
+                        border-radius: 30%;
+                        width: 20px;
+                        height: 20px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
                 }
             }
 
@@ -82,6 +108,13 @@
             padding: 0 10px;
             display: flex;
             flex-direction: column;
+
+            .emptyConversation {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+            }
         }
 
         .listMessages .sender {
@@ -164,7 +197,12 @@
                     }
                 }
 
-                .btn:hover, .btn:active {
+                @media (hover: hover) {
+                    .btn:hover {
+                        background-color: #102db0c1;
+                    }
+                }
+                .btn:active {
                     background-color: #102db0c1;
                 }
         
@@ -190,7 +228,7 @@
                     }
                 }
 
-                .mobileBtnSend:hover, .mobileBtnSend:active {
+                .mobileBtnSend:active {
                     background-color: #102db0c1;
                 }
             }

@@ -81,7 +81,7 @@ const UserActivity: FC = memo(() => {
           </div>
           <p className={styles.date}>
             {getRelativeTimeString(
-              new Date(activity.createdAt),
+              Date.parse(activity.createdAt),
               "ru"
             )}
           </p>

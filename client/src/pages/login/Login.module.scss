@@ -133,8 +133,10 @@
                 align-self: center;
             }
         }
-        .loginButton:hover {
-            background-color: rgb(131, 93, 178);
+        @media (hover: hover) {
+            .loginButton:hover {
+                background-color: rgb(131, 93, 178);
+            }
         }
         .loginButton:active {
             background-color: rebeccapurple;

@@ -10,8 +10,8 @@ class StoryService {
     return story;
   }
 
-  async getAllStories(id) {
-    if (!id) return [];
+  async getAllStories(userId) {
+    if (!userId) return [];
     const stories = await Story.findAll({
       order: [['createdAt', 'DESC']],
       include: [{
@@ -20,7 +20,7 @@ class StoryService {
       }],
     });
     const indexesToDelete = [];
-    const storiesForClient = getFullDataStories(stories, id, indexesToDelete);
+    const storiesForClient = getFullDataStories(stories, userId, indexesToDelete);
     if (indexesToDelete.length !== 0) {
       await Story.destroy({
         where: { id: indexesToDelete},
@@ -35,7 +35,7 @@ class StoryService {
 
   async getOneStory(userId) {
     if (!userId) return {};
-    const stories = await Story.findOne({
+    const story = await Story.findOne({
       order: [['createdAt', 'DESC']],
       where: { userId},
       include: [{
@@ -43,20 +43,29 @@ class StoryService {
         attributes: ["username", "refUser", "profilePic"]
       }],
     });
-    const flatStories = stories.map(story => {
-      item = story.dataValues;
-      checkDate(item.createdAt, () => indexesToDelete.push(item.id))
-      return {
-        id: item.id,
-        image: item.image,
-        userId: item.userId,
-        date: item.createdAt,
-        username: item.user.dataValues.username,
-        refUser: item.user.dataValues.refUser,
-        profilePic: item.user.dataValues.profilePic,
-      }
-    });
-    return flatStories || [];
+    const curDate = Date.now();
+    const createdDate = new Date(story.dataValues.createdAt).getTime();
+    const deltaSeconds = Math.floor((curDate - createdDate)/1000);
+    const oneDaySeconds = 86400;
+    if (deltaSeconds >= oneDaySeconds) {
+      await Story.destroy({
+        where: { userId },
+      });
+      await Activity.destroy({
+        where: { idAct: story.dataValues.id, type: 'addedStory'},
+      });
+      return null;
+    }
+    const flatStory = {
+      id: story.dataValues.id,
+      image: story.dataValues.image,
+      date: story.dataValues.createdAt,
+      userId: story.dataValues.userId,
+      username: story.dataValues.user.dataValues.username,
+      refUser: story.dataValues.user.dataValues.refUser,
+      profilePic: story.dataValues.user.dataValues.profilePic,
+    }
+    return flatStory || null;
   } 
 
 }

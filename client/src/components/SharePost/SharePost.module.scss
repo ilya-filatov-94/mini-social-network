@@ -93,7 +93,7 @@
             }
 
             .right {
-                .Btn {
+                .btn {
                     border: none;
                     background-color: #556fe3da;
                     color: white;
@@ -102,7 +102,12 @@
                     cursor: pointer;
                 }
 
-                .Btn:hover, .Btn:active {
+                @media (hover: hover) {
+                    .btn:hover {
+                        background-color: #102db0c1;
+                    }
+                }
+                .btn:active {
                     background-color: #102db0c1;
                 }
             }

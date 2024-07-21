@@ -92,11 +92,11 @@ const CardOfSuggestionFriend: FC<ISuggestionProps> = memo(({
         <div className={styles.wrapperBtns}>
           <Button
             onClick={() => showMutualFriends(user.id, user.username)}
-            addClass={styles.Btn}
+            addClass={styles.btn}
           >Посмотреть друзей</Button>
           <Button 
             onClick={() => subscribe(user.id)}
-            addClass={styles.Btn}
+            addClass={styles.btn}
           >Подписаться</Button>
         </div>
       </div>

@@ -28,8 +28,15 @@
             font-weight: 500;
         }
 
-        .time {
-            font-size: 0.75rem;
+        .wrapperDateMsg {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+
+            .time {
+                font-size: 0.75rem;
+            }
         }
     }
 
@@ -38,6 +45,7 @@
 
         .img {
             width: 100%;
+            min-height: 300px;
             object-fit: cover;
         }
 
@@ -49,4 +57,52 @@
 
 .messageItem:last-child {
     margin-bottom: 10px;
+}
+
+.msgStatus {
+    border: none;
+    border-radius: 50%;
+    width: 7px;
+    height: 7px;
+    background-color: transparent;
+}
+
+.wrapperMsgStatus {
+    align-self: end;
+    justify-self: center;
+    width: 21px;
+    height: 21px;
+}
+
+.msgStatusIcon {
+    width: 17px;
+    height: 17px;
+}
+
+@keyframes change-style-read-status-msg {
+    0% {
+        background-color: #5271ff;
+    }
+
+    50% {
+        background-color: #bdc5ed;
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .msgIsRead {
+        animation-name: change-style-read-status-msg;
+        animation-duration: 2s;
+        animation-timing-function: ease-in;
+        animation-fill-mode: forwards;
+        border: none;
+        border-radius: 50%;
+        width: 7px;
+        height: 7px;
+        background-color: #5271ff;
+    }
 }

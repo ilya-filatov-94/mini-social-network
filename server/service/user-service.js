@@ -68,11 +68,12 @@ class UserService {
     async login(email, password) {
         const user = await User.findOne({where: {email}});
         if (!user) {
-            throw ApiError.invalidData(`Пользователь с почтовым адресом ${email} не найден!`);
+            // throw ApiError.invalidData(`Пользователь с почтовым адресом ${email} не найден!`);
+            throw ApiError.invalidData('Неверный логин или пароль');
         }
         const isPassEquals = await bcrypt.compare(password, user.password);
         if (!isPassEquals) {
-            throw ApiError.invalidData('Неверный пароль');
+            throw ApiError.invalidData('Неверный логин или пароль');
         }
         const payload = {id: user.id, refUser: user.refUser, email: user.email};
         const tokens = tokenService.generateTokens(payload);
@@ -139,6 +140,7 @@ class UserService {
                 where: {refUser: refUser},
             },
         );
+        if (!user) return user;
         let userId = parseInt(user.dataValues.id);
         if (userId !== parseInt(id)) {
             userId = String(user.dataValues.id);
@@ -191,7 +193,7 @@ class UserService {
         }
         if (password) {
             newPassword = await bcrypt.hash(password, 5);
-            const newDataUser = await User.update({ 
+            const [_, affectedRows] = await User.update({ 
                 email: newEmail,  
                 refUser: refToUser,
                 username: newUsername,
@@ -200,8 +202,11 @@ class UserService {
                 website: newWebsite,
                 profilePic: newProfileImg,
                 coverPic: newCoverImg,
-            }, {where: {id: id}});
-            return newDataUser;
+            }, {
+                where: {id: id},
+                returning: true
+            });
+            return affectedRows[0];
         }
         return await User.update({ 
             email: newEmail,  
@@ -250,6 +255,7 @@ class UserService {
     }
 
     async getPossibleFriends(curUserId) {
+        if (!curUserId) return [];
         const idPossibleFriends = this.graphUsers.getPossibleFriends(String(curUserId));
         const idUsers = Object.keys(idPossibleFriends).map(item => parseInt(item));
         const possibleFriendsData = await User.findAll({
@@ -263,11 +269,14 @@ class UserService {
     }
 
     async getMutualFriends(curUserId, idPosFriend) {
+        if (!curUserId || !idPosFriend) return [];
         const idPossibleFriends = this.graphUsers.getPossibleFriends(String(curUserId));
+        console.log(idPossibleFriends);
         const idUsers = [];
         for (let value of idPossibleFriends[idPosFriend]) {
             idUsers.push(parseInt(value));
         }
+        if (idUsers.length === 0) return [];
         const mutualFriendsData = await User.findAll({
             where: {id: idUsers},
             attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
@@ -276,7 +285,9 @@ class UserService {
     }
 
     async getActivities(curUserId) {
+        if (!curUserId) return [];
         const idFriends = this.graphUsers.getFriendsOfUser(String(curUserId));
+        if (!idFriends) return [];
         const activities = await Activity.findAll({
             order: [['createdAt', 'DESC']],
             where: {userId: idFriends},

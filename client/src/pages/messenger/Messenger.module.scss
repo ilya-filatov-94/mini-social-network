@@ -60,7 +60,11 @@
                 background-color: #556fe3da;
                 color: white;
             }
-            .resetSearchBtn:hover,
+            @media (hover: hover) {
+                .resetSearchBtn:hover {
+                    background-color: #102db0c1;
+                }
+            }
             .resetSearchBtn:active {
                 background-color: #102db0c1;
             }
@@ -154,10 +158,12 @@
     padding-top: 0;
 }
 
-.itemConversation:hover.theme-dark {
-    background-color: #102db0c1;
-}
-
-.itemConversation:hover {
-    background-color: rgba(172, 213, 248, 0.4);
+@media (hover: hover) {
+    .itemConversation:hover.theme-dark {
+        background-color: #102db0c1;
+    }
+    
+    .itemConversation:hover {
+        background-color: rgba(172, 213, 248, 0.4);
+    }
 }

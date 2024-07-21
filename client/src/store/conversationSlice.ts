@@ -1,14 +1,9 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {IConversation} from '../types/messenger';
-
-interface ILastMessage {
-    text?: string | undefined;
-    file?: string | undefined;
-}
+import {IConversation, IMessage} from '../types/messenger';
 
 export interface IConversationSlice {
     currentConversaton: IConversation;
-    lastMessage: ILastMessage;
+    lastMessage: IMessage;
 }
 
 const initialState: IConversationSlice = {
@@ -20,9 +15,16 @@ const initialState: IConversationSlice = {
         refUser: ''
     },
     lastMessage: {
-        text: '',
-        file: '',
-    },
+        id: 0,
+        conversationId: 0,
+        userId: 0,
+        username: "",
+        text: "",
+        file: "",
+        mimeTypeAttach: undefined,
+        isRead: false,
+        createdAt: ""
+    }
 }
 
 const conversationSlice = createSlice({
@@ -32,12 +34,15 @@ const conversationSlice = createSlice({
         setCurrentConversationData(state, action: PayloadAction<IConversation>) {
             state.currentConversaton = action.payload;
         },
-        updateLastMessage(state, action: PayloadAction<ILastMessage>) {
-            state.lastMessage.text = action.payload?.text;
-            state.lastMessage.file = action.payload?.file;
-        }
+        updateLastMessage(state, action: PayloadAction<IMessage>) {
+            state.lastMessage = action.payload;
+        },
+        readmsgs() {}
     }
 });
 
-export const {setCurrentConversationData, updateLastMessage} = conversationSlice.actions; 
+export const {
+    setCurrentConversationData, 
+    updateLastMessage,
+} = conversationSlice.actions; 
 export default conversationSlice.reducer;

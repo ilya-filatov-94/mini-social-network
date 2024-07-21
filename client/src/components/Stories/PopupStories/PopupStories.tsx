@@ -161,7 +161,7 @@ const Content: FC<IPopupStoriesContentProps> = memo(({
           />
           <p>{stories[indexStory! - 1].username}</p>
           <p className={styles.date}>
-            {getRelativeTimeString(new Date(stories[indexStory! - 1].date!), 'ru')}
+            {getRelativeTimeString(Date.parse(stories[indexStory! - 1].date!), 'ru')}
           </p>
         </div>
         <CloseOutlinedIcon onClick={closePopup} className={styles.closeBtn} />

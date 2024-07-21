@@ -1,14 +1,15 @@
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import styles from './ContentPost.module.scss';
-import {urlAPIimages} from '../../../env_variables'; 
+import {urlAPIimages, urlClient} from '../../../env_variables'; 
 import {IPostData} from '../../../types/posts';
 import Likes from '../Likes/Likes';
+import { useLocation } from "react-router-dom";
 import {
   TextsmsOutlined as TextsmsOutlinedIcon,
   ShareOutlined as ShareOutlinedIcon
 } from "@mui/icons-material";
-
-
+import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
+import TemplatePopup from '../../TemplatePopup/TemplatePopup';
 
 interface IContentPostProps {
   post: IPostData;
@@ -26,6 +27,8 @@ const ContentPost: FC<IContentPostProps> = ({
   setCommentOpen
 }) => {
 
+  const location = useLocation();
+  const [isErrorShared, setErrorShared] = useState<boolean>(false);
   const rootStyles = [styles.content];
   if (post.desc==='') {
     rootStyles.push(styles.hideTopMargin);
@@ -47,6 +50,18 @@ const ContentPost: FC<IContentPostProps> = ({
           return number + ' ' + word + 'я'
     } else {
       return number + ' ' + word + 'ев'
+    }
+  }
+
+  async function getShared() {
+    const shareObj = {
+      title: document.title,
+      url: urlClient + location.pathname,
+    }
+    try {
+      await navigator.share(shareObj);
+    } catch(err) {
+      setErrorShared(true);
     }
   }
 
@@ -74,11 +89,21 @@ const ContentPost: FC<IContentPostProps> = ({
             {declensionOfComment(numberOfComments)}
           </span>
         </div>
-        <div className={styles.item}>
+        <div className={styles.item} onClick={getShared}>
           <ShareOutlinedIcon />
           <span className={styles.shareInfo}>Поделиться</span>
         </div>
       </div>
+      <TemplatePopup 
+        isVisible={isErrorShared} 
+        setVisible={setErrorShared}
+        headerPopup={<p>Ошибка!</p>}
+        contentPopup={
+          <div className={styles.errorShared}>
+            <ErrorOutlinedIcon style={{color: 'red'}}/><p>Не удалось поделиться</p>
+          </div>
+        }
+      />
     </>
   );
 }

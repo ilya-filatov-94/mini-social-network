@@ -70,3 +70,16 @@
         }
     }
 }
+
+.errorShared {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+
+    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+        & > *:not(:last-child) {
+            margin-right: 10px;
+        }
+    }
+}

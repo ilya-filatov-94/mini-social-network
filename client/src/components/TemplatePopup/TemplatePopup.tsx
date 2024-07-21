@@ -2,6 +2,7 @@ import {FC, ReactNode} from 'react';
 import styles from './TemplatePopup.module.scss';
 import Portal from '../../hoc/Portal';
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { shallowEqual } from 'react-redux';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 
@@ -19,7 +20,7 @@ const TemplatePopup: FC<IPopupProps> = ({
   contentPopup,
 }) => {
 
-  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode);
+  const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
 
   if (isVisible) {
     document.body.style.overflow = "hidden";

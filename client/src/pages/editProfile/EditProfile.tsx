@@ -25,6 +25,7 @@ import noAvatar from '../../assets/images/no-avatar.jpg';
 import {inputs} from './editUserInputs';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import {urlAPIimages} from '../../env_variables';
+import infoClient from '../../helpers/detectBrowserData';
 
 
 type TPreviewImg = string | ArrayBuffer | null;
@@ -41,7 +42,11 @@ const EditProfile: FC = () => {
     newRefUser.current as string,
   );
   const [updateUserData, 
-    {isLoading: isLoadingUpdate, error: errorUpdate, isSuccess}] = useUpdateUserDataMutation();
+    {
+      isLoading: isLoadingUpdate,
+      error: errorUpdate,
+      isSuccess
+    }] = useUpdateUserDataMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const [selectedAvatar, setSelectedAvatar] = useState<File>();
   const [previewAvatar, setPreviewAvatar] = useState<TPreviewImg>();
@@ -50,6 +55,10 @@ const EditProfile: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    infoClient().then(data => console.log(data));
+  }, []);
+  
   useEffect(() => {
     if (userData?.profilePic) {
       dispatch(updateUser({

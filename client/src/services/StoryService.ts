@@ -14,7 +14,7 @@ export const storyApi = createApi({
           query: (userId) => ({
             url: `/story/all`,
             params: {
-              id: userId
+              userId: userId
             }
           }),
           providesTags: (result) => result

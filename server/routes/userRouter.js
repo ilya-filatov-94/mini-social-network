@@ -29,6 +29,6 @@ router.get('/common', authMiddleware, userController.getMutualFriends);
 router.get('/activities', authMiddleware, userController.getActivitiesUsers);
 router.post('/activities', authMiddleware, userController.createActivityUser);
 router.get('/followers', authMiddleware, userController.getFollowers);
-router.get('/followers-pag', authMiddleware, userController.getFollowersSelected);
+router.get('/followers-page', authMiddleware, userController.getFollowersSelected);
 
 module.exports = router;

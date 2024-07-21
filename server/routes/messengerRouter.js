@@ -8,8 +8,9 @@ router.get('/members', authMiddleware, messengerController.findMembers);
 router.post('/conversation', authMiddleware, messengerController.openConversation); 
 router.get('/conversations', authMiddleware, messengerController.getConversations);
 router.get('/messages', authMiddleware, messengerController.getMessages); 
+router.post('/send-message', authMiddleware, messengerController.sendMessage);
 
-router.post('/send-message', authMiddleware, messengerController.sendMessage); 
+router.get('/unread-messages', authMiddleware, messengerController.getUnreadMessages); 
 
 
 module.exports = router;

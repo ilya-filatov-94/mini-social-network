@@ -85,7 +85,7 @@ const Users: FC = () => {
         }
         </div>
         <div className={styles.wrapperPagination}>
-        {listUsers?.count !== 0 &&
+        {(!!listUsers?.count && listUsers?.count > 0) &&
           <Pagination
             currentPage={currentPage}
             totalCount={listUsers?.count || 0}

@@ -44,9 +44,9 @@ class UserController {
         try {
             const {refreshToken} = request.cookies;
             const {id} = request.body;
-            const token = await userService.logout(id, refreshToken);
+            const idUser = await userService.logout(id, refreshToken);
             response.clearCookie('refreshToken');
-            return response.json(token);
+            return response.json(idUser);
         } catch (error) {
             next(error);
         }
@@ -69,6 +69,9 @@ class UserController {
             const {ref} = request.params;
             const {id} = request.query;
             const user = await userService.getOneUser(ref, id);
+            if (!user) {
+                return next(ApiError.badRequest('Пользователь не найден'));
+            }
             const profileData = excludeKeysFromObj(user.dataValues, ['email', 'password', 'status', 'createdAt', 'updatedAt']);
             return response.json(profileData);
         } catch (error) {
@@ -160,9 +163,9 @@ class UserController {
 
     async getAll(request, response, next) {
         try {
-            const {cur_user} = request.query; 
-            const users = await userService.getAllUsers(cur_user);
-            const usersExcludeCurrent = excludeCurUserFromArr(users, parseInt(cur_user));
+            const {curUserId} = request.query; 
+            const users = await userService.getAllUsers(curUserId);
+            const usersExcludeCurrent = excludeCurUserFromArr(users, parseInt(curUserId));
             return response.json(usersExcludeCurrent);
         } catch (error) {
             next(error);
@@ -181,8 +184,8 @@ class UserController {
 
     async getMutualFriends(request, response, next) {
         try {
-            const {id, pos_id} = request.query;
-            const mutualFriends = await userService.getMutualFriends(id, pos_id);
+            const {userId, idPosFriend} = request.query;
+            const mutualFriends = await userService.getMutualFriends(userId, idPosFriend);
             return response.json(mutualFriends);
         } catch (error) {
             next(error);

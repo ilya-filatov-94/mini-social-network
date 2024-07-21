@@ -43,8 +43,8 @@ const PopupMutualFriends: FC<IPopupProps> = memo(({
   const renderContent = useCallback((mutualFriends: IPossibleFriend[] | undefined) => {
     return (
       <div className={styles.wrapperUsers}>
-      {(mutualFriends && mutualFriends?.length !== 0) &&
-      mutualFriends.map((user: IPossibleFriend) => (
+      {(!!mutualFriends && mutualFriends?.length > 0) &&
+      mutualFriends?.map((user: IPossibleFriend) => (
       <div key={user.id} className={styles.infoUser}>
           <img
               className={styles.avatar}
@@ -61,6 +61,8 @@ const PopupMutualFriends: FC<IPopupProps> = memo(({
       </div>
     )
   }, []);
+
+  if (!isVisible) return null;
 
   if (isLoading) {
     return <Loader />

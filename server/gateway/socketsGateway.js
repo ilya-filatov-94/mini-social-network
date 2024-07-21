@@ -30,11 +30,11 @@ module.exports = function handlingSocketsEvents(socketIO) {
             console.log(message);
 
             if (!message.userId || !message.socketId) return;
-            const idSocketSender = socketsService.getUser(message.userId); //По userId получателя достаём его socketId
+            const socketIdSender = socketsService.getUser(message.userId); //По userId получателя достаём его socketId
             const userIdSender = socketsService.getUser(message.socketId);  //по socketId отправителя достаём его userId
             
             console.log(message.socketId, 'От кого сообщение', userIdSender);
-            console.log(idSocketSender, 'Для кого сообщение', message.userId);
+            console.log(socketIdSender, 'Для кого сообщение', message.userId);
 
             if (!userIdSender) return;
 
@@ -49,6 +49,7 @@ module.exports = function handlingSocketsEvents(socketIO) {
                 text: message.text,
                 file: fileName || '',
                 isRead: false,
+                isDelivery: true,
                 userId: Number(userIdSender),
                 conversationId: Number(message.conversationId),
                 username: message.username,
@@ -61,8 +62,8 @@ module.exports = function handlingSocketsEvents(socketIO) {
             }, {where: {id: Number(newMessage.dataValues.conversationId)}});
 
             const lastMessage = socketsService.getLastMessage();
-            if (idSocketSender) {
-                socketIO.to(idSocketSender).emit("message", {
+            if (socketIdSender) {
+                socketIO.to(socketIdSender).emit("message", {
                     id: lastMessage.id,
                     conversationId: lastMessage.conversationId,
                     userId: lastMessage.userId,
@@ -71,7 +72,37 @@ module.exports = function handlingSocketsEvents(socketIO) {
                     file: lastMessage.file || '',
                     isRead: lastMessage.isRead,
                     createdAt: String(lastMessage.createdAt),
-                    socketId: idSocketSender
+                    socketId: socketIdSender
+                });
+                socketIO.to(message.socketId).emit("msgIsDelivery", {
+                    id: lastMessage.id,
+                    conversationId: lastMessage.conversationId,
+                    userId: lastMessage.userId,
+                    isDelivery: lastMessage.isDelivery,
+                    isRead: false
+                });
+            }
+        });
+
+        socket.on("read", async (dataReadMessages) => {
+            console.log(dataReadMessages);
+
+            if (!dataReadMessages.userId || !dataReadMessages.socketId) return;
+            const socketIdSender = socketsService.getUser(dataReadMessages.userId); //По userId получателя достаём его socketId
+            const userIdSender = socketsService.getUser(dataReadMessages.socketId);  //по socketId отправителя достаём его userId
+            
+            console.log(dataReadMessages.socketId, 'От кого', userIdSender);
+            console.log(socketIdSender, 'Для кого', dataReadMessages.userId);
+
+            if (!userIdSender) return;
+            await Message.update({ isRead: true }, {
+                where: {
+                    id: dataReadMessages.ids,
+                },
+            });
+            if (socketIdSender) {
+                socketIO.to(socketIdSender).emit("msgIsRead", {
+                    ...dataReadMessages
                 });
             }
         });
@@ -84,7 +115,7 @@ module.exports = function handlingSocketsEvents(socketIO) {
                 }, {where: {id: userId}})
                 .then(result => {
                     socketsService.removeUser(userId);
-                    console.log("user disconnected!", userId);
+                    console.log(`user ${userId} disconnected!`, result);
                 });
             }
         });

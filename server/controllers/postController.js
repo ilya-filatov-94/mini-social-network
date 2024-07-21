@@ -18,7 +18,6 @@ class PostController {
                 image.mv(path.resolve(__dirname, '..', 'static', fileName));
             }
             const post = await postService.createNewPost(parseInt(id), desc, fileName);
-            //новая активность пользователя
             await createUserActivity(post.dataValues.userId, desc, fileName, post.dataValues.id);
             return response.json(post);
         } catch (error) {
@@ -87,8 +86,8 @@ class PostController {
 
     async getLikes(request, response, next) {
         try {
-            const {post_id} = request.query;
-            const likes = await postService.getLikes(parseInt(post_id));
+            const {postId} = request.query;
+            const likes = await postService.getLikes(parseInt(postId));
             return response.json(likes);
         } catch (error) {
             next(error);

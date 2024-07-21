@@ -58,8 +58,7 @@ const Login: FC = () => {
     if (isMobile) {
       executeScroll();
     }
-  // eslint-disable-next-line
-  }, []);
+  }, [isMobile, executeScroll]);
 
   const [isValidInputs, setValidInput] = useState<TStatusValidData>({
     email: false,

@@ -3,222 +3,233 @@
 
 .profile {
 
-    .imagesHeader {
-        width: 100%;
-        height: 200px;
-        position: relative;
+  .imagesHeader {
+    width: 100%;
+    height: 200px;
+    position: relative;
 
-        .cover {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
+    .cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
-        .bgNonCover {
-          background: linear-gradient(181.2deg, rgb(254, 254, 254) 10.5%, rgb(181, 239, 249) 86.8%);
-          width: 100%;
-          height: 100%;
-        }
+    .bgNonCover {
+      background: linear-gradient(181.2deg, rgb(254, 254, 254) 10.5%, rgb(181, 239, 249) 86.8%);
+      width: 100%;
+      height: 100%;
+    }
 
-        .profilePic {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            position: absolute;
-            left: 0;
-            right: 0;
-            margin: auto;
-            top: 50px;
-        }
+    .profilePic {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      top: 50px;
+    }
 
-        @include mobile{
-          height: 220px;
+    @include mobile {
+      height: 220px;
 
-          .profilePic {
-            top: 80px;
+      .profilePic {
+        top: 80px;
+      }
+    }
+  }
+
+  .profileContainer {
+    padding: 10px 30px;
+
+    @include mobile {
+      padding: 10px;
+    }
+
+    @include tablet {
+      padding: 10 20px;
+    }
+
+    .userInfo {
+      height: 230px;
+      box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+      border-radius: 20px;
+      padding: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+
+      @include mobile {
+        flex-direction: column;
+        height: 30vh;
+        margin-top: 10px;
+      }
+
+      .mainInfo {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+
+        @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+          &:not(:last-child) {
+            margin-right: 10px;
           }
         }
-    }
 
-    .profileContainer {
-        padding: 10px 30px;
+        @include mobile {
+          gap: 15px;
 
-        @include mobile{
-          padding: 10px;
+          @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+            &:not(:last-child) {
+              margin-right: 15px;
+            }
+          }
         }
 
-        @include tablet{
-          padding: 10 20px;
+        .textNick {
+          font-size: 1.875rem;
+          font-weight: 500;
         }
 
-        .userInfo {
-            height: 230px;
-            box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
-            border-radius: 20px;
-            padding: 50px;
+        .info {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 20px;
+
+          @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+            &:not(:last-child) {
+              margin-right: 20px;
+            }
+          }
+
+          @include mobile {
+            gap: 20px;
+          }
+
+          .item {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
+            gap: 5px;
+            font-size: 0.75rem;
 
-            @include mobile {
-              flex-direction: column;
-              height: 30vh;
-              margin-top: 10px;
-            }
-
-            .mainInfo {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-
-                @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                  &:not(:last-child) {
-                      margin-right: 10px;
-                  }
-                }
-
-                @include mobile {
-                  gap: 15px;
-
-                  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                    &:not(:last-child) {
-                        margin-right: 15px;
-                    }
-                  }
-                }
-      
-                .textNick {
-                  font-size: 1.875rem;
-                  font-weight: 500;
-                }
-      
-                .info {
-                  width: 100%;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  gap: 20px;
-
-                  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                    &:not(:last-child) {
-                      margin-right: 20px;
-                    }
-                  }
-
-                  @include mobile {
-                    gap: 20px;
-                  }
-      
-                  .item {
-                    display: flex;
-                    align-items: center;
-                    gap: 5px;
-                    font-size: 0.75rem;
-
-                    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                      &:not(:last-child) {
-                          margin-right: 5px;
-                      }
-                    }
-  
-                    .textInfo {
-                      font-size: 0.875rem;
-                    }
-                  }
-                }
-
-                .userActions {
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  gap: 10px;
-
-                  @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                    &:not(:last-child) {
-                        margin-right: 10px;
-                    }
-                  }
-
-                  .Btn {
-                    min-width: 120px;
-                    border: none;
-                    background-color: #556fe3da;
-                    color: white;
-                    padding: 10px 20px;
-                    border-radius: 5px;
-                    cursor: pointer;
-                  }
-
-                  .Btn:hover,
-                  .Btn:active {
-                    background-color: #102db0c1;
-                  }
-
-                  .Btn.dismissBtn {
-                    background-color: #db4742;
-                  }
-
-                  .Btn.dismissBtn:hover,
-                  .Btn.dismissBtn:active {
-                    background-color: #db5e5adb;
-                  }
-                }
-
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+              &:not(:last-child) {
+                margin-right: 5px;
               }
-
-              .socials {
-                flex: 1;
-                display: flex;
-                gap: 10px;
-
-                @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                  &:not(:last-child) {
-                      margin-right: 10px;
-                  }
-                }
-              }
-        }
-    }
-
-    &.theme-dark {
-        $curTheme: "dark";
-        background-color: themed($curTheme, "bgSoft");
-        color: themed($curTheme, "textColor");
-
-        a {
-          color: themed($curTheme, "textColor");
-        }
-
-        .userInfo {
-            background-color: themed($curTheme, "background");
-            color: themed($curTheme, "textColor");
-
-            .item {
-                color: themed($curTheme, "textColorSoft");
             }
-        }
-    }
-    &.theme-light {
-        $curTheme: "light";
-        background-color: themed($curTheme, "bgSoft");
-        color: themed($curTheme, "textColor");
 
-        a {
-          color: themed($curTheme, "textColor");
-        }
-
-        .userInfo {
-            background-color: themed($curTheme, "background");
-            color: themed($curTheme, "textColor");
-
-            .item {
-                color: themed($curTheme, "textColorSoft");
+            .textInfo {
+              font-size: 0.875rem;
             }
+          }
         }
+
+        .userActions {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 10px;
+
+          @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+            &:not(:last-child) {
+              margin-right: 10px;
+            }
+          }
+
+          .btn {
+            min-width: 120px;
+            border: none;
+            background-color: #556fe3da;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+          }
+
+          @media (hover: hover) {
+            .btn:hover {
+              background-color: #102db0c1;
+            }
+          }
+
+          .btn:active {
+            background-color: #102db0c1;
+          }
+
+          .btn.dismissBtn {
+            background-color: #db4742;
+          }
+
+          @media (hover: hover) {
+            .btn.dismissBtn:hover {
+              background-color: #db5e5adb;
+            }
+          }
+
+          .btn.dismissBtn:active {
+            background-color: #db5e5adb;
+          }
+        }
+
+      }
+
+      .socials {
+        flex: 1;
+        display: flex;
+        gap: 10px;
+
+        @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+          &:not(:last-child) {
+            margin-right: 10px;
+          }
+        }
+      }
     }
+  }
+
+  &.theme-dark {
+    $curTheme: "dark";
+    background-color: themed($curTheme, "bgSoft");
+    color: themed($curTheme, "textColor");
+
+    a {
+      color: themed($curTheme, "textColor");
+    }
+
+    .userInfo {
+      background-color: themed($curTheme, "background");
+      color: themed($curTheme, "textColor");
+
+      .item {
+        color: themed($curTheme, "textColorSoft");
+      }
+    }
+  }
+
+  &.theme-light {
+    $curTheme: "light";
+    background-color: themed($curTheme, "bgSoft");
+    color: themed($curTheme, "textColor");
+
+    a {
+      color: themed($curTheme, "textColor");
+    }
+
+    .userInfo {
+      background-color: themed($curTheme, "background");
+      color: themed($curTheme, "textColor");
+
+      .item {
+        color: themed($curTheme, "textColorSoft");
+      }
+    }
+  }
 
 }

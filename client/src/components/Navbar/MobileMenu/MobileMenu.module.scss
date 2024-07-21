@@ -59,8 +59,10 @@ $height_menu: 50px;
         cursor: pointer;
         transition: all 220ms ease-in-out;
     
-        &:hover {
-            background-color: rgba(173, 216, 230, 0.258);
+        @media (hover: hover) {
+            &:hover {
+                background-color: rgba(173, 216, 230, 0.258);
+            }
         }
     }
 
@@ -78,8 +80,10 @@ $height_menu: 50px;
         .menuItem {
             color: themed($curTheme, "textColor");
 
-            &:hover {
-                background-color: rgba(122, 122, 122, 0.936);
+            @media (hover: hover) {
+                &:hover {
+                    background-color: rgba(122, 122, 122, 0.936);
+                }
             }
         }
     }

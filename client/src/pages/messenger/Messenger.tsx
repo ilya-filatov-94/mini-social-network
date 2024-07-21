@@ -1,6 +1,6 @@
 import {FC, useState, ChangeEvent, useRef, UIEvent} from 'react';
 import styles from './Messenger.module.scss';
-import {RootState} from '../../store/index';
+import {RootState} from '../../store';
 import {useAppSelector} from '../../hooks/useTypedRedux';
 import { shallowEqual } from 'react-redux';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
@@ -14,11 +14,14 @@ import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
 import {debounce} from '../../helpers/debounce';
 import LoaderMessenger from './LoaderMessenger/LoaderMessenger';
 import AlertWidget from '../../components/AlertWidget/AlertWidget';
+import {IConversation, IMessage} from '../../types/messenger';
 
 
 const Messenger: FC = () => {
   const curUser = useAppSelector((state: RootState) => state.reducerAuth.currentUser, shallowEqual);
   const currentTheme = useAppSelector((state: RootState) => state.reducerTheme.themeMode, shallowEqual);
+  const counterUnreadMsg = useAppSelector((state: RootState) => state.reducerMessages.unreadMsgsList, shallowEqual);
+  const lastMessage = useAppSelector((state: RootState) => state.reducerConversation.lastMessage, shallowEqual);
 
   const [focusInput, setFocusInput] = useState(false);
   const [searchLine, setSearchLine] = useState<string>('');
@@ -62,6 +65,14 @@ const Messenger: FC = () => {
       inputRef.current.value = '';
     }
     setFocusInput(false);
+  }
+  
+  function getLastMessage(lastMessage: IMessage, conversation: IConversation) {
+    if (lastMessage.conversationId === conversation.id && lastMessage.text) {
+      return lastMessage.text;
+    } else {
+      return conversation.lastMessageText
+    }
   }
 
   function setErrorOrLoading(
@@ -132,7 +143,6 @@ const Messenger: FC = () => {
                 memberId={user.id!}
                 addClass={`${styles.itemConversation} ${currentTheme ==='darkMode' ? styles['theme-dark'] : ''}`}
                 username={user.username}
-                refUser={user.refUser}
                 profilePic={user.profilePic}
                 status={user.status}
                 openConversation={openConversation}
@@ -149,13 +159,13 @@ const Messenger: FC = () => {
                 id={conversation.id}
                 curUserId={curUser.id}
                 memberId={conversation.memberId}
-                lastMessageText={conversation.lastMessageText}
+                lastMessageText={getLastMessage(lastMessage, conversation)}
                 addClass={`${styles.itemConversation} ${currentTheme ==='darkMode' ? styles['theme-dark'] : ''}`}
                 username={conversation.username}
                 profilePic={conversation.profilePic}
-                refUser={conversation.refUser}
                 status={conversation.status}
                 openConversation={openConversation}
+                counterUnreadMsg={counterUnreadMsg[conversation.id] || 0}
               />
             )}
             {(listConversations && listConversations.length === 0) && 

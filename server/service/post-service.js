@@ -1,7 +1,8 @@
-const {Post, User, Like, Comment, Activity} = require('../models/models');
+const {Post, User, Like, Activity} = require('../models/models');
 
 class PostService {
   async createNewPost(userId, desc, fileName) {
+    if (!userId) return null;
     const post = await Post.create({
       userId: userId,
       desc: desc,
@@ -58,6 +59,7 @@ class PostService {
   }
 
   async addLike(userId, postId) {
+    if (!userId || !postId) return null;
     const like = await Like.create({
       userId: userId,
       postId: postId

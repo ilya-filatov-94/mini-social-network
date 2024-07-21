@@ -57,14 +57,18 @@
         align-items: center;
         gap: 10px;
 
-        .Btn {
+        .btn {
             padding: 5px;
             border-radius: 5px;
             background-color: #556fe3da;
             color: white;
         }
-        .Btn:hover,
-        .Btn:active {
+        @media (hover: hover) {
+            .btn:hover {
+                background-color: #102db0c1;
+            }
+        }
+        .btn:active {
             background-color: #102db0c1;
         }
     }

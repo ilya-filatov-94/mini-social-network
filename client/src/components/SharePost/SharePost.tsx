@@ -105,7 +105,7 @@ const SharePost: FC<ISharePostProps> = memo(({userId}) => {
             </label>
           </div>
           <div className={styles.right}>
-            <button onClick={handleUpload} className={styles.Btn}>Опубликовать</button>
+            <button onClick={handleUpload} className={styles.btn}>Опубликовать</button>
           </div>
         </div>
       </div>

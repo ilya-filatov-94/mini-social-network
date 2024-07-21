@@ -84,7 +84,7 @@ const Friends: FC = () => {
             </div>
             </div>
             <div className={styles.wrapperPagination}>
-            {followersData?.count !== 0 &&
+            {(!!followersData?.count && followersData?.count > 0) &&
               <Pagination
                 currentPage={currentPage}
                 totalCount={followersData.count}

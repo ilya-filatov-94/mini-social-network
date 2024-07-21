@@ -12,7 +12,6 @@ class CommentService {
     comment.dataValues.username = user.username;
     comment.dataValues.refUser = user.refUser;
     comment.dataValues.profilePic = user.profilePic;
-    comment.dataValues.date = comment.dataValues.createdAt;
 
     const post = await Post.findByPk(id_post);
     await Post.update({ counterComments: parseInt(post.counterComments)+1}, {

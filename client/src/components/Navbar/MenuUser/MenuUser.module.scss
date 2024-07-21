@@ -47,9 +47,11 @@
             padding: 0.5rem;
             border-radius: 10px;
         }
-        .button:hover,
-        .link:hover {
-            cursor: pointer;
+        @media (hover: hover) {
+            .button:hover,
+            .link:hover {
+                cursor: pointer;
+            }
         }
 
         &.theme-dark {
@@ -61,9 +63,11 @@
             .link {
                 color: themed($curTheme, "textColor");
             }
-            .button:hover,
-            .link:hover {
-                background-color: rgb(140, 140, 140);
+            @media (hover: hover) {
+                .button:hover,
+                .link:hover {
+                    background-color: rgb(140, 140, 140);
+                }
             }
         }
 
@@ -76,9 +80,11 @@
             .link {
                 color: themed($curTheme, "textColor");
             }
-            .button:hover,
-            .link:hover {
-                background-color: rgb(229, 227, 227);
+            @media (hover: hover) {
+                .button:hover,
+                .link:hover {
+                    background-color: rgb(229, 227, 227);
+                }
             }
         }
     }

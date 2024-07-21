@@ -133,7 +133,7 @@ const Comments: FC<IContentPostProps> = ({
                         <span>{comment.username}</span>
                         </Link>
                         <span className={styles.date}>
-                          {getRelativeTimeString(new Date(comment.date), 'ru')}
+                          {getRelativeTimeString(Date.parse(comment.date), 'ru')}
                         </span>
                     </div>
                     <p className={styles.commDesc}>{comment.desc}</p>

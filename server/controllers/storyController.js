@@ -26,8 +26,8 @@ class StoryController {
 
     async getAllStories(request, response, next) {
         try {     
-            const {id} = request.query;      
-            const stories = await StoryService.getAllStories(parseInt(id));
+            const {userId} = request.query;      
+            const stories = await StoryService.getAllStories(parseInt(userId));
             return response.json(stories);
         } catch (error) {
             next(error);
@@ -36,8 +36,8 @@ class StoryController {
 
     async getUserStory(request, response, next) {
         try {
-            const {id} = request.query;
-            const story = await StoryService.getOneStory(parseInt(id));
+            const {userId} = request.query;
+            const story = await StoryService.getOneStory(parseInt(userId));
             return response.json(story);
         } catch (error) {
             next(error);

@@ -23,7 +23,6 @@ interface ILikesProps {
 }
 
 const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
-
   const {
     data: likes, 
     error: errorLoad, 
@@ -70,7 +69,7 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
   const renderContentPopup = useCallback((likers: ILikes[] | undefined) => {
     return (
       <div className={styles.wrapperUsers}>
-      {(likers && likers?.length !== 0) &&
+      {(!!likers && likers?.length > 0) &&
       likers.map((user: ILikes) => (
       <div key={user.id} className={styles.infoUser}>
           <img

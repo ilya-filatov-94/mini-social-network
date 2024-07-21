@@ -40,7 +40,7 @@ class MessengerService {
     return conversation || {};
   }
 
-  async findMembers(id, selector) {
+  async findMembers(userId, selector) {
     let members = [];
     if (selector) {
       const searchOtherKeys = changeKeyboardLayout(selector);
@@ -48,7 +48,7 @@ class MessengerService {
           where: {
             [Op.and]: {
               username:  {[Op.or]: [{ [Op.iLike]: '%' + selector + '%' }, { [Op.iLike]: '%' + searchOtherKeys + '%' }]},
-              id: { [Op.ne]: id },
+              id: { [Op.ne]: userId },
             },
           },
           attributes: ['id', 'username', 'refUser', 'profilePic', 'status'],
@@ -58,10 +58,12 @@ class MessengerService {
   }
 
   async getConversations(curUserId) {
+    let key1, key2;
     const conversations = await Conversation.findAll(
-        {
-          where: {[Op.or]: [{participantId1: curUserId}, {participantId2: curUserId}]},
-        },
+      {
+        order: [['createdAt', 'DESC']],
+        where: {[Op.or]: [{participantId1: curUserId}, {participantId2: curUserId}]},
+      },
     );
     const idUsers = [];
     for (let i = 0; i < conversations.length; i++) {
@@ -74,12 +76,28 @@ class MessengerService {
       where: { id: idUsers},
       attributes: ['id', 'username', 'refUser', 'profilePic', 'status']
     });
+    const usersObj = {};
+    for (let i = 0; i < usersData.length; i++) {
+      key1 = usersData[i].dataValues.id;
+      usersObj[key1] = usersData[i].dataValues;
+    }
     for (let i = 0; i < conversations.length; i++) {
-      conversations[i].dataValues.memberId = usersData[i].dataValues.id;
-      conversations[i].dataValues.username = usersData[i].dataValues.username;
-      conversations[i].dataValues.profilePic = usersData[i].dataValues.profilePic;
-      conversations[i].dataValues.refUser = usersData[i].dataValues.refUser;
-      conversations[i].dataValues.status = usersData[i].dataValues.status;
+      key1 = conversations[i].dataValues.participantId1;
+      key2 = conversations[i].dataValues.participantId2;
+      if (usersObj[key1]) {
+        conversations[i].dataValues.memberId = usersObj[key1].id;
+        conversations[i].dataValues.username = usersObj[key1].username;
+        conversations[i].dataValues.profilePic = usersObj[key1].profilePic;
+        conversations[i].dataValues.refUser = usersObj[key1].refUser;
+        conversations[i].dataValues.status = usersObj[key1].status;
+      }
+      if (usersObj[key2]) {
+        conversations[i].dataValues.memberId = usersObj[key2].id;
+        conversations[i].dataValues.username = usersObj[key2].username;
+        conversations[i].dataValues.profilePic = usersObj[key2].profilePic;
+        conversations[i].dataValues.refUser = usersObj[key2].refUser;
+        conversations[i].dataValues.status = usersObj[key2].status;
+      }
     }
     return conversations;
   }
@@ -92,6 +110,36 @@ class MessengerService {
         },
     );
     return messages;
+  }
+
+  async getUnreadMessages(curUserId) {
+    const conversations = await Conversation.findAll(
+      {
+        order: [['createdAt', 'DESC']],
+        where: {[Op.or]: [{participantId1: curUserId}, {participantId2: curUserId}]},
+        attributes: ['id'],
+      },
+    );
+    const conversationIds = conversations.map(({dataValues}) => dataValues.id);
+    const unReadMessages = await Message.findAll(
+      {
+        where: { 
+          conversationId: conversationIds,
+          userId: { [Op.ne]: curUserId },
+          isRead: false,
+        },
+        order: [['createdAt', 'DESC']],
+        attributes: ['conversationId', 'isRead', 'userId'],
+      },
+    );
+    //Количество непрочитанных сообщений в каждом диалоге у собеседника
+    const objUnreadInEveryConv = {};
+    unReadMessages.forEach(({conversationId, isRead, userId}) => {
+      if (!isRead && userId !== curUserId) {
+        objUnreadInEveryConv[conversationId] == undefined ? objUnreadInEveryConv[conversationId] = 1 : ++objUnreadInEveryConv[conversationId];
+      }
+    });
+    return objUnreadInEveryConv;
   }
 
 }

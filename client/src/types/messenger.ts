@@ -30,6 +30,7 @@ export interface IMessage {
     file?: string;
     mimeTypeAttach?: string;
     isRead: boolean;
+    isDelivery?: boolean;
     createdAt?: string;
     socketId?: string;
 }
@@ -37,5 +38,12 @@ export interface IMessage {
 export interface IAttachFile {
     body?: string;
     mimeType?: string;
+}
+
+export interface IReadMsgs {
+    ids: number[];
+    conversationId?: number;
+    userId: number;
+    socketId?: string;
 }
 

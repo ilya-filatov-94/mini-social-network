@@ -21,7 +21,7 @@ import {IActivityOfUser} from '../types/activities';
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['ProfileData', 'PossibleFriend'],
+    tagTypes: ['ProfileData', 'PossibleFriends', 'Users', 'Friends'],
     endpoints: (builder) => ({
         getUserProfile: builder.query<IUserData, IRequestProfile>({
           query: (data) => ({
@@ -56,10 +56,11 @@ export const userApi = createApi({
             }
           }),
           keepUnusedDataFor: 60,
+          providesTags: ['Friends'],
         }),
         getFollowersPagination: builder.query<IFollowerResponse, IFollowerRequest>({
           query: (data) => ({
-            url: `/user/followers-pag`,
+            url: `/user/followers-page`,
             params: {
               id: data.id,
               page: data.page,
@@ -68,15 +69,17 @@ export const userApi = createApi({
             }
           }),
           keepUnusedDataFor: 60,
+          providesTags: ['Friends'],
         }),
         getAllUsers: builder.query<IListUsers[], number>({
           query: (id) => ({
             url: `/user/all`,
             params: {
-              cur_user: id
+              curUserId: id
             }
           }),
           keepUnusedDataFor: 60,
+          providesTags: ['Users'],
         }),
         getSearchAllUsers: builder.query<IAllUsersResponse, IAllUsersRequest>({
           query: (data) => ({
@@ -89,6 +92,7 @@ export const userApi = createApi({
             }
           }),
           keepUnusedDataFor: 60,
+          providesTags: ['Users']
         }),
         subscribeToUser: builder.mutation<IActionSubscribeTo, IActionSubscribeTo>({
           query: (data) => ({
@@ -96,7 +100,7 @@ export const userApi = createApi({
             method: 'POST',
             body: data
           }),
-          invalidatesTags: ['PossibleFriend']
+          invalidatesTags: ['PossibleFriends', 'Users', 'Friends']
         }),
         unSubscribeToUser: builder.mutation<number, IActionSubscribeTo>({
           query: (data) => ({
@@ -104,6 +108,7 @@ export const userApi = createApi({
             method: 'POST',
             body: data
           }),
+          invalidatesTags: ['PossibleFriends', 'Users', 'Friends']
         }),
         getPossibleFriends: builder.query<IPossibleFriend[], number>({
           query: (id) => ({
@@ -113,14 +118,14 @@ export const userApi = createApi({
             }
           }),
           keepUnusedDataFor: 60,
-          providesTags: ['PossibleFriend']
+          providesTags: ['PossibleFriends']
         }),
         getMutualFriends: builder.query<IPossibleFriend[], IRequestMutualFriend>({
           query: (data) => ({
             url: `/user/common`,
             params: {
-              id: data.id,
-              pos_id: data.pos_id
+              userId: data.id,
+              idPosFriend: data.pos_id
             }
           }),
           keepUnusedDataFor: 60,

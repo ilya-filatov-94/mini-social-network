@@ -107,6 +107,7 @@ const Message = sequelize.define('message', {
     text: {type: DataTypes.STRING},
     file: {type: DataTypes.STRING},
     isRead: {type: DataTypes.BOOLEAN},
+    isDelivery: {type: DataTypes.BOOLEAN},
 });
 
 User.hasMany(Message);

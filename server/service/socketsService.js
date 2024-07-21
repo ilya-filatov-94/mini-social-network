@@ -50,6 +50,7 @@ class socketsService {
         this.lastMessage.text = data.dataValues.text;
         this.lastMessage.file = data.dataValues.file;
         this.lastMessage.isRead = data.dataValues.isRead;
+        this.lastMessage.isDelivery = data.dataValues.isDelivery;
         this.lastMessage.createdAt = data.dataValues.createdAt;
     }
 

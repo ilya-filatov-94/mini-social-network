@@ -1,0 +1,2742 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Social-network",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:5000/"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            },
+            "jwtAuth": {
+                "type": "http",
+                "scheme": "jwt"
+            }
+        }
+    },
+    "security": [
+        {
+            "jwtAuth": []
+        }
+    ],
+    "paths": {
+        "/api/user/registration": {
+            "post": {
+                "tags": [
+                    "Регистрация пользователя"
+                ],
+                "description": "Вернёт пару токенов Acsess и Refresh, а также имя и фамилию username",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "username": "Jane Olsen",
+                                    "email": "jane@mail.ru",
+                                    "password": "12345Dd"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInJlZlVzZXIiOiJKYW5lT2xzZW4yMiIsImVtYWlsIjoiamFuZUBtYWlsLnJ1IiwiaWF0IjoxNzE5NDExMjY5LCJleHAiOjE3MTk0MTIxNjl9.pZVfKf8Hqz2ky5dFJwHaIkKGyOG5eePYoaEmULt2Mkw",
+                                        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInJlZlVzZXIiOiJKYW5lT2xzZW4yMiIsImVtYWlsIjoiamFuZUBtYWlsLnJ1IiwiaWF0IjoxNzE5NDIxNjc5LCJleHAiOjE3MjIwMTM2Nzl9.aF5ycli6u6lJRjAu7p5jdFezifY9UA4rOCcF2ojINmU",
+                                        "user": {
+                                            "username": "Jane Olsen",
+                                            "profilePic": ""
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Пользователь уже был зарегистрирован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь с таким почтовым адресом уже авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Ошибка при валидации запроса",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Ошибка при валидации запроса"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/login": {
+            "post": {
+                "tags": [
+                    "Авторизация пользователя"
+                ],
+                "description": "Вернёт токен авторизации и минимальные данные пользователя: username и картинку профиля",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "jane@mail.ru",
+                                    "password": "12345Dd"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInJlZlVzZXIiOiJKYW5lT2xzZW4yMiIsImVtYWlsIjoiamFuZUBtYWlsLnJ1IiwiaWF0IjoxNzE5NDExMjY5LCJleHAiOjE3MTk0MTIxNjl9.pZVfKf8Hqz2ky5dFJwHaIkKGyOG5eePYoaEmULt2Mkw",
+                                        "user": {
+                                            "username": "Jane Olsen",
+                                            "profilePic": "f8bdd4c7-0e6b-4750-b139-d228216185ea.jpeg"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Error response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Неверный логин или пароль"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/logout": {
+            "post": {
+                "tags": [
+                    "Выход пользователя из аккаунта"
+                ],
+                "description": "Вернёт userId пользователя. Через Swagger-UI в браузере нельзя установить Cookie, соответственно тестировать лучше через Postman",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "id": 22
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "cookie",
+                        "name": "refreshToken",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInJlZlVzZXIiOiJKYW5lT2xzZW4yMiIsImVtYWlsIjoiamFuZUBtYWlsLnJ1IiwiaWF0IjoxNzE5NDIxNjc5LCJleHAiOjE3MjIwMTM2Nzl9.aF5ycli6u6lJRjAu7p5jdFezifY9UA4rOCcF2ojINmU"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 22
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/refresh": {
+            "get": {
+                "tags": [
+                    "Обновление Access-токена"
+                ],
+                "description": "В cookie запроса передаётся Refresh-токен, далее валидируется, генерируется новый Access-токен и возвращается на клиент. \t\n Через Swagger-UI в браузере нельзя установить Cookie, соответственно тестировать лучше через Postman",
+                "parameters": [
+                    {
+                        "in": "cookie",
+                        "name": "refreshToken",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInJlZlVzZXIiOiJKYW5lT2xzZW4yMiIsImVtYWlsIjoiamFuZUBtYWlsLnJ1IiwiaWF0IjoxNzE5NDIxNjc5LCJleHAiOjE3MjIwMTM2Nzl9.aF5ycli6u6lJRjAu7p5jdFezifY9UA4rOCcF2ojINmU"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjIsInJlZlVzZXIiOiJKYW5lT2xzZW4yMiIsImVtYWlsIjoiamFuZUBtYWlsLnJ1IiwiaWF0IjoxNzE5NDExMjY5LCJleHAiOjE3MTk0MTIxNjl9.pZVfKf8Hqz2ky5dFJwHaIkKGyOG5eePYoaEmULt2Mkw"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        },
+        "/api/user/profile/{ref}": {
+            "get": {
+                "tags": [
+                    "Данные профиля пользователя"
+                ],
+                "description": "Вернёт объект данных профиля пользователя. Переданный id - это userId текущего авторизованного пользователя, ref - ссылка на страницу пользователя которого хотим посетить. В случае если пользователь посещает не свою страницу, то ответ будет дополнен параметром isSubscriber, статус подписки на пользователя",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "ref",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "JaneOlsen22"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 22
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "id": 22,
+                                        "username": "Jane Olsen",
+                                        "refUser": "JaneOlsen22",
+                                        "profilePic": "f8bdd4c7-0e6b-4750-b139-d228216185ea.jpeg",
+                                        "coverPic": "2d63f852-3ebe-4ad7-9fc2-33506027b97a.jpeg",
+                                        "city": "St. Petersburg",
+                                        "website": "http://t.me/jane"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Error Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не найден"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/profile/{ref}/edit": {
+            "get": {
+                "tags": [
+                    "Данные страницы редактирования профиля пользователя"
+                ],
+                "description": "Возвращает объект данных пользователя для страницы редактирования",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "ref",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "JaneOlsen22"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "id": 22,
+                                        "email": "jane@mail.ru",
+                                        "refUser": "JaneOlsen22",
+                                        "profilePic": "f8bdd4c7-0e6b-4750-b139-d228216185ea.jpeg",
+                                        "coverPic": "2d63f852-3ebe-4ad7-9fc2-33506027b97a.jpeg",
+                                        "city": "St. Petersburg",
+                                        "website": "http://t.me/jane",
+                                        "name": "Jane",
+                                        "lastname": "Olsen"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/profile/update": {
+            "patch": {
+                "tags": [
+                    "Обновление данных профиля"
+                ],
+                "description": "В тело запроса передаются только те данные, которые нужно изменить, обязательным параметром является только id пользователя. В примере указано обновление всех данных \t\n Возвращает объект с обновленными данными",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 22
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "jane@mail.ru"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "12345Dd"
+                                    },
+                                    "username": {
+                                        "type": "string",
+                                        "example": "Jane Olsen"
+                                    },
+                                    "city": {
+                                        "type": "string",
+                                        "example": "St. Petersburg"
+                                    },
+                                    "website": {
+                                        "type": "string",
+                                        "example": "http://t.me/jane"
+                                    },
+                                    "profilePic": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "coverPic": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": ["id"]
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "id": 22,
+                                        "username": "Jane Olsen",
+                                        "email": "jane@mail.ru",
+                                        "password": "$2b$05$DSOTVv4Oy6VJgrJDKlos6Oyr8MDCU0JSFIi6jSXBBXJfYOA.Rvba2",
+                                        "refUser": "JaneOlsen22",
+                                        "profilePic": "f8bdd4c7-0e6b-4750-b139-d228216185ea.jpeg",
+                                        "coverPic": "2d63f852-3ebe-4ad7-9fc2-33506027b97a.jpeg",
+                                        "city": "Moscow",
+                                        "website": "http://t.me/jane1",
+                                        "status": "online",
+                                        "createdAt": "2023-11-03T10:13:47.815Z",
+                                        "updatedAt": "2024-06-27T14:37:39.206Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        },
+        "/api/user/all-selected": {
+            "get": {
+                "tags": [
+                    "Список пользователей"
+                ],
+                "description": "Постраничный список всех пользователей, либо постраничный список соответствующий поисковому запросу. \t\n Вернёт массив пользователей соответствующий запрошенной странице (по умолчанию 1 и кол-во на странице по умолчанию 4), \t\n а также общее число пользователей, не считая текущего пользователя",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 22
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "search",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 1
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 4
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "count": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 10
+                                        },
+                                        "rows": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "minimum": 1,
+                                                        "example": 23
+                                                    },
+                                                    "username": {
+                                                        "type": "string",
+                                                        "example": "Rich Skinner"
+                                                    },
+                                                    "refUser": {
+                                                        "type": "string",
+                                                        "example": "RichSkinner23"
+                                                    },
+                                                    "profilePic": {
+                                                        "type": "string",
+                                                        "example": "e4a10982-ba27-4ed9-90d6-71ba52316b55.jpeg"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "online"
+                                                    },
+                                                    "city": {
+                                                        "type": "string",
+                                                        "example": "Moscow"
+                                                    },
+                                                    "subscrStatus": {
+                                                        "type": "boolean",
+                                                        "example": false
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/followers-page": {
+            "get": {
+                "tags": [
+                    "Список друзей"
+                ],
+                "description": "Постраничный список друзей (all, либо по статусу online, либо offline). \t\n В соответствии с запрошенной страницей (по умолчанию 1 и кол-во на странице по умолчанию 4), \t\n а также общее число друзей",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 22
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 1
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 4
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "selector",
+                        "schema": {
+                            "type": "string",
+                            "example": "all"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "count": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 10
+                                        },
+                                        "rows": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer",
+                                                        "minimum": 1,
+                                                        "example": 23
+                                                    },
+                                                    "username": {
+                                                        "type": "string",
+                                                        "example": "Rich Skinner"
+                                                    },
+                                                    "refUser": {
+                                                        "type": "string",
+                                                        "example": "RichSkinner23"
+                                                    },
+                                                    "profilePic": {
+                                                        "type": "string",
+                                                        "example": "e4a10982-ba27-4ed9-90d6-71ba52316b55.jpeg"
+                                                    },
+                                                    "status": {
+                                                        "type": "string",
+                                                        "example": "online"
+                                                    },
+                                                    "city": {
+                                                        "type": "string",
+                                                        "example": "Moscow"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/suggestions": {
+            "get": {
+                "tags": [
+                    "Список возможных друзей"
+                ],
+                "description": "Вернёт массив объектов с данными возможных друзей для текущего пользователя (тех с кем есть хотя бы 1 общий друг)",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 22
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 28
+                                            },
+                                            "username": {
+                                                "type": "string",
+                                                "example": "Josh Stewart"
+                                            },
+                                            "refUser": {
+                                                "type": "string",
+                                                "example": "JoshStewart28"
+                                            },
+                                            "profilePic": {
+                                                "type": "string",
+                                                "example": "3fa53d7d-f73c-4a9d-a943-c732d69c6e3d.jpeg"
+                                            },
+                                            "numberMutualFriends": {
+                                                "type": "integer",
+                                                "example": 1
+                                            }
+                                        }
+                                    }
+                                    
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/common": {
+            "get": {
+                "tags": [
+                    "Список общих друзей"
+                ],
+                "description": "Для текущего пользователя и его возможного друга вернёт массив объектов с данными общих друзей",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 22
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "idPosFriend",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 30
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 24
+                                            },
+                                            "username": {
+                                                "type": "string",
+                                                "example": "Kate Stone"
+                                            },
+                                            "refUser": {
+                                                "type": "string",
+                                                "example": "KateStone24"
+                                            },
+                                            "profilePic": {
+                                                "type": "string",
+                                                "example": "0c395dac-6746-4874-8e7f-2e52f89a4cdd.jpeg"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "offline"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/follow": {
+            "post": {
+                "tags": [
+                    "Подписаться на пользователя (добавить в друзья)"
+                ],
+                "description": "Добавить текущему пользователю в друзья другого пользователя, возваращает данные подписки",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "curUserId": 22,
+                                    "followerId": 30
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "id": 46,
+                                        "userId": "22",
+                                        "followerId": "30"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/unfollow": {
+            "post": {
+                "tags": [
+                    "Отписаться от пользователя (удалить из друзей)"
+                ],
+                "description": "Удалить у текущего пользователя из друзей другого пользователя, возвращает id удалённого пользователя",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "curUserId": 22,
+                                    "followerId": 30
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 30
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/activities": {
+            "get": {
+                "tags": [
+                    "Список активностей друзей"
+                ],
+                "description": "Список активностей друзей пользователя: добавленные посты, комментарии, истории, обновления аватаров",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 22
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 23
+                                            },
+                                            "idAct": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 38
+                                            },
+                                            "type": {
+                                                "type": "string",
+                                                "example": "addedComment"
+                                            },
+                                            "desc": {
+                                                "type": "string",
+                                                "example": "Добавил(а) комментарий"
+                                            },
+                                            "text": {
+                                                "type": "string",
+                                                "example": "Круто, я сейчас в Барселоне, была бы рада увидеться!"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "04f383f9-c5da-49f6-b2ed-9773777c249a.jpeg"
+                                            },
+                                            "createdAt": {
+                                                "type": "string",
+                                                "example": "2023-11-30T14:21:31.189Z"
+                                            },
+                                            "updatedAt": {
+                                                "type": "string",
+                                                "example": "2023-11-30T14:21:31.189Z"
+                                            },
+                                            "userId": {
+                                                "type": "integer",
+                                                "example": 24
+                                            },
+                                            "user": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "username": {
+                                                        "type": "string",
+                                                        "example": "Kate Stone"
+                                                    },
+                                                    "refUser": {
+                                                        "type": "string",
+                                                        "example": "KateStone24"
+                                                    },
+                                                    "profilePic": {
+                                                        "type": "string",
+                                                        "example": "0c395dac-6746-4874-8e7f-2e52f89a4cdd.jpeg"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            },
+            "post": {
+                "tags": [
+                    "Добавить новую активность (тестовый роут)"
+                ],
+                "description": "Добавить активность пользователя (тестовый роут, так как активности сами создаются при создании комметариев, постов, историй и обновления аватаров",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "userId": {
+                                        "type": "integer",
+                                        "example": 22
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "addedComment"
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Добавил(а) комментарий"
+                                    },
+                                    "text": {
+                                        "type": "string",
+                                        "example": "Круто, я сейчас в Барселоне, была бы рада увидеться!"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": ["userId", "type", "desc"]
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 23
+                                        },
+                                        "userId": {
+                                            "type": "integer",
+                                            "example": 24
+                                        },
+                                        "type": {
+                                            "type": "string",
+                                            "example": "addedComment"
+                                        },
+                                        "desc": {
+                                            "type": "string",
+                                            "example": "Добавил(а) комментарий"
+                                        },
+                                        "text": {
+                                            "type": "string",
+                                            "example": "Круто, я сейчас в Барселоне, была бы рада увидеться!"
+                                        },
+                                        "image": {
+                                            "type": "string",
+                                            "example": "04f383f9-c5da-49f6-b2ed-9773777c249a.jpeg"
+                                        },
+                                        "idAct": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": null
+                                        },
+                                        "updatedAt": {
+                                            "type": "string",
+                                            "example": "2023-11-30T14:21:31.189Z"
+                                        },
+                                        "createdAt": {
+                                            "type": "string",
+                                            "example": "2023-11-30T14:21:31.189Z"
+                                        }
+                                    }    
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/post/create": {
+            "post": {
+                "tags": [
+                    "Создать новый пост"
+                ],
+                "description": "Создание нового поста на странице пользователя",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 22
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Новый пост"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "id"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "counterComments": {
+                                            "type": "string",
+                                            "example": "0"
+                                        },
+                                        "id": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 24
+                                        },
+                                        "userId": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 22
+                                        },
+                                        "desc": {
+                                            "type": "string",
+                                            "example": "Новый пост"
+                                        },
+                                        "image": {
+                                            "type": "string",
+                                            "example": "04f383f9-c5da-49f6-b2ed-9773777c249a.jpeg"
+                                        },
+                                        "updatedAt": {
+                                            "type": "string",
+                                            "example": "2023-11-30T14:21:31.189Z"
+                                        },
+                                        "createdAt": {
+                                            "type": "string",
+                                            "example": "2023-11-30T14:21:31.189Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/post/update": {
+            "patch": {
+                "tags": [
+                    "Обновление поста"
+                ],
+                "description": "Обновление данных поста на странице пользователя. Возвращает объект обновленного поста",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "example": 22
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Обновленный пост"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": ["id"]
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 24
+                                        },
+                                        "desc": {
+                                            "type": "string",
+                                            "example": "Новый пост"
+                                        },
+                                        "image": {
+                                            "type": "string",
+                                            "example": "04f383f9-c5da-49f6-b2ed-9773777c249a.jpeg"
+                                        },
+                                        "counterComments": {
+                                            "type": "string",
+                                            "example": "1"
+                                        },
+                                        "createdAt": {
+                                            "type": "string",
+                                            "example": "2023-11-30T14:21:31.189Z"
+                                        },
+                                        "updatedAt": {
+                                            "type": "string",
+                                            "example": "2023-11-30T14:21:31.189Z"
+                                        },
+                                        "userId": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 22
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/post/delete": {
+            "delete": {
+                "tags": [
+                    "Удаление поста"
+                ],
+                "description": "Удаление поста возвращает id поста",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "id": 22
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 22
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/post/all": {
+            "get": {
+                "tags": [
+                    "Список постов пользователя"
+                ],
+                "description": "Список всех постов пользователя",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 22
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 21
+                                            },
+                                            "desc": {
+                                                "type": "string",
+                                                "example": "Встретились сегодня с одногруппниками"
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "04f383f9-c5da-49f6-b2ed-9773777c249a.jpeg"
+                                            },
+                                            "date": {
+                                                "type": "string",
+                                                "example": "2024-06-28T15:09:18.076Z"
+                                            },
+                                            "userId": {
+                                                "type": "integer",
+                                                "example": 22
+                                            },
+                                            "counterComments": {
+                                                "type": "string",
+                                                "example": "1"
+                                            },
+                                            "user": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "username": {
+                                                        "type": "string",
+                                                        "example": "Jane Olsen"
+                                                    },
+                                                    "refUser": {
+                                                        "type": "string",
+                                                        "example": "JaneOlsen22"
+                                                    },
+                                                    "profilePic": {
+                                                        "type": "string",
+                                                        "example": "0c395dac-6746-4874-8e7f-2e52f89a4cdd.jpeg"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/post/likes": {
+            "get": {
+                "tags": [
+                    "Список лайков к посту пользователя"
+                ],
+                "description": "Список лайков к посту пользователя",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "postId",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 20
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 79
+                                            },
+                                            "userId": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 16
+                                            },
+                                            "postId": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 20
+                                            },
+                                            "username": {
+                                                "type": "string",
+                                                "example": "Tom Riddle"
+                                            },
+                                            "refUser": {
+                                                "type": "string",
+                                                "example": "TomRiddle16"
+                                            },
+                                            "profilePic": {
+                                                "type": "string",
+                                                "example": "c7cb1fbf-3a3a-4ce8-9acc-793b99d404b9.jpeg"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/post/add-like": {
+            "patch": {
+                "tags": [
+                    "Поставить лайк посту"
+                ],
+                "description": "Поставить лайк посту пользователя. Возвращает объект лайка",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "userId": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 22
+                                    },
+                                    "postId": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 20
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 92
+                                        },
+                                        "userId": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 22
+                                        },
+                                        "postId": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 20
+                                        },
+                                        "updatedAt": {
+                                            "type": "string",
+                                            "example": "2023-11-30T14:21:31.189Z"
+                                        },
+                                        "createdAt": {
+                                            "type": "string",
+                                            "example": "2023-11-30T14:21:31.189Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/post/remove-like": {
+            "delete": {
+                "tags": [
+                    "Убрать лайк к посту"
+                ],
+                "description": "Удалить лайк для поста пользователя. Возвращает объект с userId и postId",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "userId": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 22
+                                    },
+                                    "postId": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 20
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "userId": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 22
+                                        },
+                                        "postId": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 20
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/comment/create": {
+            "post": {
+                "tags": [
+                    "Создать комментарий под постом"
+                ],
+                "description": "Создать комментарий под постом",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "userId": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 22
+                                    },
+                                    "postId": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 20
+                                    },
+                                    "desc": {
+                                        "type": "string",
+                                        "example": "Новый комментарий"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 44
+                                        },
+                                        "desc": {
+                                            "type": "string",
+                                            "example": "Новый комментарий"
+                                        },
+                                        "userId": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 22
+                                        },
+                                        "postId": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 20
+                                        },
+                                        "updatedAt": {
+                                            "type": "string",
+                                            "example": "2023-11-30T14:21:31.189Z"
+                                        },
+                                        "createdAt": {
+                                            "type": "string",
+                                            "example": "2023-11-30T14:21:31.189Z"
+                                        },
+                                        "username": {
+                                            "type": "string",
+                                            "example": "Jane Olsen"
+                                        },
+                                        "refUser": {
+                                            "type": "string",
+                                            "example": "JaneOlsen22"
+                                        },
+                                        "profilePic": {
+                                            "type": "string",
+                                            "example": "f8bdd4c7-0e6b-4750-b139-d228216185ea.jpeg"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/comment/delete": {
+            "delete": {
+                "tags": [
+                    "Удалить комментарий к посту"
+                ],
+                "description": "Удалить комментарий к посту пользователя, возвращает id удалённого комментария",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "postId": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 20
+                                    },
+                                    "comId": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 45
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "integer",
+                                    "example": 45
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/comment/all": {
+            "get": {
+                "tags": [
+                    "Все комментарии к посту пользователя"
+                ],
+                "description": "Все комментарии к посту пользователя, возвращает массив объектов с комментариями",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "postId",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 20
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 38
+                                            },
+                                            "desc": {
+                                                "type": "string",
+                                                "example": "Комментарий"
+                                            },
+                                            "date": {
+                                                "type": "string",
+                                                "example": "2023-11-30T14:21:31.189Z"
+                                            },
+                                            "userId": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 24
+                                            },
+                                            "postId": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 20
+                                            },
+                                            "username": {
+                                                "type": "string",
+                                                "example": "Kate Stone"
+                                            },
+                                            "refUser": {
+                                                "type": "string",
+                                                "example": "KateStone24"
+                                            },
+                                            "profilePic": {
+                                                "type": "string",
+                                                "example": "0c395dac-6746-4874-8e7f-2e52f89a4cdd.jpeg"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/story/create": {
+            "post": {
+                "tags": [
+                    "Добавить новую историю"
+                ],
+                "description": "Добавление новой истории пользователя, возвращает объект истории",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "userId": {
+                                        "type": "integer",
+                                        "example": 22
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "userId",
+                                    "image"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 47
+                                        },
+                                        "image": {
+                                            "type": "string",
+                                            "example": "e96a7c8f-faa4-431e-8481-5b56c4a15bed.jpeg"
+                                        },
+                                        "userId": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 22
+                                        },
+                                        "updatedAt": {
+                                            "type": "string",
+                                            "example": "2024-07-01T09:38:08.789Z"
+                                        },
+                                        "createdAt": {
+                                            "type": "string",
+                                            "example": "2024-07-01T09:38:08.789Z"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Loading error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Ошибка при загрузке story"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/story/one": {
+            "get": {
+                "tags": [
+                    "История пользователя"
+                ],
+                "description": "Получить объект истории пользователя",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 22
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 47
+                                        },
+                                        "image": {
+                                            "type": "string",
+                                            "example": "e96a7c8f-faa4-431e-8481-5b56c4a15bed.jpeg"
+                                        },
+                                        "date": {
+                                            "type": "string",
+                                            "example": "2024-07-01T09:38:08.789Z"
+                                        },
+                                        "userId": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 22
+                                        },
+                                        "username": {
+                                            "type": "string",
+                                            "example": "Jane Olsen"
+                                        },
+                                        "refUser": {
+                                            "type": "string",
+                                            "example": "JaneOlsen22"
+                                        },
+                                        "profilePic": {
+                                            "type": "string",
+                                            "example": "f8bdd4c7-0e6b-4750-b139-d228216185ea.jpeg"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/story/all": {
+            "get": {
+                "tags": [
+                    "Истории всех пользователей"
+                ],
+                "description": "Возвращает массив объектов историй пользователей. Первой в массиве идёт история текущего пользователя, запросившего истории",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 22
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 47
+                                            },
+                                            "image": {
+                                                "type": "string",
+                                                "example": "e96a7c8f-faa4-431e-8481-5b56c4a15bed.jpeg"
+                                            },
+                                            "userId": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 22
+                                            },
+                                            "date": {
+                                                "type": "string",
+                                                "example": "2023-11-30T14:21:31.189Z"
+                                            },
+                                            "username": {
+                                                "type": "string",
+                                                "example": "Jane Olsen"
+                                            },
+                                            "refUser": {
+                                                "type": "string",
+                                                "example": "JaneOlsen22"
+                                            },
+                                            "profilePic": {
+                                                "type": "string",
+                                                "example": "f8bdd4c7-0e6b-4750-b139-d228216185ea.jpeg"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/messenger/members": {
+            "get": {
+                "tags": [
+                    "Поиск собеседника для диалога"
+                ],
+                "description": "Поиск пользователя по username для открытия/создания диалога с ним. Userid - Это id текущего пользователя",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 22
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "selector",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "John"
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 30
+                                            },
+                                            "username": {
+                                                "type": "string",
+                                                "example": "John Lithgow"
+                                            },
+                                            "refUser": {
+                                                "type": "string",
+                                                "example": "JohnLithgow30"
+                                            },
+                                            "profilePic": {
+                                                "type": "string",
+                                                "example": "42abfb76-9169-4b3d-8318-81c8b4b00153.jpeg"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "offline"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/messenger/conversation": {
+            "post": {
+                "tags": [
+                    "Открыть/создать диалог с пользователем"
+                ],
+                "description": "Для выбранного собеседника открыть существующий диалог или создать новый, если он не существует. \t\n Возвращает данные выбранного диалога и последнего сообщения в диалоге",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "curUserId": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 22
+                                    },
+                                    "memberId": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 16
+                                    }
+                                },
+                                "required": ["curUserId", "memberId"]
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "minimum": 1,
+                                            "example": 7
+                                        },
+                                        "participantId1": {
+                                            "type": "integer",
+                                            "example": 16
+                                        },
+                                        "participantId2": {
+                                            "type": "integer",
+                                            "example": 22
+                                        },
+                                        "lastMessageId": {
+                                            "type": "integer",
+                                            "example": 158
+                                        },
+                                        "lastMessageText": {
+                                            "type": "string",
+                                            "example": "Привет!"
+                                        },
+                                        "createdAt": {
+                                            "type": "string",
+                                            "example": "2024-07-01T09:38:08.789Z"
+                                        },
+                                        "updatedAt": {
+                                            "type": "string",
+                                            "example": "2024-07-01T09:38:08.789Z"
+                                        },
+                                        "memberId": {
+                                            "type": "integer",
+                                            "example": 16
+                                        },
+                                        "username": {
+                                            "type": "string",
+                                            "example": "Tom Riddle"
+                                        },
+                                        "profilePic": {
+                                            "type": "string",
+                                            "example": "c7cb1fbf-3a3a-4ce8-9acc-793b99d404b9.jpeg"
+                                        },
+                                        "refUser": {
+                                            "type": "string",
+                                            "example": "TomRiddle16"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "offline"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/messenger/conversations": {
+            "get": {
+                "tags": [
+                    "Диалоги пользователя"
+                ],
+                "description": "Получить данные по всем диалогам пользователя",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "userId",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 22
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 7
+                                            },
+                                            "participantId1": {
+                                                "type": "integer",
+                                                "example": 16
+                                            },
+                                            "participantId2": {
+                                                "type": "integer",
+                                                "example": 22
+                                            },
+                                            "lastMessageId": {
+                                                "type": "integer",
+                                                "example": 158
+                                            },
+                                            "lastMessageText": {
+                                                "type": "string",
+                                                "example": "Привет!"
+                                            },
+                                            "createdAt": {
+                                                "type": "string",
+                                                "example": "2024-07-01T09:38:08.789Z"
+                                            },
+                                            "updatedAt": {
+                                                "type": "string",
+                                                "example": "2024-07-01T09:38:08.789Z"
+                                            },
+                                            "memberId": {
+                                                "type": "integer",
+                                                "example": 16
+                                            },
+                                            "username": {
+                                                "type": "string",
+                                                "example": "Tom Riddle"
+                                            },
+                                            "profilePic": {
+                                                "type": "string",
+                                                "example": "c7cb1fbf-3a3a-4ce8-9acc-793b99d404b9.jpeg"
+                                            },
+                                            "refUser": {
+                                                "type": "string",
+                                                "example": "TomRiddle16"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "offline"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/messenger/messages": {
+            "get": {
+                "tags": [
+                    "Все сообщения диалога"
+                ],
+                "description": "Получить все сообщения диалога",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "conversationId",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "example": 7
+                        }
+                    }
+                ],
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "minimum": 1,
+                                                "example": 24
+                                            },
+                                            "username": {
+                                                "type": "string",
+                                                "example": "Tom Riddle"
+                                            },
+                                            "text": {
+                                                "type": "string",
+                                                "example": "Привет, Джейн!"
+                                            },
+                                            "file": {
+                                                "type": "string",
+                                                "example": "Привет, Джейн!"
+                                            },
+                                            "isRead": {
+                                                "type": "boolean",
+                                                "example": false
+                                            },
+                                            "createdAt": {
+                                                "type": "string",
+                                                "example": "2024-07-01T09:38:08.789Z"
+                                            },
+                                            "updatedAt": {
+                                                "type": "string",
+                                                "example": "2024-07-01T09:38:08.789Z"
+                                            },
+                                            "userId": {
+                                                "type": "integer",
+                                                "example": 16
+                                            },
+                                            "conversationId": {
+                                                "type": "integer",
+                                                "example": 7
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Error unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "example": {
+                                        "message": "Пользователь не авторизован"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -15,7 +15,7 @@ export const commentApi = createApi({
           query: (data) => ({
             url: `/comment/all`,
             params: {
-              id_post: data.postId
+              postId: data.postId
             }
           }),
           providesTags: (result) => result

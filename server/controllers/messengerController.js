@@ -1,6 +1,5 @@
 const messengerService = require('../service/messenger-service');
-const uuid = require('uuid');
-const path = require('path');
+
 
 
 class messengerController {
@@ -16,8 +15,8 @@ class messengerController {
 
     async getConversations(request, response, next) {
         try {
-            const {id} = request.query;
-            const conversations = await messengerService.getConversations(Number(id));
+            const {userId} = request.query;
+            const conversations = await messengerService.getConversations(Number(userId));
             return response.json(conversations);
         } catch(error) {
             next(error);
@@ -26,8 +25,8 @@ class messengerController {
 
     async findMembers(request, response, next) {
         try {
-            const {id, selector} = request.query;
-            const members = await messengerService.findMembers(Number(id), selector);
+            const {userId, selector} = request.query;
+            const members = await messengerService.findMembers(Number(userId), selector);
             return response.json(members);
         } catch (error) {
             next(error);
@@ -48,6 +47,16 @@ class messengerController {
         try {
             const {conversationId} = request.body;
             const messages = await messengerService.getMessages(Number(conversationId));
+            return response.json(messages);
+        } catch(error) {
+            next(error);
+        }
+    }
+
+    async getUnreadMessages(request, response, next) {
+        try {
+            const {userId} = request.query;
+            const messages = await messengerService.getUnreadMessages(Number(userId));
             return response.json(messages);
         } catch(error) {
             next(error);

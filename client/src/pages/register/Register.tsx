@@ -51,8 +51,7 @@ const Register: FC = () => {
     if (isMobile) {
       executeScroll();
     }
-  // eslint-disable-next-line
-  }, []);
+  }, [isMobile, executeScroll]);
 
   const [regData, setRegData] = useState<IRegValue>({
     name: '',

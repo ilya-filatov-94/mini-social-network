@@ -50,7 +50,12 @@
             }
         }
 
-        .btn:hover, .btn:active {
+        @media (hover: hover) {
+            .btn:hover {
+                background-color: #102db0c1;
+            }
+        }
+        .btn:active {
             background-color: #102db0c1;
         }
         
@@ -74,7 +79,13 @@
             }
         }
 
-        .mobileBtnSend:hover, .mobileBtnSend:active {
+        @media (hover: hover) {
+            .mobileBtnSend:hover {
+                background-color: #102db0c1;
+            }
+        }
+
+        .mobileBtnSend:active {
             background-color: #102db0c1;
         }
     }

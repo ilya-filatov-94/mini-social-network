@@ -15,23 +15,22 @@ export interface IPropsConversation {
   lastMessageText?: string;
   username: string;
   profilePic: string | undefined;
-  refUser: string;
   status?: string;
   addClass?: string;
   openConversation: (params: any) => any;
+  counterUnreadMsg?: number;
 }
 
 const Conversation: FC<IPropsConversation> = memo(({
-  id,
   lastMessageText,
   curUserId,
   memberId,
   username,
   profilePic,
-  refUser,
   status,
   addClass,
-  openConversation
+  openConversation,
+  counterUnreadMsg,
 }) => {
 
   const navigate = useNavigate();
@@ -71,24 +70,30 @@ const Conversation: FC<IPropsConversation> = memo(({
 
   return (
     <div 
+      className={`${styles.wrapperConversation} ${addClass ? addClass : ''}`} 
       onClick={clickConversation}
-      className={`${styles.userItem} ${addClass ? addClass : ''}`}
     >
-      <img
-        className={styles.avatar}
-        src={profilePic ? urlAPIimages + profilePic : noAvatar}
-        alt={`${username} avatar`}
-      />
-      <div className={styles.infoUser}>
-        <p className={styles.username}>{username}</p>
-        {status &&
-          <p className={styles.infoText}>{status}</p>
-        }
-        {lastMessageText &&
-          <p className={styles.previewMsg}>{previewTruncMsg(lastMessageText, 32)}</p>
-        }
+      <div className={styles.userItem}>
+        <img
+          className={styles.avatar}
+          src={profilePic ? urlAPIimages + profilePic : noAvatar}
+          alt={`${username} avatar`}
+        />
+        <div className={styles.infoUser}>
+          <p className={styles.username}>{username}</p>
+          {status &&
+            <p className={styles.infoText}>{status}</p>
+          }
+          {lastMessageText &&
+            <p className={styles.previewMsg}>{previewTruncMsg(lastMessageText, 32)}</p>
+          }
+        </div>
       </div>
-
+      {(!!counterUnreadMsg && counterUnreadMsg > 0) &&
+        <div className={styles.counterMsg}>
+          {counterUnreadMsg}
+        </div>
+      }
     </div>
   )
 });

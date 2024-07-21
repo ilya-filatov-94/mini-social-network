@@ -48,23 +48,23 @@ export const postApi = createApi({
         }),
         getLikes: builder.query<ILikes[], number>({
           query: (postId) => ({
-            url: `/post/getlikes`,
+            url: `/post/likes`,
             params: {
-              post_id: postId
+              postId: postId
             }
           }),
           keepUnusedDataFor: 60,
         }),
         addLike: builder.mutation<ILikes, ILikes>({
           query: (data) => ({
-            url: `/post/addlike`,
+            url: `/post/add-like`,
             method: 'PATCH',
             body: data
           }),
         }),
         removeLike: builder.mutation<ILikes, ILikes>({
           query: (data) => ({
-            url: `/post/removelike`,
+            url: `/post/remove-like`,
             method: 'DELETE',
             body: data
           }),

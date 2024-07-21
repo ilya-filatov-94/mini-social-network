@@ -153,8 +153,10 @@
             }
         }
 
-        .saveButton:hover {
-            background-color: rgb(153, 117, 188);
+        @media (hover: hover) {
+            .saveButton:hover {
+                background-color: rgb(153, 117, 188);
+            }
         }
         .saveButton:active {
             background-color: rgb(130, 88, 171);

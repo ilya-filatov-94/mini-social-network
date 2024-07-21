@@ -24,13 +24,18 @@
       letter-spacing: 0.1rem;
     }
 
-    &.dots:hover {
-      background-color: transparent;
-      cursor: default;
-    }
+    @media (hover: hover) {
+      &.dots:hover {
+        background-color: transparent;
+        cursor: default;
+      }
 
-    &:hover {
-      cursor: pointer;
+      @media (hover: hover) {
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
     }
 
     &.selected {
@@ -66,16 +71,20 @@
         border-top: 0.12em solid rgba(0, 0, 0, 0.43);
       }
 
-      &:hover {
-        cursor: default;
+      @media (hover: hover) {
+        &:hover {
+          cursor: default;
+        }
       }
     }
   }
 
   &.theme-dark {
     
-    .paginationItem:hover:not(.dots, .selected) {
-      background-color: rgba(149, 149, 149, 0.582);
+    @media (hover: hover) {
+      .paginationItem:hover:not(.dots, .selected) {
+        background-color: rgba(149, 149, 149, 0.582);
+      }
     }
 
     &.paginationItem {
@@ -103,8 +112,10 @@
 
   &.theme-light {
 
-    .paginationItem:hover:not(.dots, .selected) {
-      background-color: rgba(0, 0, 0, 0.105);
+    @media (hover: hover) {
+      .paginationItem:hover:not(.dots, .selected) {
+        background-color: rgba(0, 0, 0, 0.105);
+      }
     }
 
     &.paginationItem {

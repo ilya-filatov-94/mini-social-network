@@ -8,13 +8,11 @@ extends TUserInfo {
 }
 
 export interface IComments 
-extends TUserInfo {
+extends Required<TUserInfo> {
   id: number;
-  desc: string;
-  userId: number;
+  userId?: number;
   postId: number;
-  createdAt?: string;
-  updatedAt?: string;
+  desc: string;
   date: string;
 }
 

@@ -143,13 +143,13 @@ const Profile: FC = () => {
             <div className={styles.userActions}>
               {!currentUser
               ? <>
-                  <button className={styles.Btn}>Написать</button>
+                  <button className={styles.btn}>Написать</button>
                   <Button 
                     onClick={() => subscribe(isFollower)}
-                    addClass={isFollower ? `${styles.Btn} ${styles.dismissBtn}` : styles.Btn}
+                    addClass={isFollower ? `${styles.btn} ${styles.dismissBtn}` : styles.btn}
                   >{isFollower ? 'Отписаться' : 'Подписаться'}</Button>
                 </>
-                : <ButtonLink addClass={styles.Btn} to={`/profile/${id}/edit`}>
+                : <ButtonLink addClass={styles.btn} to={`/profile/${id}/edit`}>
                     Редактировать профиль
                   </ButtonLink>
               }

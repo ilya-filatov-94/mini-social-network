@@ -7,7 +7,6 @@ class CommentController {
         try {
             const {userId, postId, desc} = request.body;
             const comment = await CommentService.createNewComment(parseInt(userId), parseInt(postId), desc);
-            //Новая активность пользователя
             await createUserActivity(userId, desc, comment.dataValues.id);
             return response.json(comment);
         } catch (error) {
@@ -17,8 +16,8 @@ class CommentController {
 
     async getAllComments(request, response, next) {
         try {
-            const {id_post} = request.query;
-            const comments = await CommentService.getAll(parseInt(id_post));
+            const {postId} = request.query;
+            const comments = await CommentService.getAll(parseInt(postId));
             return response.json(comments);
         } catch (error) {
             next(error);

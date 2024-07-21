@@ -16,7 +16,7 @@ export const messengerApi = createApi({
           query: (userId) => ({
             url: `/messenger/conversations`,
             params: {
-              id: userId
+              userId: userId
             }
           }),
           keepUnusedDataFor: 60,
@@ -25,7 +25,7 @@ export const messengerApi = createApi({
           query: (data) => ({
             url: `/messenger/members`,
             params: {
-                id: data.id,
+                userId: data.id,
                 selector: data.selector
             }
           }),
@@ -62,6 +62,15 @@ export const messengerApi = createApi({
           }),
           invalidatesTags: ['Messages'],
         }),
+        getUnreadMsgsForConversations: builder.query<Record<string, number>, number>({
+          query: (userId) => ({
+            url: `/messenger/unread-messages`,
+            params: {
+              userId: userId
+            }
+          }),
+          keepUnusedDataFor: 60,
+        }),
     })
 });
 
@@ -71,4 +80,5 @@ export const {
   useOpenConversationMutation,
   useGetMessagesQuery,
   useSendMesageMutation,
+  useGetUnreadMsgsForConversationsQuery,
 } = messengerApi;

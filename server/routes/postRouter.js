@@ -7,9 +7,9 @@ router.post('/create', authMiddleware, postController.createPost);
 router.patch('/update', authMiddleware, postController.updatePost);
 router.delete('/delete', authMiddleware, postController.deletePost);
 router.get('/all', authMiddleware, postController.getAllPosts);
-router.get('/getlikes', authMiddleware, postController.getLikes);
-router.patch('/addlike', authMiddleware, postController.addLike);
-router.delete('/removelike', authMiddleware, postController.removeLike); 
+router.get('/likes', authMiddleware, postController.getLikes);
+router.patch('/add-like', authMiddleware, postController.addLike);
+router.delete('/remove-like', authMiddleware, postController.removeLike); 
 
 
 module.exports = router;

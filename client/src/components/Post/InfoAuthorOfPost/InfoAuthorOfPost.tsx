@@ -46,7 +46,7 @@ const InfoAuthorOfPost: FC<IPostsProps> = ({
             replace={true}>
             <span className={styles.username}>{post.user.username}</span>
           </Link>
-          <span className={styles.date}>{getRelativeTimeString(new Date(post.date!), 'ru')}</span>
+          <span className={styles.date}>{getRelativeTimeString(Date.parse(post.date!), 'ru')}</span>
         </div>
       </div>
       {currentUser && 

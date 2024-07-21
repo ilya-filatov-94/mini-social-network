@@ -6,9 +6,15 @@ import axios from 'axios';
 
 import {WebSocketState, typeConnect} from '../../types/websocket';
 import {ClientToServerListen, ServerToClientListen} from './types';
-import {changeInputMessage, initUser, IMessageList} from '../messagesSlice';
+import {
+    changeInputMessage, 
+    initUser, 
+    IMessageList, 
+    updateUnreadMsgsList, 
+    updateReadStatusFromServer
+} from '../messagesSlice';
 import {updateLastMessage} from '../conversationSlice';
-import {IAttachFile} from '../../types/messenger';
+import {IAttachFile, IReadMsgs} from '../../types/messenger';
 
 let socket: Socket<ServerToClientListen, ClientToServerListen>
 let initConnection = false;
@@ -20,8 +26,7 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
     const messagesState: IMessageList = state.reducerMessages;
     const userId = state.reducerAuth.currentUser.id;
     
-    //Если соединение не создано, создаём и инициализируем события
-    if (webSocketState.connect === typeConnect.Disconnected && !socket) {
+    if (webSocketState.connect === typeConnect.Disconnected && !socket) {   //Создание соединения и инициализация событий
         socket = io(API_SocketURL);
         socket.on('connect', () => {
             console.log("Вы успешно подключии сокет");
@@ -33,17 +38,21 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
         });
 
         socket.on('message', (message) => {
-            dispatch(updateLastMessage({text: message.text, file: message.file}));
-            console.log('Сообщение от пользователя', message);
+            const numberUnreadMsgs = getState()?.reducerMessages?.unreadMsgsList[message.conversationId] || 0;
+            dispatch(updateUnreadMsgsList({[message.conversationId]: numberUnreadMsgs+1}));
+            dispatch(updateLastMessage(message));
         });
 
-    } else if (webSocketState.connect === typeConnect.Connected && socket) {
-        //Если соединение создано, выполняем действия согласно заданным событиям  
+        socket.on('msgIsDelivery', (message) => {
+            dispatch(updateLastMessage(message));
+        });
+
+        socket.on('msgIsRead', (dataMsgs) => {
+            dispatch(updateReadStatusFromServer(dataMsgs));
+        });
+
+    } else if (webSocketState.connect === typeConnect.Connected && socket) { 
         if (action.type === 'messages/send') {
-            dispatch(updateLastMessage({
-                text: messagesState.inputMessage.text, 
-                file:messagesState.inputMessage.file
-            }));
             const fileData: IAttachFile = {};
             if (messagesState.inputMessage.file) {
                 const response = await axios({
@@ -57,6 +66,14 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
             socket.emit('message', messageObj);
             const clearTextMessage = {...messagesState.inputMessage, text: '', file: '', mimeTypeAttach: ''};
             dispatch(changeInputMessage(clearTextMessage));
+        }
+
+        if (action.type === 'messages/changeMsgsReadStatus') {
+            const dataReadMsgs: IReadMsgs = {
+                ...action.payload as IReadMsgs,
+                socketId: socket.id,
+            }
+            socket.emit('read', dataReadMsgs);
         }
 
         if (userId !== 0 && !initConnection) {
