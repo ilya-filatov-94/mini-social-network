@@ -80,7 +80,7 @@ const PopupMutualFriends: FC<IPopupProps> = memo(({
   return (
     <TemplatePopup
       isVisible={isVisible} 
-      setVisible={setVisible}
+      setVisible={() => setVisible(false)}
       headerPopup={renderHeader(dataPossibleFr.namePossibleFriend)}
       contentPopup={renderContent(mutualFriends)}
     />

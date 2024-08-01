@@ -15,6 +15,8 @@ import {
 } from '../messagesSlice';
 import {updateLastMessage} from '../conversationSlice';
 import {IAttachFile, IReadMsgs} from '../../types/messenger';
+import { INotification } from '../../types/notifications';
+import {addNotification} from '../notificationSlice';
 
 let socket: Socket<ServerToClientListen, ClientToServerListen>
 let initConnection = false;
@@ -51,6 +53,11 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
             dispatch(updateReadStatusFromServer(dataMsgs));
         });
 
+        socket.on('notification', (dataNotification) => {
+            console.log('Уведомление', dataNotification);
+            dispatch(addNotification(dataNotification));
+        });
+
     } else if (webSocketState.connect === typeConnect.Connected && socket) { 
         if (action.type === 'messages/send') {
             const fileData: IAttachFile = {};
@@ -61,6 +68,8 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
                     responseType: 'blob'
                 });
                 fileData.body = response.data || '';
+                console.log(response.data);
+                
             }
             const messageObj =  {...messagesState.inputMessage, socketId: socket.id, file: fileData.body};
             socket.emit('message', messageObj);
@@ -74,6 +83,16 @@ export const webSocketMiddleware: Middleware = ({ dispatch, getState }) => (next
                 socketId: socket.id,
             }
             socket.emit('read', dataReadMsgs);
+        }
+
+        if (action.type === 'notifications/emitNotification') {
+            const dataNotification: INotification = {
+                ...action.payload as INotification,
+                socketId: socket.id,
+            }
+            console.log('Отправляем', dataNotification);
+            
+            socket.emit('sendNotification', dataNotification);
         }
 
         if (userId !== 0 && !initConnection) {

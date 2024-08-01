@@ -24,6 +24,16 @@ class CommentController {
         }
     }
 
+    async getOneComment(request, response, next) {
+        try {
+            const {comId} = request.query;
+            const comment = await CommentService.getOne(parseInt(comId));
+            return response.json(comment);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async deleteComment(request, response, next) {
         try {
             const {postId, comId} = request.body;

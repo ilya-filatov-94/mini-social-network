@@ -1,7 +1,8 @@
 import {FC, useState} from 'react';
 import styles from './Post.module.scss';
 
-import {useAppSelector} from '../../hooks/useTypedRedux';
+import {useAppSelector, useAppDispatch} from '../../hooks/useTypedRedux';
+import { emitNotification } from '../../store/notificationSlice';
 import { shallowEqual } from 'react-redux';
 import InfoAuthorOfPost from './InfoAuthorOfPost/InfoAuthorOfPost';
 import ContentPost from './ContentPost/ContentPost';
@@ -34,9 +35,16 @@ const Post: FC<IPostsProps> = ({
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const [isCommentOpen, setCommentOpen] = useState<boolean>(false);
   const [numberOfComments, updateCommentCounter] = useState<number>(post.counterComments || 0);
+  const dispatch = useAppDispatch();
 
   async function deletePostFn() {
     if (post.id) {
+      const dataNotification = {
+        userId: userId,
+        type: 'deletedPost',
+        ref: '/post/' + post.id
+      };
+      dispatch(emitNotification(dataNotification));   
       await deletePost(post.id).unwrap();
     }
   }

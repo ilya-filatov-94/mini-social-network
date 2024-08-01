@@ -1,7 +1,6 @@
 const messengerService = require('../service/messenger-service');
 
 
-
 class messengerController {
     async openConversation(request, response, next) {
         try {
@@ -62,6 +61,7 @@ class messengerController {
             next(error);
         }
     }
+
 }
 
 module.exports = new messengerController();

@@ -2,7 +2,7 @@ const socketsService = require('../service/socketsService');
 const {User, Conversation, Message} = require('../models/models');
 const fs = require('fs');
 const uuid = require('uuid');
-
+const notificationService = require('../service/notification-service');
 
 module.exports = function handlingSocketsEvents(socketIO) {
 
@@ -78,7 +78,10 @@ module.exports = function handlingSocketsEvents(socketIO) {
                     id: lastMessage.id,
                     conversationId: lastMessage.conversationId,
                     userId: lastMessage.userId,
+                    text: lastMessage.text,
+                    file: lastMessage.file || '',
                     isDelivery: lastMessage.isDelivery,
+                    createdAt: String(lastMessage.createdAt),
                     isRead: false
                 });
             }
@@ -104,6 +107,56 @@ module.exports = function handlingSocketsEvents(socketIO) {
                 socketIO.to(socketIdSender).emit("msgIsRead", {
                     ...dataReadMessages
                 });
+            }
+        });
+
+        socket.on("sendNotification", async (dataNotification) => {
+            console.log(dataNotification);
+
+            if (!dataNotification.userId || !dataNotification.socketId) return;
+            const socketIdSender = socketsService.getUser(dataNotification.userId); //По userId получателя достаём его socketId
+            const userIdSender = socketsService.getUser(dataNotification.socketId);  //по socketId отправителя достаём его userId
+            
+            console.log(dataNotification.socketId, 'От кого', userIdSender);
+            console.log(socketIdSender, 'Для кого', dataNotification.userId);
+
+            if (!userIdSender) return;
+
+            let notification;
+            const deletedNotification = socketsService.deleteNotifications[dataNotification.type];
+            if (deletedNotification) {
+                try {
+                    await notificationService.deleteNotification(deletedNotification, dataNotification.ref);
+                } catch (error) {
+                    console.log(error);
+                }
+                notification = {};
+            }
+            if (dataNotification.type === 'deletedPost') {
+                try {
+                    await notificationService.deleteAllNotificationOfPost(dataNotification.ref);
+                } catch (error) {
+                    console.log(error);
+                }
+                notification = {};
+            }
+            if (!deletedNotification) {
+                try {
+                    notification = await notificationService.createNotification(
+                        Number(dataNotification.userId), 
+                        Number(userIdSender), 
+                        dataNotification.ref, 
+                        dataNotification.type
+                    );
+                } catch (error) {
+                    console.log(error);
+                    notification = {};
+                }
+            }
+
+            const permissionToSend = socketIdSender && Object.keys(notification)?.length && dataNotification.type !== "deleteLike";
+            if (permissionToSend) {
+                socketIO.to(socketIdSender).emit("notification", notification);
             }
         });
 

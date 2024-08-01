@@ -37,7 +37,7 @@ const MenuElement: FC<IMenuElement> = ({
         />
         <span className={styles.styleText}>{textElem}</span>
         {(menuRef === '/conversations' && !!(summUnreadMessages) && summUnreadMessages > 0) && 
-          <div className={styles.counterMsg}>{summUnreadMessages}</div>
+          <div className={styles.counterMsg}>{summUnreadMessages > 99 ? '99+' : summUnreadMessages}</div>
         }
       </div>
     </Link>

@@ -1,0 +1,47 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+
+    .label {
+        width: 0.875rem;
+        height: 0.875rem;
+        background-color: red;
+        border-radius: 50%;
+        padding: 5px;
+        position: absolute;
+        top: -3px;
+        right: -3px;
+    }
+}
+
+.wrapperPopup {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    max-height: 300px;
+    min-width: 250px;
+    gap: 10px;
+    overflow: auto;
+
+    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+        &:not(:last-child) {
+            margin-bottom: 10px;
+        }
+    }
+}
+
+.wrapperList hr {
+    display: none;
+}
+
+.wrapperList:not(:last-child) hr {
+    display: inline-block;
+    border: none;
+    height: 0.5px;
+    background-color: lightgrey;
+    width: 100%;
+}

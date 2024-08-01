@@ -72,6 +72,7 @@ const Users: FC = () => {
             key={user.id}
             myId={curUser.id}
             userId={user.id}
+            refCurUser={curUser.refUser}
             username={user.username}
             avatar={user.profilePic}
             refUser={user.refUser}

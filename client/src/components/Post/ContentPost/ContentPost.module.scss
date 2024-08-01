@@ -26,7 +26,7 @@
     gap: 20px;
 
     @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-        & > *:not(:last-child) {
+        &>*:not(:last-child) {
             margin-right: 20px;
         }
     }
@@ -38,18 +38,19 @@
     .item {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 7px;
         cursor: pointer;
         font-size: 0.875rem;
 
         @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-            & > *:not(:last-child) {
-                margin-right: 10px;
+            &>*:not(:last-child) {
+                margin-right: 7px;
             }
         }
 
         .mobileInfo {
             display: none;
+
             @include mobile {
                 display: block;
             }
@@ -57,6 +58,7 @@
 
         .commInfo {
             display: block;
+
             @include mobile {
                 display: none;
             }
@@ -64,6 +66,7 @@
 
         .shareInfo {
             display: block;
+
             @include mobile {
                 display: none;
             }
@@ -78,8 +81,39 @@
     gap: 10px;
 
     @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-        & > *:not(:last-child) {
+        &>*:not(:last-child) {
             margin-right: 10px;
+        }
+    }
+}
+
+.wrapperPopup {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    max-height: 300px;
+    min-width: 250px;
+    gap: 10px;
+    overflow: auto;
+
+    &>p {
+        width: 100%;
+        padding: 7px;
+        cursor: pointer;
+    }
+
+    &>p:hover {
+        background-color: rgba(172, 213, 248, 0.4);
+    }
+
+    &.theme-dark>p:hover {
+        background-color: #102db0c1;
+    }
+
+    @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+        &:not(:last-child) {
+            margin-bottom: 10px;
         }
     }
 }

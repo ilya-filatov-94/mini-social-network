@@ -1,7 +1,8 @@
 import {FC, useState, useEffect, useCallback} from 'react';
 import styles from './Likes.module.scss';
-import {useAppSelector} from '../../../hooks/useTypedRedux';
+import {useAppSelector, useAppDispatch} from '../../../hooks/useTypedRedux';
 import { shallowEqual } from 'react-redux';
+import { emitNotification } from '../../../store/notificationSlice'
 import {FavoriteOutlined, FavoriteBorderOutlined} from "@mui/icons-material";
 import noAvatar from '../../../assets/images/no-avatar.jpg';
 import {ILikes} from '../../../types/posts';
@@ -19,10 +20,11 @@ import TemplatePopup from '../../TemplatePopup/TemplatePopup';
 
 interface ILikesProps {
   postId: number;
+  userId: number;
   curTheme: string;
 }
 
-const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
+const Likes: FC<ILikesProps> = ({postId, userId, curTheme}) => {
   const {
     data: likes, 
     error: errorLoad, 
@@ -35,6 +37,7 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
   const [isVisiblePopup, setVisiblePopup] = useState<boolean>(false);
 
   const counterLikes = currLikes.length;
+  const dispatch = useAppDispatch();
   const currUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const hasLike = currLikes?.filter(item => item.username === currUser.username).length;
   
@@ -57,11 +60,24 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
     }
     if (!hasLike) {
       changeLikes([curUserLike, ...currLikes]);
+      const dataNotification = {
+        userId: userId,
+        ref: '/post/' + postId,
+        type: 'addedLike',
+        isRead: false,
+      };
+      dispatch(emitNotification(dataNotification));
       await addLike(curUserLike).unwrap();
     }
     if (hasLike) {
       const newArrlikes = currLikes.filter(item => item.username !== currUser.username);
       changeLikes(newArrlikes);
+      const dataNotification = {
+        userId: userId,
+        ref: '/post/' + postId,
+        type: 'deletedLike'
+      };
+      dispatch(emitNotification(dataNotification));
       await removeLike(curUserLike).unwrap();
     }
   }
@@ -154,7 +170,7 @@ const Likes: FC<ILikesProps> = ({postId, curTheme}) => {
       </div>
       <TemplatePopup 
           isVisible={isVisiblePopup} 
-          setVisible={setVisiblePopup}
+          setVisible={() => setVisiblePopup(false)}
           headerPopup={`Понравилось ${counterLikes} людям`}
           contentPopup={renderContentPopup(currLikes)}
       />

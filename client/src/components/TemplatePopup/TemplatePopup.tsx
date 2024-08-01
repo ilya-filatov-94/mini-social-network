@@ -8,7 +8,7 @@ import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 interface IPopupProps {
   isVisible: boolean; 
-  setVisible: (state: boolean) => void;
+  setVisible: () => void;
   headerPopup: ReactNode;
   contentPopup: ReactNode;
 }
@@ -38,7 +38,7 @@ const TemplatePopup: FC<IPopupProps> = ({
            <div className={styles.headerPopup}>
                 {headerPopup}
                 <CloseOutlinedIcon 
-                    onClick={() => setVisible(false)}
+                    onClick={setVisible}
                     className={styles.closeBtn} 
                 />
             </div>

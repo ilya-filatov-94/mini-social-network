@@ -30,5 +30,7 @@ router.get('/activities', authMiddleware, userController.getActivitiesUsers);
 router.post('/activities', authMiddleware, userController.createActivityUser);
 router.get('/followers', authMiddleware, userController.getFollowers);
 router.get('/followers-page', authMiddleware, userController.getFollowersSelected);
+router.get('/get-notifications', authMiddleware, userController.getAllNotifications);
+router.patch('/update-notifications', authMiddleware, userController.updateNotifications);
 
 module.exports = router;

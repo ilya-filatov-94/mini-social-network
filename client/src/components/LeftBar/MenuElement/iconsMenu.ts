@@ -9,8 +9,8 @@ import Gallery from '../../../assets/images/Gallery.png';
 import Videos from '../../../assets/images/Videos.png';
 import Messages from '../../../assets/images/Messages.png';
 import Courses from '../../../assets/images/Courses.png';
-// import Tutorials from '../../../assets/images/Tutorials.png';
-// import Fund from '../../../assets/images/Fund.png';
+import Tutorials from '../../../assets/images/Tutorials.png';
+import Fund from '../../../assets/images/Fund.png';
 import {IMenu} from '../../../types/menu';
 
 
@@ -91,17 +91,17 @@ export const otherMenuIcons: IMenu[] = [
         image: Courses,
         menuRef: '/courses'
     },
-    // {
-    //     id: 12,
-    //     name: 'Обучение',
-    //     image: Tutorials,
-    //     menuRef: '/tutorials'
-    // },
-    // {
-    //     id: 13,
-    //     name: 'Пожертвования',
-    //     image: Fund,
-    //     menuRef: '/fund'
-    // },
+    {
+        id: 12,
+        name: 'Обучение',
+        image: Tutorials,
+        menuRef: '/tutorials'
+    },
+    {
+        id: 13,
+        name: 'Пожертвования',
+        image: Fund,
+        menuRef: '/fund'
+    },
 ];
 

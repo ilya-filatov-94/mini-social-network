@@ -1,0 +1,19 @@
+@import '../../styles/responsive.scss';
+@import '../../components/Layout/sizeCoontainer.scss';
+
+.container {
+    padding: 10px 30px;
+    font-size: 0.875rem;
+    overflow-y: hidden;
+    height: calc(100vh - $topBar);
+
+    @include mobile {
+        padding: 10px;
+    }
+
+    .wrapper {
+        height: 100%;
+        overflow: auto;
+        padding-right: 10px;
+    }
+}

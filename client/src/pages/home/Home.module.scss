@@ -1,14 +1,21 @@
 @import '../../styles/responsive.scss';
+@import '../../components/Layout/sizeCoontainer.scss';
 
 .home {
-    padding: 20px 30px;
+    overflow: hidden;
+    height: calc(100vh - $topBar);
 
-    @include mobile {
-        padding: 10px;
-    }
-    
-    @include tablet {
-        padding: 20px;
+    .wrapper {
+        height: 100%;
+        overflow-y: auto;
+        padding: 20px 30px;
+
+        @include mobile {
+            padding: 10px;
+        }
+
+        @include tablet {
+            padding: 20px;
+        }
     }
 }
-

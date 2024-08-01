@@ -9,8 +9,10 @@ const Home: FC = () => {
 
   return (
     <div className={styles.home}>
-      <Stories />
-      <UserActivity />
+      <div className={styles.wrapper}>
+        <Stories />
+        <UserActivity />
+      </div>
     </div>
   )
 }

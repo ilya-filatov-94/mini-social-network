@@ -1,15 +1,19 @@
-import {FC, useState} from 'react';
+import {FC, useState, useCallback} from 'react';
 import styles from './ContentPost.module.scss';
 import {urlAPIimages, urlClient} from '../../../env_variables'; 
+import { shallowEqual } from 'react-redux';
+import {useAppSelector, useAppDispatch} from '../../../hooks/useTypedRedux';
+import {emitNotification} from '../../../store/notificationSlice';
+import axios from 'axios';
 import {IPostData} from '../../../types/posts';
 import Likes from '../Likes/Likes';
-import { useLocation } from "react-router-dom";
 import {
   TextsmsOutlined as TextsmsOutlinedIcon,
   ShareOutlined as ShareOutlinedIcon
 } from "@mui/icons-material";
 import ErrorOutlinedIcon from '@mui/icons-material/ErrorOutlined';
 import TemplatePopup from '../../TemplatePopup/TemplatePopup';
+import {useAddPostMutation} from '../../../services/PostService';
 
 interface IContentPostProps {
   post: IPostData;
@@ -27,8 +31,11 @@ const ContentPost: FC<IContentPostProps> = ({
   setCommentOpen
 }) => {
 
-  const location = useLocation();
+  const currUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
+  const dispatch = useAppDispatch();
   const [isErrorShared, setErrorShared] = useState<boolean>(false);
+  const [isVisiblePopupShared, setVisiblePopupShared] = useState<boolean>(false);
+  const [addPost, {error: isErrorSharedPost}] = useAddPostMutation();
   const rootStyles = [styles.content];
   if (post.desc==='') {
     rootStyles.push(styles.hideTopMargin);
@@ -53,13 +60,61 @@ const ContentPost: FC<IContentPostProps> = ({
     }
   }
 
-  async function getShared() {
+  const renderPopupShared = useCallback(() => {
+    return (
+        <div className={`${styles.wrapperPopup} ${curTheme ==='darkMode' ? styles['theme-dark'] : ''}}`}>
+          <p onClick={sharedPostOnPage}>
+            Поделиться на своей странице
+          </p>
+          <p onClick={getSharedRefOnPost}>
+            Отправить ссылку
+          </p>
+        </div>
+      )
+  }, []);
+
+  async function sharedPostOnPage() {
+    const formData = new FormData();
+    formData.append('id', `${currUser.id}`);
+    if (post.desc) {
+      formData.append('desc', `Пост со страницы пользователя ${post.user.username}: ` + post.desc);
+    }
+    if (post.image) {
+      const response = await axios({
+        method: 'get',
+        url: urlAPIimages + post.image,
+        responseType: 'blob'
+      });
+      formData.append('image', response.data);
+    }
+    if (!post.desc && !post.image) return;
+    await addPost(formData).unwrap().then(() => {
+      const dataNotification = {
+        userId: post.user.id!,
+        ref: '/post/' + post.id,
+        type: 'sharedPost'
+      };
+      dispatch(emitNotification(dataNotification));
+      setVisiblePopupShared(false);
+    }).catch((error: unknown) => {
+      console.error(error);
+    });
+  }
+
+  async function getSharedRefOnPost() {
     const shareObj = {
       title: document.title,
-      url: urlClient + location.pathname,
+      url: urlClient + '/post/' + post.id,
     }
     try {
       await navigator.share(shareObj);
+      const dataNotification = {
+        userId: post.user.id!,
+        ref: '/post/' + post.id,
+        type: 'sharedPost'
+      };
+      dispatch(emitNotification(dataNotification));
+      setVisiblePopupShared(false);
     } catch(err) {
       setErrorShared(true);
     }
@@ -78,7 +133,7 @@ const ContentPost: FC<IContentPostProps> = ({
         )}
       </div>
       <div className={styles.info}>
-        <Likes postId={post.id!} curTheme={curTheme}/>
+        <Likes postId={post.id!} userId={post.user.id!} curTheme={curTheme}/>
         <div
           className={styles.item}
           onClick={() => setCommentOpen(!isCommentOpen)}
@@ -89,20 +144,26 @@ const ContentPost: FC<IContentPostProps> = ({
             {declensionOfComment(numberOfComments)}
           </span>
         </div>
-        <div className={styles.item} onClick={getShared}>
+        <div className={styles.item} onClick={() => setVisiblePopupShared(true)}>
           <ShareOutlinedIcon />
           <span className={styles.shareInfo}>Поделиться</span>
         </div>
       </div>
       <TemplatePopup 
         isVisible={isErrorShared} 
-        setVisible={setErrorShared}
+        setVisible={() => setErrorShared(false)}
         headerPopup={<p>Ошибка!</p>}
         contentPopup={
           <div className={styles.errorShared}>
             <ErrorOutlinedIcon style={{color: 'red'}}/><p>Не удалось поделиться</p>
           </div>
         }
+      />
+      <TemplatePopup 
+        isVisible={isVisiblePopupShared} 
+        setVisible={() => setVisiblePopupShared(false)}
+        headerPopup='Поделиться постом'
+        contentPopup={renderPopupShared()}
       />
     </>
   );

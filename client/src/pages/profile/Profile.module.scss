@@ -1,7 +1,15 @@
 @import '../../styles/theme.scss';
 @import '../../styles/responsive.scss';
+@import '../../components/Layout/sizeCoontainer.scss';
 
 .profile {
+  overflow-y: hidden;
+  height: calc(100vh - $topBar);
+
+  .wrapper {
+    overflow-y: auto;
+    height: 100%;
+  }
 
   .imagesHeader {
     width: 100%;
@@ -12,6 +20,15 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      padding: 0 15px;
+
+      @include mobile {
+        padding: 0;
+      }
+
+      @include tablet {
+        padding: 0;
+      }
     }
 
     .bgNonCover {
@@ -66,6 +83,7 @@
         flex-direction: column;
         height: 30vh;
         margin-top: 10px;
+        padding: 50px 20px 20px 20px;
       }
 
       .mainInfo {

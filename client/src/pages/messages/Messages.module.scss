@@ -1,11 +1,12 @@
 @import '../../styles/responsive.scss';
 @import '../../styles/theme.scss';
+@import '../../components/Layout/sizeCoontainer.scss';
 
 .container {
     padding: 10px 20px;
     font-size: 0.875rem;
     overflow-y: hidden;
-    height: 100vh;
+    height: calc(100vh - $topBar);
 
     @include tablet {
         padding: 10px 10px;
@@ -44,7 +45,7 @@
                 font-size: 0.875rem;
                 font-weight: 400;
                 cursor: pointer;
-        
+
                 p:last-child {
                     margin-left: 10px;
                 }
@@ -57,7 +58,7 @@
                 align-items: center;
 
                 .wrapperHeader {
-                    display: flex;                
+                    display: flex;
                     flex-direction: row;
                     justify-content: center;
                     align-items: center;
@@ -123,7 +124,7 @@
             border-top-left-radius: 15px;
             background-color: rgba(0, 195, 255, 0.345);
         }
-        
+
         .listMessages .recipient {
             width: 80%;
             align-self: flex-start;
@@ -143,15 +144,15 @@
             gap: 10px;
             border-bottom-right-radius: 20px;
             border-bottom-left-radius: 20px;
-            
+
             @include mobile {
                 gap: 5px;
             }
 
             @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-              &:not(:last-child) {
-                margin-right: 5px;
-              }
+                &:not(:last-child) {
+                    margin-right: 5px;
+                }
             }
 
             .input {
@@ -202,10 +203,11 @@
                         background-color: #102db0c1;
                     }
                 }
+
                 .btn:active {
                     background-color: #102db0c1;
                 }
-        
+
                 .mobileBtnSend {
                     display: none;
 
@@ -250,7 +252,7 @@
 
         .bottomBar {
             border-top: 2px solid themed($curTheme, "bgSoft");
-            
+
             .input {
                 color: themed($curTheme, "textColor");
                 border: 3px solid themed($curTheme, "bgSoft");

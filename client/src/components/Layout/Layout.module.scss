@@ -3,20 +3,36 @@
 
 .main {
     display: flex;
-    height: 100vh;
 
     &.theme-dark {
         $curTheme: "dark";
         background-color: themed($curTheme, "bgSoft");
         color: themed($curTheme, "textColor");
+
+        scrollbar-width: thin;
+        scrollbar-color: grey black;
+
+        &::-webkit-scrollbar-track {
+            background: white;
+            /* цвет зоны отслеживания */
+        }
     }
+
     &.theme-light {
         $curTheme: "light";
         background-color: themed($curTheme, "bgSoft");
         color: themed($curTheme, "textColor");
+
+        scrollbar-width: thin;
+        scrollbar-color: grey white;
+
+        &::-webkit-scrollbar-track {
+            background: white;
+            /* цвет зоны отслеживания */
+        }
     }
 }
 
 .wrpapperOutlet {
-    flex: 6;
+    flex: 7;
 }

@@ -50,12 +50,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 7px;
 
     @include mobile {
         @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-            & > *:not(:last-child) {
-                margin-right: 10px;
+            &>*:not(:last-child) {
+                margin-right: 7px;
             }
         }
     }
@@ -67,6 +67,7 @@
 
 .wrapper.theme-dark {
     $curTheme: "dark";
+
     .wrapperIcon .users::before {
         border-right: 1px solid themed($curTheme, "border");
         border-bottom: 1px solid themed($curTheme, "border");
@@ -81,6 +82,7 @@
 
 .wrapper.theme-light {
     $curTheme: "light";
+
     .wrapperIcon .users::before {
         border-right: 1px solid themed($curTheme, "border");
         border-bottom: 1px solid themed($curTheme, "border");
@@ -102,6 +104,7 @@
 
 .wrapper.theme-light {
     $curTheme: "light";
+
     .wrapperIcon .users .avatars .img {
         border: 1px solid themed($curTheme, "textColorSoft");
     }
@@ -109,6 +112,7 @@
 
 .wrapper.theme-dark {
     $curTheme: "light";
+
     .wrapperIcon .users .avatars .img {
         border: 1px solid themed($curTheme, "textColorSoft");
     }
@@ -123,7 +127,7 @@
 
     @include mobile {
         @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-            & > *:not(:last-child) {
+            &>*:not(:last-child) {
                 margin-right: 7px;
             }
         }
@@ -144,6 +148,7 @@
 
 .mobileInfo {
     display: none;
+
     @include mobile {
         display: inline;
         font-size: 0.875rem;
@@ -186,7 +191,7 @@
             justify-content: center;
             align-items: flex-start;
         }
-            
+
         .link {
             margin: 0;
             padding: 0;
@@ -202,7 +207,7 @@
             font-size: 0.875rem;
             margin-bottom: 5px;
         }
-            
+
         .textOfCard {
             font-weight: 400;
             font-size: 0.875rem;

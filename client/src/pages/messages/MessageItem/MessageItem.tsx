@@ -58,27 +58,6 @@ const MessageItem: FC<IMessageItemProps> = memo(({
     }
   }, [inView, isLoadingMessages, changesMessageStatus, curUserId, id, isRead, userId]);
 
-  const renderStatusMsg = useCallback(() => {
-    if (userId === curUserId && isDelivery && !isRead) {
-      return (
-        <div className={styles.wrapperMsgStatus}>
-          <DoneOutlinedIcon className={styles.msgStatusIcon} />
-        </div>
-      )
-    }
-    if (userId === curUserId && isDelivery && isRead) {
-      return (
-        <div className={styles.wrapperMsgStatus}>
-          <DoneAllOutlinedIcon className={styles.msgStatusIcon} />
-        </div>
-      )
-    }
-  }, [isRead, curUserId, isDelivery, userId]);
-
-  useEffect(() => {
-    renderStatusMsg();
-  }, [renderStatusMsg])
-
   return (
     <div 
       className={`${styles.messageItem} ${addClass}`}
@@ -101,7 +80,16 @@ const MessageItem: FC<IMessageItemProps> = memo(({
         }
         <p className={styles.text}>{textMsg}</p>
       </div>
-      {renderStatusMsg()}
+      {(userId === curUserId && isDelivery && !isRead) && (
+        <div className={styles.wrapperMsgStatus}>
+          <DoneOutlinedIcon className={styles.msgStatusIcon} />
+        </div>
+      )}
+      {(userId === curUserId && isDelivery && isRead) && (
+        <div className={styles.wrapperMsgStatus}>
+          <DoneAllOutlinedIcon className={styles.msgStatusIcon} />
+        </div>
+      )}
     </div>
   )
 })

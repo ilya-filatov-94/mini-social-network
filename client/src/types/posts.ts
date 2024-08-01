@@ -11,7 +11,6 @@ export interface IPostData {
 
 export interface ILikes 
 extends TUserInfo {
-  id?: number;
   userId?: number;
   postId: number;
 }

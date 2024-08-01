@@ -11,7 +11,7 @@
     height: $heightNav;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1000;
 
     .leftSection {
         display: flex;
@@ -19,51 +19,59 @@
         gap: 30px;
 
         @include mobile {
+            gap: 15px;
+
             @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                & > *:not(:last-child) {
-                    margin-right: 27px;
+                &>*:not(:last-child) {
+                    margin-right: 15px;
                 }
             }
         }
+
         @include tablet {
             @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                & > *:not(:last-child) {
+                &>*:not(:last-child) {
                     margin-right: 30px;
                 }
             }
         }
     }
+
     &.homeLink {
         text-decoration: none;
         color: #000;
     }
 
     .rigthSection {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-
-        @include mobile {
-            display: none;
-        }
-
-        @include tablet {
-            .tabletNavbar {
-                display: none;
-            }
-        }
-
-        .user {
+        .userMenu {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 500;
+            gap: 20px;
 
-            img {
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                object-fit: cover;
+            @include mobile {
+                gap: 0;
+            }
+
+            @include mobile {
+                display: none;
+            }
+
+            @include tablet {
+                display: none;
+            }
+
+            .user {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-weight: 500;
+
+                img {
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    object-fit: cover;
+                }
             }
         }
     }
@@ -74,6 +82,7 @@
         color: themed($curTheme, "textColor");
         border-bottom: 1px solid themed($curTheme, "border");
     }
+
     &.theme-light {
         $curTheme: "light";
         background-color: themed($curTheme, "background");

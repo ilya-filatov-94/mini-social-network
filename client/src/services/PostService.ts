@@ -22,6 +22,15 @@ export const postApi = createApi({
           : ['Posts'],
           keepUnusedDataFor: 60,
         }),
+        getOnePost: builder.query<IPostData, number>({
+          query: (postId) => ({
+            url: `/post/one`,
+            params: {
+              postId: postId
+            }
+          }),
+          keepUnusedDataFor: 60,
+        }),
         addPost: builder.mutation<IPostData, FormData>({
           query: (data) => ({
             url: `/post/create`,
@@ -73,7 +82,8 @@ export const postApi = createApi({
 });
 
 export const {
-  useGetAllPostsQuery, 
+  useGetAllPostsQuery,
+  useGetOnePostQuery,
   useAddPostMutation,
   useUpdatePostMutation,
   useDeletePostMutation,

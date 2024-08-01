@@ -35,6 +35,16 @@ class PostController {
         }
     }
 
+    async getOnePost(request, response, next) {
+        try {
+            const {postId} = request.query;
+            const post = await postService.getOne(postId);
+            return response.json(post);
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async updatePost(request, response, next) {
         try {
             const {id, desc} = request.body;

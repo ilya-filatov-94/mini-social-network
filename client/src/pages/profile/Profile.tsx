@@ -7,11 +7,14 @@ import {
   useSubscribeToUserMutation,
   useUnSubscribeToUserMutation
 } from '../../services/UserService';
-import {useParams} from "react-router-dom";
+import {useOpenConversationMutation} from '../../services/MessengerService';
+import {useParams, useNavigate} from "react-router-dom";
 import {useAppSelector} from '../../hooks/useTypedRedux';
+import { setCurrentConversationData } from '../../store/conversationSlice';
 import { shallowEqual } from 'react-redux';
 import {useScroll} from '../../hooks/useScroll';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import {useAppDispatch} from '../../hooks/useTypedRedux';
 import Loader from '../../components/Loader/Loader';
 import Alert from '@mui/material/Alert';
 import Posts from '../../components/Posts/Posts';
@@ -27,10 +30,14 @@ import {
   Place as PlaceIcon,
   Language as LanguageIcon,
 } from "@mui/icons-material";
+import {useMatchMedia} from '../../hooks/useMatchMedia';
+import {IConversation} from '../../types/messenger';
 
 
 const Profile: FC = () => {
   const {id} = useParams();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const currentUser = curUser.refUser === id;
   const {data: userData, error, isLoading} = useGetUserProfileQuery({
@@ -38,9 +45,14 @@ const Profile: FC = () => {
   const [isFollower, follow] = useState<boolean>(false);
   const [subscribeToUser, {error: errorSubscribe}] = useSubscribeToUserMutation();
   const [unSubscribeToUser, {error: errorUnsubscribe}] = useUnSubscribeToUserMutation();
+  const [openConversation, {
+    isError: isErrorOpenConversation, 
+    isLoading: isLoadingOpenConversation
+  }] = useOpenConversationMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
 
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
+  const {isMobile} = useMatchMedia();
 
   const [executeScroll, elRef] = useScroll('start');
   useEffect(() => {
@@ -53,6 +65,32 @@ const Profile: FC = () => {
     }
   // eslint-disable-next-line
   }, [userData]);
+
+  function navigateToMessenger() {
+    openConversation({
+      userId: curUser.id, 
+      memberId: (userData!).id
+    })
+    .unwrap()
+    .then((conversationData: IConversation) => {  
+      dispatch(setCurrentConversationData({
+        id: conversationData.id,
+        memberId: conversationData.memberId,
+        lastMessageId: conversationData.lastMessageId,
+        lastMessageText: conversationData.lastMessageText,
+        username: conversationData.username,
+        profilePic: conversationData.profilePic,
+        refUser: conversationData.refUser,
+        status: conversationData.status
+      }));
+      navigate(`/messages/${conversationData.id}`);
+    })
+    .catch((error: unknown) => {
+        if (isFetchBaseQueryErrorType(error)) {
+          console.error(error);
+        }
+    });
+  }
 
   async function subscribe(subscribeTo: boolean) {
     if (userData) {
@@ -72,11 +110,11 @@ const Profile: FC = () => {
     }
   }
   
-  if (isLoading) {
+  if (isLoading || isLoadingOpenConversation) {
     return <Loader />
   }
 
-  if (error || errorSubscribe || errorUnsubscribe) {
+  if (error || errorSubscribe || errorUnsubscribe || isErrorOpenConversation) {
     if (isFetchBaseQueryErrorType(error)) {
       return <Alert severity="error" sx={{m: 20}}>Произошла ошибка при загрузке данных! {error.status}</Alert>
     }
@@ -97,6 +135,7 @@ const Profile: FC = () => {
       : `${styles.profile} ${styles['theme-light']}`
       }
     >
+      <div className={styles.wrapper}>
       <div className={styles.imagesHeader}>
         {userData.coverPic 
         ? <img
@@ -119,11 +158,15 @@ const Profile: FC = () => {
             <div className={styles.info}>
               <div className={styles.item}>
                 <PlaceIcon />
-                <span className={styles.textInfo}>город: {userData.city}</span>
+                <span className={styles.textInfo}>
+                  {!isMobile ? 'город: ' + userData.city : userData.city}
+                </span>
               </div>
               <div className={styles.item}>
                 <LanguageIcon />
-                <span className={styles.textInfo}>сайт: {userData.website}</span>
+                <span className={styles.textInfo}>
+                  {!isMobile ? 'сайт: ' + userData.website : userData.website}
+                </span>
               </div>
             </div>
             <div className={styles.socials}>
@@ -143,7 +186,7 @@ const Profile: FC = () => {
             <div className={styles.userActions}>
               {!currentUser
               ? <>
-                  <button className={styles.btn}>Написать</button>
+                  <Button addClass={styles.btn} onClick={navigateToMessenger}>Написать</Button>
                   <Button 
                     onClick={() => subscribe(isFollower)}
                     addClass={isFollower ? `${styles.btn} ${styles.dismissBtn}` : styles.btn}
@@ -158,6 +201,7 @@ const Profile: FC = () => {
         </div>
         {currentUser && <SharePost userId={userData.id} />}
         <Posts userId={userData.id} currentUser={currentUser} curUserId={curUser.id}/>
+      </div>
       </div>
     </div>
   );

@@ -10,6 +10,7 @@ import {messengerApi} from '../services/MessengerService';
 import {webSocketMiddleware} from './middleware/websocketMiddleware';
 import reducerWebSocket from './webSocketSlice';
 import reducerMessages from './messagesSlice';
+import reducerNotifications from './notificationSlice';
 
 
 import storage from "redux-persist/lib/storage";
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   reducerWebsocket: reducerWebSocket,
   reducerConversation: reducerConversation,
   reducerMessages: reducerMessages,
+  reducerNotifications: reducerNotifications,
   [userApi.reducerPath]: userApi.reducer,
   [postApi.reducerPath]: postApi.reducer,
   [commentApi.reducerPath]: commentApi.reducer,

@@ -110,7 +110,7 @@ const LeftBar: FC = () => {
 
         <TemplatePopup 
           isVisible={isErrorGetUnreadMsgs} 
-          setVisible={setModalErrorClose}
+          setVisible={() => setModalErrorClose(false)}
           headerPopup={<p>Ошибка!</p>}
           contentPopup={
           <div className={styles.errorShared}>

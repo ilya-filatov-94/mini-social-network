@@ -11,17 +11,17 @@
         position: relative;
         padding: 0;
         margin: 0;
-        left: 40px;
         width: 30px;
         height: 25px;
         cursor: pointer;
 
         &.theme-dark .middleLine {
-            $curTheme: "dark"; 
+            $curTheme: "dark";
             background-color: themed($curTheme, "textColor");
         }
+
         &.theme-light .middleLine {
-            $curTheme: "light"; 
+            $curTheme: "light";
             background-color: themed($curTheme, "textColor");
         }
 
@@ -50,12 +50,13 @@
 
     .headerBurger.theme-dark::before,
     .headerBurger.theme-dark::after {
-        $curTheme: "dark"; 
+        $curTheme: "dark";
         background-color: themed($curTheme, "textColor");
     }
+
     .headerBurger.theme-light::before,
     .headerBurger.theme-light::after {
-        $curTheme: "light"; 
+        $curTheme: "light";
         background-color: themed($curTheme, "textColor");
     }
 

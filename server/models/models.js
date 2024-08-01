@@ -110,11 +110,23 @@ const Message = sequelize.define('message', {
     isDelivery: {type: DataTypes.BOOLEAN},
 });
 
+const Notification = sequelize.define('notification', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    userId: {type: DataTypes.INTEGER},
+    senderId: {type: DataTypes.INTEGER},
+    ref: {type: DataTypes.STRING},
+    type: {type: DataTypes.STRING},
+    isRead: {type: DataTypes.BOOLEAN},
+});
+
 User.hasMany(Message);
 Message.belongsTo(User);
 
 Conversation.hasMany(Message);
 Message.belongsTo(Conversation);
+
+User.hasMany(Notification, { foreignKey: 'senderId' });
+Notification.belongsTo(User, { foreignKey: 'senderId' });
 
 module.exports = {
     User,
@@ -126,5 +138,6 @@ module.exports = {
     Activity,
     Relationship,
     Conversation,
-    Message
+    Message,
+    Notification,
 };

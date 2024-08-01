@@ -16,12 +16,13 @@ import {
   IAllUsersResponse
 } from '../types/users';
 import {IActivityOfUser} from '../types/activities';
+import {INotification} from '../types/notifications';
 
 
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['ProfileData', 'PossibleFriends', 'Users', 'Friends'],
+    tagTypes: ['ProfileData', 'PossibleFriends', 'Users', 'Friends', 'Notifications'],
     endpoints: (builder) => ({
         getUserProfile: builder.query<IUserData, IRequestProfile>({
           query: (data) => ({
@@ -139,6 +140,24 @@ export const userApi = createApi({
           }),
           keepUnusedDataFor: 60,
         }),
+        getAllNotifications: builder.query<INotification[], number>({
+          query: (userId) => ({
+            url: `/user/get-notifications`,
+            params: {
+              userId,
+            }
+          }),
+          keepUnusedDataFor: 0,
+          providesTags: ['Notifications'],
+        }),
+        updateNotifications: builder.mutation<INotification[], number>({
+          query: (userId) => ({
+            url: '/user/update-notifications',
+            method: 'PATCH',
+            body: {userId: userId }
+          }),
+          invalidatesTags: ['Notifications']
+        }),
     })
 });
 
@@ -154,5 +173,7 @@ export const {
   useUnSubscribeToUserMutation,
   useGetPossibleFriendsQuery,
   useGetMutualFriendsQuery,
-  useGetActivitiesUsersQuery
+  useGetActivitiesUsersQuery,
+  useGetAllNotificationsQuery,
+  useUpdateNotificationsMutation,
 } = userApi;

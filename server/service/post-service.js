@@ -28,10 +28,33 @@ class PostService {
       ],
       include: [{
         model: User,
-        attributes: ["username", "refUser", "profilePic"]
+        attributes: ["id", "username", "refUser", "profilePic"]
       }],
     });
     return postsInfo;
+  }
+
+  async getOne(postId) {
+    if (!postId) return {};
+    const postInfo = await Post.findOne({
+      where: {
+        id: postId,
+      },
+      order: [['createdAt', 'DESC']],
+      attributes: [
+        "id",
+        "desc",
+        "image",
+        ["updatedAt", "date"],
+        "userId",
+        "counterComments",
+      ],
+      include: [{
+        model: User,
+        attributes: ["id","username", "refUser", "profilePic"]
+      }],
+    });
+    return postInfo;
   }
 
   async updatePost(id, desc, fileName) {

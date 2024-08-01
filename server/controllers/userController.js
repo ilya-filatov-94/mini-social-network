@@ -1,5 +1,6 @@
 const ApiError = require('../error/ApiError');
 const userService = require('../service/user-service');
+const notificationService = require('../service/notification-service');
 const {validationResult} = require('express-validator');
 const uuid = require('uuid');
 const path = require('path');
@@ -218,6 +219,27 @@ class UserController {
             const users = await userService.getSelectedUsers(search, id, limit, page);
             return response.json(users);
         } catch (error) {
+            next(error);
+        }
+    }
+
+    async getAllNotifications(request, response, next) {
+        try {
+            const {userId} = request.query;
+            const notification = await notificationService.getAll(Number(userId));
+            return response.json(notification);
+        } catch(error) {
+            next(error);
+        }
+    }
+
+    async updateNotifications(request, response, next) {
+        try {
+            const {userId} = request.body;
+            console.log('БЛЯЯТЬ', userId);
+            const notification = await notificationService.updateNotification(Number(userId));
+            return response.json(notification);
+        } catch(error) {
             next(error);
         }
     }

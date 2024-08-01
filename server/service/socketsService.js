@@ -13,6 +13,11 @@ class socketsService {
             file: '',
             isRead: false,
             createdAt: '',
+        },
+        this.deleteNotifications = {
+            deletedLike: 'addedLike',
+            deletedFriend: 'addedInFriends',
+            deletedComment: 'addedComment'
         }
     }
 

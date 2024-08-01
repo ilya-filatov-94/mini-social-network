@@ -1,11 +1,11 @@
 import {FC, useRef, SetStateAction, Dispatch} from 'react';
 import styles from './Comments.module.scss';
-import {useAppSelector} from '../../../hooks/useTypedRedux';
+import {useAppSelector, useAppDispatch} from '../../../hooks/useTypedRedux';
 import { shallowEqual } from 'react-redux';
+import { emitNotification } from '../../../store/notificationSlice';
 import {Link} from 'react-router-dom';
 import noAvatar from '../../../assets/images/no-avatar.jpg';
 import {urlAPIimages} from '../../../env_variables';
-// import { ReactComponent as SendArrow} from '../../../assets/images/right_arrow.svg';
 import AlertWidget from '../../AlertWidget/AlertWidget';
 import {IComments} from '../../../types/comments';
 import {
@@ -40,18 +40,36 @@ const Comments: FC<IContentPostProps> = ({
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
   const curUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const dispatch = useAppDispatch();
 
   async function handleSendComment() {
     if (textareaRef.current) {
       let textPost = textareaRef.current.value;
       if (!textPost) return;
-      await addComment({userId: curUser.id, postId, desc: textPost}).unwrap();
-      updateCommentCounter(prev => prev + 1);
+      const newComment: IComments = await addComment({userId: curUser.id, postId, desc: textPost}).unwrap();
+      if (newComment) {
+        const dataNotification = {
+          userId: userId,
+          ref: '/comment/' + newComment.id,
+          type: 'addedComment',
+          isRead: false,
+        };
+        dispatch(emitNotification(dataNotification));   
+      }   
+      updateCommentCounter(prev => Number(prev) + 1);
     }
   }
 
   async function handleDeleteComment(id: number) {
-    await deleteComment({postId, id});
+    const idDeletedComment = await deleteComment({postId, id}).unwrap();
+    if (idDeletedComment && idDeletedComment !== 0) {
+      const dataNotification = {
+        userId: userId,
+        ref: '/comment/' + idDeletedComment,
+        type: 'deletedComment',
+      };
+      dispatch(emitNotification(dataNotification));  
+    }
     updateCommentCounter(prev => prev - 1);
   }
   

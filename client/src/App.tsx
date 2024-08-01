@@ -12,6 +12,8 @@ import Register from './pages/register/Register';
 import Login from './pages/login/Login';
 const Home = lazy(() => import('./pages/home/Home'));
 const Profile = lazy(() => import('./pages/profile/Profile'));
+const PagePost = lazy(() => import('./pages/onePost/PagePost'));
+const PageComment = lazy(() => import('./pages/oneComment/PageComment'));
 const EditProfile = lazy(() => import('./pages/editProfile/EditProfile'));
 const Friends = lazy(() => import('./pages/friends/Friends'));
 const Users = lazy(() => import('./pages/users/Users'));
@@ -72,6 +74,16 @@ const App: FC = () => {
             <Route path="messages/:id" element={
               <RequireAuth >
                 <Messages />
+              </RequireAuth >
+            }/>
+            <Route path="/post/:postId" element={
+              <RequireAuth >
+                <PagePost />
+              </RequireAuth >
+            }/>
+            <Route path="/comment/:comId" element={
+              <RequireAuth >
+                <PageComment />
               </RequireAuth >
             }/>
             <Route path='*' element={<div>Страница находится в разработке</div>} />

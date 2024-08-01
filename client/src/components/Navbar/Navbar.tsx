@@ -15,15 +15,15 @@ import {
   HomeOutlined as HomeOutlinedIcon,
   DarkModeOutlined as DarkModeOutlinedIcon,
   WbSunnyOutlined as WbSunnyOutlinedIcon,
-  NotificationsOutlined as NotificationsOutlinedIcon,
+  // NotificationsOutlined as NotificationsOutlinedIcon,
   Diversity3Outlined as Diversity3OutlinedIcon
 } from '@mui/icons-material';
-
+import Notifications from './Notifications/Notifications';
 
 
 const Navbar: FC = memo(() => {
 
-  const {isMobile} = useMatchMedia();
+  const {isMobile, isTablet} = useMatchMedia();
   const navigate = useNavigate();
   const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
   const currentUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
@@ -44,7 +44,7 @@ const Navbar: FC = memo(() => {
     : `${styles.navbar} ${styles['theme-light']}`
     }>
       <div className={styles.leftSection}>
-        <Logo themeMode={currentTheme}/>
+        <Logo themeMode={currentTheme} />
         <HomeOutlinedIcon onClick={()=> navigateTo('/')} sx={{cursor: 'pointer'}}/>
         <div
           className={styles.themeSwitch}
@@ -55,10 +55,12 @@ const Navbar: FC = memo(() => {
           }
         </div>
         < Diversity3OutlinedIcon onClick={()=> navigateTo('/users')} sx={{cursor: 'pointer'}} />
+        {(isMobile || isTablet) && <Notifications />}
       </div>
 
       <div className={styles.rigthSection}>
-          <NotificationsOutlinedIcon />
+        <div className={styles.userMenu}>
+          <Notifications />
           <UserAvatar
             onClick={() => openMenu(!menuIsOpen)}
             addClass={styles.avatar}
@@ -75,21 +77,22 @@ const Navbar: FC = memo(() => {
             curTheme={currentTheme}
             position={styles.positionMenuUser}
           />
-      </div>
+        </div>
 
-      {isMobile &&
-        <>
-        <BurgerElement 
-          isOpenMobileMenu={menuIsOpen}
-          openMobileMenu={openMenu}
-          currentTheme={currentTheme}
-        />
-        <MobileMenu
-          isOpenMobileMenu={menuIsOpen}
-          openMobileMenu={openMenu}
-        />
-        </>
-      }
+        {isMobile && (
+          <>
+            <BurgerElement 
+              isOpenMobileMenu={menuIsOpen}
+              openMobileMenu={openMenu}
+              currentTheme={currentTheme}
+            />
+            <MobileMenu
+              isOpenMobileMenu={menuIsOpen}
+              openMobileMenu={openMenu}
+            />
+          </>
+        )}
+      </div>
     </div>
   )
 });

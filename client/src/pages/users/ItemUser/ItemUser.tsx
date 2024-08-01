@@ -10,6 +10,8 @@ import {
 } from '../../../services/UserService';
 import Alert from '@mui/material/Alert';
 import {FetchBaseQueryError} from "@reduxjs/toolkit/query/react";
+import { emitNotification } from '../../../store/notificationSlice';
+import {useAppDispatch} from '../../../hooks/useTypedRedux';
 
 interface IUserItemProps {
   myId: number;
@@ -17,6 +19,7 @@ interface IUserItemProps {
   username: string;
   avatar: string | undefined;
   refUser: string;
+  refCurUser: string;
   status: string;
   city: string;
   subscrInformation: boolean;
@@ -28,6 +31,7 @@ const ItemUser: FC<IUserItemProps> = memo(({
     username, 
     avatar,
     refUser,
+    refCurUser,
     status, 
     city,
     subscrInformation
@@ -37,6 +41,7 @@ const ItemUser: FC<IUserItemProps> = memo(({
   const [subscribeToUser, {error: errorSubscribe}] = useSubscribeToUserMutation();
   const [unSubscribeToUser, {error: errorUnsubscribe}] = useUnSubscribeToUserMutation();
   const isFetchBaseQueryErrorType = (error: any): error is FetchBaseQueryError => 'status' in error;
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (userId) {
@@ -46,10 +51,19 @@ const ItemUser: FC<IUserItemProps> = memo(({
 
   async function subscribe(subscribeTo: boolean) {
     follow(!subscribeTo);
+    const dataNotification = {
+      userId: userId,
+      ref: '/profile/' + refCurUser,
+      type: '',
+    };
     if (!subscribeTo) {
+      dataNotification.type = 'addedInFriends';
+      dispatch(emitNotification(dataNotification)); 
       await subscribeToUser({curUserId: myId, followerId: userId}).unwrap();
     }
     if (subscribeTo) {
+      dataNotification.type = 'deletedFriend';
+      dispatch(emitNotification(dataNotification)); 
       await unSubscribeToUser({curUserId: myId, followerId: userId}).unwrap();
     }
   }

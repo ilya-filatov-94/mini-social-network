@@ -23,6 +23,15 @@ export const commentApi = createApi({
           : ['Comments'],
           keepUnusedDataFor: 60,
         }),
+        getOneComment: builder.query<IComments, number>({
+          query: (comId) => ({
+            url: `/comment/one`,
+            params: {
+              comId: comId
+            }
+          }),
+          keepUnusedDataFor: 60,
+        }),
         addComment: builder.mutation<IComments, TCommentReq>({
           query: (data) => ({
             url: `/comment/create`,
@@ -47,6 +56,7 @@ export const commentApi = createApi({
 
 export const {
     useGetAllCommentsQuery,
+    useGetOneCommentQuery,
     useAddCommentMutation,
     useDeleteCommentMutation
 } = commentApi;

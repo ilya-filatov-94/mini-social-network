@@ -37,6 +37,7 @@ class CommentService {
         attributes: ["username", "refUser", "profilePic"]
       }],
     });
+    if (!comments?.length) return [];
     const flatComments = comments.map(comment => (
       {
         id: comment.id,
@@ -50,6 +51,37 @@ class CommentService {
       }
     ));
     return flatComments;
+  }
+
+  async getOne(commentId) {
+    if (!commentId) return {};
+    const comment = await Comment.findOne({
+      where: { id: commentId},
+      order: [['createdAt', 'DESC']],
+      attributes: [
+        "id",
+        "desc",
+        "createdAt",
+        "userId",
+        "postId"
+      ],
+      include: [{
+        model: User,
+        attributes: ["username", "refUser", "profilePic"]
+      }],
+    });
+    if (Object.keys(comment).length === 0) return {};
+    const flatComment = {
+      id: comment.id,
+      desc: comment.desc,
+      date: comment.createdAt,
+      userId: comment.userId,
+      postId: comment.postId,
+      username: comment.user.username,
+      refUser: comment.user.refUser,
+      profilePic: comment.user.profilePic
+    }
+    return flatComment;
   }
 
   async deleteComment(id_post, id_com) {

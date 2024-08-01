@@ -1,5 +1,5 @@
 @import '../../styles/theme.scss';
-
+@import '../../styles/responsive.scss';
 
 .post {
     box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
@@ -19,6 +19,14 @@
 
     .container {
         padding: 20px;
+
+        @include tablet {
+            padding: 14px;
+        }
+
+        @include mobile {
+            padding: 10px;
+        }
     }
 
     @supports (-webkit-touch-callout: none) and (not (translate: none)) {
@@ -27,4 +35,3 @@
         }
     }
 }
-

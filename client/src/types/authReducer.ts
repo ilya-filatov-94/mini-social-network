@@ -49,4 +49,4 @@ export interface IResponseLogout {
     id: string;
 }
 
-export type TUserInfo = Pick<TinitialUser, "username" | "refUser" | "profilePic">;
+export type TUserInfo = Pick<TinitialUser, "username" | "refUser" | "profilePic"> & {id?: number};
