@@ -1,23 +1,41 @@
 @import '../../styles/responsive.scss';
 @import '../../styles/theme.scss';
+@import '../../components/Layout/sizeCoontainer.scss';
 
 .settingsContainer {
-    padding: 10px 30px;
+    padding: 10px 20px;
     font-size: 0.875rem;
+    overflow-y: hidden;
+    height: calc(100vh - $topBar);
 
-    @include mobile {
+    .wrapper {
+        height: 100%;
+        overflow-y: auto;
+        border-radius: 20px;
         padding: 10px;
+        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
+
+        @include mobile {
+            padding: 10px;
+        }
     }
 
     .wrapperSettings {
-        box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
-        border-radius: 20px;
-        padding: 20px;
+        width: 100%;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        
+        padding: 10px 40px;
+
+        @include mobile {
+            padding: 10px 15px;
+        }
+
+        .updateProfile {
+            width: 100%;
+        }
+
         .header {
             display: flex;
             justify-content: center;
@@ -49,6 +67,7 @@
                     top: 25px;
                     left: 20px;
                 }
+
                 @include tablet {
                     top: 25px;
                     left: 20px;
@@ -65,11 +84,11 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             gap: 20px;
 
             .preview {
-                width: 80px;
+                min-width: 80px;
                 height: 80px;
                 object-fit: cover;
                 border-radius: 50%;
@@ -103,7 +122,7 @@
                 .headerFileInput {
                     font-size: 1rem;
                 }
-    
+
                 .fileInput {
                     opacity: 0;
                     height: 0;
@@ -118,7 +137,7 @@
                     margin: 0;
                     padding: 7px;
                     border-radius: 5px;
-                    background-color:#938eef;
+                    background-color: #938eef;
                     color: white;
                     cursor: pointer;
                 }
@@ -141,15 +160,17 @@
         .saveButton {
             background-color: #938eef;
             color: white;
-            width: 30%;
+            width: 25%;
             padding: 10px;
             align-self: center;
 
             @include mobile {
+                width: 40%;
                 align-self: center;
             }
+
             @include tablet {
-                width: 30%;
+                width: 40%;
             }
         }
 
@@ -158,9 +179,11 @@
                 background-color: rgb(153, 117, 188);
             }
         }
+
         .saveButton:active {
             background-color: rgb(130, 88, 171);
         }
+
         .saveButton:disabled {
             background-color: rgb(175, 175, 175);
         }
@@ -176,10 +199,11 @@
             color: themed($curTheme, "textColor");
         }
 
-        .wrapperSettings {
+        .wrapper {
             background-color: themed($curTheme, "background");
         }
     }
+
     &.theme-light {
         $curTheme: "light";
         background-color: themed($curTheme, "bgSoft");
@@ -190,9 +214,8 @@
             color: themed($curTheme, "textColor");
         }
 
-        .wrapperSettings {
+        .wrapper {
             background-color: themed($curTheme, "background");
         }
     }
 }
-

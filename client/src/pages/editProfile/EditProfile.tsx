@@ -205,6 +205,7 @@ const EditProfile: FC = () => {
         ? `${styles.settingsContainer} ${styles['theme-dark']}`
         : `${styles.settingsContainer} ${styles['theme-light']}`
         }>
+      <div className={styles.wrapper}>
         <div className={styles.wrapperSettings}>
             <div className={styles.header}>
                 <h1>Редактирование профиля</h1>
@@ -285,6 +286,7 @@ const EditProfile: FC = () => {
             </form>
         </div>
       </div>
+    </div>
   )
 } else return <Alert severity="error" sx={{m: 20}}>{JSON.stringify(errorLoading || errorUpdate)}</Alert>
 }
