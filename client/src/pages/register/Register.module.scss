@@ -1,42 +1,36 @@
 @import '../../styles/responsive.scss';
 
 .register {
-    height: 100vh;
+    height: 100%;
     background-color: rgb(193, 190, 255);
     display: flex;
     align-items: center;
     justify-content: center;
-
-    @include mobile {
-        height: 100%;
-    }
+    overflow-y: auto;
 }
 
 .card {
+    width: 60%;
+    min-height: 85vh;
     display: flex;
     background-color: white;
-    width: 50%;
+    margin: 20px;
     border-radius: 10px;
-    min-height: 600px;
-    overflow: hidden;
 
     @include mobile {
         width: 100%;
-        margin: 10px;
-        flex-direction: column-reverse;
-        overflow-y: scroll;
-        padding-top: 10px;
-        padding-left: 10px;
-
-        @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-            padding: 0;
-        }
+        min-height: 50vh;
+        margin: 15px;
+        padding: 30px 0;
+        overflow-y: auto;
     }
+
     @include tablet {
         width: 100%;
-        margin: 10px;
-        flex-direction: column-reverse;
-        overflow-y: scroll;
+        min-height: 40vh;
+        margin: 20px;
+        padding: 30px 0;
+        overflow-y: auto;
     }
 
     .leftSection {
@@ -47,8 +41,34 @@
         justify-content: center;
         gap: 50px;
 
+        @include mobile {
+            padding: 1rem;
+
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                &:not(:last-child) {
+                    margin-bottom: 30px;
+                }
+            }
+        }
+
+        @include tablet {
+            padding: 1.5rem;
+
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                &:not(:last-child) {
+                    margin-bottom: 30px;
+                }
+            }
+        }
+
         h1 {
             font-size: 2rem;
+            color: #555;
+            text-align: center;
+        }
+
+        h2 {
+            padding-top: 10px;
             color: #555;
             text-align: center;
         }
@@ -57,15 +77,49 @@
             display: flex;
             flex-direction: column;
             gap: 30px;
+
+            @include mobile {
+                @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                    &:not(:last-child) {
+                        margin-bottom: 30px;
+                    }
+                }
+            }
         }
 
         .inputForm {
             padding: 15px;
+
             @include mobile {
                 @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-                        &:not(:last-child) {
+                    &:not(:last-child) {
                         margin-bottom: 30px;
                     }
+                }
+            }
+        }
+
+        .wrapperButton {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+
+            @include mobile {
+                justify-content: center;
+                gap: 10px;
+
+                .regButton {
+                    min-width: 140px;
+                }
+            }
+
+            @include tablet {
+                justify-content: center;
+                gap: 20px;
+
+                .regButton {
+                    min-width: 140px;
                 }
             }
         }
@@ -73,25 +127,25 @@
         .regButton {
             background-color: #938eef;
             color: white;
-            width: 60%;
             padding: 10px;
             align-self: center;
-            
+
             @include mobile {
                 align-self: center;
             }
-            @include tablet {
-                width: 30%;
-            }
+
         }
+
         @media (hover: hover) {
             .regButton:hover {
                 background-color: rgb(131, 93, 178);
             }
         }
+
         .regButton:active {
             background-color: rebeccapurple;
         }
+
         .regButton:disabled {
             background-color: grey;
         }
@@ -99,9 +153,11 @@
 
     .rightSection {
         flex: 1 1 0;
-        background: url(../../assets/images/bg-for-login.jpeg) center rgba(39,11,96, 0.5);
+        background: url(../../assets/images/bg-for-login.jpeg) center rgba(39, 11, 96, 0.5);
         background-blend-mode: multiply;
         background-size: cover;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
         padding: 50px;
         display: flex;
         flex-direction: column;
@@ -131,13 +187,17 @@
         }
 
         .loginButton {
-            width: 50%;
+            width: 30%;
             background-color: white;
             color: rebeccapurple;
             font-weight: bold;
             padding: 10px;
 
             @include tablet {
+                width: 30%;
+            }
+
+            @include mobile {
                 width: 30%;
             }
         }

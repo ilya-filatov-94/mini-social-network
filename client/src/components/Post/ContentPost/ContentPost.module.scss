@@ -32,7 +32,7 @@
     }
 
     @include mobile {
-        justify-content: space-between;
+        justify-content: space-evenly;
     }
 
     .item {

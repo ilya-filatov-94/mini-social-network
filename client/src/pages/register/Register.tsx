@@ -11,8 +11,6 @@ import {useAppDispatch, useAppSelector} from '../../hooks/useTypedRedux';
 import { shallowEqual } from 'react-redux';
 import {registerUser, setErrorStatus} from '../../store/authSlice';
 import {useMatchMedia} from '../../hooks/useMatchMedia';
-import {useScroll} from '../../hooks/useScroll';
-
 import LoadingButton from '../../components/LoadingButton/LoadingButton';
 import ButtonLink from '../../components/ButtonLink/ButtonLink';
 import InputWithValidation, {TStatusValidData} from '../../components/InputWithValidation/InputWithValidation';
@@ -28,6 +26,7 @@ interface IRegValue {
 const Register: FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const {isMobile, isTablet, isDesktop} = useMatchMedia();
   const isAuth = useAppSelector(state => state.reducerAuth.isAuth, shallowEqual);
   const status = useAppSelector(state => state.reducerAuth.status, shallowEqual);
   const error = useAppSelector(state => state.reducerAuth.error, shallowEqual);
@@ -41,17 +40,7 @@ const Register: FC = () => {
         setValidInput({...isValidInputs, email: false});
       }
     }
-  // eslint-disable-next-line
   }, [status, error]);
-
-  const {isMobile} = useMatchMedia();
-  const [executeScroll, elRef] = useScroll('start');
-
-  useEffect(() => {
-    if (isMobile) {
-      executeScroll();
-    }
-  }, [isMobile, executeScroll]);
 
   const [regData, setRegData] = useState<IRegValue>({
     name: '',
@@ -59,14 +48,12 @@ const Register: FC = () => {
     email: '',
     password: '',
   });
-
   const [isValidInputs, setValidInput] = useState<TStatusValidData>({
     name: false,
     lastname: false,
     email: false,
     password: false,
   });
-
   const isValidForm = Object.entries(isValidInputs).every(key => key[1]);
 
   function handleInputs(event: ChangeEvent<HTMLInputElement>) {
@@ -103,7 +90,15 @@ const Register: FC = () => {
     <div className={styles.register}>
       <div className={styles.card}>
         <div className={styles.leftSection}>
-          <h1 ref={elRef}>Регистрация</h1>
+        {(isMobile || isTablet) && (
+          <div>
+            <h1>IFriends</h1>
+            <h2>Регистрация</h2>
+          </div>
+        )}
+        {isDesktop && (
+          <h1>Регистрация</h1>
+        )}
           <form onSubmit={handleRegister}>
             {inputs.map((input) => 
               <InputWithValidation
@@ -118,28 +113,45 @@ const Register: FC = () => {
                 {...input}
               />
             )}
-            <LoadingButton
+            {(isMobile || isTablet) && (
+              <div className={styles.wrapperButton}>
+                <LoadingButton
+                  type="submit"
+                  loading={status === 'loading'}
+                  disabled={!isValidForm}
+                  text="Зарегистрироваться"
+                  classes={styles.regButton}
+                />
+                <ButtonLink addClass={styles.regButton} to={"/login"}>
+                  Войти
+                </ButtonLink>
+              </div>
+            )}
+            {(isDesktop) && (
+              <LoadingButton
               type="submit"
               loading={status === 'loading'}
               disabled={!isValidForm}
               text="Зарегистрироваться"
               classes={styles.regButton}
-            />
+              />
+            )}
           </form>
         </div>
-
-        <div className={styles.rightSection}>
-          <h1>IFriends</h1>
-          <p>
-            Сайт IFriends - интернет-ресурс, который помогает вам поддерживать
-            связь с вашими старыми и новыми друзьями. Это сетевой проект,
-            объединяющий людей на основании мест учебы или работы.
-          </p>
-          <span>Уже есть аккаунт?</span>
-          <ButtonLink addClass={styles.loginButton} to={"/login"}>
-            Войти
-          </ButtonLink>
-        </div>
+        {(isDesktop) && (
+          <div className={styles.rightSection}>
+            <h1>IFriends</h1>
+            <p>
+              Сайт IFriends - интернет-ресурс, который помогает вам поддерживать
+              связь с вашими старыми и новыми друзьями. Это сетевой проект,
+              объединяющий людей на основании мест учебы или работы.
+            </p>
+            <span>Уже есть аккаунт?</span>
+            <ButtonLink addClass={styles.loginButton} to={"/login"}>
+              Войти
+            </ButtonLink>
+          </div>
+        )}
       </div>
     </div>
   );
