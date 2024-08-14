@@ -168,20 +168,32 @@ const Profile: FC = () => {
                   {!isMobile ? 'сайт: ' + userData.website : userData.website}
                 </span>
               </div>
-            </div>
-            <div className={styles.socials}>
-              <a href="http://facebook.com">
-                <FacebookTwoToneIcon />
-              </a>
-              <a href="http://instagram.com">
-                <InstagramIcon />
-              </a>
-              <a href="http://twitter.com">
-                <TwitterIcon />
-              </a>
-              <a href="http://ru.linkedinn.com">
-                <LinkedInIcon />
-              </a>
+              {(userData?.facebook !=='' || userData?.instagram !=='' || userData?.twitter !=='' || userData?.linkedinn !=='') && (
+              <>
+                <div className={styles.item}>
+                  <span className={styles.textInfo}>Социальные сети: </span>
+                </div>
+                <div className={styles.item}>
+                  <div className={styles.socials}>
+                    {userData?.facebook && (
+                    <a href={userData?.facebook}>
+                      <FacebookTwoToneIcon />
+                    </a>)}
+                    {userData?.instagram && (
+                    <a href={userData?.instagram}>
+                      <InstagramIcon />
+                    </a>)}
+                    {userData?.twitter && (
+                    <a href={userData?.twitter}>
+                        <TwitterIcon />
+                    </a>)}
+                    {userData?.linkedinn && (
+                    <a href={userData?.linkedinn}>
+                      <LinkedInIcon />
+                    </a>)}
+                  </div>
+                </div>
+              </>)}
             </div>
             <div className={styles.userActions}>
               {!currentUser

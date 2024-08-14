@@ -10,14 +10,14 @@ export interface IUserFullData {
     coverPic?: string;
     city?: string;
     website?: string;
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedinn?: string;
     password?: string;
 }
 
-export interface IUpdateData {
-    username?: string;
-    refUser?: string;
-    profilePic?: string;
-}
+export type IUpdateData = Partial<(Pick<IUserFullData, "refUser" | "profilePic">) & {username: string}>;
 
 export interface IUser {
     id: number;

@@ -1,4 +1,4 @@
-import {FC, memo} from 'react';
+import {FC, memo, SyntheticEvent} from 'react';
 import styles from './UserAvatar.module.scss';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import { Link } from 'react-router-dom';
@@ -25,6 +25,10 @@ const UserAvatar: FC<IUserAvatarProps> = memo(({
 
   const currentUser = useAppSelector(state => state.reducerAuth.currentUser, shallowEqual);
 
+  function addDefaultImage(event: SyntheticEvent<HTMLImageElement, Event>) {
+    event.currentTarget.src = noAvatar;
+  }
+
   const usernameLink = (
     <Link 
       className={`${styles.styleText} ${props.textclass}`} 
@@ -47,7 +51,8 @@ const UserAvatar: FC<IUserAvatarProps> = memo(({
       }>
       <img 
         src={avatar ? urlAPIimages + avatar : noAvatar} 
-        alt={`${name} user`} 
+        alt={`${name} user`}
+        onError={addDefaultImage}
         className={addClass}
       />
       {refUser

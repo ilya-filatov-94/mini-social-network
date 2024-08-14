@@ -24,8 +24,10 @@ import LoadingButton from '../../components/LoadingButton/LoadingButton';
 import noAvatar from '../../assets/images/no-avatar.jpg';
 import {inputs} from './editUserInputs';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import DevicesOutlinedIcon from '@mui/icons-material/DevicesOutlined';
 import {urlAPIimages} from '../../env_variables';
 import infoClient from '../../helpers/detectBrowserData';
+import {IUserFullData} from '../../types/users';
 
 
 type TPreviewImg = string | ArrayBuffer | null;
@@ -54,9 +56,13 @@ const EditProfile: FC = () => {
   const [previewCover, setPreviewCover] = useState<TPreviewImg>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [infoDevice, setInfoDevice] = useState<string>('');
 
   useEffect(() => {
-    infoClient().then(data => console.log(data));
+    infoClient().then(data => {
+      setInfoDevice(data);
+      console.log(data)
+    });
   }, []);
   
   useEffect(() => {
@@ -89,22 +95,20 @@ const EditProfile: FC = () => {
   }
   const previewSelectedImages = getPreviewOfSelectedImages();
   
-  const [newUserData, setNewUserData] = useState({
-    name: '',
-    lastname: '',
-    city: '',
-    website: '',
-    email: '',
-    password: '',
+  const [newUserData, setNewUserData] = useState(() => {
+    const objDefaultState: Record<string, string> = {};
+    inputs.forEach((item) => {
+      objDefaultState[item.name] = '';
+    });
+    return objDefaultState as Record<keyof IUserFullData, string>;
   });
 
-  const [isValidInputs, setValidInput] = useState({
-    name: true,
-    lastname: true,
-    city: true,
-    website: true,
-    email: true,
-    password: true,
+  const [isValidInputs, setValidInput] = useState(() => {
+    const objDefaultState: Record<string, boolean> = {};
+    inputs.forEach((item) => {
+      objDefaultState[item.name] = true;
+    });
+    return objDefaultState as Record<keyof IUserFullData, boolean>;
   });
 
   const setValueinForm = (ref: MutableRefObject<null | HTMLInputElement>, error: string) => {
@@ -128,23 +132,24 @@ const EditProfile: FC = () => {
       newUsername = newUserData?.name + ' ' + newUserData?.lastname;
       newRef = newUsername.replace(' ', '') + userData?.id;
       formData.append('username', newUsername);
-      formData.append('refUser', newRef);
     }
     if (newUserData.name !== '' && newUserData.lastname === '') {
       newUsername = `${newUserData?.name} ${userData?.lastname}`;
       newRef = newUsername.replace(' ', '') + userData?.id;
       formData.append('username', newUsername);
-      formData.append('refUser', newRef);
     }
     if (newUserData.name === '' && newUserData.lastname !== '') {
       newUsername = `${userData?.name} ${newUserData?.lastname}`;
       newRef = newUsername.replace(' ', '') + userData?.id;
       formData.append('username', newUsername);
-      formData.append('refUser', newRef);
     }
     if (selectedAvatar) formData.append('profilePic', selectedAvatar);
     if (selectedCover) formData.append('coverPic', selectedCover);
     formData.append('city', newUserData.city);
+    formData.append('facebook', newUserData.facebook);
+    formData.append('instagram', newUserData.instagram);
+    formData.append('twitter', newUserData.twitter);
+    formData.append('linkedinn', newUserData.linkedinn);
     formData.append('website', newUserData.website);
 
     const emptyNewData = Object.entries(newUserData)
@@ -274,6 +279,10 @@ const EditProfile: FC = () => {
                     {...input}
                   />
                 )}
+                <div className={styles.infoDevice}>
+                  <DevicesOutlinedIcon />
+                  <span className={styles.wrapperFileInput}>Информация о Вашем устройстве: {infoDevice}</span>
+                </div>
                 <div className={styles.wrapperSaveBtn}>
                   <LoadingButton
                     type="submit"

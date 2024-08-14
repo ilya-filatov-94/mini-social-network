@@ -70,10 +70,10 @@
     }
 
     .userInfo {
-      height: 230px;
+      min-height: 150px;
       box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
       border-radius: 20px;
-      padding: 50px;
+      padding: 35px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -81,9 +81,14 @@
 
       @include mobile {
         flex-direction: column;
-        height: 30vh;
+        height: 15rem;
         margin-top: 10px;
+        margin-bottom: 10px;
         padding: 50px 20px 20px 20px;
+      }
+
+      @include tablet {
+        padding: 40px 54px;
       }
 
       .mainInfo {
@@ -92,6 +97,7 @@
         flex-direction: column;
         align-items: center;
         gap: 10px;
+        margin-top: 15px;
 
         @supports (-webkit-touch-callout: none) and (not (translate: none)) {
           &:not(:last-child) {
@@ -101,6 +107,7 @@
 
         @include mobile {
           gap: 15px;
+          margin-top: 0;
 
           @supports (-webkit-touch-callout: none) and (not (translate: none)) {
             &:not(:last-child) {
@@ -116,19 +123,15 @@
 
         .info {
           width: 100%;
-          display: flex;
+          display: grid;
+          gap: 20px;
           align-items: center;
           justify-content: center;
-          gap: 20px;
+          justify-items: start;
+          min-height: 50px;
 
-          @supports (-webkit-touch-callout: none) and (not (translate: none)) {
-            &:not(:last-child) {
-              margin-right: 20px;
-            }
-          }
-
-          @include mobile {
-            gap: 20px;
+          @media screen and (min-width: 961px) {
+            grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
           }
 
           .item {
@@ -146,6 +149,36 @@
             .textInfo {
               font-size: 0.875rem;
             }
+          }
+        }
+
+        .item:nth-child(odd) {
+          justify-self: end;
+        }
+
+        @media screen and (min-width: 961px) and (max-width: 1180px) {
+          .info {
+            min-width: 245px;
+          }
+        }
+
+        @include mobile {
+          .info {
+            min-width: 130px;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+          }
+        }
+
+        @include tablet {
+          .info {
+            min-width: 180px;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
           }
         }
 
@@ -228,6 +261,10 @@
       .item {
         color: themed($curTheme, "textColorSoft");
       }
+
+      .textInfo {
+        color: themed($curTheme, "textColorSoft");
+      }
     }
   }
 
@@ -245,6 +282,10 @@
       color: themed($curTheme, "textColor");
 
       .item {
+        color: themed($curTheme, "textColorSoft");
+      }
+
+      .textInfo {
         color: themed($curTheme, "textColorSoft");
       }
     }

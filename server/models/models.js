@@ -12,6 +12,10 @@ const User = sequelize.define('user', {
     coverPic: {type: DataTypes.STRING},
     city: {type: DataTypes.STRING, defaultValue: "Не указан"},
     website: {type: DataTypes.STRING, defaultValue: "Отсутствует"},
+    facebook: {type: DataTypes.STRING, defaultValue: ""},
+    instagram: {type: DataTypes.STRING, defaultValue: ""},
+    twitter: {type: DataTypes.STRING, defaultValue: ""},
+    linkedinn: {type: DataTypes.STRING, defaultValue: ""},
     status: {type: DataTypes.STRING, defaultValue: "offline"},
 });
 

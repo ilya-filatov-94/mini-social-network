@@ -157,6 +157,20 @@
             align-items: center;
         }
 
+        .infoDevice {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+
+            @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+                &:not(:last-child) {
+                    margin-right: 10px;
+                }
+            }
+        }
+
         .saveButton {
             background-color: #938eef;
             color: white;

@@ -166,9 +166,9 @@ class UserService {
         return user;
     }
 
-    async updateUser(id, email, password, username, city, website, profileImg, coverImg) {
+    async updateUser(id, email, password, username, city, website, facebook, instagram, twitter, linkedinn, profileImg, coverImg) {
         if (!id) return {};
-        let newEmail, newPassword, newUsername, newCity, newWebsite, newProfileImg, newCoverImg;
+        let newEmail, newPassword, newUsername, newCity, newWebsite, newProfileImg, newCoverImg, newFacebook, newInstagram, newTwitter, newLinkedinn;
         const user = await User.findOne(
             {
                 where: {id: id},
@@ -183,14 +183,18 @@ class UserService {
             refToUser = user.dataValues.username.replace(' ', '') + String(id);
         }
         newCity = city || user.dataValues.city;
+        newFacebook = facebook || user.dataValues.facebook;
+        newInstagram = instagram || user.dataValues.instagram;
+        newTwitter = twitter || user.dataValues.twitter;
+        newLinkedinn = linkedinn || user.dataValues.linkedinn;
         newWebsite = website || user.dataValues.website;
         newProfileImg = profileImg || user.dataValues.profilePic;
-        newCoverImg = coverImg || user.dataValues.coverPic;
         if (profileImg) {
             let type = 'updatedAvatar';
             let desc = `Обновил(а) фото профиля`;
             await this.createActivity(parseInt(id), type, desc, '', profileImg, parseInt(id));
         }
+        newCoverImg = coverImg || user.dataValues.coverPic;
         if (password) {
             newPassword = await bcrypt.hash(password, 5);
             const [_, affectedRows] = await User.update({ 
@@ -200,6 +204,10 @@ class UserService {
                 password: newPassword,
                 city: newCity,
                 website: newWebsite,
+                facebook: newFacebook,
+                instagram: newInstagram,
+                twitter: newTwitter,
+                linkedinn: newLinkedinn,
                 profilePic: newProfileImg,
                 coverPic: newCoverImg,
             }, {
@@ -208,15 +216,23 @@ class UserService {
             });
             return affectedRows[0];
         }
-        return await User.update({ 
+        const [_, affectedRows] = await User.update({ 
             email: newEmail,  
             refUser: refToUser,
             username: newUsername,
             city: newCity,
             website: newWebsite,
+            facebook: newFacebook,
+            instagram: newInstagram,
+            twitter: newTwitter,
+            linkedinn: newLinkedinn,
             profilePic: newProfileImg,
             coverPic: newCoverImg,
-        }, {where: {id: id}});
+        }, {
+            where: {id: id},
+            returning: true
+        });
+        return affectedRows[0];
     }
 
     async subscribeUser(curUserId, followerId) {

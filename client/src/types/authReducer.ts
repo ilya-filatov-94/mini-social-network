@@ -21,6 +21,10 @@ export interface IUserData {
     coverPic: string | undefined;
     city: string;
     website: string;
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedinn?: string;
     status: string;
     isSubscriber?: boolean;
 }

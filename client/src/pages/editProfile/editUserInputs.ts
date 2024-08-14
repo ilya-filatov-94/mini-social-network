@@ -37,6 +37,42 @@ export const inputs = [
     },
     {
         idInput: 4,
+        name: "facebook",
+        type: "text",
+        placeholder: "Ссылка на Facebook",
+        label: "Ваша страница на Facebook",
+        required: false,
+        validations: {}
+    },
+    {
+        idInput: 5,
+        name: "instagram",
+        type: "text",
+        placeholder: "Ссылка в Instagram",
+        label: "Ваша страница в Instagram",
+        required: false,
+        validations: {}
+    },
+    {
+        idInput: 6,
+        name: "twitter",
+        type: "text",
+        placeholder: "Ссылка в Twitter",
+        label: "Ваша страница в Twitter",
+        required: false,
+        validations: {}
+    },
+    {
+        idInput: 7,
+        name: "linkedinn",
+        type: "text",
+        placeholder: "Ссылка на LinkedInn",
+        label: "Ваша страница на LinkedInn",
+        required: false,
+        validations: {}
+    },
+    {
+        idInput: 8,
         name: "website",
         type: "text",
         placeholder: "Ссылка на другие соц. сети",
@@ -45,7 +81,7 @@ export const inputs = [
         validations: {}
     },
     {
-        idInput: 5,
+        idInput: 9,
         name: "email",
         type: "text",
         placeholder: "Новая электронная почта",
@@ -54,7 +90,7 @@ export const inputs = [
         validations: {checkEmail: true}
     },
     {
-        idInput: 6,
+        idInput: 10,
         name: "password",
         type: "password",
         placeholder: "Новый пароль",

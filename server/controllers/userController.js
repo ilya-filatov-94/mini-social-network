@@ -93,7 +93,19 @@ class UserController {
 
     async updateProile(request, response, next) {
         try {
-            const {id, email, password, username, city, website} = request.body;
+            const {
+                id, 
+                email, 
+                password, 
+                username, 
+                city, 
+                website, 
+                facebook, 
+                instagram, 
+                twitter, 
+                linkedinn
+            } = request.body;
+
             let profileImg = '';
             let coverImg = '';
             let typeImage;
@@ -112,8 +124,19 @@ class UserController {
                     coverPic.mv(path.resolve(__dirname, '..', 'static', coverImg));
                 }
             }
-            const user = await userService.updateUser(parseInt(id), 
-                email, password, username, city, website, profileImg, coverImg
+            const user = await userService.updateUser(
+                parseInt(id), 
+                email, 
+                password, 
+                username, 
+                city, 
+                website, 
+                facebook, 
+                instagram, 
+                twitter, 
+                linkedinn,
+                profileImg, 
+                coverImg
             );
             return response.json(user);
         } catch (error) {
