@@ -259,7 +259,6 @@ class UserController {
     async updateNotifications(request, response, next) {
         try {
             const {userId} = request.body;
-            console.log('БЛЯЯТЬ', userId);
             const notification = await notificationService.updateNotification(Number(userId));
             return response.json(notification);
         } catch(error) {

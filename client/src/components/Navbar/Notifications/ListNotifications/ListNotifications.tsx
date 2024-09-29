@@ -25,7 +25,7 @@ const ListNotifications: FC<IListNotificationsProps> = ({
     setVisiblePopup
 }) => {
     const currentTheme = useAppSelector(state => state.reducerTheme.themeMode, shallowEqual);
-    const {isMobile} = useMatchMedia();
+    const {isMobile, isTablet, isDesktop} = useMatchMedia();
 
     function openPopup() {
         setVisiblePopup(true);
@@ -33,10 +33,13 @@ const ListNotifications: FC<IListNotificationsProps> = ({
     }
 
     function setOffsetElement(offsetElement: number) {
-        if (offsetElement > 0 && !isMobile) {
-           return {left: String(offsetElement)+'px'}; 
+        if (offsetElement > 0 && !isMobile && !isTablet && isDesktop) {
+           return {left: String(offsetElement - 112)+'px'}; 
+        } else if (offsetElement > 0 && !isMobile && isTablet && !isDesktop) {
+            return {left: String(offsetElement - 116)+'px'}; 
         } else return {};
     }
+
     if (!isVisible) return null;
 
     return (

@@ -51,8 +51,8 @@ const Notifications: FC = () => {
 
   useEffect(() => {
     if (refIcon.current) {
-      if (refIcon.current.offsetLeft > 0) {
-        offsetLeftParent.current = refIcon.current.offsetLeft - 112;
+      if (refIcon.current.offsetLeft > 0) {    
+        offsetLeftParent.current = refIcon.current.offsetLeft;
       }  
     }
   }, [refIcon.current]);
